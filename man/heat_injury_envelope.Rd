@@ -49,12 +49,12 @@ without disturbing the caller's random stream.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with \code{time}, \code{temp}, \code{survival} (the
-point-estimate trajectory from \code{\link[bayesTLS:predict_heat_injury]{predict_heat_injury()}}), and \code{conf.low} /
+point-estimate trajectory from \code{\link[=predict_heat_injury]{predict_heat_injury()}}), and \code{conf.low} /
 \code{conf.high} (the pointwise parametric-bootstrap confidence band).
 }
 \description{
 \code{heat_injury_envelope()} is the uncertainty counterpart of
-\code{\link[bayesTLS:predict_heat_injury]{predict_heat_injury()}}: it redraws the fitted curve parameters by parametric
+\code{\link[=predict_heat_injury]{predict_heat_injury()}}: it redraws the fitted curve parameters by parametric
 bootstrap (the same machinery \code{\link[=confint]{confint()}} uses), re-integrates the survival
 trajectory under the temperature \code{trace} for each draw with the documented
 dose-accumulation map, and returns a pointwise confidence band around the
@@ -72,6 +72,6 @@ trace <- data.frame(time = seq(0, 2, by = 0.1),
 heat_injury_envelope(fit, trace, nboot = 50, seed = 1)
 }
 \seealso{
-\code{\link[bayesTLS:predict_heat_injury]{predict_heat_injury()}} for the point trajectory, \code{\link[bayesTLS:plot_heat_injury]{plot_heat_injury()}}
+\code{\link[=predict_heat_injury]{predict_heat_injury()}} for the point trajectory, \code{\link[=plot_heat_injury]{plot_heat_injury()}}
 to draw the band.
 }

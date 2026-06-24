@@ -60,7 +60,7 @@ A \code{ggplot} object.
 }
 \description{
 \code{plot_heat_injury()} draws the point-estimate survival trajectory from
-\code{\link[bayesTLS:predict_heat_injury]{predict_heat_injury()}} inside the pointwise parametric-bootstrap confidence
+\code{\link[=predict_heat_injury]{predict_heat_injury()}} inside the pointwise parametric-bootstrap confidence
 band from \code{\link[=heat_injury_envelope]{heat_injury_envelope()}}. The band is prior-free -- a confidence
 band, never a posterior / credible band (the project's honest-uncertainty
 contract).
@@ -74,6 +74,6 @@ trace <- data.frame(time = seq(0, 2, by = 0.1),
 plot_heat_injury(fit, trace, nboot = 50, seed = 1)
 }
 \seealso{
-\code{\link[=heat_injury_envelope]{heat_injury_envelope()}} for the band data, \code{\link[bayesTLS:predict_heat_injury]{predict_heat_injury()}}
+\code{\link[=heat_injury_envelope]{heat_injury_envelope()}} for the band data, \code{\link[=predict_heat_injury]{predict_heat_injury()}}
 for the point trajectory.
 }

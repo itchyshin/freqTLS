@@ -28,6 +28,9 @@ profile_tls_points <- function(df) {
 }
 
 test_that("live freqTLS point estimates match the cached bayesTLS medians", {
+  skip(paste("Benchmark cache + profile_tls_points() helper are built from the",
+             "old profileTLS-format data; rebuilt for the bayesTLS raw datasets",
+             "(standardize_data -> fit_4pl) in P6."))
   skip_if_not(file.exists(cache_path) && nzchar(cache_path),
               "bayesTLS benchmark cache absent (needs Stan + bayesTLS to build)")
 

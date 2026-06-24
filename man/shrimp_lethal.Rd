@@ -3,69 +3,40 @@
 \docType{data}
 \name{shrimp_lethal}
 \alias{shrimp_lethal}
-\title{Brown shrimp lethal thermal-death-time assay}
+\title{Brown shrimp lethal thermal-death-time data}
 \format{
-A data frame with 148 rows and 5 columns:
+A data frame with 148 rows and 6 variables:
 \describe{
-\item{temp}{Assay temperature in degrees Celsius. Six nominal levels
-spanning roughly 30--33 C.}
-\item{duration}{Exposure duration in \strong{hours} (0.5 to 6 h).}
-\item{total}{Number of individuals in the trial (integer; the source
-\code{N_individuals_after_trial}).}
-\item{survived}{Number surviving the trial (integer), reconstructed from the
-source mortality proportion as \code{total - round(mortality_prop * total)}
-(see \emph{Reconstructed death counts} below).}
-\item{mortality_prop}{The original source proportion dead
-(\code{Mortality_after_trial}), retained for provenance.}
+\item{Date}{Experiment date (use as a grouping factor).}
+\item{Tank}{Holding-tank identifier (use as a grouping factor).}
+\item{Temperature_assay}{Assay temperature (degrees C).}
+\item{Duration_exposure_hours}{Exposure duration (hours).}
+\item{N_individuals_after_trial}{Number of individuals in the trial.}
+\item{Mortality_after_trial}{Proportion that died during the trial
+(deaths / \code{N_individuals_after_trial}), in the unit interval.
+Consumed by
+\code{standardize_data(mortality = "Mortality_after_trial")}.}
 }
 }
 \source{
-Vendored from the \code{bayesTLS} package
-(\url{https://github.com/daniel1noble/bayesTLS}), file
-\code{inst/extdata/data_lethal_TDT_brown_shrimp.csv}, redistributed under CC BY
-4.0. Survival counts reconstructed from the CSV mortality proportions (see
-\emph{Reconstructed death counts}).
+Brown shrimp lethal-TDT assay (Case Study 1). Raw file:
+\code{system.file("extdata", "data_lethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
 }
 \usage{
-data(shrimp_lethal)
+shrimp_lethal
 }
 \description{
-Survival counts from a lethal thermal-death-time (TDT) assay on the brown
-shrimp \emph{Crangon crangon}: groups of individuals were held at a fixed assay
-temperature for a fixed exposure duration, and the number surviving was
-recorded. The data are vendored from the \code{bayesTLS} package and reshaped into
-the \code{\link[=fit_tls]{fit_tls()}} column contract. They are ungrouped (a single 4PL fit).
+Replicate lethal-TDT trials for brown shrimp (\emph{Crangon crangon}). Each
+row is one tank of individuals exposed to a fixed assay temperature for a
+fixed duration; the response is the proportion that died. The model-ready
+frame for Case Study 1 (lethal endpoint).
 }
-\section{Reconstructed death counts}{
-
-The survival counts in this dataset are \strong{reconstructed} from the source CSV
-rather than read from a precomputed count column. In the \code{bayesTLS} source CSV
-(\code{inst/extdata/data_lethal_TDT_brown_shrimp.csv}) the column
-\code{Mortality_after_trial} records the \emph{proportion} dead in each trial (for
-example \code{0.0909 = 1/11}, \code{0.5 = 5/10}). To obtain the integer death and
-survival counts that \code{fit_tls()} expects, freqTLS multiplies that
-proportion by the trial size and rounds: \code{deaths = round(mortality_prop * total)}, \code{survived = total - deaths}. The reconstructed deaths span 0--11
-(summing to 738 across 148 rows). The original proportion is kept as
-\code{mortality_prop} for transparency. See \code{data-raw/make_benchmark_data.R} for
-the reconstruction script.
-}
-
-\section{Attribution}{
-
-These data originate from the \code{bayesTLS} package by Daniel W. A. Noble,
-Pieter A. Arnold and Patrice Pottier (2026, manuscript in preparation), which
-introduced the thermal-load-sensitivity framework that freqTLS implements,
-and from the original \emph{Crangon crangon} lethal assay distributed with it.
-They are redistributed under the Creative Commons Attribution 4.0
-International licence (CC BY 4.0). freqTLS code is licensed GPL (>= 3); the
-CC BY 4.0 licence applies only to the vendored data. Please cite \code{bayesTLS}
-(see \code{citation("freqTLS")}) when you use this dataset.
-}
-
 \examples{
-data(shrimp_lethal)
-str(shrimp_lethal)
-# Reconstructed deaths span the full 0--11 range:
-table(shrimp_lethal$total - shrimp_lethal$survived)
+std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
+                        duration = "Duration_exposure_hours",
+                        n_total = "N_individuals_after_trial",
+                        mortality = "Mortality_after_trial",
+                        random_effects = c("Date", "Tank"),
+                        duration_unit = "hours")
 }
 \keyword{datasets}

@@ -3,70 +3,64 @@
 \docType{data}
 \name{snowgum_psii}
 \alias{snowgum_psii}
-\title{Snowgum photosystem-II thermal-tolerance assay (continuous proportion)}
+\title{Snow gum leaf PSII functional-impairment thermal-tolerance data}
 \format{
-A data frame with 319 rows and 3 columns:
+A data frame with 394 rows and 8 variables:
 \describe{
-\item{temp}{Assay temperature in degrees Celsius. Six levels: 28, 34, 39,
-42, 45, 48 C.}
-\item{duration}{Exposure duration in \strong{minutes} (5, 15, 30, 60, 120) --
-note: minutes, not hours. Set \code{tref} to a value on this scale (for example
-\code{tref = 5}) when fitting.}
-\item{prop}{Retained PSII function, the proportion \code{final_fvfm / initial_fvfm} in \verb{[0, 1]} (1 = full retention, 0 = complete loss).}
+\item{Temp}{Assay temperature (degrees C); 30, 35, 40, 44, 48, 52, 56.}
+\item{Time}{Exposure duration (minutes); 5, 15, 30, 60, 120.}
+\item{recovery}{Post-heat recovery light condition: \code{"Dark"} (darkness
+immediately after heat) or \code{"Light"} (90 min moderate light
+post-heat). A two-level moderator.}
+\item{plant}{Replicate mature tree (factor, 6 levels); the natural random-effect
+grouping.}
+\item{meas_day}{Assay day (factor, 2 levels). Two levels only, so a poor
+random-effect grouping; better treated as fixed or omitted.}
+\item{initial_fvfm}{\eqn{F_v/F_m} measured before heat exposure.}
+\item{final_fvfm}{\eqn{F_v/F_m} measured 16--24 h after heat exposure.}
+\item{fvfm_prop}{Retained PSII function, \code{final_fvfm / initial_fvfm}
+(a proportion in the unit interval; 0 indicates complete loss of
+measurable PSII function).}
 }
 }
 \source{
-Vendored from the \code{bayesTLS} package
-(\url{https://github.com/daniel1noble/bayesTLS}), file
-\code{inst/extdata/data_function_PSII_TDT_snowgum.csv}, redistributed under CC BY
-4.0. The retained-PSII proportion is computed as \code{final_fvfm / initial_fvfm}
-from the source columns (see \code{data-raw/make_benchmark_data.R}).
+Arnold PA, Harris RJ, Aitken SM, Hoek MM, Cook AM, Leigh A, Nicotra AB
+(2026) Towards a standard approach to investigating the thermal load
+sensitivity of photosystem II via chlorophyll fluorescence. bioRxiv
+\doi{10.64898/2026.04.09.717599} (CC BY-NC 4.0), Experiment 1, snow gum
+slice. Raw file:
+\code{system.file("extdata", "data_function_PSII_TDT_snowgum.csv", package = "freqTLS")}.
 }
 \usage{
-data(snowgum_psii)
+snowgum_psii
 }
 \description{
-A \strong{functional} (not lethal) thermal-tolerance assay on snowgum \emph{Eucalyptus
-pauciflora}: leaf-disc photosystem-II efficiency (\code{Fv/Fm}) was measured before
-and after a fixed assay temperature and exposure duration. The response is the
-\strong{retained PSII proportion} \code{prop = final_fvfm / initial_fvfm}, a continuous
-value in \verb{[0, 1]}. This is the real-data showcase for the v0.2 \strong{beta} family:
-\code{fit_tls(y = prop, time = duration, temp = temp, family = "beta")} (no trials
-column \code{n}). The data are vendored from the \code{bayesTLS} package and reshaped
-into the \code{\link[=fit_tls]{fit_tls()}} column contract.
+Chlorophyll-fluorescence (\eqn{F_v/F_m}) measurements on excised snow gum
+(\emph{Eucalyptus pauciflora}) leaf sections before and 16--24 h after heat
+exposure, from Experiment 1 (post-heat light vs dark recovery) of Arnold et al.
+(2026). Short branches were cut from six mature trees grown outdoors in
+Canberra, ACT; \eqn{\sim}1 cm\eqn{^2} leaf sections were dark-adapted, given an
+initial \eqn{F_v/F_m}, then submerged in a temperature-controlled water bath
+under sub-saturating light across a grid of assay temperatures (30--56 degrees
+C) and exposure durations (5--120 min). After heat, paired arrays were held for
+90 min in moderate light (\code{recovery = "Light"}) or in darkness
+(\code{recovery = "Dark"}); a final \eqn{F_v/F_m} was taken 16--24 h later. The
+response is the continuous proportion \code{fvfm_prop} (post/pre ratio),
+modelled with a Beta likelihood. The model-ready frame for the leaf PSII case
+study (sublethal, continuous-proportion endpoint). The light/dark contrast is a
+two-group categorical moderator; in the source experiment post-heat light
+lowered apparent heat tolerance.
 }
-\section{Boundary values}{
-
-60 of the 319 rows have \code{final_fvfm == 0} (complete PSII loss at the hottest /
-longest exposures), so \code{prop} sits exactly at the \code{0} boundary. The beta
-likelihood is undefined at \code{0} and \code{1}, so \code{fit_tls(family = "beta")} clamps
-those values inward (to \code{1e-6} / \code{1 - 1e-6}) and emits a warning. The raw
-proportion is vendored unchanged (zeros included) so the complete-loss
-observations remain visible rather than being hidden by pre-clamping.
+\details{
+Two of the 396 raw rows have post/pre \eqn{F_v/F_m} marginally above 1 (both
+Dark, low dose) where a leaf measured slightly higher after heat than before;
+retained function cannot exceed 1, so these are treated as measurement noise
+and excluded, leaving 394 rows.
 }
-
-\section{Attribution}{
-
-These data originate from the \code{bayesTLS} package by Daniel W. A. Noble,
-Pieter A. Arnold and Patrice Pottier (2026, manuscript in preparation), which
-introduced the thermal-load-sensitivity framework that freqTLS implements,
-and from the original \emph{Eucalyptus pauciflora} PSII assay distributed with it.
-They are redistributed under the Creative Commons Attribution 4.0 International
-licence (CC BY 4.0). freqTLS code is licensed GPL (>= 3); the CC BY 4.0
-licence applies only to the vendored data. Please cite \code{bayesTLS} (see
-\code{citation("freqTLS")}) when you use this dataset.
-}
-
 \examples{
-data(snowgum_psii)
-str(snowgum_psii)
-# A continuous proportion in [0, 1]; complete-loss rows sit at the 0 boundary.
-summary(snowgum_psii$prop)
-# Fit the v0.2 beta family (boundary zeros are clamped inward with a warning):
-fit <- suppressWarnings(
-  fit_tls(snowgum_psii, y = prop, time = duration, temp = temp,
-          family = "beta", tref = 5)
-)
-coef(fit)[c("CTmax", "z")]
+std <- standardize_data(snowgum_psii, temp = "Temp", duration = "Time",
+                        proportion = "fvfm_prop",
+                        random_effects = "plant",
+                        duration_unit = "minutes")
 }
 \keyword{datasets}

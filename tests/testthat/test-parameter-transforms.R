@@ -19,7 +19,7 @@ test_that("link round-trips are exact (1e-8)", {
 
 test_that("disjoint-bounds asymptotes always satisfy 0 < low < up < 1", {
   inv_logit <- function(x) 1 / (1 + exp(-x))
-  b <- tls_compute_bounds(0, 1)
+  b <- compute_4pl_bounds(0, 1)
   set.seed(1)
   beta_low <- runif(500, -8, 8)
   beta_up  <- runif(500, -8, 8)

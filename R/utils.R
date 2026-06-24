@@ -20,27 +20,6 @@
 #' @return Numeric value(s) on the natural scale.
 #' @keywords internal
 #' @noRd
-#' Disjoint-bounds asymptote intervals (mirrors bayesTLS::compute_4pl_bounds)
-#'
-#' Splits `[lower, upper]` at its midpoint into two disjoint half-open intervals
-#' so that `low < up` by construction: `low` lives in `[low_min, low_max]` and
-#' `up` in `[up_min, up_max]`, each reached as `min + w * plogis(coef)`.
-#' @keywords internal
-#' @noRd
-tls_compute_bounds <- function(lower = 0, upper = 1, pad = 0.001, gap = 0.002) {
-  if (upper <= lower)
-    cli::cli_abort("{.arg upper} ({upper}) must be strictly greater than {.arg lower} ({lower}).")
-  if (2 * pad + gap >= (upper - lower))
-    cli::cli_abort("{.arg pad}/{.arg gap} leave no room for the asymptote intervals; widen the bounds.")
-  midpoint <- (lower + upper) / 2
-  low_min <- lower + pad
-  low_max <- midpoint - gap / 2
-  up_min  <- midpoint + gap / 2
-  up_max  <- upper - pad
-  list(low_min = low_min, low_max = low_max, low_w = low_max - low_min,
-       up_min = up_min, up_max = up_max, up_w = up_max - up_min, midpoint = midpoint)
-}
-
 tls_backtransform <- function(x, link) {
   switch(link,
     log = exp(x),

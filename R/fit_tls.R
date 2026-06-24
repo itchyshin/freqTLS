@@ -283,7 +283,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
 
   # Disjoint-bounds asymptote scalars. P1 fixes bounds to c(0, 1); the `bounds`
   # argument is wired through with the fit_4pl facade (P3).
-  b4 <- tls_compute_bounds(0, 1)
+  b4 <- compute_4pl_bounds(0, 1)
   tmb_data <- list(
     y = as.numeric(y_v),
     n = as.numeric(n_v),
@@ -446,7 +446,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
 #' @keywords internal
 #' @noRd
 tls_default_start <- function(temp_v, ng, n_low = 1L, n_up = n_low,
-                              n_logk = n_low, bounds = tls_compute_bounds(0, 1)) {
+                              n_logk = n_low, bounds = compute_4pl_bounds(0, 1)) {
   # Central-ish asymptote starts (low ~ 0.05, up ~ 0.95) on the disjoint-bounds
   # logit: extreme starts near the interval edges can make the RE Laplace inner
   # solve ill-conditioned and the gradient non-finite at iteration 0.

@@ -3,60 +3,31 @@
 \docType{data}
 \name{zebrafish_lethal}
 \alias{zebrafish_lethal}
-\title{Zebrafish lethal thermal-death-time assay, by life stage}
+\title{Zebrafish lethal thermal-death-time data across life stages}
 \format{
-A data frame with 323 rows and 5 columns:
+A data frame with 323 rows and 7 variables:
 \describe{
-\item{temp}{Assay temperature in degrees Celsius (the source \code{assay_temp}),
-spanning roughly 38--42 C.}
-\item{duration}{Exposure duration in \strong{hours} (the source \code{duration_h}),
-0.0167 to 10 h.}
-\item{total}{Number of individuals in the trial (integer; the source
-\code{n_total}).}
-\item{survived}{Number surviving the trial (integer; the source \code{n_surv}).}
+\item{assay_temp}{Assay temperature (degrees C).}
+\item{duration_h}{Exposure duration (hours).}
+\item{n_total}{Number of individuals in the trial.}
+\item{n_surv}{Number that survived.}
+\item{n_dead}{Number that died (\code{n_total - n_surv}).}
 \item{life_stage}{Life stage, a factor with levels \code{young_embryos},
-\code{old_embryos}, \code{larvae} (118, 106 and 99 rows respectively).}
+\code{old_embryos}, \code{larvae}.}
+\item{Date_experiment}{Experiment date (grouping factor).}
 }
 }
 \source{
-Vendored from the \code{bayesTLS} package
-(\url{https://github.com/daniel1noble/bayesTLS}), object \code{zebrafish_lethal},
-redistributed under CC BY 4.0.
+Zebrafish lethal-TDT assay (Case Study 2). Raw file:
+\code{system.file("extdata", "data_lethal_TDT_zebrafish.csv", package = "freqTLS")}.
 }
 \usage{
-data(zebrafish_lethal)
+zebrafish_lethal
 }
 \description{
-Survival counts from a lethal thermal-death-time (TDT) assay on zebrafish
-\emph{Danio rerio} at three life stages. Groups of individuals were held at a fixed
-assay temperature for a fixed exposure duration, and the number surviving was
-recorded. The data are vendored from the \code{bayesTLS} package and reshaped into
-the \code{\link[=fit_tls]{fit_tls()}} column contract. They are grouped by \code{life_stage}, so a fit
-estimates a separate \code{CTmax} and \code{z} per stage with shared \code{low}, \code{up}, and
-\code{k}.
-}
-\details{
-Unlike the shrimp data, the zebrafish survival counts are taken directly from
-the shipped \code{bayesTLS::zebrafish_lethal} object: the counts already satisfy
-\code{n_surv + n_dead == n_total} for every row, so no reconstruction is needed.
-Only the shrimp counts require reconstruction from the source proportions (see
-\link[bayesTLS:shrimp_lethal]{shrimp_lethal}).
-}
-\section{Attribution}{
-
-These data originate from the \code{bayesTLS} package by Daniel W. A. Noble,
-Pieter A. Arnold and Patrice Pottier (2026, manuscript in preparation), which
-introduced the thermal-load-sensitivity framework that freqTLS implements,
-and from the original \emph{Danio rerio} lethal assay distributed with it. They are
-redistributed under the Creative Commons Attribution 4.0 International licence
-(CC BY 4.0). freqTLS code is licensed GPL (>= 3); the CC BY 4.0 licence
-applies only to the vendored data. Please cite \code{bayesTLS} (see
-\code{citation("freqTLS")}) when you use this dataset.
-}
-
-\examples{
-data(zebrafish_lethal)
-str(zebrafish_lethal)
-table(zebrafish_lethal$life_stage)
+Lethal-TDT trials for zebrafish (\emph{Danio rerio}) at three life stages.
+Built from the raw daily survival sheet by summing the per-day
+morning/afternoon mortality counts into one death count per trial and dropping
+excluded rows. One row per assay trial. The model-ready frame for Case Study 2.
 }
 \keyword{datasets}

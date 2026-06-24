@@ -7,6 +7,13 @@
 
 test_that("a grouped formula fit equals the matching column fit", {
   data(zebrafish_lethal)
+  # The shipped dataset uses bayesTLS raw column names; alias them to the generic
+  # names these formula-mechanics tests reference (the real case-study workflow
+  # goes through standardize_data()).
+  zebrafish_lethal$survived <- zebrafish_lethal$n_surv
+  zebrafish_lethal$total    <- zebrafish_lethal$n_total
+  zebrafish_lethal$duration <- zebrafish_lethal$duration_h
+  zebrafish_lethal$temp     <- zebrafish_lethal$assay_temp
 
   f_col <- suppressWarnings(fit_tls(
     zebrafish_lethal,
@@ -83,6 +90,13 @@ test_that("an independent continuous shape predictor is allowed (v0.2 relaxed)",
 
 test_that("random intercepts on CTmax / log_z / low / log_k are parsed; up is rejected", {
   data(zebrafish_lethal)
+  # The shipped dataset uses bayesTLS raw column names; alias them to the generic
+  # names these formula-mechanics tests reference (the real case-study workflow
+  # goes through standardize_data()).
+  zebrafish_lethal$survived <- zebrafish_lethal$n_surv
+  zebrafish_lethal$total    <- zebrafish_lethal$n_total
+  zebrafish_lethal$duration <- zebrafish_lethal$duration_h
+  zebrafish_lethal$temp     <- zebrafish_lethal$assay_temp
   # `(1 | group)` on CTmax yields a CTmax RE spec ($re).
   spec <- freqTLS:::tls_parse_formula(
     tls_bf(survived | trials(total) ~ time(duration) + temp(temp),

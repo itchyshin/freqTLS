@@ -72,7 +72,7 @@ TMB's \code{map} mechanism and the rest re-optimised, mirroring the bracket-then
 }
 
 \code{up} has no single internal coordinate under the nested-gap asymptote
-reparameterisation (\code{up = low + (1 - low) * plogis(beta_gap)}); profiling it
+reparameterisation (\code{up = low + (1 - low) * plogis(beta_up)}); profiling it
 would require rebuilding the compiled objective on a re-rooted \verb{(up, low)}
 pair. freqTLS instead falls back to the delta-method Wald interval for \code{up}
 and says so (SPEC.md S10). Group contrasts (\code{dCTmax}, \code{dlog_z}) are profiled

@@ -783,7 +783,7 @@ tls_contrast_refit <- function(fit, target) {
   n_obs <- length(d$y)
   ncol_X <- ncol(X)
 
-  b4c <- tls_compute_bounds(0, 1)
+  b4c <- compute_4pl_bounds(0, 1)
   tmb_data <- list(
     y = d$y, n = d$n,
     log_time = log10(d$time), temp = d$temp,

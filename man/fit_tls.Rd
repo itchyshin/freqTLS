@@ -55,7 +55,7 @@ ungrouped fit).}
 
 \item{start}{Optional named list of starting values on the internal
 (unconstrained) scale, overriding the defaults. Names must match the
-parameters in \code{src/profile_tls.cpp} (\code{beta_low}, \code{beta_gap}, \code{beta_logk},
+parameters in \code{src/profile_tls.cpp} (\code{beta_low}, \code{beta_up}, \code{beta_logk},
 \code{beta_CT}, \code{beta_logz}, \code{log_phi}).}
 
 \item{control}{List of optimiser controls; \code{optimizer} is passed to
