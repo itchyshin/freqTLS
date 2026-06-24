@@ -52,7 +52,7 @@ from the fit's stored default), \code{"wald"}, or \code{"bootstrap"}. Absolute /
 \item{nboot, TC_rate_range, seed}{Passed to \code{\link[=extract_tdt]{extract_tdt()}} for the bootstrap
 path (absolute / LTx / \code{lethal}).}
 
-\item{...}{Passed from \code{\link[=tls_z]{tls_z()}} / \code{\link[=tls_ctmax]{tls_ctmax()}} / \code{\link[bayesTLS:tls_tcrit]{tls_tcrit()}} to \code{\link[=tls]{tls()}}.}
+\item{...}{Passed from \code{\link[=tls_z]{tls_z()}} / \code{\link[=tls_ctmax]{tls_ctmax()}} / \code{\link[=tls_tcrit]{tls_tcrit()}} to \code{\link[=tls]{tls()}}.}
 }
 \value{
 A \code{tls} object: a list with \verb{$summary} (a tibble of
