@@ -6,6 +6,18 @@ freqTLS, indexed by capability. It mirrors the missing-cell audit in
 `ROADMAP.md`, `NEWS.md`, and the capability matrix in the same commit when a
 capability changes.
 
+> **bayesTLS-twin redesign (in progress, 2026-06-24).** The package is being
+> rebuilt as the frequentist twin of bayesTLS (new API:
+> `standardize_data`/`fit_4pl`/`tls`/`extract_tdt`/`predict_survival_curves`/
+> `diagnose_tdt_fit`/`two_stage`; disjoint-bounds asymptotes). Current twin
+> limitations: `fit_4pl` fixes `bounds = c(0, 1)` and fits the relative backbone
+> (absolute/LTx and T_crit are derived post-hoc via `extract_tdt`/`tls` bootstrap,
+> not profiled); `extract_tdt` bands are bootstrap (slower than the relative
+> profile path); the benchmark cache and case-study vignettes are stale
+> (profileTLS-format) and rebuilt at finalization. The profileTLS limitations
+> below still describe the shared engine. See `NEWS.md` and the handoff in
+> `docs/dev-log/recovery-checkpoints/`.
+
 ## Current status: Phase 6 (docs and pkgdown site; v0.1 surface complete)
 
 As of 2026-06-16 the full v0.1 surface is implemented and tested. The TMB 4PL

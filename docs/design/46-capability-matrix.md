@@ -6,6 +6,17 @@ fitted, planned, and unsupported. It is kept synchronized with
 the same commit when a capability changes (AGENTS.md design rule 10). The live
 phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 
+> **bayesTLS-twin redesign (in progress, 2026-06-24).** freqTLS is being rebuilt
+> as the frequentist twin of bayesTLS. The user-facing API is now
+> `standardize_data()` -> `fit_4pl()` -> `tls()` / `extract_tdt()` /
+> `predict_survival_curves()` / `diagnose_tdt_fit()`, with `two_stage` as the
+> classical comparator; the profileTLS names (`fit_tls`, `tidy_parameters`,
+> `get_ctmax`, ...) remain as the internal engine and still work. The
+> family x design x CI engine grid below still holds (now on disjoint-bounds
+> asymptotes); this audit grid is rewritten to the twin API at finalization
+> (benchmark + vignettes). See `NEWS.md` and
+> `docs/dev-log/recovery-checkpoints/2026-06-24-autonomous-session-handoff.md`.
+
 ## v0.1 core grid: family x design x CI
 
 The v0.1 surface is the full cross-product of two families, two designs, and two
