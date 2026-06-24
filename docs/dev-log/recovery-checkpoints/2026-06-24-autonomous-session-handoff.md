@@ -1,6 +1,28 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `17a233c`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `6dce092`
+
+> **Session-2 final (HEAD `6dce092`):** the twin is now **feature-complete for the
+> fit → extract → predict → compare → plot workflow**. Added since the P4c–P4e
+> note below:
+> - `431e155` **P4f** `two_stage` classical comparator (`ts_stage1/2/ci/curve`;
+>   normal + small-sample t intervals; MASS added to Imports).
+> - `dcceac7` **P4g** plots (incl. the Confidence Eye) + extractors accept the
+>   `freq_tls` workflow object (not just the bare `profile_tls` fit).
+> - `6dce092` **docs** capability sync (NEWS rewritten to the twin API;
+>   capability-matrix + known-limitations twin-redesign banners).
+>
+> Verification: `devtools::test()` **680 PASS / 1 skip**; `R CMD check` 0/0/0.
+> **Remaining tranche (validation + docs):** P5 profile-t calibration simulation
+> (coverage + width; the §9 ADEMP); P6 three-way benchmark rebuild (freqTLS vs
+> bayesTLS vs two_stage on the shared datasets — needs Stan) + `--as-cran` +
+> CITATION refresh + lean CI; P7 case-study vignettes mirroring
+> `ms/case_studies_new.qmd` + pkgdown site; deprecate profileTLS; NotebookLM
+> corpus. Optional secondary twin functions: `make_temperature_scenarios`/
+> `planted_dose_from_trace`, `repair_rate_schoolfield` (reconcile with
+> `heat_injury.R`), `derive_tdt_landscape`/`plot_tdt_landscape`, `theme_tdt`,
+> `summarise_observed_survival`/`get_surv_draws`/`get_hi_draws`, non-default
+> `bounds` wiring.
 
 > **Session-2 update:** P4c–P4e landed — the full **fit → extract → predict** twin
 > surface is now built and committed:
