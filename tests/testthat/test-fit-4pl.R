@@ -75,6 +75,15 @@ test_that("the freq_tls workflow is accepted by the plots and extractors", {
   expect_type(derive_ctmax(f), "double")
 })
 
+test_that("freq_tls supports the standard S3 generics (delegating to the engine fit)", {
+  f <- fit_4pl(std_sim(seed = 1), t_ref = 1, family = "binomial", quiet = TRUE)
+  expect_type(coef(f), "double")
+  expect_s3_class(logLik(f), "logLik")
+  expect_true(is.matrix(vcov(f)))
+  expect_identical(nobs(f), nobs(f$fit))
+  expect_equal(as.numeric(logLik(f)), as.numeric(logLik(f$fit)))
+})
+
 test_that("fit_4pl rejects non-standardized data and (for now) absolute / custom bounds", {
   raw <- simulate_tls(family = "binomial", seed = 2)
   expect_error(fit_4pl(raw), "standardize_data")

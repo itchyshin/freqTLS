@@ -174,3 +174,22 @@ print.freq_tls <- function(x, ...) {
               isTRUE(conv$pdHess), m$method))
   invisible(x)
 }
+
+# S3 generics delegate from the freq_tls workflow to its engine fit, so
+# coef()/logLik()/vcov()/nobs() work on the object fit_4pl() returns.
+
+#' @importFrom stats coef
+#' @export
+coef.freq_tls <- function(object, ...) stats::coef(object$fit, ...)
+
+#' @importFrom stats logLik
+#' @export
+logLik.freq_tls <- function(object, ...) stats::logLik(object$fit, ...)
+
+#' @importFrom stats vcov
+#' @export
+vcov.freq_tls <- function(object, ...) stats::vcov(object$fit, ...)
+
+#' @importFrom stats nobs
+#' @export
+nobs.freq_tls <- function(object, ...) stats::nobs(object$fit, ...)

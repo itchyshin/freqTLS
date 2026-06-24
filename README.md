@@ -72,16 +72,16 @@ The classical workflow fits a curve per temperature, then regresses the
 derived endpoints in a second stage. That discards the joint
 uncertainty: the second-stage standard errors treat noisy first-stage
 estimates as fixed, and the design’s identifiability is invisible.
-`freqTLS` fits **one** model to all the counts at once and inverts
-the likelihood for `CTmax` and `z` directly, so the interval reflects
-the whole design and flags weakly identified parameters.
+`freqTLS` fits **one** model to all the counts at once and inverts the
+likelihood for `CTmax` and `z` directly, so the interval reflects the
+whole design and flags weakly identified parameters.
 
 ## How it differs from bayesTLS
 
-`freqTLS` and [`bayesTLS`](https://github.com/daniel1noble/bayesTLS)
-fit the **same model**. Under the matched constant-shape configuration
-they target the same likelihood and the same fitted curve; they differ
-only in how uncertainty is summarised.
+`freqTLS` and [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) fit
+the **same model**. Under the matched constant-shape configuration they
+target the same likelihood and the same fitted curve; they differ only
+in how uncertainty is summarised.
 
 |  | `bayesTLS` | `freqTLS` |
 |----|----|----|
@@ -111,31 +111,41 @@ pak::pak("itchyshin/freqTLS")
 
 ## Quick start
 
-The core loop is **simulate → fit → confidence intervals → plot**. It
-runs end to end with a small simulation and needs no Stan, no MCMC, and
-no internet.
+The workflow mirrors `bayesTLS` — **standardize → fit → quantities →
+plot** — so a `bayesTLS` analysis runs on `freqTLS` by changing only the
+package the data and functions come from. The engine is maximum
+likelihood (no Stan, no MCMC, no internet); uncertainty is a frequentist
+trio (Wald, profile, bootstrap) instead of a posterior.
 
 ``` r
 library(freqTLS)
 
-# 1. Simulate survival counts from the locked data-generating process
+# 1. Standardize raw survival counts (the shared bayesTLS entry point)
 dat <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4, phi = 50, seed = 1)
+std <- standardize_data(dat, temp = "temp", duration = "duration",
+                        n_total = "total", n_surv = "survived")
 
-# 2. Fit by maximum likelihood (CTmax and z are direct parameters)
-fit <- fit_tls(dat, y = survived, n = total, time = duration, temp = temp,
-               family = "beta_binomial", tref = 1)
+# 2. Fit the 4PL by maximum likelihood, directly in CTmax and z
+fit <- fit_4pl(std, t_ref = 1)
 
-# 3. Profile-likelihood confidence intervals for the headline quantities
-confint(fit, parm = c("CTmax", "z"), method = "profile")
-#> # A tibble: 2 × 8
-#>   parameter conf.low conf.high estimate level method  scale    conf.status
-#>   <chr>        <dbl>     <dbl>    <dbl> <dbl> <chr>   <chr>    <chr>      
-#> 1 CTmax        35.8      36.3     36.0   0.95 profile identity ok         
-#> 2 z             3.43      4.38     3.90  0.95 profile log      ok
+# 3. Headline thermal-death-time quantities with profile-likelihood intervals
+tls(fit)
+#> <tls> relative threshold; quantities: z, CTmax (profile intervals)
+#> # A tibble: 2 × 4
+#>   quantity median lower upper
+#>   <chr>     <dbl> <dbl> <dbl>
+#> 1 CTmax     36.0  35.7  36.3 
+#> 2 z          3.90  3.43  4.38
 ```
 
+For per-group CTmax/z, pass formulas —
+`fit_4pl(dat, ctmax = ~ 0 + species, z = ~ 0 + species)` — exactly as in
+`bayesTLS`. `extract_tdt()`, `predict_survival_curves()`, and
+`diagnose_tdt_fit()` complete the twin surface; the column / formula
+engine interface (`fit_tls()`, `tls_bf()`) remains available underneath.
+
 ``` r
-# 4. Plot the fit (survival curves; the Confidence Eye is shown above)
+# 4. Plot the fitted survival surface (the Confidence Eye is shown above)
 plot_survival_curves(fit)
 ```
 
@@ -295,17 +305,18 @@ priors, no MCMC, no Stan).
 
 ## Data credits
 
-The benchmark datasets vendored with `freqTLS` (`shrimp_lethal`,
-`zebrafish_lethal`, `snowgum_psii`, and `dsuzukii_lethal`) originate
-from the [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package
-and are redistributed under [CC BY
-4.0](https://creativecommons.org/licenses/by/4.0/) with attribution. The
-shrimp survival counts are reconstructed from the source CSV
-proportions, `snowgum_psii` is the retained-PSII proportion
-(`final_fvfm / initial_fvfm`) for the beta family, and `dsuzukii_lethal`
-is *Drosophila suzukii* mortality counts by sex (Ørsted et al. 2024,
-Zenodo 10.5281/zenodo.10602268) (see `?shrimp_lethal`, `?snowgum_psii`,
-`?dsuzukii_lethal`, and `inst/CITATION`). `freqTLS` code is released
-under GPL (\>= 3); the CC BY 4.0 licence applies only to the vendored
-data. Please cite `bayesTLS` (see `citation("freqTLS")`) when you use
-these datasets.
+The seven case-study datasets vendored with `freqTLS` (`shrimp_lethal`,
+`shrimp_sublethal`, `zebrafish_lethal`, `zebrafish_o2`, `snowgum_psii`,
+`dsuzukii`, and `aphid_tdt`) are the shared datasets of the
+[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) framework,
+redistributed with attribution. They include the two new published case
+studies — `aphid_tdt` (cereal aphids across species and ages; Li et
+al. 2023) and `zebrafish_o2` (zebrafish across an oxygen gradient;
+Saruhashi et al. 2026) — alongside `dsuzukii` (*Drosophila suzukii* by
+sex; Ørsted et al. 2024, Zenodo 10.5281/zenodo.10602268) and
+`snowgum_psii` (retained PSII for the beta family). See `?aphid_tdt`,
+`?zebrafish_o2`, the other dataset help pages, and `inst/CITATION` for
+sources and licences. `freqTLS` code is released under GPL (\>= 3); the
+original data licences apply to the vendored data. Please cite
+`bayesTLS` and the original data sources (see `citation("freqTLS")`)
+when you use these datasets.
