@@ -30,6 +30,7 @@ Depends:
 Imports:
     cli,
     ggplot2,
+    MASS,
     parallel,
     rlang,
     stats,
