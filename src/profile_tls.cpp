@@ -1,6 +1,7 @@
 // freqTLS TMB likelihood: single-stage 4PL thermal-load-sensitivity model
-// with a direct CTmax / log_z midpoint reparameterisation and nested-gap
-// asymptotes. Families: binomial (0), beta-binomial (1), beta (2).
+// with a direct CTmax / log_z midpoint reparameterisation and disjoint-bounds
+// asymptotes (matching bayesTLS::compute_4pl_bounds). Families: binomial (0),
+// beta-binomial (1), beta (2).
 //
 // Engineering patterns adapted from drmTMB (GPL-3,
 // https://github.com/itchyshin/drmTMB):
@@ -37,10 +38,14 @@ Type objective_function<Type>::operator()()
   DATA_MATRIX(X_CT);       // design matrix for CTmax
   DATA_MATRIX(X_logz);     // design matrix for log(z)
   DATA_MATRIX(X_low);      // design matrix for low (logit)
-  DATA_MATRIX(X_gap);      // design matrix for the nested gap up|low (logit)
+  DATA_MATRIX(X_up);       // design matrix for up (disjoint-bounds logit)
   DATA_MATRIX(X_logk);     // design matrix for log(k)
   DATA_INTEGER(family_code); // 0 binomial, 1 beta_binomial, 2 beta
   DATA_SCALAR(log10_tref); // log10 of the reference time
+  DATA_SCALAR(low_min);    // disjoint asymptote bounds (bayesTLS compute_4pl_bounds):
+  DATA_SCALAR(low_w);      //   low in [low_min, low_min + low_w]
+  DATA_SCALAR(up_min);     //   up  in [up_min,  up_min  + up_w]
+  DATA_SCALAR(up_w);
   DATA_IVECTOR(re_index);  // 0-based random-intercept group per obs (CTmax RE)
   DATA_IVECTOR(re_index_logz); // 0-based random-intercept group per obs (log_z RE)
   DATA_IVECTOR(re_index_low);  // 0-based random-intercept group per obs (low RE)
@@ -48,7 +53,7 @@ Type objective_function<Type>::operator()()
 
   // ---- parameters ----------------------------------------------------------
   PARAMETER_VECTOR(beta_low);   // lower-asymptote coefficients (logit, per column)
-  PARAMETER_VECTOR(beta_gap);   // nested-gap coefficients (logit, per column)
+  PARAMETER_VECTOR(beta_up);    // upper-asymptote coefficients (disjoint-bounds logit, per column)
   PARAMETER_VECTOR(beta_logk);  // log-steepness coefficients (per column)
   PARAMETER_VECTOR(beta_CT);    // CTmax coefficients (per design column)
   PARAMETER_VECTOR(beta_logz);  // log(z) coefficients (per design column)
@@ -80,39 +85,36 @@ Type objective_function<Type>::operator()()
   // all three shared (or all the same width) this is identical to the previous
   // single `shared_shape` block.
   bool low_shared  = (beta_low.size()  == 1);
-  bool gap_shared  = (beta_gap.size()  == 1);
+  bool up_shared   = (beta_up.size()   == 1);
   bool logk_shared = (beta_logk.size() == 1);
-  Type low_s = profile_tls_inv_logit(beta_low(0));
-  Type up_s  = low_s + (Type(1.0) - low_s) * profile_tls_inv_logit(beta_gap(0));
+  // Disjoint-bounds asymptotes (bayesTLS::compute_4pl_bounds): low and up each map
+  // an unconstrained coefficient onto a half-open interval splitting [lower, upper]
+  // at its midpoint, so low < up by construction and `up` is a DIRECT coordinate
+  // (no nested gap on low). Each shape sub-parameter has its OWN design and may be
+  // shared (a single intercept coefficient -> the scalar path) or vary per
+  // observation, INDEPENDENTLY of the others.
+  Type low_s = low_min + profile_tls_inv_logit(beta_low(0)) * low_w;
+  Type up_s  = up_min  + profile_tls_inv_logit(beta_up(0))  * up_w;
   Type k_s   = exp(beta_logk(0));
-  vector<Type> low_lin, gap_lin, logk_lin;
+  vector<Type> low_lin, up_lin, logk_lin;
   if (!low_shared)  low_lin  = X_low  * beta_low;
-  if (!gap_shared)  gap_lin  = X_gap  * beta_gap;
+  if (!up_shared)   up_lin   = X_up   * beta_up;
   if (!logk_shared) logk_lin = X_logk * beta_logk;
 
-  // Per-design-column natural-scale shape values for the report. Each is sized to
-  // its OWN coefficient vector, since the shape designs may have independent
-  // widths. `up` is the nested gap on `low`, so a per-column `up` is only defined
-  // when `low` and `gap` share a design (the grouped / uniform-width case); when
-  // the widths differ, `up` reports the shared scalar only (the continuous case
-  // uses the coefficient SEs, not a per-column `up`). For uniform widths this is
-  // identical to the previous block, so existing fits are byte-identical.
+  // Per-design-column natural-scale shape values for the report, each sized to its
+  // OWN coefficient vector. low and up are now INDEPENDENT (disjoint bounds), so
+  // `up` is sized to beta_up directly.
   vector<Type> low(beta_low.size());
   for (int j = 0; j < beta_low.size(); ++j) {
-    low(j) = profile_tls_inv_logit(beta_low(j));
+    low(j) = low_min + profile_tls_inv_logit(beta_low(j)) * low_w;
+  }
+  vector<Type> up(beta_up.size());
+  for (int j = 0; j < beta_up.size(); ++j) {
+    up(j) = up_min + profile_tls_inv_logit(beta_up(j)) * up_w;
   }
   vector<Type> k(beta_logk.size());
   for (int j = 0; j < beta_logk.size(); ++j) {
     k(j) = exp(beta_logk(j));
-  }
-  bool up_per_column = (beta_low.size() == beta_gap.size());
-  vector<Type> up(up_per_column ? beta_low.size() : 1);
-  if (up_per_column) {
-    for (int j = 0; j < beta_low.size(); ++j) {
-      up(j) = low(j) + (Type(1.0) - low(j)) * profile_tls_inv_logit(beta_gap(j));
-    }
-  } else {
-    up(0) = up_s;
   }
 
   Type nll = Type(0.0);
@@ -129,32 +131,18 @@ Type objective_function<Type>::operator()()
     // equals CT(i) exactly, so the no-RE likelihood is byte-identical.
     Type CT_i = CT(i);
     if (b_CT.size() > 0) CT_i += b_CT(re_index(i));
-    // Per-observation shape values: the scalar shared path (bit-identical) or
-    // the per-observation grouped design.
-    // Per-shape values, preserving the EXACT original expressions and ordering
-    // (low_i, then up_i, then k_i) for the two pre-existing cases so the fit is
-    // bit-identical: the fully-shared scalar path (up_s) and the all-vary grouped
-    // path (`low_i + (1 - low_i) * inv_logit(gap_lin(i))`). The middle branch is
-    // the new mixed case (low shared, gap varying, or vice versa).
-    // low, with an optional random intercept on its logit coordinate. When b_low
-    // is empty the original expressions are used verbatim (bit-identical); with a
-    // RE the deviation is added on the logit scale before inv_logit, and up_i is
-    // recomputed from the shifted low_i (it can no longer use the up_s fast path).
+    // Per-observation shape values (disjoint bounds). low and up each map their
+    // own coordinate onto [min, min + w]; low may carry a random intercept on its
+    // pre-bounds logit coordinate (added before inv_logit). up has no RE and is a
+    // direct coordinate independent of low.
     Type low_i;
     if (b_low.size() > 0) {
       Type low_eta = (low_shared ? beta_low(0) : low_lin(i)) + b_low(re_index_low(i));
-      low_i = profile_tls_inv_logit(low_eta);
+      low_i = low_min + profile_tls_inv_logit(low_eta) * low_w;
     } else {
-      low_i = low_shared ? low_s : profile_tls_inv_logit(low_lin(i));
+      low_i = low_shared ? low_s : (low_min + profile_tls_inv_logit(low_lin(i)) * low_w);
     }
-    Type up_i;
-    if (low_shared && gap_shared && b_low.size() == 0) {
-      up_i = up_s;
-    } else if (gap_shared) {
-      up_i = low_i + (Type(1.0) - low_i) * profile_tls_inv_logit(beta_gap(0));
-    } else {
-      up_i = low_i + (Type(1.0) - low_i) * profile_tls_inv_logit(gap_lin(i));
-    }
+    Type up_i = up_shared ? up_s : (up_min + profile_tls_inv_logit(up_lin(i)) * up_w);
     // log_k, with an optional random intercept on the log scale (bit-identical
     // when b_logk is empty).
     Type k_i;

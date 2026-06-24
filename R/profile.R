@@ -30,7 +30,7 @@
 #' }
 #'
 #' `up` has no single internal coordinate under the nested-gap asymptote
-#' reparameterisation (`up = low + (1 - low) * plogis(beta_gap)`); profiling it
+#' reparameterisation (`up = low + (1 - low) * plogis(beta_up)`); profiling it
 #' would require rebuilding the compiled objective on a re-rooted `(up, low)`
 #' pair. freqTLS instead falls back to the delta-method Wald interval for `up`
 #' and says so (SPEC.md S10). Group contrasts (`dCTmax`, `dlog_z`) are profiled
@@ -783,15 +783,18 @@ tls_contrast_refit <- function(fit, target) {
   n_obs <- length(d$y)
   ncol_X <- ncol(X)
 
+  b4c <- tls_compute_bounds(0, 1)
   tmb_data <- list(
     y = d$y, n = d$n,
     log_time = log10(d$time), temp = d$temp,
     X_CT = X, X_logz = X,
     X_low = matrix(1, n_obs, 1L),    # shapes are shared on the contrast refit
-    X_gap = matrix(1, n_obs, 1L),
+    X_up = matrix(1, n_obs, 1L),
     X_logk = matrix(1, n_obs, 1L),
     family_code = fam$family_code,
     log10_tref = log10(fit$tref),
+    low_min = b4c$low_min, low_w = b4c$low_w,
+    up_min = b4c$up_min, up_w = b4c$up_w,
     re_index = rep(0L, n_obs),   # contrasts are fixed-group fits: no RE
     re_index_logz = rep(0L, n_obs),
     re_index_low = rep(0L, n_obs),
@@ -812,8 +815,8 @@ tls_contrast_refit <- function(fit, target) {
   logz_start <- c(logz_by_grp[[target$ref]], logz_by_grp[lvl[-1L]] - logz_by_grp[[target$ref]])
 
   parameters <- list(
-    beta_low = tls_link(est$estimate[est$parameter == "low"], "logit"),
-    beta_gap = stats::qlogis(0.95),
+    beta_low = stats::qlogis((est$estimate[est$parameter == "low"] - b4c$low_min) / b4c$low_w),
+    beta_up = stats::qlogis(0.95),
     beta_logk = log(est$estimate[est$parameter == "k"]),
     beta_CT = unname(ct_start),
     beta_logz = unname(logz_start),
@@ -831,11 +834,10 @@ tls_contrast_refit <- function(fit, target) {
     b_logk = numeric(0),
     log_sd_logk = 0
   )
-  # Recover beta_gap exactly from low/up so the start sits at the MLE.
-  low_hat <- est$estimate[est$parameter == "low"]
+  # Recover beta_up exactly from up so the start sits at the MLE (disjoint bounds).
   up_hat <- est$estimate[est$parameter == "up"]
-  gap_frac <- (up_hat - low_hat) / (1 - low_hat)
-  parameters$beta_gap <- stats::qlogis(min(max(gap_frac, 1e-6), 1 - 1e-6))
+  up_frac <- (up_hat - b4c$up_min) / b4c$up_w
+  parameters$beta_up <- stats::qlogis(min(max(up_frac, 1e-6), 1 - 1e-6))
 
   map <- list()
   if (identical(fam$family_code, 0L)) map$log_phi <- factor(NA)

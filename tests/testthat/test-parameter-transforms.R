@@ -17,16 +17,17 @@ test_that("link round-trips are exact (1e-8)", {
                tolerance = 1e-8)
 })
 
-test_that("nested-gap asymptotes always satisfy 0 < low < up < 1", {
+test_that("disjoint-bounds asymptotes always satisfy 0 < low < up < 1", {
   inv_logit <- function(x) 1 / (1 + exp(-x))
+  b <- tls_compute_bounds(0, 1)
   set.seed(1)
   beta_low <- runif(500, -8, 8)
-  beta_gap <- runif(500, -8, 8)
-  low <- inv_logit(beta_low)
-  up <- low + (1 - low) * inv_logit(beta_gap)
-  expect_true(all(low > 0 & low < 1))
-  expect_true(all(up > low))
-  expect_true(all(up < 1))
+  beta_up  <- runif(500, -8, 8)
+  low <- b$low_min + b$low_w * inv_logit(beta_low)
+  up  <- b$up_min  + b$up_w  * inv_logit(beta_up)
+  expect_true(all(low >= b$low_min & low <= b$low_max))  # low within its interval
+  expect_true(all(up  >= b$up_min  & up  <= b$up_max))   # up within its interval
+  expect_true(all(low > 0 & low < up & up < 1))          # disjoint split => low < up
 })
 
 test_that("fitted probability stays in (0, 1) across the design", {

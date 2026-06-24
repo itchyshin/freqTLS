@@ -194,6 +194,13 @@ tls_wald_natural <- function(fit, conf.level) {
     se <- fixed[r, "Std. Error"]
     lo_i <- e - zq * se
     hi_i <- e + zq * se
+    # `low` lives on a disjoint-bounds logit: low = low_min + low_w * plogis(beta_low),
+    # so its Wald endpoints must be rescaled to the natural scale (not plain plogis).
+    if (internal_name == "beta_low") {
+      bb <- fit$tmb_inputs$data
+      return(c(bb$low_min + bb$low_w * stats::plogis(lo_i),
+               bb$low_min + bb$low_w * stats::plogis(hi_i)))
+    }
     c(tls_backtransform(lo_i, link), tls_backtransform(hi_i, link))
   }
 

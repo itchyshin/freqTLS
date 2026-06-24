@@ -36,7 +36,7 @@ test_that("binomial fit has the expected object contract", {
   expect_identical(fit$family$family, "binomial")
   # Binomial has no phi row.
   expect_false("phi" %in% fit$estimates$parameter)
-  # df = 5 free parameters (beta_low, beta_gap, beta_logk, beta_CT, beta_logz).
+  # df = 5 free parameters (beta_low, beta_up, beta_logk, beta_CT, beta_logz).
   expect_identical(fit$df, 5L)
   expect_identical(fit$data_summary$n_groups, 1L)
 })

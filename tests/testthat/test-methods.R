@@ -45,7 +45,7 @@ test_that("vcov returns the internal-coordinate covariance matrix", {
   expect_identical(dim(vc), c(5L, 5L))
   expect_true(isSymmetric(unname(vc)))
   expect_identical(rownames(vc),
-                   c("beta_low", "beta_gap", "beta_logk", "beta_CT", "beta_logz"))
+                   c("beta_low", "beta_up", "beta_logk", "beta_CT", "beta_logz"))
 })
 
 test_that("logLik, AIC, and nobs return sane scalars with attributes", {

@@ -169,7 +169,7 @@ tls_predict_pars <- function(fit, newdata) {
     unname(p[names(p) == nm])
   }
   X_low_fit  <- fit$tmb_inputs$data$X_low
-  X_gap_fit  <- fit$tmb_inputs$data$X_gap
+  X_up_fit  <- fit$tmb_inputs$data$X_up
   X_logk_fit <- fit$tmb_inputs$data$X_logk
   # A shape needs the design-rebuild path when its design is not a scalar and not
   # the same one-hot grouping as CTmax/log_z (whose group lookup above handles it,
@@ -187,8 +187,9 @@ tls_predict_pars <- function(fit, newdata) {
     as.numeric(Xn %*% beta_of(beta_name))
   }
 
+  bb <- fit$tmb_inputs$data
   low <- if (needs_rebuild(X_low_fit)) {
-    stats::plogis(rebuild_eta("low", "beta_low"))
+    bb$low_min + bb$low_w * stats::plogis(rebuild_eta("low", "beta_low"))
   } else {
     resolve("low")
   }
@@ -197,8 +198,8 @@ tls_predict_pars <- function(fit, newdata) {
   } else {
     resolve("k")
   }
-  up <- if (needs_rebuild(X_gap_fit)) {
-    low + (1 - low) * stats::plogis(rebuild_eta("up", "beta_gap"))
+  up <- if (needs_rebuild(X_up_fit)) {
+    bb$up_min + bb$up_w * stats::plogis(rebuild_eta("up", "beta_up"))
   } else {
     resolve("up")
   }

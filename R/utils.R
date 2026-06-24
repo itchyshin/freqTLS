@@ -20,6 +20,27 @@
 #' @return Numeric value(s) on the natural scale.
 #' @keywords internal
 #' @noRd
+#' Disjoint-bounds asymptote intervals (mirrors bayesTLS::compute_4pl_bounds)
+#'
+#' Splits `[lower, upper]` at its midpoint into two disjoint half-open intervals
+#' so that `low < up` by construction: `low` lives in `[low_min, low_max]` and
+#' `up` in `[up_min, up_max]`, each reached as `min + w * plogis(coef)`.
+#' @keywords internal
+#' @noRd
+tls_compute_bounds <- function(lower = 0, upper = 1, pad = 0.001, gap = 0.002) {
+  if (upper <= lower)
+    cli::cli_abort("{.arg upper} ({upper}) must be strictly greater than {.arg lower} ({lower}).")
+  if (2 * pad + gap >= (upper - lower))
+    cli::cli_abort("{.arg pad}/{.arg gap} leave no room for the asymptote intervals; widen the bounds.")
+  midpoint <- (lower + upper) / 2
+  low_min <- lower + pad
+  low_max <- midpoint - gap / 2
+  up_min  <- midpoint + gap / 2
+  up_max  <- upper - pad
+  list(low_min = low_min, low_max = low_max, low_w = low_max - low_min,
+       up_min = up_min, up_max = up_max, up_w = up_max - up_min, midpoint = midpoint)
+}
+
 tls_backtransform <- function(x, link) {
   switch(link,
     log = exp(x),
@@ -133,7 +154,7 @@ tls_re_blocks <- function(fit) {
 #' @return A `data.frame` with one row per internal coordinate.
 #' @keywords internal
 #' @noRd
-tls_name_map <- function(group_levels, family, X_low, X_gap, X_logk) {
+tls_name_map <- function(group_levels, family, X_low, X_up, X_logk) {
   ng <- length(group_levels)
 
   # Shape coordinates. Each shape design is classified by its own columns:
@@ -141,7 +162,7 @@ tls_name_map <- function(group_levels, family, X_low, X_gap, X_logk) {
   #   >1 column, one-hot factor -> per-group `low:<level>` / `k:<level>` (natural);
   #   >1 column, general design -> per-coefficient `low:<col>` / `k:<col>` (link
   #                                scale, e.g. a continuous covariate slope).
-  # `up` has no single internal coordinate (nested gap), so beta_gap keeps the
+  # `up` has no single internal coordinate (nested gap), so beta_up keeps the
   # name "gap" and `up` is surfaced separately (via the ADREPORTed `up` SE).
   shape_block <- function(base, natural_base, link, X) {
     nc <- ncol(X)
@@ -157,7 +178,7 @@ tls_name_map <- function(group_levels, family, X_low, X_gap, X_logk) {
   }
   scalar <- rbind(
     shape_block("beta_low", "low", "logit", X_low),
-    data.frame(internal = paste0("beta_gap[", seq_len(ncol(X_gap)), "]"),
+    data.frame(internal = paste0("beta_up[", seq_len(ncol(X_up)), "]"),
                natural = "gap", link = "identity", group = NA_character_,
                stringsAsFactors = FALSE),
     shape_block("beta_logk", "k", "log", X_logk)
