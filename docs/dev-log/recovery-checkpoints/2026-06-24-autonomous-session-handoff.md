@@ -1,6 +1,21 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `9fd85f8`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `4b80c04`
+
+> **Session-2 update:** P4c + P4d landed since this was first written — the full
+> quantity surface is now built and committed:
+> - `6001989` **P4c** `extract_tdt()` (nested `$z`/`$CTmax`/`$T_crit`, draws +
+>   summary, bootstrap) + `get_z_summary`/`get_z_draws`/`get_ctmax_*`/`get_tcrit_*`.
+> - `4b80c04` **P4d** `tls()` now does relative **and** absolute/LTx + `lethal`
+>   (T_crit) by delegating to `extract_tdt`; added `tls_tcrit`.
+>
+> Verification now: `devtools::test()` **656 PASS / 1 skip**; `R CMD check` 0/0/0.
+> **Next:** `predict_survival_curves` twin (point via `predict_survival_surface`;
+> bootstrap survival CIs via the forward 4PL over the grid per replicate), then
+> `plot_*` twins, then `two_stage`/`repair`/`temperature_scenarios`, P5
+> calibration, P6 benchmark + `--as-cran`, P7 vignettes, deprecate profileTLS.
+> The "Exact next steps" below for `extract_tdt` are now **done** — kept for the
+> design record.
 
 ## What this session built (the freqTLS = frequentist-twin-of-bayesTLS build)
 
