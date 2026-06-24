@@ -1,6 +1,28 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `6dce092`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `fc9bb01`
+
+> **Session-3 (HEAD `fc9bb01`): the twin is now scientifically validated.**
+> - `499da87` **P5a** Bates–Watts **profile-t / Wald-t calibration** (`tls_ci_df`
+>   = n−p; qnorm→qt, qchisq→qt²; df-aware grid). Equivariance preserved.
+> - `bdec351` **P5b** **coverage evidence**: at df≈10 the asymptotic z under-covers
+>   (0.927) and the t-correction restores it (0.964); t≡z at df≈100
+>   (`data-raw/calibration-study.R`, cached).
+> - `4b58775` **P6 (start)** three-way **benchmark**: freqTLS reproduces bayesTLS's
+>   CTmax to **0.07 °C** on shrimp; freqTLS's prior-free z tracks the classical
+>   two-stage (bayes higher = prior). Installed the redesigned bayesTLS clone.
+> - `fc9bb01` **P7 (start)** twin **README** (standardize_data→fit_4pl→tls; data
+>   credits → 7 datasets) + `freq_tls` S3 methods (coef/logLik/vcov/nobs).
+>
+> Verification: `devtools::test()` **691 PASS / 1 skip**; `R CMD check` 0/0/0.
+> **Genuinely remaining (presentation + release):** P7 case-study **vignettes**
+> (rewrite the stale .Rmd to the twin, mirroring `ms/case_studies_new.qmd` —
+> aphid/Li, zebrafish-O₂/Saruhashi, the frequentist-vs-Bayesian centerpiece using
+> the P5/P6 evidence) + **pkgdown** build; expand the **benchmark grid** (grouped
+> datasets, 4×4000 MCMC) + re-enable `test-benchmark-sanity`; **deprecate
+> profileTLS** (lifecycle/superseded); **NotebookLM** corpus; optional secondary
+> twins (temperature scenarios, repair, landscape, more accessors); `--as-cran` +
+> CITATION refresh. The earlier session-2 notes below are superseded by this.
 
 > **Session-2 final (HEAD `6dce092`):** the twin is now **feature-complete for the
 > fit → extract → predict → compare → plot workflow**. Added since the P4c–P4e
