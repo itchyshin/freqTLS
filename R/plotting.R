@@ -136,6 +136,7 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
+  if (inherits(fit, "freq_tls")) fit <- fit$fit
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -348,6 +349,7 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
+  if (inherits(fit, "freq_tls")) fit <- fit$fit
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -465,6 +467,7 @@ plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
+  if (inherits(fit, "freq_tls")) fit <- fit$fit
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -549,6 +552,7 @@ plot_survival_surface <- function(fit, temps = NULL, times = NULL,
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
+  if (inherits(fit, "freq_tls")) fit <- fit$fit
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }

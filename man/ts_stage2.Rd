@@ -13,7 +13,7 @@ ts_stage2(
 )
 }
 \arguments{
-\item{stage1}{Output of \code{\link[bayesTLS:ts_stage1]{ts_stage1()}}.}
+\item{stage1}{Output of \code{\link[=ts_stage1]{ts_stage1()}}.}
 
 \item{t_ref}{Reference exposure duration for CTmax (minutes). Default 60.}
 

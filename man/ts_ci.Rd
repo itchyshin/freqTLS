@@ -17,13 +17,13 @@ ts_ci(
 )
 }
 \arguments{
-\item{stage2}{Output of \code{\link[bayesTLS:ts_stage2]{ts_stage2()}}.}
+\item{stage2}{Output of \code{\link[=ts_stage2]{ts_stage2()}}.}
 
 \item{method}{\code{"delta"} or \code{"mvn"}.}
 
 \item{level}{Confidence level. Default 0.95.}
 
-\item{t_ref, time_multiplier, TC_rate_range}{As in \code{\link[bayesTLS:ts_stage2]{ts_stage2()}}.}
+\item{t_ref, time_multiplier, TC_rate_range}{As in \code{\link[=ts_stage2]{ts_stage2()}}.}
 
 \item{temp_grid}{Temperatures for the line band (\code{"mvn"} only).}
 

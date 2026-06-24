@@ -64,6 +64,17 @@ test_that("family defaults from the standardized response type", {
   expect_match(deparse1(ff$response), "survival ~")
 })
 
+test_that("the freq_tls workflow is accepted by the plots and extractors", {
+  f <- fit_4pl(std_sim(seed = 1), t_ref = 1, family = "binomial", quiet = TRUE)
+  # plots (incl. the Confidence Eye) and extractors take the workflow, not just $fit
+  expect_s3_class(plot_confidence_eye(f), "ggplot")
+  expect_s3_class(plot_survival_curves(f), "ggplot")
+  expect_s3_class(plot_tdt_curve(f), "ggplot")
+  expect_s3_class(tidy_parameters(f), "tbl_df")
+  expect_s3_class(get_ctmax(f), "data.frame")
+  expect_type(derive_ctmax(f), "double")
+})
+
 test_that("fit_4pl rejects non-standardized data and (for now) absolute / custom bounds", {
   raw <- simulate_tls(family = "binomial", seed = 2)
   expect_error(fit_4pl(raw), "standardize_data")

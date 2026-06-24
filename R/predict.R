@@ -46,6 +46,7 @@ predict.profile_tls <- function(object, newdata,
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -234,6 +235,7 @@ tls_predict_pars <- function(fit, newdata) {
 #' @export
 predict_survival_surface <- function(object, temps = NULL, times = NULL,
                                      group = NULL) {
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -328,6 +330,7 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #'
 #' @export
 derive_lt <- function(object, p = 0.5, temp, group = NULL) {
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -403,6 +406,7 @@ derive_lt <- function(object, p = 0.5, temp, group = NULL) {
 #' derive_ctmax(fit, surv = 0.5, duration = c(1, 4))  # absolute 50% survival
 #' @export
 derive_ctmax <- function(object, surv = NULL, duration = NULL, group = NULL) {
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -480,6 +484,7 @@ derive_ctmax <- function(object, surv = NULL, duration = NULL, group = NULL) {
 #' derive_tcrit(fit, rate = c(0.1, 1)) # lower thermal thresholds
 #' @export
 derive_tcrit <- function(object, rate = 1, group = NULL) {
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }

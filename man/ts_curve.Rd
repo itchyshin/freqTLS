@@ -7,7 +7,7 @@
 ts_curve(stage2, temp_grid, time_multiplier = 1)
 }
 \arguments{
-\item{stage2}{Output of \code{\link[bayesTLS:ts_stage2]{ts_stage2()}}.}
+\item{stage2}{Output of \code{\link[=ts_stage2]{ts_stage2()}}.}
 
 \item{temp_grid}{Temperatures (°C) to evaluate.}
 

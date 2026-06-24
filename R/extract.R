@@ -36,6 +36,7 @@
 #' @export
 tidy_parameters <- function(fit, conf.int = TRUE, conf.level = 0.95,
                             method = c("wald", "profile")) {
+  if (inherits(fit, "freq_tls")) fit <- fit$fit
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} object from {.fn fit_tls}.")
   }
