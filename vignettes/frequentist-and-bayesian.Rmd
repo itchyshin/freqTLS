@@ -32,8 +32,9 @@ identifiability, and non-convergence. The aim here is an honest account of the
 trade-offs — including the uncomfortable fact, developed at the end, that the
 "prior-free" frequentist path quietly uses prior-like machinery of its own.
 
-It builds **without Stan**: the `freqTLS` fits run live; the Bayesian
-behaviour is described, not computed.
+It builds **without Stan**: the `freqTLS` fits run live, while the Bayesian
+comparison and the coverage evidence are read from cached simulations rather
+than recomputed.
 
 ## One model, two inferential philosophies
 
@@ -50,10 +51,12 @@ about the parameters**:
   **posterior**, and reports a **credible interval** — a probability statement
   about the parameter, conditional on the prior.
 
-On strong data these agree closely (see the worked head-to-head in
-`vignette("comparing-to-bayesTLS")`). They diverge exactly where the data are
-weak and the prior starts to do the work — which is precisely where you most
-need to know what is data and what is assumption.
+On strong data these agree closely — on the brown-shrimp benchmark the two
+packages' `CTmax` estimates differ by only about 0.07 °C (cached in
+`benchmark_vs_bayes.rds`; the full three-way comparison, which adds the classical
+two-stage method, is in `vignette("comparing-to-bayesTLS")`). They diverge
+exactly where the data are weak and the prior starts to do the work — which is
+precisely where you most need to know what is data and what is assumption.
 
 ## Priors: regularisation versus sensitivity
 
@@ -148,6 +151,60 @@ the coverage as a probability about the parameter — and that "significance"
 language should be retired (Rafi & Greenland 2020; Amrhein, Greenland & McShane
 2019); freqTLS keeps the familiar term "confidence interval" but shares that
 caution.
+
+## Does the interval actually cover? Small-sample calibration
+
+A confidence interval is only worth the name if it contains the truth at the
+advertised rate. That is a *checkable* claim — and, unlike the Bayesian path
+whose calibration is entangled with the prior, the frequentist path lets us check
+it cleanly: simulate data from a known `CTmax` and `z`, refit, and count how
+often the nominal 95% interval covers the generating value.
+
+The asymptotic theory behind a likelihood interval is exact only as the sample
+grows. In small samples the curvature-based standard error is a little too small
+and the normal / chi-squared reference a little too generous, so the naive
+interval comes out **too narrow and under-covers**. `freqTLS` corrects this with
+the **Bates–Watts profile-t** calibration: it refers the signed-root likelihood
+statistic to a *t* distribution with the residual degrees of freedom of the fit
+(`df = n_obs − n_parameters`) rather than to a standard normal. This widens the
+Wald and profile intervals precisely when the sample is small, and not at all
+when it is large (Bates & Watts, 1988).
+
+The pay-off, measured over ~500 simulated datasets per cell (cached in
+`calibration_results.rds`):
+
+```{r calibration, echo = FALSE}
+cal <- readRDS(system.file("extdata", "calibration_results.rds", package = "freqTLS"))
+knitr::kable(
+  data.frame(
+    "Sample size"             = sub("mid", "medium", cal$cell),
+    "Residual df"             = cal$median_df,
+    "Coverage (asymptotic z)" = sprintf("%.3f", cal$cov_CTmax_z),
+    "Coverage (profile-t)"    = sprintf("%.3f", cal$cov_CTmax_t),
+    "Extra width"             = sprintf("%+.0f%%", 100 * (cal$width_CTmax_t / cal$width_CTmax_z - 1)),
+    check.names = FALSE
+  ),
+  caption = paste(
+    "95% confidence-interval coverage for CTmax (nominal 0.95),",
+    "over ~500 simulated datasets per cell. Monte-Carlo SE ≈ 0.01."
+  )
+)
+```
+
+At `df ≈ 10` the asymptotic 95% interval covers only about 93% of the time; the
+t-calibration restores it to ~96%, at the cost of ~14% extra width. By
+`df ≈ 100` the two references coincide (`t ≈ z`) and the correction costs
+essentially nothing. The widening is therefore self-cancelling: it pays for the
+small-sample optimism of the asymptotics, then steps out of the way as data
+accumulate.
+
+This bears on the Bayesian comparison in two ways. First, it is the honest basis
+for the "confidence" label of the previous section — here the coverage is
+*measured*, not assumed. Second, it is itself a mild small-sample adjustment, a
+frequentist cousin of the regularisation discussed next: a correction that leans
+on the *t* distribution much as a weakly informative prior leans on its scale.
+The difference is that this one is explicit, validated by simulation, and
+disappears as the sample grows.
 
 ## The blurry line: clamping, shrinkage, and penalties as implicit priors
 
@@ -251,6 +308,8 @@ regularised*, not *assumption-free*.
 - Amrhein, V., Greenland, S., & McShane, B. (2019). Scientists rise up against
   statistical significance [Comment]. *Nature*, 567, 305–307.
   <https://doi.org/10.1038/d41586-019-00857-9>
+- Bates, D. M., & Watts, D. G. (1988). *Nonlinear Regression Analysis and Its
+  Applications*. Wiley. <https://doi.org/10.1002/9780470316757>
 - Bishop, C. M. (2006). *Pattern Recognition and Machine Learning* (§3.1.4,
   §3.3). Springer.
 - Chung, Y., Rabe-Hesketh, S., Dorie, V., Gelman, A., & Liu, J. (2013). A
