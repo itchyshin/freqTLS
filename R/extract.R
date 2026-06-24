@@ -166,7 +166,7 @@ tls_param_scale <- function(parameter, name_map) {
 #' @noRd
 tls_wald_natural <- function(fit, conf.level) {
   est <- fit$estimates
-  zq <- stats::qnorm(1 - (1 - conf.level) / 2)
+  zq <- stats::qt(1 - (1 - conf.level) / 2, df = tls_ci_df(fit))
 
   conf.low <- rep(NA_real_, nrow(est))
   conf.high <- rep(NA_real_, nrow(est))

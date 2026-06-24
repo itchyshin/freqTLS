@@ -71,12 +71,12 @@ test_that("a non-closing profile auto-falls back to a finite bootstrap interval"
   fs <- sparse_fit()
   expect_message(
     suppressWarnings(
-      confint(fs, "CTmax", method = "profile", nboot = 200L, boot_seed = 5L)
+      confint(fs, "z", method = "profile", nboot = 200L, boot_seed = 5L)
     ),
     "parametric bootstrap"
   )
   ci <- suppressWarnings(suppressMessages(
-    confint(fs, "CTmax", method = "profile", nboot = 200L, boot_seed = 5L)
+    confint(fs, "z", method = "profile", nboot = 200L, boot_seed = 5L)
   ))
   expect_identical(ci$method, "bootstrap")
   expect_identical(ci$conf.status, "bootstrap")
@@ -86,7 +86,7 @@ test_that("a non-closing profile auto-falls back to a finite bootstrap interval"
 test_that("fallback = FALSE keeps the strict profile NA on a non-closing side", {
   fs <- sparse_fit()
   ci <- suppressWarnings(
-    confint(fs, "CTmax", method = "profile", fallback = FALSE)
+    confint(fs, "z", method = "profile", fallback = FALSE)
   )
   expect_true(is.na(ci$conf.low) || is.na(ci$conf.high))
   expect_match(ci$conf.status, "open")

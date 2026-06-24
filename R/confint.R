@@ -311,7 +311,7 @@ tls_confint_wald <- function(fit, parm, level) {
     # symmetric `estimate +/- z * se` from the estimates table.
     ei <- match(p, est$parameter)
     if (!is.na(ei) && grepl("^(low|up|k):", p) && is.na(est$group[ei])) {
-      zc <- stats::qnorm(1 - (1 - level) / 2)
+      zc <- stats::qt(1 - (1 - level) / 2, df = tls_ci_df(fit))
       e <- est$estimate[ei]
       se <- est$std.error[ei]
       return(tibble::tibble(

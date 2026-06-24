@@ -98,7 +98,9 @@ test_that("the z Wald interval equals exp() of the internal log_z interval", {
   fx <- summary(fit$sdreport, select = "fixed")
   e <- fx["beta_logz", "Estimate"]
   se <- fx["beta_logz", "Std. Error"]
-  zq <- stats::qnorm(0.975)
+  # Wald-t calibration: the natural-scale interval uses qt(df = n - p), and z is
+  # the back-transform of the internal log_z interval (equivariance).
+  zq <- stats::qt(0.975, df = freqTLS:::tls_ci_df(fit))
   ci_logz <- exp(c(e - zq * se, e + zq * se))
   zrow <- get_z(fit)
   expect_equal(c(zrow$conf.low, zrow$conf.high), ci_logz, tolerance = 1e-8)

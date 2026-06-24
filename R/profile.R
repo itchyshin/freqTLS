@@ -452,7 +452,10 @@ tls_mle_par_list <- function(fit, template) {
 #' @noRd
 tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
   nll_hat <- -fit$logLik
-  cutoff <- stats::qchisq(level, df = 1)
+  df_t <- tls_ci_df(fit)
+  # Bates-Watts profile-t: compare the deviance to t^2 (not chi-square_1) so the
+  # interval is small-sample calibrated (t^2 -> chi-square_1 as df -> Inf).
+  cutoff <- stats::qt(1 - (1 - level) / 2, df = df_t)^2
   nll_fun <- tls_profile_nll_fun(fit, target, trace)
   theta_hat <- target$theta_hat
 
@@ -466,9 +469,9 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
   # ---- grid for the curve (curvature-scaled span) --------------------------
   se <- tls_target_curvature_se(fit, target)
   span <- if (is.finite(se) && se > 0) {
-    # Reach a bit past the cutoff in both directions; chi-square(0.99,1) ~ 6.63
-    # so ~3.5 SE covers a 95% interval with margin.
-    3.5 * se
+    # Reach past the (heavier-tailed) t cutoff: the endpoint is ~ t_df SE from the
+    # MLE, so (t_df + margin) * se brackets it (-> ~3.5 SE for large df).
+    (stats::qt(1 - (1 - level) / 2, df = df_t) + 1.5) * se
   } else {
     max(0.5, 0.25 * abs(theta_hat))
   }

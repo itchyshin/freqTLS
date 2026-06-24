@@ -20,6 +20,22 @@
 #' @return Numeric value(s) on the natural scale.
 #' @keywords internal
 #' @noRd
+#' Residual degrees of freedom for the t-based interval calibration
+#'
+#' Bates-Watts profile-t / Wald-t intervals compare the (signed-root) statistic
+#' to a t distribution with `n - p` degrees of freedom: `n` data rows, `p`
+#' estimated parameters. This is the small-sample correction the asymptotic
+#' chi-square / normal calibration lacks (it converges to it as `df -> Inf`). For
+#' random-effects fits the conditional modes are integrated out, so `n - p`
+#' over-states the df (approximate; the coverage simulation validates it).
+#' @keywords internal
+#' @noRd
+tls_ci_df <- function(fit) {
+  n_obs <- length(fit$diag_data$y)
+  p <- length(fit$par)
+  max(n_obs - p, 1L)
+}
+
 tls_backtransform <- function(x, link) {
   switch(link,
     log = exp(x),

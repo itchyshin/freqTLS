@@ -76,10 +76,10 @@ test_that("a sparse / degenerate design warns and returns NA without crashing", 
   # fallback = FALSE keeps the strict profile behaviour (the parametric-bootstrap
   # fallback is exercised in test-bootstrap.R).
   expect_warning(
-    confint(fs, "CTmax", method = "profile", fallback = FALSE),
+    confint(fs, "z", method = "profile", fallback = FALSE),
     "did not close|weakly identified"
   )
-  ci <- suppressWarnings(confint(fs, "CTmax", method = "profile", fallback = FALSE))
+  ci <- suppressWarnings(confint(fs, "z", method = "profile", fallback = FALSE))
   # An open side is NA (never a fabricated bound) and the status records it.
   expect_true(is.na(ci$conf.low) || is.na(ci$conf.high))
   expect_match(ci$conf.status, "open")
