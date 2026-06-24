@@ -47,3 +47,21 @@ test_that("tls() also accepts a bare profile_tls fit and rejects absolute for no
   expect_s3_class(tls(f4$fit, method = "wald"), "tls")     # bare engine fit
   expect_error(tls(f4, target_surv = "absolute"), "relative")
 })
+
+test_that("diagnose_tdt_fit reports a one-row convergence summary", {
+  f <- fit_4pl(std_sim(seed = 7), t_ref = 1, family = "binomial", quiet = TRUE)
+  d <- diagnose_tdt_fit(f)
+  expect_equal(nrow(d), 1L)
+  expect_true(all(c("converged", "pd_hessian", "max_abs_gradient",
+                    "gradient_pass", "all_pass") %in% names(d)))
+  expect_true(d$converged)
+  expect_true(d$pd_hessian)
+  expect_true(d$all_pass)
+})
+
+test_that("tdt_parameter_table returns the bayesTLS parameter/median/lower/upper shape", {
+  f <- fit_4pl(std_sim(seed = 8), t_ref = 1, family = "binomial", quiet = TRUE)
+  pt <- tdt_parameter_table(f, method = "wald")
+  expect_setequal(names(pt), c("parameter", "group", "median", "lower", "upper"))
+  expect_true(all(c("low", "up", "k", "CTmax", "z") %in% pt$parameter))
+})

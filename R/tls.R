@@ -98,3 +98,59 @@ print.tls <- function(x, ...) {
   print(x$summary)
   invisible(x)
 }
+
+#' Diagnose a freqTLS fit (frequentist twin of `diagnose_tdt_fit`)
+#'
+#' The maximum-likelihood analogue of `bayesTLS::diagnose_tdt_fit()`: where the
+#' Bayesian version reports Rhat / ESS / divergences, the freqTLS version reports
+#' optimiser convergence, a positive-definite Hessian, and the gradient norm at
+#' the optimum, with a single `all_pass` flag.
+#'
+#' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
+#' @return A one-row tibble of convergence diagnostics.
+#' @seealso [fit_4pl()], [check_tls()]
+#' @export
+diagnose_tdt_fit <- function(object) {
+  fit <- if (inherits(object, "freq_tls")) object$fit else object
+  if (!inherits(fit, "profile_tls"))
+    cli::cli_abort("{.arg object} must be a {.cls freq_tls} or {.cls profile_tls} fit.")
+  conv <- fit$convergence
+  g <- tryCatch(max(abs(fit$obj$gr(fit$opt$par))),
+                error = function(e) NA_real_)
+  converged    <- isTRUE(conv$code == 0L)
+  pd_hessian   <- isTRUE(conv$pdHess)
+  gradient_pass <- is.finite(g) && g < 1e-3
+  tibble::tibble(
+    converged        = converged,
+    pd_hessian       = pd_hessian,
+    max_abs_gradient = g,
+    gradient_pass    = gradient_pass,
+    optimizer        = conv$optimizer %||% NA_character_,
+    logLik           = as.numeric(fit$logLik),
+    n_params         = fit$df,
+    AIC              = fit$AIC,
+    all_pass         = converged && pd_hessian && gradient_pass
+  )
+}
+
+#' 4PL parameter table (frequentist twin of `tdt_parameter_table`)
+#'
+#' Returns the fitted 4PL parameters (`low`, `up`, `k`, `CTmax`, `z`, and `phi`
+#' for over-dispersed families) as point estimates with confidence intervals, in
+#' bayesTLS's `parameter / [group] / median / lower / upper` shape.
+#'
+#' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
+#' @param method Interval method: `"wald"` (default) or `"profile"`.
+#' @param level Confidence level (default 0.95).
+#' @return A tibble with `parameter`, `group`, `median`, `lower`, `upper`.
+#' @seealso [tls()], [tidy_parameters()]
+#' @export
+tdt_parameter_table <- function(object, method = NULL, level = 0.95) {
+  fit <- if (inherits(object, "freq_tls")) object$fit else object
+  meta <- if (inherits(object, "freq_tls")) object$meta else list()
+  method <- method %||% meta$method %||% "wald"
+  method <- if (identical(method, "profile")) "profile" else "wald"
+  tp <- tidy_parameters(fit, conf.int = TRUE, conf.level = level, method = method)
+  tibble::tibble(parameter = tp$parameter, group = tp$group,
+                 median = tp$estimate, lower = tp$conf.low, upper = tp$conf.high)
+}
