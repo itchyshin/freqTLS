@@ -4,6 +4,7 @@
 \alias{tls}
 \alias{tls_z}
 \alias{tls_ctmax}
+\alias{tls_tcrit}
 \title{Thermal-load-sensitivity quantities (z, CTmax) with confidence intervals}
 \usage{
 tls(
@@ -11,13 +12,19 @@ tls(
   by = NULL,
   params = c("all", "z", "ctmax"),
   target_surv = "relative",
+  lethal = FALSE,
   method = NULL,
-  level = 0.95
+  level = 0.95,
+  nboot = 1000L,
+  TC_rate_range = c(0.1, 1),
+  seed = NULL
 )
 
 tls_z(object, ...)
 
 tls_ctmax(object, ...)
+
+tls_tcrit(object, ...)
 }
 \arguments{
 \item{object}{A \code{freq_tls} fit from \code{\link[=fit_4pl]{fit_4pl()}} (or a bare \code{profile_tls} fit
@@ -29,15 +36,23 @@ fit's moderator (e.g. the \code{ctmax}/\code{z}/\code{by} factor).}
 \item{params}{\code{"all"} (z and CTmax, the default), \code{"z"}, or \code{"ctmax"}.}
 
 \item{target_surv}{Survival threshold for CTmax: \code{"relative"} (the curve
-midpoint, the default). Absolute / LTx thresholds arrive with
-\code{\link[=extract_tdt]{extract_tdt()}}.}
+midpoint, the default), \code{"absolute"} (50\% survival), or a number in \verb{(0, 1)}
+for an LTx. Non-relative thresholds and \code{lethal} are derived per bootstrap
+replicate via \code{\link[=extract_tdt]{extract_tdt()}}.}
 
-\item{method}{Interval method: \code{"profile"} (default, from the fit's stored
-default), \code{"wald"}, or \code{"bootstrap"}.}
+\item{lethal}{If \code{TRUE}, also report \code{T_crit} (the damage-rate-floor critical
+temperature); uses the bootstrap path.}
+
+\item{method}{Interval method for the relative path: \code{"profile"} (default,
+from the fit's stored default), \code{"wald"}, or \code{"bootstrap"}. Absolute /
+\code{lethal} always use bootstrap.}
 
 \item{level}{Confidence level (default 0.95).}
 
-\item{...}{Passed from \code{\link[=tls_z]{tls_z()}} / \code{\link[=tls_ctmax]{tls_ctmax()}} to \code{\link[=tls]{tls()}}.}
+\item{nboot, TC_rate_range, seed}{Passed to \code{\link[=extract_tdt]{extract_tdt()}} for the bootstrap
+path (absolute / LTx / \code{lethal}).}
+
+\item{...}{Passed from \code{\link[=tls_z]{tls_z()}} / \code{\link[=tls_ctmax]{tls_ctmax()}} / \code{\link[bayesTLS:tls_tcrit]{tls_tcrit()}} to \code{\link[=tls]{tls()}}.}
 }
 \value{
 A \code{tls} object: a list with \verb{$summary} (a tibble of

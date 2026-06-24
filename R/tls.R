@@ -18,18 +18,26 @@
 #'   fit's moderator (e.g. the `ctmax`/`z`/`by` factor).
 #' @param params `"all"` (z and CTmax, the default), `"z"`, or `"ctmax"`.
 #' @param target_surv Survival threshold for CTmax: `"relative"` (the curve
-#'   midpoint, the default). Absolute / LTx thresholds arrive with
-#'   [extract_tdt()].
-#' @param method Interval method: `"profile"` (default, from the fit's stored
-#'   default), `"wald"`, or `"bootstrap"`.
+#'   midpoint, the default), `"absolute"` (50% survival), or a number in `(0, 1)`
+#'   for an LTx. Non-relative thresholds and `lethal` are derived per bootstrap
+#'   replicate via [extract_tdt()].
+#' @param lethal If `TRUE`, also report `T_crit` (the damage-rate-floor critical
+#'   temperature); uses the bootstrap path.
+#' @param method Interval method for the relative path: `"profile"` (default,
+#'   from the fit's stored default), `"wald"`, or `"bootstrap"`. Absolute /
+#'   `lethal` always use bootstrap.
 #' @param level Confidence level (default 0.95).
-#' @param ... Passed from [tls_z()] / [tls_ctmax()] to [tls()].
+#' @param nboot,TC_rate_range,seed Passed to [extract_tdt()] for the bootstrap
+#'   path (absolute / LTx / `lethal`).
+#' @param ... Passed from [tls_z()] / [tls_ctmax()] / [tls_tcrit()] to [tls()].
 #' @return A `tls` object: a list with `$summary` (a tibble of
 #'   `[<group>,] quantity, median, lower, upper`) and `$meta`.
 #' @seealso [fit_4pl()], [tls_z()], [tls_ctmax()], [confint.profile_tls()]
 #' @export
 tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
-                target_surv = "relative", method = NULL, level = 0.95) {
+                target_surv = "relative", lethal = FALSE, method = NULL,
+                level = 0.95, nboot = 1000L, TC_rate_range = c(0.1, 1),
+                seed = NULL) {
   if (inherits(object, "freq_tls")) {
     fit <- object$fit; meta <- object$meta
   } else if (inherits(object, "profile_tls")) {
@@ -39,13 +47,26 @@ tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
   }
   params <- match.arg(params)
   method <- method %||% meta$method %||% "profile"
-  if (!identical(target_surv, "relative"))
-    cli::cli_abort(c(
-      "Only {.code target_surv = \"relative\"} is available from {.fn tls} so far.",
-      i = "Absolute (LT50) and LTx thresholds arrive with {.fn extract_tdt}."
-    ))
-
   qsel <- switch(params, all = c("z", "CTmax"), z = "z", ctmax = "CTmax")
+
+  # Absolute / LTx thresholds and T_crit are derived per bootstrap replicate;
+  # delegate to extract_tdt() and flatten its nested summaries into the flat
+  # tls() shape. The fast relative path below uses the profile/Wald coordinate CIs.
+  if (!identical(target_surv, "relative") || isTRUE(lethal)) {
+    et <- extract_tdt(object, target_surv = target_surv, lethal = lethal,
+                      TC_rate_range = TC_rate_range, nboot = nboot,
+                      level = level, seed = seed, by = by)
+    summ <- tls_flatten_tdt(et, qsel, lethal)
+    out <- list(
+      summary = summ,
+      meta = list(params = c(qsel, if (isTRUE(lethal)) "Tcrit"),
+                  mode = et$meta$target_surv, method = "bootstrap", level = level,
+                  by = et$meta$by, t_ref = meta$t_ref, temp_mean = meta$temp_mean)
+    )
+    class(out) <- c("tls", "list")
+    return(out)
+  }
+
   est <- fit$estimates
   pat <- paste0("^(", paste(qsel, collapse = "|"), ")(:|$)")
   rows <- est[grepl(pat, est$parameter), , drop = FALSE]
@@ -93,6 +114,35 @@ tls_z <- function(object, ...) tls(object, params = "z", ...)
 #' @rdname tls
 #' @export
 tls_ctmax <- function(object, ...) tls(object, params = "ctmax", ...)
+
+#' @rdname tls
+#' @export
+tls_tcrit <- function(object, ...) {
+  r <- tls(object, params = "ctmax", lethal = TRUE, ...)
+  r$summary <- r$summary[r$summary$quantity == "Tcrit", , drop = FALSE]
+  r$meta$params <- "Tcrit"
+  r
+}
+
+# Flatten an extract_tdt() result into the flat tls() $summary shape
+# (quantity / [group] / median / lower / upper).
+tls_flatten_tdt <- function(et, qsel, lethal) {
+  byc <- et$meta$by
+  one <- function(s, label, prefix) {
+    cols <- list()
+    if (!is.null(byc)) cols[[byc]] <- s[[byc]]
+    cols$quantity <- label
+    cols$median <- s[[paste0(prefix, "_median")]]
+    cols$lower  <- s[[paste0(prefix, "_lower")]]
+    cols$upper  <- s[[paste0(prefix, "_upper")]]
+    as.data.frame(cols, stringsAsFactors = FALSE)
+  }
+  parts <- list()
+  if ("z" %in% qsel)     parts <- c(parts, list(one(et$z$summary, "z", "z")))
+  if ("CTmax" %in% qsel) parts <- c(parts, list(one(et$CTmax$summary, "CTmax", "temp")))
+  if (isTRUE(lethal))    parts <- c(parts, list(one(et$T_crit$summary, "Tcrit", "temp")))
+  tibble::as_tibble(do.call(rbind, parts))
+}
 
 #' @export
 print.tls <- function(x, ...) {

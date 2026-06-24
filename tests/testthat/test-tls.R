@@ -42,10 +42,13 @@ test_that("tls_z / tls_ctmax select a single quantity", {
   expect_setequal(tls_ctmax(f, method = "wald")$summary$quantity, "CTmax")
 })
 
-test_that("tls() also accepts a bare profile_tls fit and rejects absolute for now", {
+test_that("tls() accepts a bare profile_tls fit; absolute delegates to the bootstrap path", {
   f4 <- fit_4pl(std_sim(seed = 6), t_ref = 1, family = "binomial", quiet = TRUE)
   expect_s3_class(tls(f4$fit, method = "wald"), "tls")     # bare engine fit
-  expect_error(tls(f4, target_surv = "absolute"), "relative")
+  ra <- suppressWarnings(tls(f4, target_surv = "absolute", nboot = 40, seed = 1))
+  expect_s3_class(ra, "tls")
+  expect_match(ra$meta$mode, "p=0.500")
+  expect_identical(ra$meta$method, "bootstrap")
 })
 
 test_that("diagnose_tdt_fit reports a one-row convergence summary", {
@@ -64,4 +67,19 @@ test_that("tdt_parameter_table returns the bayesTLS parameter/median/lower/upper
   pt <- tdt_parameter_table(f, method = "wald")
   expect_setequal(names(pt), c("parameter", "group", "median", "lower", "upper"))
   expect_true(all(c("low", "up", "k", "CTmax", "z") %in% pt$parameter))
+})
+
+test_that("tls() delegates absolute / lethal to the bootstrap path", {
+  d <- simulate_tls(family = "binomial", group = c("A", "B"),
+                    CTmax = c(34, 38), z = c(3, 5), seed = 3)
+  s <- standardize_data(d, temp = "temp", duration = "duration",
+                        n_total = "total", n_surv = "survived")
+  f <- suppressWarnings(fit_4pl(s, ctmax = ~ 0 + group, z = ~ 0 + group,
+                                t_ref = 1, family = "binomial", quiet = TRUE))
+  r <- suppressWarnings(tls(f, lethal = TRUE, nboot = 49, seed = 1))
+  expect_true(all(c("z", "CTmax", "Tcrit") %in% r$summary$quantity))
+  expect_identical(r$meta$method, "bootstrap")
+  expect_true("group" %in% names(r$summary))
+  rt <- suppressWarnings(tls_tcrit(f, nboot = 49, seed = 1))
+  expect_setequal(rt$summary$quantity, "Tcrit")
 })
