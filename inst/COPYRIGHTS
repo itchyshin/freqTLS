@@ -1,0 +1,72 @@
+freqTLS copyright and provenance notes
+
+freqTLS is released under GPL (>= 3); see LICENSE. This file records code and
+patterns adapted from other GPL-compatible packages, and the licence of the
+vendored benchmark data. Any further reuse must be recorded here, with the source
+file and the nature of the adaptation, before the change is treated as complete
+(AGENTS.md design rule 9).
+
+== Provenance ==
+
+freqTLS is the frequentist sibling of bayesTLS, forked from the profileTLS
+package (https://github.com/itchyshin/profileTLS) at commit 6f963a9 (v0.3.3),
+which it supersedes. Both are GPL (>= 3).
+
+== Engineering patterns adapted from drmTMB (GPL-3) ==
+
+Source: https://github.com/itchyshin/drmTMB (local sibling package).
+
+- src/init.c: the Boolean.h pre-include guard that lets the package compile
+  cleanly under R 4.5's Apple clang is adapted from drmTMB::src/init.c.
+- src/profile_tls.cpp: the same Boolean.h pre-include guard
+  (cf. drmTMB::src/drmTMB.cpp:1-14); the beta-binomial lgamma density form
+  (cf. drmTMB::src/drmTMB.cpp:1319-1328); and the branch-free CppAD::CondExp
+  probability clamp and the beta-binomial shape floor
+  (cf. drmTMB::src/drmTMB.cpp:1302-1314).
+- src/profile_tls_numeric.h: the series-vs-direct CondExp switching for a stable
+  log1p(exp()) is adapted from drmTMB::src/drm_numeric.h.
+- R/formula.R: the shape of the brms/drmTMB-style formula parser -- variadic
+  capture of per-sub-parameter formulas via substitute(), the small
+  formula-walking primitives (LHS/RHS extraction, additive flattening), and
+  random-effect-bar detection -- is adapted from drmTMB's drm_formula() /
+  parse_drm_formula_entry() (cf. drmTMB::R/parse-formula.R). freqTLS writes
+  its own grammar: the time() / temp() axis markers, the five fixed
+  sub-parameter handles (low, up, log_k, CTmax, log_z), the successes |
+  trials(total) and cbind() response idioms, and the v0.1 restrictions
+  (intercept-only shapes; CTmax / log_z share one design; random effects
+  deferred to v0.2).
+- The agent-kit, dev-log discipline, and the optimizer/profile plumbing patterns
+  (planned for R/fit_engine.R, R/profile.R, R/confint.R) follow drmTMB's
+  governance and R/profile.R patterns.
+
+freqTLS writes independent code for the 4PL thermal-load-sensitivity
+likelihood and its direct CTmax/z parameterisation; only the numerical-stability
+and registration patterns above are adapted.
+
+== Confidence-Eye geometry adapted from gllvmTMB (GPL-3) ==
+
+Source: https://github.com/JenniNiku/gllvmTMB (or the local sibling package).
+
+- R/plotting.R (Phase 4): the Confidence-Eye lens geometry in the helper
+  tls_eye_polygon_df() adapts gllvmTMB's .eye_polygon_df(width_max = 0.70) from
+  gllvmTMB/R/loading-uncertainty-helpers.R (the Gaussian-width lens taper and the
+  CI-half-width fallback for a missing SE), and plot_confidence_eye() adapts the
+  structure of gllvmTMB's plot_loadings_confidence_eye() from
+  gllvmTMB/R/plot-loadings-confidence-eye.R (pale geom_polygon lens at alpha 0.35,
+  hollow geom_point at shape 21, the reliability fill palette, and the honest
+  fallback that refuses to draw a lens when no finite (lower, upper) interval
+  exists -- here keyed off the profile conf.status so a non-closing profile
+  renders a hollow point only). freqTLS writes its own forward-prediction and
+  survival/TDT/surface plots; only the lens geometry and eye structure are
+  adapted.
+
+== Vendored benchmark data (CC BY 4.0) ==
+
+The benchmark datasets shrimp_lethal, zebrafish_lethal, and snowgum_psii
+originate from the bayesTLS package (Daniel W. A. Noble, Pieter A. Arnold,
+Patrice Pottier) and are redistributed under the Creative Commons Attribution 4.0
+International licence (CC BY 4.0). The shrimp survival counts are rebuilt from the
+source CSV proportions, and the snowgum retained-PSII proportion is computed as
+final_fvfm / initial_fvfm from the source CSV (see data-raw/make_benchmark_data.R
+and R/data.R). Attribution is given in R/data.R and inst/CITATION. freqTLS code
+remains GPL (>= 3); the data licence applies only to the vendored datasets.

@@ -1,0 +1,307 @@
+{
+  "title": "freqTLS mission control",
+  "subtitle": "Phase board for the profile-likelihood complement to bayesTLS. A row is not done unless engine, R API, point estimates, profile/Wald CIs, tests, docs, the Confidence-Eye figure gate, and Rose's audit agree. freqTLS implements the bayesTLS thermal-load-sensitivity framework by maximum likelihood.",
+  "updated": "2026-06-17",
+  "metrics": {
+    "verified": 7,
+    "active": 0,
+    "blocked": 0,
+    "deferred": 0,
+    "total": 7
+  },
+  "phases": [
+    {
+      "id": "Phase 0",
+      "name": "Bootstrap team, memory, docs, and package scaffold",
+      "owner": "Ada + Grace + Rose",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "Copy SPEC, adapt drmTMB agent-kit, write AGENTS/CLAUDE, 13+4 agents, skills, hooks",
+          "status": "verified"
+        },
+        {
+          "name": "Build docs/dev-log tree, dashboard (port 8767), tools/checkpoint.R, seed decisions and known-limitations",
+          "status": "verified"
+        },
+        {
+          "name": "Write docs/design 00..10, 46, 90; ROADMAP, NEWS, README.Rmd",
+          "status": "verified"
+        },
+        {
+          "name": "DESCRIPTION (4 authors), NAMESPACE, _pkgdown.yml, CI, .Rbuildignore, inst/COPYRIGHTS, inst/CITATION",
+          "status": "verified"
+        }
+      ]
+    },
+    {
+      "id": "Phase 1",
+      "name": "TMB core and fit engine",
+      "owner": "Gauss + Noether (+ Emmy)",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "src/profile_tls.cpp, numeric.h, init.c; families, model_matrix, fit_engine, fit_tls, utils, simulate; test-parameter-transforms",
+          "status": "verified"
+        }
+      ]
+    },
+    {
+      "id": "Phase 2",
+      "name": "API, methods, and extractors",
+      "owner": "Emmy + Boole + Curie",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "methods.R (print/summary/coef/vcov/logLik/AIC/nobs), extract.R (tidy_parameters + get_ctmax/z/shape, Wald CIs); simulate_tls hardening; test-fit-binomial, test-fit-beta-binomial, test-simulate, test-methods",
+          "status": "verified"
+        }
+      ]
+    },
+    {
+      "id": "Phase 3",
+      "name": "Profile likelihood and identifiability diagnostics",
+      "owner": "Fisher + Gauss + Pat",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "profile.R (map-refit + uniroot endpoints), confint.R (profile/wald), diagnostics.R (12 warnings), eye-style profile plot; tidy_parameters(method='profile'); test-profile, test-group",
+          "status": "verified"
+        }
+      ]
+    },
+    {
+      "id": "Phase 4",
+      "name": "Predict and Confidence-Eye plotting",
+      "owner": "Florence + Darwin",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "predict.R (survival/link/midpoint, surface, derive_lt), plotting.R (Confidence Eye + survival/tdt/surface, eye/line switch, honest conf.status fallback); test-predict; Florence figure-audit gate (rendered-PNG inspection)",
+          "status": "verified"
+        }
+      ]
+    },
+    {
+      "id": "Phase 5",
+      "name": "bayesTLS benchmark harness",
+      "owner": "Curie + Jason + Rose",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "make_benchmark_data.R (R-SHRIMP, run), R/data.R, inst/CITATION, build_benchmark_cache.R (guarded, not run), test-benchmark-sanity (skips: cache absent)",
+          "status": "verified"
+        }
+      ]
+    },
+    {
+      "id": "Phase 6",
+      "name": "Docs and pkgdown site",
+      "owner": "documentation-writer + pkgdown-editor + Pat + Darwin + literature-curator + Grace",
+      "status": "verified",
+      "counts": "1/1",
+      "slices": [
+        {
+          "name": "README.Rmd (renders survival + Confidence-Eye plots), four vignettes (freqTLS, model-math, profile-likelihood, comparing-to-bayesTLS -- the last builds WITHOUT Stan via guarded cache read), NEWS, final _pkgdown.yml; document/test/check/build_site clean",
+          "status": "verified"
+        }
+      ]
+    }
+  ],
+  "repos": [
+    {
+      "name": "freqTLS",
+      "branch": "main",
+      "head": "v0.2 features complete",
+      "dirty": true,
+      "note": "This package. Phases 1-6 verified: TMB engine + fit_tls + simulate_tls, S3 methods + tidy extractors, the profile-likelihood machinery (confint(method='profile'/'wald'), 12 identifiability warnings, eye-style profile plot), prediction + Confidence-Eye plotting, the benchmark data + harness (R-SHRIMP-corrected shrimp_lethal + zebrafish_lethal vendored with CC-BY attribution; freqTLS fits both with sensible estimates; guarded maintainer cache builder written-but-not-run; test-benchmark-sanity skips because the cache is absent), and the docs + pkgdown site (README renders survival + Confidence-Eye plots; four vignettes incl. comparing-to-bayesTLS which builds WITHOUT Stan via a guarded cache read; final _pkgdown.yml; document/test/check/build_site clean locally). 379 tests green. The v0.1 surface plus the full v0.2 feature set are complete: beta family (family_code 2), a random intercept on CTmax (Laplace + ranef + profile intervals for the fixed effects), derive_tcrit (rate-multiplier critical temperature), deterministic predict_heat_injury, and grouped covariate effects on low/up/log_k; the no-RE / shared-shape byte-identical gate held throughout (verified bit-identical for well-conditioned fits). A new frequentist-vs-Bayesian vignette ships too. Remaining: the maintainer-built bayesTLS+two-stage cache (needs Stan), and a few deferred intervals (profile/bootstrap of grouped shape coordinates; an RE-aware bootstrap)."
+    },
+    {
+      "name": "bayesTLS",
+      "branch": "HEAD",
+      "head": "comparator",
+      "dirty": false,
+      "note": "Bayesian sister and framework origin (Noble, Arnold, Pottier). Source of the model and the benchmark comparator."
+    },
+    {
+      "name": "drmTMB",
+      "branch": "main",
+      "head": "pattern source",
+      "dirty": false,
+      "note": "Engineering and governance pattern source (GPL-3). TMB likelihood, optimizer, profile, and agent-kit patterns adapted here."
+    },
+    {
+      "name": "gllvmTMB",
+      "branch": "main",
+      "head": "figure source",
+      "dirty": false,
+      "note": "Confidence-Eye geometry source (GPL-3): plot_loadings_confidence_eye and .eye_polygon_df."
+    }
+  ],
+  "agents": [
+    { "name": "Ada", "role": "orchestrator and integrator", "status": "verified" },
+    { "name": "Grace", "role": "CI, pkgdown, CRAN, reproducibility", "status": "verified" },
+    { "name": "Rose", "role": "systems auditor and claim gate", "status": "verified" },
+    { "name": "Gauss", "role": "TMB likelihood and numerics", "status": "verified" },
+    { "name": "Noether", "role": "math consistency", "status": "verified" },
+    { "name": "Fisher", "role": "statistical inference and profile CIs", "status": "verified" },
+    { "name": "Emmy", "role": "R package architecture", "status": "verified" },
+    { "name": "Boole", "role": "fit_tls API surface", "status": "verified" },
+    { "name": "Curie", "role": "simulation and testing", "status": "verified" },
+    { "name": "Florence", "role": "Confidence-Eye figure gate", "status": "verified" },
+    { "name": "Darwin", "role": "thermal-biology audience", "status": "verified" },
+    { "name": "Pat", "role": "applied-user walkthrough", "status": "verified" },
+    { "name": "Jason", "role": "bayesTLS/drmTMB source scout", "status": "verified" }
+  ],
+  "matrix": [
+    {
+      "area": "binomial, ungrouped",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "deferred",
+      "next": "Phase 3: profile CIs via confint(method='profile') (map-refit + uniroot; equivariant, ci_z == exp(ci_log_z) to 0; D(MLE)=0). Bootstrap is a v0.1 non-goal."
+    },
+    {
+      "area": "binomial, grouped",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "deferred",
+      "next": "Per-group CTmax:grp/z:grp profile to finite closed intervals; group contrasts dCTmax/dlog_z profiled via a treatment-coded refit (estimate == per-group difference to 1e-4) -- Phase 3."
+    },
+    {
+      "area": "beta-binomial, ungrouped",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "deferred",
+      "next": "phi profiled on the log scale (Phase 3): asymmetric profile CI preserved (phi=43.3 -> [17.5, 272]); clean-data phi -> binomial limit honestly does not close (open_both + inner-non-convergence warning)."
+    },
+    {
+      "area": "beta-binomial, grouped",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "deferred",
+      "next": "All 4 family x design x {wald, profile} cells now fitted in v0.1 (Phase 3 completes the profile column). Bootstrap remains a planned non-goal."
+    },
+    {
+      "area": "bayesTLS benchmark (relative, constant-shape)",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "deferred",
+      "next": "Phase 5 done for the freqTLS + data side: R-SHRIMP-corrected shrimp_lethal (deaths 0..11, sum 738, vs shipped {0,1} sum 35) + zebrafish_lethal vendored with CC-BY attribution; freqTLS fits both live (shrimp CTmax 31.8/z 2.2; zebrafish per-stage CTmax 39.8-41.4/z ~1.8-2.0). The bayesTLS + two-stage CACHE is maintainer-built (build_benchmark_cache.R, guarded, not run here -- no bayesTLS/Stan); test-benchmark-sanity skips until it exists. Phase 6 builds the comparison vignette from the cache."
+    },
+    {
+      "area": "Confidence-Eye uncertainty display",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "deferred",
+      "next": "Phase 4 done: plot_confidence_eye (pale lens + hollow point, eye/line switch) drives off conf.status -- a non-closing profile renders hollow points with no lens (verified: any(GeomPolygon)==FALSE). Compatibility language only. Plus predict/survival/tdt/surface plots, all rendered + inspected."
+    },
+    {
+      "area": "Beta family / random intercept / grouped shapes (v0.2)",
+      "engine": "implemented",
+      "bridge": "implemented",
+      "point": "implemented",
+      "wald": "implemented",
+      "profile": "implemented",
+      "bootstrap": "partial",
+      "next": "Fitted in v0.2: beta family (family_code 2); random intercept on CTmax (Laplace, ranef, profile/Wald); grouped covariate effects on low/up/log_k (Wald); derive_tcrit; predict_heat_injury. Deferred: profile/bootstrap of grouped shape coordinates, an RE-aware bootstrap. Time-to-event / multi-trait stay non-goal (or bayesTLS)."
+    }
+  ],
+  "active_work": [
+    {
+      "when": "2026-06-16",
+      "who": "Curie + Jason + Rose",
+      "text": "Phase 5 verified: the benchmark data + harness. data-raw/make_benchmark_data.R (run now) downloads the bayesTLS shrimp CSV + both shipped .rda @HEAD and builds two freqTLS-native datasets via usethis::use_data: shrimp_lethal (148 rows, R-SHRIMP-corrected -- deaths reconstructed from the CSV proportion) and zebrafish_lethal (323 rows, grouped by life_stage). R/data.R documents both with CC-BY attribution + the R-SHRIMP note; inst/CITATION cites bayesTLS for the data. data-raw/build_benchmark_cache.R is WRITTEN but NOT RUN (guard executed and confirmed to stop -- bayesTLS + cmdstanr absent), so inst/extdata/bayesTLS_benchmark_cache.rds is absent and test-benchmark-sanity SKIPS. R-SHRIMP before/after: shipped deaths {0,1} sum 35 -> corrected deaths 0..11 sum 738 (86 rows floored upstream). freqTLS fits the real data: shrimp conv 0 pdHess TRUE CTmax 31.8 z 2.2 phi 7.1; zebrafish conv 0 pdHess TRUE per-stage CTmax 39.9/41.4/39.8, z 2.0/1.8/2.0, with an appropriate sparse-cell duration warning. devtools::test = [ FAIL 0 | WARN 0 | SKIP 1 | PASS 201 ]. Next: Phase 6 (docs/site) builds the comparison vignette once a maintainer runs the cache builder."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "Florence + Darwin",
+      "text": "Phase 4 verified: predict.R (survival/link/midpoint forward map, predict_survival_surface, derive_lt) and plotting.R (plot_confidence_eye with style=eye/line + honest conf.status fallback, plot_survival_curves, plot_tdt_curve, plot_survival_surface). devtools::test = 201 PASS, 0 FAIL, 0 WARN (predict 38). Survival monotone in duration and temperature; midpoint == log10(tref) at temp=CTmax (tref 1 and 2); derive_lt round-trips to 1e-6. Render-proof: survival + eye + open-fallback + line + surface + tdt PNGs all read back and inspected (figure-audits/2026-06-16-eye.md); the non-closing eye draws hollow points and NO lens. Next is Phase 5 (Curie + Jason + Rose): the bayesTLS benchmark harness."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "Fisher + Gauss + Pat",
+      "text": "Phase 3 verified: profile.R (map-refit profile NLL + bracket-then-uniroot endpoints), confint.R (method = profile/wald), diagnostics.R (12 identifiability warnings), eye-style plot.profile_tls_profile, and tidy_parameters(method='profile'). devtools::test = 163 PASS, 0 FAIL, 0 WARN. D(MLE)=0; CTmax/z profile CIs finite/closed/bracketing; ci_z == exp(ci_log_z) to 0; sparse case warns + returns NA without crashing; grouped CTmax:grp/z:grp and contrasts dCTmax/dlog_z profile to finite intervals; up uses the documented Wald/delta fallback."
+    }
+  ],
+  "activity": [
+    {
+      "when": "2026-06-16",
+      "who": "Ada",
+      "text": "Bootstrapped the freqTLS team from the drmTMB agent-kit, adapted to single-stage 4PL thermal-load-sensitivity scope; DESCRIPTION parses with the four bayesTLS-framework authors."
+    }
+  ],
+  "blockers": [
+    {
+      "status": "guard",
+      "kind": "Claim boundary",
+      "item": "Wald CIs (Phase 2) and profile CIs (Phase 3) exist and are tested for self-consistency (equivariance, D(MLE)=0, honest non-closing). Coverage has NOT been simulated; do not report interval coverage rates until a coverage study is run. up is a Wald/delta fallback, not a true profile."
+    },
+    {
+      "status": "guard",
+      "kind": "Language boundary",
+      "item": "freqTLS intervals are compatibility intervals. Never describe them as posterior or credible; the Confidence Eye is the default visual."
+    }
+  ],
+  "evidence": [
+    {
+      "when": "2026-06-16",
+      "who": "devtools::test + verification gate (Phase 5)",
+      "text": "devtools::test = [ FAIL 0 | WARN 0 | SKIP 1 | PASS 201 ]; the SKIP is test-benchmark-sanity.R:31:3 'bayesTLS benchmark cache absent (needs Stan + bayesTLS to build)'. R-SHRIMP before/after (shipped .rda vs CSV reconstruction): shipped shrimp_lethal deaths take only {0,1} (113 zeros + 35 ones, sum 35 over 148 rows); corrected deaths = round(mortality_prop*total) span 0..11 (12 distinct values, sum 738), with 86 rows that as.integer() floored to 0. make_benchmark_data.R ran and wrote data/shrimp_lethal.rda (148) + data/zebrafish_lethal.rda (323). build_benchmark_cache.R guard fired (bayesTLS/cmdstanr absent) and the cache rds is absent. Verification gate: shrimp temps 30,30.5,31,31.5,32,32.5,33; survived/total median 0.60; shrimp fit_tls(beta_binomial, tref=1) conv 0 pdHess TRUE low~0 up 0.941 k 5.69 CTmax 31.775 z 2.194 phi 7.079; zebrafish grouped fit conv 0 pdHess TRUE CTmax young 39.921/old 41.379/larvae 39.792, z young 1.998/old 1.798/larvae 1.982, up 0.864 k 7.83 phi 3.29, with the appropriate warning 'Fewer than 3 unique durations at temperatures 40.1, 40.5, 41.2, and 42'."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "devtools::test + verification gate + render-proof (Phase 4)",
+      "text": "devtools::test = [ FAIL 0 | WARN 0 | SKIP 0 | PASS 201 ] (fit-beta-binomial 15, fit-binomial 13, group 21, methods 36, parameter-transforms 17, predict 38, profile 35, simulate 26). Gate: survival range over expand.grid(temp=c(34,36,38),duration=c(1,2,4)) = [0.0239, 0.8945]; decreasing with duration (temp=36) TRUE; decreasing with temperature (duration=2) TRUE; predict(type='midpoint') == log10(tref) at temp=CTmax to 1e-8 for tref 1 and 2; derive_lt round-trips (predict(temp, derive_lt(p,temp))==p to 1e-6 at p in {0.25,0.5,0.75}). Render-proof (PNGs read back, figure-audits/2026-06-16-eye.md): plot_survival_curves = 7 viridis curves all monotone-declining + observed points; plot_confidence_eye = pale-green lens + hollow shape-21 point per facet, 'compatibility' caption, no posterior wording, no filled points; sparse-fit eye = hollow red points and NO polygon layer (any(GeomPolygon)==FALSE), subtitle 'No interval closed; hollow points only' -- the honest fallback; style='line' draws interval lines; surface = viridis heatmap + contours; tdt = log-linear LT50 line (slope -1/z)."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "devtools::test + verification gate (Phase 3)",
+      "text": "devtools::test = [ FAIL 0 | WARN 0 | SKIP 0 | PASS 163 ] (fit-beta-binomial 15, fit-binomial 13, group 21, methods 36, parameter-transforms 17, profile 35, simulate 26). Gate: min(profile(f,'CTmax')$deviance)=0; confint(f,'CTmax',method='profile')=[35.72,36.13] est 35.93 status ok; z CI [3.623143,4.374418] == exp(log_z CI) (equivariance maxabsdiff 0); sparse design warns 'did not close ... weakly identified' and returns conf.low NA, conf.high 36.0, status open_lower, no crash; grouped recovers CTmax:A 34.07 / CTmax:B 37.99 / z:A 3.21 / z:B 5.08 and CTmax:A, z:B profile to finite closed intervals; contrasts dCTmax:A-B 3.9224 == CTmax:B-CTmax:A and dlog_z:A-B 0.4592 == log z:B - log z:A to 1e-4; beta-binomial phi profile [17.5,272] asymmetric; clean-data phi->1.1e7 honestly open_both + inner-non-convergence warning. up uses the Wald/delta fallback (interval_type 'wald')."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "devtools::test + end-to-end (Phase 2)",
+      "text": "devtools::test = [ FAIL 0 | WARN 0 | SKIP 0 | PASS 107 ] (fit-beta-binomial 15, fit-binomial 13, methods 36, parameter-transforms 17, simulate 26). print/summary readable; tidy_parameters has the 8 columns with Wald CIs (z [3.64,4.39] log-scale, CTmax [35.72,36.13] identity); z CI == exp(internal log_z CI) to 0; bb beats binom on overdispersed data (AIC 297.7 < 395.4) and collapses to near-binomial on clean data; simulate_tls misuse (list group; mismatched grouped length) now errors."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "DESCRIPTION",
+      "text": "Authors@R parses with Nakagawa (cre) plus Noble, Arnold, and Pottier (aut), crediting the bayesTLS framework origin."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "docs/dev-log",
+      "text": "check-log, after-task, decisions, and known-limitations seeded; dashboard served on port 8767."
+    },
+    {
+      "when": "2026-06-16",
+      "who": "devtools::test + end-to-end recovery",
+      "text": "Phase 1 gate: load_all compiles src/ and prints LOADED OK; test-parameter-transforms PASS 17/0 fail; binomial fit logLik=-129.05 conv=0 pdHess=TRUE CTmax=35.93 z=4.00; beta-binomial logLik=-137.71 conv=0 pdHess=TRUE CTmax=35.90 z=4.06 phi=40.8; grouped recovers per-group CTmax/z; all fitted p in (0,1)."
+    }
+  ]
+}

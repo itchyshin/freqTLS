@@ -1,0 +1,113 @@
+url: https://itchyshin.github.io/freqTLS/
+
+# Build to pkgdown-site/ so the rendered site does not collide with the durable
+# docs/ governance tree (design notes, dev-log, agent-kit). The CI pkgdown
+# workflow uploads this directory.
+destination: pkgdown-site
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+development:
+  mode: auto
+
+home:
+  title: freqTLS — profile-likelihood inference for thermal death-time models
+  description: >
+    Fast, prior-free profile-likelihood confidence intervals for the 4PL
+    thermal-load-sensitivity (thermal death-time) model, fitted by maximum
+    likelihood via TMB. The likelihood complement to bayesTLS.
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
+  links:
+    - text: Source code on GitHub
+      href: https://github.com/itchyshin/freqTLS
+    - text: bayesTLS (the Bayesian sibling)
+      href: https://github.com/daniel1noble/bayesTLS
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+
+articles:
+  - title: Get started
+    navbar: Get started
+    contents:
+      - freqTLS
+  - title: Model details
+    navbar: Model details
+    contents:
+      - model-math
+      - profile-likelihood
+      - random-effects
+  - title: Comparison
+    navbar: Comparison
+    contents:
+      - comparing-to-bayesTLS
+      - frequentist-and-bayesian
+  - title: Case studies
+    navbar: Case studies
+    contents:
+      - case-study-shrimp
+      - case-study-zebrafish
+      - case-study-leaf-psii
+      - case-study-suzukii
+      - heat-injury
+      - case-study-summary
+
+reference:
+  - title: Fitting and post-fit tools
+    desc: >
+      Fit thermal-load-sensitivity models by maximum likelihood and inspect the
+      results.
+    contents:
+      - fit_tls
+      - tls_bf
+      - profile_tls-methods
+      - tidy_parameters
+      - get_ctmax
+      - get_z
+      - get_shape
+      - ranef
+      - check_tls
+      - tls_family
+  - title: Profile likelihood
+    desc: >
+      Profile-likelihood deviance curves and prior-free confidence intervals.
+    contents:
+      - profile.profile_tls
+      - confint.profile_tls
+  - title: Prediction and plotting
+    desc: >
+      Predict survival, derive lethal times, and draw the fitted curves, the
+      survival surface, and the Confidence Eye.
+    contents:
+      - predict.profile_tls
+      - predict_survival_surface
+      - predict_heat_injury
+      - heat_injury_envelope
+      - plot_heat_injury
+      - derive_lt
+      - derive_ctmax
+      - derive_tcrit
+      - plot_survival_curves
+      - plot_tdt_curve
+      - plot_survival_surface
+      - plot_confidence_eye
+      - plot.profile_tls_profile
+  - title: Simulation
+    desc: Generate data from the locked data-generating process.
+    contents:
+      - simulate_tls
+  - title: Data
+    desc: Vendored benchmark datasets (credit bayesTLS, CC BY 4.0).
+    contents:
+      - shrimp_lethal
+      - zebrafish_lethal
+      - snowgum_psii
+      - dsuzukii_lethal
+  - title: Package
+    contents:
+      - freqTLS-package

@@ -1,0 +1,284 @@
+---
+title: "Case study: snow-gum leaf PSII thermal tolerance (continuous proportion, beta family)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case study: snow-gum leaf PSII thermal tolerance (continuous proportion, beta family)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4,
+  dpi = 96
+)
+```
+
+This article fits a thermal-tolerance model to a **functional** (not lethal)
+endpoint in snow-gum (*Eucalyptus pauciflora*) leaves: the **retained
+photosystem-II (PSII) efficiency** of leaf tissue after a heat dose. The response
+is a **continuous proportion** in `[0, 1]` with no underlying trial count, which
+is exactly the case the v0.2 **beta family** was added to handle. It is a
+`freqTLS`-only treatment: the fit runs live by maximum likelihood (TMB, **no
+Stan**), and uncertainty is summarised by profile-likelihood **confidence
+intervals**, not a posterior.
+
+**This vignette builds without Stan.** The `freqTLS` side runs live by
+maximum likelihood (TMB); the Bayesian (`bayesTLS`) Beta-family column is read
+from the maintainer-built benchmark cache (`inst/extdata/bayesTLS_benchmark_cache.rds`).
+The classical two-stage column is genuinely **not applicable** to a continuous
+proportion (it needs integer counts out of a denominator), so this case study is
+a two-way `bayesTLS`-vs-`freqTLS` comparison rather than the full three-way.
+
+```{r setup}
+library(freqTLS)
+```
+
+```{r load-data, include = FALSE}
+data(snowgum_psii)
+```
+
+## The dataset
+
+`snowgum_psii` is a vendored, leaf-level thermal-tolerance dataset. Each row is
+one leaf disc heated at a `(temp, duration)` combination; the response is the
+**retained PSII proportion**, `prop = final_fvfm / initial_fvfm`, i.e. the
+chlorophyll-fluorescence efficiency (Fv/Fm) after the heat dose divided by its
+value before. A `prop` near 1 means the photosystem was essentially undamaged; a
+`prop` near 0 means PSII function was lost.
+
+```{r data-shape}
+str(snowgum_psii)
+range(snowgum_psii$temp)
+range(snowgum_psii$duration)
+range(snowgum_psii$prop)
+```
+
+There are `r nrow(snowgum_psii)` leaf-disc measurements across a
+`r length(unique(snowgum_psii$temp))` × `r length(unique(snowgum_psii$duration))`
+temperature-by-duration grid. Three features set this case study apart:
+
+* **The response is a continuous proportion, not a count.** Retained PSII is a
+  ratio of two continuous fluorescence readings, so there is **no trials column**
+  (`n`) to pass — the binomial and beta-binomial families do not apply. The
+  natural likelihood for a bounded continuous response is the **beta family**
+  (`family = "beta"`), new in v0.2.
+* **`duration` is in minutes**, from 5 to 120 minutes
+  (`r paste(sort(unique(snowgum_psii$duration)), collapse = ", ")` min) across
+  temperatures of `r paste(sort(unique(snowgum_psii$temp)), collapse = ", ")` °C.
+  We set the reference exposure to `tref = 5` minutes, the shortest dose.
+* **The endpoint is functional (sublethal), not lethal.** Loss of PSII
+  efficiency is photosynthetic damage, not death of the leaf. This distinction
+  matters for what we can report (see "No T_crit" below).
+
+### Boundary zeros
+
+The beta density is undefined at exactly 0 and 1, and this dataset contains
+`r sum(snowgum_psii$prop == 0)` measurements at `prop == 0` (complete PSII loss
+at the hottest, longest doses). `fit_tls()` clamps these boundary values inward
+to `(1e-06, 0.999999)` and emits a warning so the adjustment is never silent:
+
+```{r boundary}
+sum(snowgum_psii$prop == 0)   # boundary zeros, clamped inward with a warning
+```
+
+This is the honest, documented behaviour for a continuous-proportion response;
+`check_tls()` will also flag boundary values during a pre-fit data check. (If a
+study instead had bounded *counts* — successes out of a known number of trials —
+the right answer would be `family = "beta_binomial"`, not an inward clamp.)
+
+## Fitting the model: the beta family
+
+A single call fits the 4PL thermal-tolerance curve with a **beta** observation
+model. The temperature effect runs through the midpoint (shared `low`, `up`,
+`k`), matching the constant-shape configuration used throughout `freqTLS`, and
+the beta family adds one dispersion parameter, `phi`.
+
+```{r fit}
+fit <- suppressWarnings(fit_tls(
+  snowgum_psii,
+  y = prop, time = duration, temp = temp,
+  family = "beta", tref = 5
+))
+fit$convergence$code   # 0 = converged
+```
+
+The optimiser converged (code `0`, positive-definite Hessian). The thermal limit
+`CTmax` and thermal sensitivity `z`, with **profile-likelihood confidence
+intervals**:
+
+```{r estimates}
+confint(fit, c("CTmax", "z"), method = "profile")[
+  , c("parameter", "estimate", "conf.low", "conf.high", "method")]
+```
+
+So the maximum-likelihood estimates are:
+
+| Quantity | Estimate (profile 95% CI) |
+| --- | --- |
+| `CTmax` at 5 min (°C) | 46.5 [45.9, 47.1] |
+| `z` (°C / decade) | 6.5 [5.9, 7.2] |
+
+The retained-PSII curve loses half its functional response near **46.5 °C** at a
+five-minute exposure, with a thermal sensitivity `z` of about **6.5 °C per
+tenfold change in exposure time** — a shallower temperature dependence (larger
+`z`) than the lethal insect assays in the sibling case studies, as one expects
+for a sublethal leaf endpoint. The intervals are confidence intervals from the
+profile likelihood — the range of parameter values the data do not reject at the
+95% level — not credible intervals and not posterior summaries.
+
+### The Confidence Eye
+
+The `freqTLS` uncertainty display is the **Confidence Eye**: a confidence
+lens with a hollow point estimate, carrying no prior and making no probability
+statement about the parameter. Here it shows `CTmax` and `z` from the profile.
+
+```{r eye, fig.height = 5, fig.alt = "Confidence Eye for snow-gum leaf PSII showing CTmax (near 46.5 C) and z (near 6.5 C per decade), each drawn as a pale confidence lens with a hollow point estimate. Both profiles close on both sides, so each eye is drawn as a closed lens."}
+plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
+```
+
+Both profiles close on both sides (a finite lower and upper confidence limit),
+so each eye is drawn as a closed lens rather than a hollow, open one. A
+non-closing profile would instead render a hollow point and an open lens — the
+visual never fabricates a closed eye.
+
+### Retained-PSII curves
+
+The fitted curves, with the observed leaf-disc proportions overlaid, show the 4PL
+decline of retained PSII with exposure time at each temperature.
+
+```{r curves, fig.height = 4.5, fig.alt = "Fitted retained-PSII proportion curves for snow-gum leaves by temperature (28 to 48 C), with observed leaf-disc proportions overlaid. Retained PSII falls from near one to near zero as exposure time increases, and the curves drop to shorter times at higher temperatures; at the hottest, longest doses many discs sit at zero retained PSII."}
+plot_survival_curves(fit)
+```
+
+Here the y-axis is the retained-PSII proportion rather than a survival fraction,
+but the 4PL shape and its temperature shift are read the same way: hotter
+exposures collapse the curve toward zero at shorter times.
+
+### No T_crit for this endpoint
+
+We deliberately do **not** report a rate-multiplier critical temperature
+`T_crit` here. `T_crit` is a **lethal**, damage-accumulation concept: it marks
+where the *thermal-death* rate falls to a negligible floor. Retained PSII is a
+**functional, sublethal** endpoint, so a `T_crit` computed from this curve would
+not be a thermal-death threshold and would be misleading to present as one. The
+package restricts the lethal-threshold interpretation to lethal endpoints; for
+this case study the reportable quantities are `CTmax` and `z` only.
+
+## Value-add: profile and bootstrap intervals on a continuous proportion
+
+Two things distinguish this analysis from the standard count benchmark.
+
+First, both interval methods are available and agree. The default **profile**
+interval respects the asymmetry of the likelihood; a prior-free **parametric
+bootstrap** gives a second, independent confidence interval (here on a small
+number of replicates for a fast build):
+
+```{r bootstrap}
+suppressWarnings(
+  confint(fit, c("CTmax", "z"), method = "bootstrap", nboot = 199, boot_seed = 1)
+)[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
+```
+
+The bootstrap interval (`CTmax` ≈ 46.5 [46.0, 47.0], `z` ≈ 6.5 [6.0, 7.2]) brackets
+the same estimates as the profile, without a prior and without a closed-form
+standard error — useful confirmation on a boundary-heavy continuous response.
+
+Second, the **classical two-stage** comparator cannot represent this response at
+all: it consumes integer survival counts out of a known number of trials, and a
+continuous PSII ratio has no such denominator — there is no "number tested" to
+form a binomial likelihood. `bayesTLS`, by contrast, *does* offer a **Beta**
+likelihood, so the Bayesian comparison below is available; it is the count-based
+two-stage line that is genuinely absent. The beta family is what lets
+`freqTLS` fit a 4PL thermal-tolerance curve to a bounded continuous endpoint,
+and it does so with the same profile-likelihood machinery used for the count
+families.
+
+## The two-way comparison: bayesTLS Beta vs freqTLS
+
+`bayesTLS` *can* fit this continuous proportion — it offers a **Beta** likelihood
+— so the cache carries a Bayesian column for snow-gum PSII, the same beta 4PL at
+`tref = 5` min on the relative-midpoint threshold. The `freqTLS` column is
+computed live as this page renders. There is **no classical two-stage column**:
+that estimator needs integer survival counts, which a continuous PSII ratio does
+not have (see above), so this is an honest two-way comparison rather than the full
+three-way of the lethal-count case studies.
+
+```{r three-way-psii, echo = FALSE}
+cache_path <- system.file("extdata", "bayesTLS_benchmark_cache.rds", package = "freqTLS")
+has_cache  <- nzchar(cache_path) && file.exists(cache_path)
+
+fmt <- function(est, lo, hi) {
+  ifelse(is.na(est), "--", sprintf("%.2f [%.2f, %.2f]", est, lo, hi))
+}
+
+pro <- confint(fit, c("CTmax", "z"), method = "profile")
+pr_of <- function(parm) {
+  r <- pro[pro$parameter == parm, , drop = FALSE]
+  stats::setNames(c(r$estimate[1L], r$conf.low[1L], r$conf.high[1L]), c("est", "lo", "hi"))
+}
+
+cache_has_snowgum <- FALSE
+if (has_cache) {
+  cache <- readRDS(cache_path)
+  cache_has_snowgum <- !is.null(cache$bayesian) && "snowgum" %in% cache$bayesian$dataset
+}
+
+if (cache_has_snowgum) {
+  pick <- function(parm, cols) {
+    r <- cache$bayesian[cache$bayesian$dataset == "snowgum" &
+                          cache$bayesian$parameter == parm, , drop = FALSE]
+    stats::setNames(as.numeric(r[1L, cols]), c("est", "lo", "hi"))
+  }
+  by_ct <- pick("CTmax", c("median", "lower", "upper"))
+  by_z  <- pick("z",     c("median", "lower", "upper"))
+  pr_ct <- pr_of("CTmax"); pr_z <- pr_of("z")
+  knitr::kable(data.frame(
+    Quantity = c("CTmax (°C)", "z (°C / decade)"),
+    `Two-stage`               = c("-- (no count form)", "-- (no count form)"),
+    `bayesTLS (95% CrI)`      = c(fmt(by_ct["est"], by_ct["lo"], by_ct["hi"]),
+                                  fmt(by_z["est"],  by_z["lo"],  by_z["hi"])),
+    `freqTLS (profile CI)` = c(fmt(pr_ct["est"], pr_ct["lo"], pr_ct["hi"]),
+                                  fmt(pr_z["est"],  pr_z["lo"],  pr_z["hi"])),
+    check.names = FALSE
+  ), caption = "Snow-gum leaf PSII CTmax and z: the same beta 4PL summarised by bayesTLS (posterior) and freqTLS (profile likelihood). The count-based two-stage estimator does not apply to a continuous proportion.")
+} else {
+  ct <- pr_of("CTmax"); z <- pr_of("z")
+  knitr::kable(data.frame(
+    Quantity = c("CTmax (°C)", "z (°C / decade)"),
+    `freqTLS (profile CI)` = c(fmt(ct["est"], ct["lo"], ct["hi"]),
+                                  fmt(z["est"],  z["lo"],  z["hi"])),
+    check.names = FALSE
+  ), caption = "Live freqTLS estimates (no Stan). The bayesTLS Beta column appears once the maintainer-built cache carries the snow-gum PSII fit.")
+}
+```
+
+The two interval-bearing fits land close: `CTmax` ≈ 46 °C (bayesTLS 45.9,
+freqTLS 46.5) and `z` ≈ 6 °C per decade (5.8 versus 6.5), with overlapping
+intervals. Under the matched beta configuration they summarise the *same* fitted
+curve — one prior-free and by optimisation, the other with a prior and MCMC. The
+continuous proportion has no count representation, so the classical two-stage line
+that appears in the lethal-count case studies is genuinely absent here rather than
+pending (see `vignette("comparing-to-bayesTLS")` and `vignette("model-math")`).
+
+## Boundary: what this case study is and is not
+
+`freqTLS` is purpose-built for the 4PL thermal-tolerance model class. This
+article uses it on a **continuous-proportion, sublethal** endpoint via the beta
+family, which is the right tool when the response is a bounded ratio without a
+trials denominator. Two reminders:
+
+* The endpoint is **functional, not lethal**, so `T_crit` is out of scope here
+  (see above); only `CTmax` and `z` are reported.
+* When a study has **bounded counts** (successes out of a known number tested),
+  prefer `family = "beta_binomial"` over clamping a derived proportion — the
+  clamp is for genuinely continuous responses like this PSII ratio.
+
+## Session info
+
+```{r session}
+sessionInfo()
+```

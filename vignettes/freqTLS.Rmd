@@ -1,0 +1,243 @@
+---
+title: "Getting started with freqTLS"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with freqTLS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4,
+  dpi = 96
+)
+```
+
+`freqTLS` fits single-stage four-parameter logistic (4PL) thermal-load-sensitivity
+(TLS) / thermal death-time models by maximum likelihood, parameterised **directly in
+`CTmax` and `z`** (thermal sensitivity), and returns prior-free, asymmetry-respecting
+**profile-likelihood** confidence intervals. It is the likelihood complement to the
+Bayesian [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package; the modelling
+framework is theirs (see `vignette("comparing-to-bayesTLS")` for the relationship and
+credit).
+
+This vignette walks through the core loop: simulate → fit → confidence intervals →
+plot. It runs end to end with a small simulation and needs no Stan, no MCMC, and no
+internet.
+
+```{r setup}
+library(freqTLS)
+```
+
+## Simulate a dataset
+
+`simulate_tls()` draws survival counts from the locked data-generating process: a
+factorial grid of assay temperatures and exposure durations, with the 4PL evaluated at
+the supplied true `CTmax`, `z`, and shape parameters. We use the overdispersed
+beta-binomial family here (`phi` controls the overdispersion).
+
+```{r simulate}
+set.seed(1)
+dat <- simulate_tls(
+  temps  = seq(30, 42, by = 2),
+  times  = c(0.5, 1, 2, 4, 8),
+  reps   = 3,
+  n      = 20,
+  CTmax  = 36,
+  z      = 4,
+  phi    = 50,
+  family = "beta_binomial",
+  seed   = 1
+)
+head(dat)
+```
+
+Each row is one temperature-by-duration cell: `survived` out of `total` individuals
+survived the exposure. The true parameters used to generate the data are kept as an
+attribute, which is handy for checking recovery:
+
+```{r truth}
+attr(dat, "truth")[c("CTmax", "z", "phi")]
+```
+
+## Fit the model
+
+`fit_tls()` references columns with tidy evaluation (bare column names, as in `dplyr`).
+You pass the success column (`y`, survivors), the trial column (`n`, total), the
+duration (`time`) and temperature (`temp`) columns, the family, and the reference time
+`tref` at which `CTmax` is defined.
+
+```{r fit}
+fit <- fit_tls(
+  dat,
+  y      = survived,
+  n      = total,
+  time   = duration,
+  temp   = temp,
+  family = "beta_binomial",
+  tref   = 1
+)
+fit
+```
+
+### Formula interface
+
+If you prefer a `brms`/`drmTMB`-style grammar, build a model with `tls_bf()` and
+pass it as the first argument with the data in `data =`. The left-hand side names
+the survival counts (`successes | trials(total)`, or `cbind(successes,
+failures)`); the right-hand side tags the two axes with the `time()` and `temp()`
+markers. Add a sub-parameter formula for any predictor on `CTmax` or `log_z`
+(e.g. `CTmax ~ life_stage` for a grouped fit). The formula path feeds the same
+likelihood engine as the column call above, so the two fits are numerically
+identical:
+
+```{r fit-formula}
+fit_f <- fit_tls(
+  tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
+  data   = dat,
+  family = "beta_binomial",
+  tref   = 1
+)
+all.equal(coef(fit_f), coef(fit))
+```
+
+The grammar scales well beyond a single ungrouped fit: each sub-parameter can take
+a grouping factor, a continuous covariate, or an `lme4`-style random intercept.
+See **Going further** below.
+
+The print method reports the headline quantities (`CTmax`, `z`), the shape parameters
+(`low`, `up`, `k`), the overdispersion `phi`, and the convergence status. `summary()`
+adds standard errors and the log-likelihood:
+
+```{r summary}
+summary(fit)
+```
+
+A tidy, broom-style table of all natural-scale parameters is available with
+`tidy_parameters()`, and the headline quantities have dedicated extractors:
+
+```{r tidy}
+tidy_parameters(fit)
+get_ctmax(fit)
+get_z(fit)
+```
+
+## Profile-likelihood confidence intervals
+
+The reason for the direct `CTmax`/`z` parameterisation is that both headline quantities
+are model *coordinates*, so they can be profiled directly. `confint()` with
+`method = "profile"` (the default) inverts the likelihood-ratio test: the interval is
+the set of values whose deviance from the maximum stays below the chi-square cutoff,
+found by root-finding on each side of the MLE.
+
+```{r confint}
+confint(fit, parm = "CTmax", method = "profile")
+confint(fit, parm = "z", method = "profile")
+```
+
+These are **confidence** intervals, not posteriors: they carry no prior, and they
+need not be symmetric about the estimate. The `conf.status` column reports `"ok"` when
+the profile closes on both sides; a weakly identified parameter is flagged rather than
+given a fabricated bound (see `vignette("profile-likelihood")`).
+
+For comparison, the first-order Wald interval is available with `method = "wald"`:
+
+```{r wald}
+confint(fit, parm = c("CTmax", "z"), method = "wald")
+```
+
+## Plot the fit
+
+`plot_survival_curves()` draws the fitted survival probability against exposure
+duration, one curve per temperature, with the observed proportions overlaid:
+
+```{r survival-curves, fig.alt = "Fitted 4PL survival curves: survival probability declining with exposure duration, one curve per assay temperature, with observed proportions as points."}
+plot_survival_curves(fit)
+```
+
+The default uncertainty display is the **Confidence Eye**: a pale confidence lens
+with a hollow point estimate. It is freqTLS's visual identity and deliberately avoids
+posterior-density iconography, because these are likelihood intervals.
+
+```{r confidence-eye, fig.alt = "Confidence Eye plot: a pale lens spanning the profile-likelihood interval with a hollow point estimate, for CTmax and z."}
+plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
+```
+
+## Going further: groups, shape predictors, and random effects
+
+The same `tls_bf()` grammar scales from the single fit above to grouped,
+covariate, and hierarchical models.
+
+**Other families.** Besides `"beta_binomial"`, `fit_tls()` accepts `"binomial"`
+(no overdispersion) and `"beta"` (a continuous proportion in (0, 1) with no trials
+column; see `vignette("case-study-leaf-psii")`).
+
+**Grouped `CTmax` and `z`.** Put a grouping factor on a sub-parameter to estimate a
+separate, directly profile-able `CTmax` and `z` per group, with one shared curve
+shape (the `bayesTLS` constant-shape configuration):
+
+```{r grouped}
+dat_grp <- simulate_tls(
+  temps = seq(30, 42, by = 2), times = c(0.5, 1, 2, 4, 8), reps = 3, n = 20,
+  group = c("cool", "warm"), CTmax = c(34, 38), z = c(3, 5),
+  phi = 50, family = "beta_binomial", seed = 2
+)
+fit_grp <- fit_tls(
+  tls_bf(
+    survived | trials(total) ~ time(duration) + temp(temp),
+    CTmax ~ group,
+    log_z ~ group
+  ),
+  data = dat_grp, family = "beta_binomial", tref = 1
+)
+confint(fit_grp, c("CTmax:cool", "CTmax:warm", "z:cool", "z:warm"),
+        method = "profile")
+```
+
+**Shape predictors.** The shape parameters are no longer intercept-only: `low`,
+`up`, and `log_k` each take their own grouping factor or continuous covariate
+(for example `low ~ group` or `log_k ~ body_size`). See `?tls_bf`.
+
+**A random intercept.** Add an `lme4`-style `(1 | group)` term to let a
+sub-parameter vary across groups drawn from a population — here `CTmax` varies by
+`colony`:
+
+```{r random-effect}
+dat_re <- simulate_tls(
+  temps = seq(30, 42, by = 2), times = c(0.5, 1, 2, 4, 8), reps = 2, n = 20,
+  CTmax = 36, z = 4, phi = 50, family = "beta_binomial",
+  re_sd = 1.2, n_re_groups = 10, seed = 3
+)
+fit_re <- fit_tls(
+  tls_bf(
+    survived | trials(total) ~ time(duration) + temp(temp),
+    CTmax ~ (1 | colony)
+  ),
+  data = dat_re, family = "beta_binomial", tref = 1
+)
+fit_re
+head(ranef(fit_re))
+```
+
+The intercept is integrated out by a Laplace approximation; `sigma_CTmax` is its
+standard deviation and `ranef()` returns the per-colony BLUPs. The population
+`CTmax` interval is profiled under the random effect (`confint(fit_re, "CTmax")`,
+the default), which propagates the variance-component uncertainty that a Wald
+interval would understate. Single random intercepts are supported on `CTmax`,
+`log_z`, `low`, and `log_k`; see `vignette("random-effects")` for the full
+hierarchical workflow and the few-groups caveats.
+
+## Where to next
+
+* `vignette("model-math")` — the 4PL, the direct `CTmax`/`z` parameterisation, and the
+  exact bridge to `bayesTLS`.
+* `vignette("profile-likelihood")` — what the profile is doing, why intervals can be
+  asymmetric, profile versus Wald, and the honest non-closing fallback.
+* `vignette("random-effects")` — hierarchical thermal-tolerance models: random
+  intercepts on `CTmax`, `log_z`, `low`, and `log_k`, with their diagnostics.
+* `vignette("comparing-to-bayesTLS")` — the three-way comparison (classical two-stage,
+  Bayesian, profile likelihood) and the credit for the framework.

@@ -1,0 +1,402 @@
+---
+title: "Case study: zebrafish lethal thermal death time across life stages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case study: zebrafish lethal thermal death time across life stages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4,
+  dpi = 96
+)
+```
+
+This article fits a lethal thermal-death-time (TDT) model to zebrafish
+(*Danio rerio*) measured at three points in early development, and asks a
+question that ordinary thermal-limit summaries cannot: **do the life stages
+differ only in how hot they tolerate (`CTmax`, `z`), or also in the *shape* of
+their survival response?** It is the `freqTLS` showcase for the **shape
+covariate** — letting the curve's asymptotes and steepness vary by group, not
+just its thermal location.
+
+The fit runs live by maximum likelihood (TMB, **no Stan**); uncertainty is
+summarised by profile-likelihood **confidence intervals**; and the
+stage-to-stage differences are **frequentist contrasts**, not posteriors.
+
+**This vignette builds without Stan.** The `freqTLS` fits run live and need
+nothing beyond this package. The Bayesian (`bayesTLS`) and classical two-stage
+columns of the three-way benchmark are read from a maintainer-built cache **if it
+is present**; when the cache is absent (a fresh checkout, or continuous
+integration) the page shows the recipe and the `freqTLS` side and explains how
+to populate it. The live `bayesTLS` (Stan) calls are documented for
+reproducibility but are never evaluated here.
+
+```{r setup}
+library(freqTLS)
+```
+
+## The dataset and the question
+
+`zebrafish_lethal` is vendored from
+[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) under CC BY 4.0; cite
+`bayesTLS` and `citation("freqTLS")` when you use it (see `?zebrafish_lethal`).
+It records survival counts in a temperature × duration grid, replicated across
+three early life stages.
+
+```{r data-shape}
+data(zebrafish_lethal)
+str(zebrafish_lethal)
+table(zebrafish_lethal$life_stage)
+```
+
+There are `r nrow(zebrafish_lethal)` cells across the three life stages —
+`r sum(zebrafish_lethal$life_stage == "young_embryos")` for young embryos,
+`r sum(zebrafish_lethal$life_stage == "old_embryos")` for old embryos, and
+`r sum(zebrafish_lethal$life_stage == "larvae")` for larvae — totalling
+`r format(sum(zebrafish_lethal$total), big.mark = ",")` fish. The grouping factor
+`life_stage` is the covariate of interest.
+
+The biological question has two parts:
+
+1. **Location.** Do the stages differ in thermal tolerance — the critical
+   temperature `CTmax` and the thermal-sensitivity slope `z`?
+2. **Shape.** Do they also differ in the *form* of the survival curve — in
+   particular the maximum survival at benign exposures (the upper asymptote `up`)
+   or the steepness `k`?
+
+The first question is the standard TDT comparison. The second is where the shape
+covariate earns its keep, and where the constant-shape benchmark below cannot
+follow.
+
+**Configuration.** Throughout we use the *benchmark* configuration that makes the
+three estimators directly comparable (`docs/design/06-benchmark-protocol.md`):
+reference time `tref = 1` hour, the **relative** mortality threshold, the
+**beta-binomial** family (overdispersed survival counts), and — for the
+three-way comparison — a **constant shape** (`low`, `up`, `k` shared, the
+temperature effect running through the midpoint only). The shape covariate is a
+deliberate, separately fitted *relaxation* of that last constraint, taken up in
+the second half of this article.
+
+## The grouped fit (live)
+
+A single `fit_tls()` call fits all three stages at once, with stage-specific
+`CTmax` and `z` but a shared constant shape — the matched benchmark
+configuration.
+
+```{r profile-zebrafish}
+data(zebrafish_lethal)
+zebra_fit <- suppressWarnings(fit_tls(
+  zebrafish_lethal,
+  y = survived, n = total, time = duration, temp = temp, group = life_stage,
+  family = "beta_binomial", tref = 1
+))
+# per-stage CTmax with profile intervals
+get_ctmax(zebra_fit)[, c("parameter", "estimate", "conf.low", "conf.high")]
+```
+
+(The zebrafish fit emits a data-adequacy warning about temperatures with fewer
+than three durations; this is the kind of identifiability signal `freqTLS`
+surfaces explicitly. It is suppressed here only to keep the vignette output tidy.)
+
+The matching thermal-sensitivity slopes, again with profile-likelihood
+confidence intervals:
+
+```{r profile-zebrafish-z}
+get_z(zebra_fit)[, c("parameter", "estimate", "conf.low", "conf.high")]
+```
+
+Read off the location story: **old embryos have a markedly higher `CTmax`**
+(around `r round(get_ctmax(zebra_fit)$estimate[2], 1)` °C) than young embryos and
+larvae (both near `r round(get_ctmax(zebra_fit)$estimate[1], 1)` °C), while the
+`z` slopes are similar (roughly 1.8–2.0 °C). The profile intervals are
+asymmetric where the likelihood is, and prior-free.
+
+### A Confidence Eye per stage
+
+The default `freqTLS` uncertainty visual is the **Confidence Eye** — a
+confidence lens with a hollow point estimate, carrying no prior and making no
+probability statement about the parameter. One row per stage makes the `CTmax`
+separation legible at a glance:
+
+```{r eye-ctmax, fig.alt = "Confidence Eyes for zebrafish CTmax by life stage: three pale confidence lenses with hollow point estimates, the old-embryo lens sitting clearly to the right (hotter) of the young-embryo and larval lenses; a freqTLS uncertainty display, not a posterior density."}
+plot_confidence_eye(
+  zebra_fit,
+  parm = c("CTmax:young_embryos", "CTmax:old_embryos", "CTmax:larvae"),
+  method = "profile"
+)
+```
+
+The same display for the slope `z`, where the three stages overlap far more:
+
+```{r eye-z, fig.alt = "Confidence Eyes for zebrafish z (thermal sensitivity) by life stage: three overlapping pale confidence lenses with hollow point estimates near 1.8 to 2.0 degrees Celsius, indicating similar thermal-sensitivity slopes across stages; a freqTLS uncertainty display, not a posterior density."}
+plot_confidence_eye(
+  zebra_fit,
+  parm = c("z:young_embryos", "z:old_embryos", "z:larvae"),
+  method = "profile"
+)
+```
+
+### Fitted survival curves
+
+The fitted survival curves against exposure duration, one panel per stage, with
+the observed survival proportions overlaid:
+
+```{r curves, fig.width = 7, fig.height = 4, fig.alt = "Fitted zebrafish survival curves versus exposure duration on a log time axis, faceted by life stage (young embryos, old embryos, larvae), one curve per temperature with observed survival proportions overlaid as points; survival falls with longer and hotter exposures, and the young-embryo panel plateaus at a visibly lower ceiling."}
+plot_survival_curves(zebra_fit)
+```
+
+The young-embryo panel already hints at the shape story: even at benign
+exposures its survival does not reach the ceiling the older stages approach. The
+constant-shape fit above cannot represent that — it forces a single upper
+asymptote on all three stages. We return to it after the benchmark.
+
+## The three-way comparison, per stage
+
+The benchmark compares three estimators of the same constant-shape 4PL, all
+locked to the **relative** mortality threshold and a matched time unit /
+reference time so the comparison is fair:
+
+| Estimator | Path | Uncertainty |
+| --- | --- | --- |
+| Classical two-stage | `bayesTLS::ts_stage1 -> ts_stage2 -> ts_ci` | delta-method CI |
+| Bayesian | `bayesTLS::fit_4pl(temp_effects = "mid") -> extract_tdt(target_surv = "relative")` | posterior credible interval |
+| `freqTLS` | `fit_tls() -> confint(method = "profile")` | profile-likelihood confidence interval |
+
+Under this matched configuration the Bayesian and profile-likelihood fits target
+the **same likelihood and the same fitted curve** (see `vignette("model-math")`);
+they differ only in how they summarise uncertainty — a posterior (with priors)
+versus a prior-free likelihood interval.
+
+The `bayesTLS` and two-stage numbers come from a maintainer-built cache; the
+`freqTLS` column is computed live from `zebra_fit` as this page renders. The
+recipe that builds the cache (shown with `eval = FALSE`, so this vignette never
+needs Stan) is:
+
+```{r bayes-recipe, eval = FALSE}
+library(bayesTLS)
+data(zebrafish_lethal, package = "freqTLS")
+
+# 1. Standardise: name the temperature / duration / count columns and the time
+#    unit, carrying the life_stage grouping factor through.
+std <- bayesTLS::standardize_data(
+  data          = zebrafish_lethal,
+  temp          = "temp",
+  duration      = "duration",
+  n_total       = "total",
+  n_surv        = "survived",
+  duration_unit = "hours"
+)
+
+# 2. Bayesian fit, matched: constant shape via temp_effects = "mid",
+#    beta-binomial, grouped by life stage.
+bfit <- bayesTLS::fit_4pl(
+  data         = std,
+  group        = "life_stage",
+  temp_effects = "mid",
+  family       = brms::brmsfamily("beta_binomial", link = "identity"),
+  chains       = 4, iter = 4000, seed = 123, backend = "cmdstanr"
+)
+
+# 3. Relative-threshold CTmax + z at tref = 1 hour, per stage.
+btdt  <- bayesTLS::extract_tdt(
+  bfit, target_surv = "relative",
+  t_ref = 1, time_multiplier = 1, output_time_unit = "hours"
+)
+ctmax <- bayesTLS::get_ctmax_summary(btdt)  # per-stage temp_lower / median / upper
+zsumm <- bayesTLS::get_z_summary(btdt)      # per-stage z_median / lower / upper
+```
+
+A maintainer runs `data-raw/build_benchmark_cache.R` on a Stan machine to write
+`inst/extdata/bayesTLS_benchmark_cache.rds` (the Bayesian and two-stage summaries
+plus a `meta` provenance block). When the cache holds the zebrafish stages, the
+three-way table below fills in; otherwise it shows the live `freqTLS` column
+and a note.
+
+```{r three-way-zebra, echo = FALSE}
+cache_path <- system.file("extdata", "bayesTLS_benchmark_cache.rds", package = "freqTLS")
+has_cache  <- nzchar(cache_path) && file.exists(cache_path)
+
+fmt <- function(est, lo, hi) {
+  ifelse(is.na(est), "--", sprintf("%.2f [%.2f, %.2f]", est, lo, hi))
+}
+
+stage_levels <- zebra_fit$group_levels
+stage_label  <- c(young_embryos = "Young embryos", old_embryos = "Old embryos",
+                  larvae = "Larvae")
+
+# Live freqTLS per-stage CTmax and z as profile-likelihood confidence
+# intervals (always available; no Stan). One confint() call covers every stage;
+# these are the same per-stage profiles drawn as Confidence Eyes above.
+pro <- suppressMessages(confint(
+  zebra_fit,
+  c(paste0("CTmax:", stage_levels), paste0("z:", stage_levels)),
+  method = "profile"
+))
+pr_of <- function(parm, g) {
+  r <- pro[pro$parameter == paste0(parm, ":", g), , drop = FALSE]
+  if (nrow(r) == 0L) return(stats::setNames(rep(NA_real_, 3), c("est", "lo", "hi")))
+  stats::setNames(c(r$estimate[1L], r$conf.low[1L], r$conf.high[1L]),
+                  c("est", "lo", "hi"))
+}
+
+# Does the cache carry the zebrafish stages? Each stage is keyed as
+# "zebrafish:<life_stage>" (the stage lives in the dataset key, not a separate
+# `group` column), so look for those keys rather than a bare "zebrafish".
+cache_has_zebra <- FALSE
+if (has_cache) {
+  cache <- readRDS(cache_path)
+  cache_has_zebra <- !is.null(cache$bayesian) &&
+    "dataset" %in% names(cache$bayesian) &&
+    all(paste0("zebrafish:", stage_levels) %in% cache$bayesian$dataset)
+}
+
+if (cache_has_zebra) {
+  # Pick a cached row by stage-keyed dataset + parameter.
+  pick <- function(df, parm, g, cols) {
+    r <- df[df$dataset == paste0("zebrafish:", g) & df$parameter == parm, ,
+            drop = FALSE]
+    if (nrow(r) == 0L) return(stats::setNames(rep(NA_real_, 3), c("est", "lo", "hi")))
+    stats::setNames(as.numeric(r[1L, cols]), c("est", "lo", "hi"))
+  }
+  one_row <- function(g, parm, quantity) {
+    ts <- pick(cache$two_stage, parm, g, c("estimate", "lower", "upper"))
+    by <- pick(cache$bayesian,  parm, g, c("median",   "lower", "upper"))
+    pr <- pr_of(parm, g)
+    data.frame(
+      Stage    = stage_label[[g]],
+      Quantity = quantity,
+      `Two-stage (delta CI)`    = fmt(ts["est"], ts["lo"], ts["hi"]),
+      `bayesTLS (95% CrI)`      = fmt(by["est"], by["lo"], by["hi"]),
+      `freqTLS (profile CI)` = fmt(pr["est"], pr["lo"], pr["hi"]),
+      check.names = FALSE
+    )
+  }
+  rows <- do.call(rbind, lapply(stage_levels, function(g) rbind(
+    one_row(g, "CTmax", "CTmax (°C)"),
+    one_row(g, "z",     "z (°C / decade)")
+  )))
+  knitr::kable(rows, row.names = FALSE,
+               caption = "Zebrafish CTmax and z per stage from three estimators (matched constant-shape configuration).")
+} else {
+  prof_tbl <- do.call(rbind, lapply(stage_levels, function(g) {
+    ct <- pr_of("CTmax", g); z <- pr_of("z", g)
+    data.frame(
+      Stage = stage_label[[g]],
+      `CTmax (°C), profile CI`        = fmt(ct["est"], ct["lo"], ct["hi"]),
+      `z (°C / decade), profile CI`   = fmt(z["est"], z["lo"], z["hi"]),
+      check.names = FALSE
+    )
+  }))
+  knitr::kable(prof_tbl, row.names = FALSE,
+               caption = "Live freqTLS per-stage estimates (no Stan). The bayesTLS and two-stage columns appear once the maintainer-built cache carries the zebrafish stages.")
+  cat("\nNo zebrafish entries in the benchmark cache; run",
+      "data-raw/build_benchmark_cache.R on a Stan machine to populate them.",
+      "The freqTLS estimates above are live and need no Stan.\n")
+}
+```
+
+Under the matched configuration the `freqTLS` profile-likelihood confidence
+intervals and the `bayesTLS` credible intervals summarise the *same* fitted curve
+per stage — one prior-free and by optimisation, the other with a prior and MCMC.
+That equivalence is the point of the complementary framing; it is also exactly
+what makes the benchmark a fair three-way comparison.
+
+## Beyond the matched shape: stage-specific curves
+
+The three-way comparison holds the shape constant (`low`, `up`, `k` shared across
+temperatures and stages) so all three estimators target the *same* curve — that
+is what makes the benchmark fair. But it also means the benchmark **cannot answer
+the second question**: whether the stages differ in the *form* of their survival
+response, not only its thermal location.
+
+`freqTLS` can relax that restriction. Since v0.2 the shape parameters `low`,
+`up`, and `log_k` may vary by a grouping factor through the `tls_bf()` formula
+interface. Re-fitting `zebrafish_lethal` with fully stage-specific shapes and
+comparing by AIC asks whether the life stages differ in more than thermal
+*location*:
+
+```{r v02-stage-shape}
+stage_shape <- suppressWarnings(fit_tls(
+  tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+         CTmax ~ life_stage, log_z ~ life_stage,
+         low ~ life_stage, up ~ life_stage, log_k ~ life_stage),
+  data = zebrafish_lethal, family = "beta_binomial", tref = 1
+))
+# zebra_fit (above) is the shared-shape fit; stage_shape lets low / up / k vary.
+c(shared_shape_AIC = round(AIC(zebra_fit), 1),
+  stage_shape_AIC  = round(AIC(stage_shape), 1))
+```
+
+The stage-specific model has the substantially lower AIC, so the data support
+per-stage shapes. The difference is concentrated in the upper asymptote `up` (the
+maximum survival at benign exposures), not the steepness `k`:
+
+```{r v02-up}
+stage_est <- stage_shape$estimates
+stage_est[grepl("^up:", stage_est$parameter), c("parameter", "estimate", "std.error")]
+```
+
+**This is the headline.** Young embryos have a markedly lower survival ceiling
+(`up` near 0.72) than older embryos and larvae (near 0.92–0.94) — even under the
+gentlest exposures, a fraction of young embryos do not survive. The stages
+therefore differ not just in *where* their thermal limit sits (`CTmax`) but in
+*how high their survival can ever be* (`up`). The matched constant-shape
+configuration — the one the classical two-stage workflow and the `bayesTLS`
+benchmark use here — forces a single ceiling on all three stages and so **cannot
+express this difference at all**. The shape covariate is what makes it visible.
+
+### Stage contrasts as frequentist intervals
+
+The Confidence Eyes above let you *see* that the old-embryo `CTmax` sits apart.
+To put a number and a confidence interval on the *difference* itself,
+`freqTLS` profiles the contrast directly: it recodes the design so the
+stage-to-stage difference is its own coordinate, then takes a profile-likelihood
+interval on it. These are **frequentist contrasts** — differences in fitted
+parameters with confidence intervals — not posterior contrasts.
+
+```{r contrasts}
+ctmax_contrasts <- rbind(
+  suppressWarnings(confint(zebra_fit, "dCTmax:old_embryos-young_embryos", method = "profile")),
+  suppressWarnings(confint(zebra_fit, "dCTmax:larvae-young_embryos",      method = "profile"))
+)
+z_contrasts <- rbind(
+  suppressWarnings(confint(zebra_fit, "dlog_z:old_embryos-young_embryos", method = "profile")),
+  suppressWarnings(confint(zebra_fit, "dlog_z:larvae-young_embryos",      method = "profile"))
+)
+rbind(ctmax_contrasts, z_contrasts)[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
+```
+
+The `CTmax` contrasts confirm what the eyes show: the **old-embryo versus
+young-embryo difference is about 1.46 °C with a confidence interval that
+excludes zero**, while the **larva versus young-embryo difference (~0.13 °C)
+straddles zero** — larvae and young embryos are indistinguishable in `CTmax`. The
+`z` (slope) contrasts both straddle zero on the `log_z` scale, so there is no
+compelling evidence that the stages differ in thermal sensitivity. The
+stage-to-stage signal is in the *location of the limit* (old embryos elevated)
+and in the *survival ceiling* (young embryos depressed), not in the slope.
+
+(The contrast is encoded relative to the first-named stage, so the printed sign
+follows that coding; the magnitude and whether the interval covers zero are the
+inferential content. Contrast profiling is a fixed-effects operation; under a
+random-effects fit `freqTLS` directs you to `confint(method = "wald")`
+instead.)
+
+## See also: bayesTLS
+
+This article is the `freqTLS` half of a complementary pair. Reach for
+`freqTLS` when you want fast, prior-free, asymmetry-respecting confidence
+intervals; explicit identifiability checks; and — as here — a **shape covariate**
+that lets the survival ceiling and steepness vary by group, with frequentist
+contrasts on the differences. Reach for
+[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) when you want a full
+Bayesian workflow, prior information, posterior contrasts, or the heat-injury and
+repair sub-models. The two are lenses on the same model:
+`vignette("comparing-to-bayesTLS")` lays out the relationship and the credit, and
+`vignette("profile-likelihood")` covers the non-closing behaviour and the
+bootstrap fallback.

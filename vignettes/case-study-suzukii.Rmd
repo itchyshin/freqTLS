@@ -1,0 +1,322 @@
+---
+title: "Case study: Drosophila suzukii lethal thermal death time across sexes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case study: Drosophila suzukii lethal thermal death time across sexes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4,
+  dpi = 96
+)
+```
+
+This article fits a lethal thermal-death-time (TDT) model to the vinegar fly
+*Drosophila suzukii*, asking the question Ørsted, Hoffmann, Sgrò and colleagues
+posed in their 2024 study: **do the two sexes differ in their thermal limits?**
+It mirrors the lethal subset of Case Study 4 in the `bayesTLS` supplement, but it
+is a `freqTLS`-only treatment: the fit runs live by maximum likelihood (TMB,
+**no Stan**), uncertainty is summarised by profile-likelihood **confidence
+intervals**, and the sex difference is a **frequentist contrast**, not a
+posterior.
+
+**This vignette builds without Stan.** The `freqTLS` side runs live by
+maximum likelihood (TMB); the Bayesian (`bayesTLS`) and classical two-stage
+columns of the three-way comparison are read from the maintainer-built benchmark
+cache (`inst/extdata/bayesTLS_benchmark_cache.rds`), so the full per-sex table
+renders without a Stan toolchain.
+
+```{r setup}
+library(freqTLS)
+```
+
+```{r load-data, include = FALSE}
+data(dsuzukii_lethal)
+```
+
+## The dataset
+
+`dsuzukii_lethal` is a small, vendored lethal-mortality dataset: per-individual
+mortality from the Ørsted *D. suzukii* assays, aggregated into survival counts
+per `(temp, time, sex)` cell. It is distributed under CC BY 4.0 from the primary
+Zenodo deposit ([10.5281/zenodo.10602268](https://doi.org/10.5281/zenodo.10602268));
+cite `@orsted_suzukii_2024` and `citation("freqTLS")` when you use it.
+
+```{r data-shape}
+str(dsuzukii_lethal)
+table(dsuzukii_lethal$sex)
+```
+
+There are `r nrow(dsuzukii_lethal)` cells (a temperature × duration × sex grid),
+`r sum(dsuzukii_lethal$sex == "F")` for females and
+`r sum(dsuzukii_lethal$sex == "M")` for males, totalling
+`r sum(dsuzukii_lethal$total)` flies. Two columns deserve emphasis:
+
+* **`time` is in minutes.** The reference exposure for this study is **4 hours =
+  240 minutes**, so we set `tref = 240`.
+* The threshold is **absolute** (a fixed 50% survival), following Ørsted, rather
+  than the relative midpoint used for the shrimp and zebrafish case studies. In
+  `freqTLS` the default `derive_*` behaviour at `surv = 0.5` is exactly this
+  absolute LT50, so no extra argument is needed here.
+
+## Fitting the model: one fit, grouped by sex
+
+A single grouped call fits a beta-binomial 4PL with sex-specific thermal
+location (`CTmax`, `z`) and a shared curve shape (`low`, `up`, `k`) — the
+constant-shape configuration that matches the `bayesTLS` "sex on the midpoint
+only" model. The temperature effect runs through the midpoint, so each sex gets
+its own `CTmax` and `z` while the asymptotes and steepness are pooled.
+
+```{r fit}
+fit <- suppressWarnings(fit_tls(
+  dsuzukii_lethal,
+  y = survived, n = total, time = time, temp = temp, group = sex,
+  family = "beta_binomial", tref = 240
+))
+fit$convergence$code   # 0 = converged
+```
+
+The optimiser converged (code `0`, positive-definite Hessian). The per-sex
+thermal limits, with **profile-likelihood confidence intervals**:
+
+```{r per-sex}
+confint(fit, c("CTmax:F", "CTmax:M", "z:F", "z:M"), method = "profile")[
+  , c("parameter", "estimate", "conf.low", "conf.high", "method")]
+```
+
+So the maximum-likelihood estimates are:
+
+| Quantity | Female | Male |
+| --- | --- | --- |
+| `CTmax` at 4 h (°C) | 35.23 [35.13, 35.32] | 35.25 [35.16, 35.34] |
+| `z` (°C / decade) | 3.01 [2.86, 3.18] | 3.18 [3.01, 3.36] |
+
+Both sexes have an upper thermal limit near 35.2 °C at a four-hour exposure, and
+a thermal sensitivity `z` of about 3 °C per tenfold change in survival time. The
+intervals are confidence intervals from the profile likelihood — the range of
+parameter values the data do not reject at the 95% level — not credible
+intervals and not posterior summaries.
+
+### The Confidence Eye
+
+The `freqTLS` uncertainty display is the **Confidence Eye**: a confidence
+lens with a hollow point estimate, carrying no prior and making no probability
+statement about the parameter. Here it shows `CTmax` and `z` for both sexes
+side by side.
+
+```{r eye, fig.height = 5, fig.alt = "Confidence Eye for Drosophila suzukii CTmax and z, one lens per sex (female and male). The lenses for the two sexes overlap almost completely for both CTmax (near 35.2 C) and z (near 3 C per decade), each drawn as a pale confidence lens with a hollow point estimate."}
+plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
+```
+
+The female and male lenses overlap heavily for both quantities — the first
+visual hint that the sexes are not strongly separated. Each lens is a closed
+confidence interval (the profiles closed on both sides), so the eyes are
+drawn closed rather than hollow-and-open.
+
+### Survival curves
+
+The fitted survival curves, with the observed cell proportions overlaid, show
+the 4PL decline of survival with exposure time at each temperature, per sex.
+
+```{r survival, fig.height = 4.5, fig.alt = "Fitted Drosophila suzukii survival curves by temperature (34 to 38 C) and sex, with observed cell proportions overlaid. Survival falls from near one to near zero as exposure time increases, and the curves shift to shorter survival times at higher temperatures; the female and male curves are nearly indistinguishable at each temperature."}
+plot_survival_curves(fit)
+```
+
+### A lower thermal threshold: T_crit
+
+Because this is a **lethal** endpoint, the rate-multiplier critical temperature
+`T_crit` is meaningful here (it is a damage-accumulation concept and would be
+misleading for sublethal endpoints such as heat-coma). `derive_tcrit()` returns
+the temperature at which the thermal-damage rate falls to a chosen low floor; at
+the `bayesTLS` default floor of 1% of the lethal dose per hour:
+
+```{r tcrit}
+c(
+  T_crit_F = round(derive_tcrit(fit, rate = 1, group = "F"), 2),
+  T_crit_M = round(derive_tcrit(fit, rate = 1, group = "M"), 2)
+)
+```
+
+`T_crit` sits near **29 °C** for both sexes (about 6 °C below `CTmax`), the lower
+thermal threshold a heat-injury model would treat as the onset of negligible
+damage. It is a deterministic transform of the fitted `CTmax` and `z`, not a new
+fit.
+
+## Do the sexes differ? A frequentist contrast
+
+The biological question is whether the small female-minus-male gaps in `CTmax`
+and `z` are distinguishable from zero. `freqTLS` answers this with a profile
+or bootstrap confidence interval **on the difference itself** — a frequentist
+contrast, *not* a posterior probability statement. The contrast is requested by
+name: `dCTmax:F-M` (the `CTmax` difference, female minus male) and `dz:F-M` (the
+sensitivity difference, taken on the log-`z` scale so the `z` ratio is its
+exponential).
+
+```{r contrast}
+rbind(
+  confint(fit, "dCTmax:F-M", method = "profile"),
+  confint(fit, "dz:F-M",     method = "profile")
+)[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
+```
+
+Both intervals **span zero**:
+
+* `dCTmax:F-M` = **0.024 °C, 95% CI [-0.097, 0.151]** — the sexes' four-hour
+  `CTmax` values are indistinguishable.
+* `dz:F-M` = **0.054 [-0.021, 0.128]** on the log-`z` scale (a `z` ratio of
+  `exp(0.054)` ≈ 1.06, i.e. males about 6% steeper), with a confidence interval
+  that includes 0 (ratio 1).
+
+This agrees with the published finding: Ørsted reported a sex difference in `z`
+whose interval spans zero, i.e. **no clear sex difference in thermal sensitivity
+or limit**. The likelihood path reaches the same conclusion as the Bayesian path
+did, by a contrast that makes no posterior claim. (The same numbers come from a
+parametric bootstrap: `confint(fit, "dz:F-M", method = "bootstrap")` returns
+`0.054 [-0.021, 0.131]`, an asymmetry-respecting interval without a prior.)
+
+## Validation: does ML recover the published values?
+
+A useful cross-check is whether the maximum-likelihood fit lands on the same
+parameter values Ørsted (2024) reported in their Table 1, which were obtained by
+a different route. The published values are `z` ≈ 3.03 (F) / 3.28 (M) and a
+four-hour `CTmax` ≈ 35.2 °C for both sexes.
+
+```{r validation}
+ml <- confint(fit, c("CTmax:F", "CTmax:M", "z:F", "z:M"), method = "profile")
+data.frame(
+  parameter   = ml$parameter,
+  ML_estimate = round(ml$estimate, 2),
+  published   = c(35.2, 35.2, 3.03, 3.28)
+)
+```
+
+The match is close: `CTmax` ≈ 35.23 / 35.25 °C against a published ≈ 35.2 °C, and
+`z` ≈ 3.01 / 3.18 against a published 3.03 / 3.28. The likelihood path reproduces
+the published thermal-limit estimates on the same data — a validation success
+that the `freqTLS` engine targets the same model and the same fitted curve as
+the analyses that established these numbers.
+
+## The three-way comparison, per sex
+
+The cache holds the maintainer-built `bayesTLS` (posterior) and classical
+two-stage summaries; the `freqTLS` column is computed live as this page
+renders. All three use the matched configuration (beta-binomial, constant shape,
+`tref = 240` minutes). The `CTmax` compared is the relative-midpoint parameter;
+for these near-0/near-1 lethal asymptotes it coincides with the absolute LT50 the
+study reports above, so the benchmark and the headline per-sex table agree.
+
+```{r three-way-suzukii, echo = FALSE}
+cache_path <- system.file("extdata", "bayesTLS_benchmark_cache.rds", package = "freqTLS")
+has_cache  <- nzchar(cache_path) && file.exists(cache_path)
+
+fmt <- function(est, lo, hi) {
+  ifelse(is.na(est), "--", sprintf("%.2f [%.2f, %.2f]", est, lo, hi))
+}
+
+sex_levels <- fit$group_levels
+sex_label  <- c(F = "Female", M = "Male")
+
+# Live freqTLS per-sex CTmax and z as profile-likelihood confidence
+# intervals (always available; no Stan).
+pro <- suppressMessages(confint(
+  fit,
+  c(paste0("CTmax:", sex_levels), paste0("z:", sex_levels)),
+  method = "profile"
+))
+pr_of <- function(parm, g) {
+  r <- pro[pro$parameter == paste0(parm, ":", g), , drop = FALSE]
+  if (nrow(r) == 0L) return(stats::setNames(rep(NA_real_, 3), c("est", "lo", "hi")))
+  stats::setNames(c(r$estimate[1L], r$conf.low[1L], r$conf.high[1L]),
+                  c("est", "lo", "hi"))
+}
+
+# The cache keys each sex as "dsuzukii:<sex>".
+cache_has_suzukii <- FALSE
+if (has_cache) {
+  cache <- readRDS(cache_path)
+  cache_has_suzukii <- !is.null(cache$bayesian) &&
+    "dataset" %in% names(cache$bayesian) &&
+    all(paste0("dsuzukii:", sex_levels) %in% cache$bayesian$dataset)
+}
+
+if (cache_has_suzukii) {
+  pick <- function(df, parm, g, cols) {
+    r <- df[df$dataset == paste0("dsuzukii:", g) & df$parameter == parm, , drop = FALSE]
+    if (nrow(r) == 0L) return(stats::setNames(rep(NA_real_, 3), c("est", "lo", "hi")))
+    stats::setNames(as.numeric(r[1L, cols]), c("est", "lo", "hi"))
+  }
+  one_row <- function(g, parm, quantity) {
+    ts <- pick(cache$two_stage, parm, g, c("estimate", "lower", "upper"))
+    by <- pick(cache$bayesian,  parm, g, c("median",   "lower", "upper"))
+    pr <- pr_of(parm, g)
+    data.frame(
+      Sex      = sex_label[[g]],
+      Quantity = quantity,
+      `Two-stage (delta CI)`    = fmt(ts["est"], ts["lo"], ts["hi"]),
+      `bayesTLS (95% CrI)`      = fmt(by["est"], by["lo"], by["hi"]),
+      `freqTLS (profile CI)` = fmt(pr["est"], pr["lo"], pr["hi"]),
+      check.names = FALSE
+    )
+  }
+  rows <- do.call(rbind, lapply(sex_levels, function(g) rbind(
+    one_row(g, "CTmax", "CTmax (°C)"),
+    one_row(g, "z",     "z (°C / decade)")
+  )))
+  knitr::kable(rows, row.names = FALSE,
+               caption = "D. suzukii CTmax and z per sex from three estimators (matched constant-shape configuration, tref = 240 min).")
+} else {
+  prof_tbl <- do.call(rbind, lapply(sex_levels, function(g) {
+    ct <- pr_of("CTmax", g); z <- pr_of("z", g)
+    data.frame(
+      Sex = sex_label[[g]],
+      `CTmax (°C), profile CI`      = fmt(ct["est"], ct["lo"], ct["hi"]),
+      `z (°C / decade), profile CI` = fmt(z["est"], z["lo"], z["hi"]),
+      check.names = FALSE
+    )
+  }))
+  knitr::kable(prof_tbl, row.names = FALSE,
+               caption = "Live freqTLS per-sex estimates (no Stan). The bayesTLS and two-stage columns appear once the maintainer-built cache carries the D. suzukii sexes.")
+}
+```
+
+Under the matched configuration the `freqTLS` profile-likelihood confidence
+intervals and the `bayesTLS` credible intervals summarise the *same* fitted curve
+per sex — one prior-free and by optimisation, the other with a prior and MCMC —
+and the two model-based fits agree tightly, both reproducing the published thermal
+limits (`CTmax` ≈ 35.2 °C; `z` ≈ 3.0 for females and 3.2 for males). The classical
+two-stage estimate sits a few tenths of a degree lower on `CTmax` (≈ 34.8–35.0 °C)
+with wider, less precise intervals — the expected behaviour of the cruder
+per-temperature method, and a reminder that the headline equivalence here is
+between the two model-based fits (see `vignette("comparing-to-bayesTLS")` and
+`vignette("model-math")`).
+
+## Boundary: lethal only
+
+`freqTLS` is purpose-built for the 4PL survival/proportion model class. The
+Ørsted study measured two further *D. suzukii* endpoints that are **non-goals**
+here:
+
+* **Heat-coma (knockdown)** is a right-censored time-to-event endpoint
+  (`brms::bf(... | cens(cens) ~ ...)`), a model class outside the 4PL count
+  engine. Its rate-multiplier `T_crit` is also endpoint-conditional (knockdown
+  `z` < lethal `z`), so it must not be reported as a lethal threshold. For the
+  heat-coma analysis, **see `bayesTLS`**.
+* **Productivity (fertility)** is modelled with a hurdle-Gamma (a zero-inflation
+  process plus a positive clutch-size process), two response processes, neither
+  a 4PL survival curve, and the magnitude component has no LT50 or `z` at all.
+  For productivity, **see `bayesTLS`**.
+
+This article covers the **lethal-by-sex** subset only, which is the part of the
+*D. suzukii* analysis that fits the `freqTLS` model class.
+
+## Session info
+
+```{r session}
+sessionInfo()
+```

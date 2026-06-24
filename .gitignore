@@ -32,6 +32,10 @@ vignettes/*.pdf
 *_cache/
 /cache/
 
+# Local download cache for data-raw/make_benchmark_data.R (raw bayesTLS source
+# files; safe to delete, never committed)
+data-raw/.cache/
+
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
@@ -39,11 +43,23 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
+# pkgdown site (built to pkgdown-site/ so it does not collide with the tracked
+# docs/ governance tree of design notes, dev-log, and the agent-kit)
+pkgdown-site/
 
 # translation temp files
 po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Compiled C/C++ / TMB objects and shared libraries (rebuilt locally per platform)
+src/*.o
+src/*.so
+src/*.dll
+*.o
+*.so
+*.dll
+
+# Local, machine-specific Claude Code settings
+.claude/settings.local.json
