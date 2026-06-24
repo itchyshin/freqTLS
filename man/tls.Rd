@@ -30,7 +30,7 @@ fit's moderator (e.g. the \code{ctmax}/\code{z}/\code{by} factor).}
 
 \item{target_surv}{Survival threshold for CTmax: \code{"relative"} (the curve
 midpoint, the default). Absolute / LTx thresholds arrive with
-\code{\link[bayesTLS:extract_tdt]{extract_tdt()}}.}
+\code{\link[=extract_tdt]{extract_tdt()}}.}
 
 \item{method}{Interval method: \code{"profile"} (default, from the fit's stored
 default), \code{"wald"}, or \code{"bootstrap"}.}

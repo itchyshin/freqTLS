@@ -56,13 +56,16 @@ tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
   quantity <- sub(":.*$", "", rows$parameter)
   by_name <- by %||% meta$moderators %||% "group"
   by_name <- by_name[1L]
-  # Clean cell-means coefficient labels (e.g. "speciesR_padi" -> "R_padi") to the
-  # bare factor level when the moderator name is a clean prefix of every label.
-  grp <- rows$group
-  nn <- !is.na(grp)
-  if (any(nn) && !is.null(by_name) && all(startsWith(grp[nn], by_name)))
-    grp[nn] <- sub(paste0("^", by_name), "", grp[nn])
-  if (any(nn)) {
+  # A fit is grouped iff its quantity coefficients are level-tagged ("CTmax:lvl").
+  # An ungrouped fit's single "all"/intercept level is NOT surfaced as a column.
+  grouped <- any(grepl(":", rows$parameter))
+  if (grouped) {
+    # Clean cell-means coefficient labels (e.g. "speciesR_padi" -> "R_padi").
+    grp <- rows$group
+    if (!is.null(by_name)) {
+      pre <- !is.na(grp) & startsWith(grp, by_name)
+      grp[pre] <- sub(paste0("^", by_name), "", grp[pre])
+    }
     df <- data.frame(grp, quantity = quantity, median = rows$estimate,
                      lower = ci$conf.low[idx], upper = ci$conf.high[idx],
                      stringsAsFactors = FALSE)
@@ -76,7 +79,7 @@ tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
   out <- list(
     summary = summ,
     meta = list(params = qsel, mode = target_surv, method = method,
-                level = level, by = if (any(!is.na(rows$group))) by_name else NULL,
+                level = level, by = if (grouped) by_name else NULL,
                 t_ref = meta$t_ref, temp_mean = meta$temp_mean)
   )
   class(out) <- c("tls", "list")
