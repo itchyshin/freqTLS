@@ -21,7 +21,7 @@ Named list with \code{low_min}, \code{low_max}, \code{low_w}, \code{up_min}, \co
 }
 \description{
 Given the lower and upper bounds of where the asymptotes can sit, returns
-the disjoint intervals used by \code{\link[bayesTLS:make_4pl_formula]{make_4pl_formula()}}'s \code{inv_logit} reparam.
+the disjoint intervals used by \code{\link[=make_4pl_formula]{make_4pl_formula()}}'s \code{inv_logit} reparam.
 \code{low} is mapped to \verb{(lower + pad, midpoint - gap/2)}, \code{up} to
 \verb{(midpoint + gap/2, upper - pad)}. The gap kills label-switching by ensuring
 \code{up > low} always; the pad keeps the asymptotes off the exact boundaries.

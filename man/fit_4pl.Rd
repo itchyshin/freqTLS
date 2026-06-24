@@ -28,7 +28,7 @@ fit_4pl(
 \item{data}{Output of \code{\link[=standardize_data]{standardize_data()}}.}
 
 \item{ctmax, z, up, low, k, by}{Direct-mode formula interface; see
-\code{\link[bayesTLS:make_4pl_formula]{make_4pl_formula()}}. Supplying \code{ctmax}/\code{z} (or \code{by}) fits per-group CTmax/z.}
+\code{\link[=make_4pl_formula]{make_4pl_formula()}}. Supplying \code{ctmax}/\code{z} (or \code{by}) fits per-group CTmax/z.}
 
 \item{threshold}{\code{"relative"} (default; CTmax/z at the curve midpoint) or
 \code{"absolute"} (at the \code{p}-survival level). \emph{Absolute is wired into the
@@ -59,8 +59,8 @@ The frequentist twin of \code{bayesTLS::fit_4pl()}. Consumes \code{\link[=standa
 output and fits the single-stage 4PL thermal death-time model, parameterised
 directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 Returns a \code{freq_tls} workflow object; uncertainty (Wald / profile / bootstrap)
-is computed on demand by the quantity twins (\code{\link[bayesTLS:tls]{tls()}}, \code{confint()}).
+is computed on demand by the quantity twins (\code{\link[=tls]{tls()}}, \code{confint()}).
 }
 \seealso{
-\code{\link[=standardize_data]{standardize_data()}}, \code{\link[bayesTLS:make_4pl_formula]{make_4pl_formula()}}, \code{\link[=fit_tls]{fit_tls()}}
+\code{\link[=standardize_data]{standardize_data()}}, \code{\link[=make_4pl_formula]{make_4pl_formula()}}, \code{\link[=fit_tls]{fit_tls()}}
 }

@@ -42,5 +42,5 @@ vary. Random effects go inside the \code{ctmax}/\code{z}/\code{up}/\code{low}/\c
 \code{ctmax = ~ 0 + grp + (1 | batch)}.
 }
 \seealso{
-\code{\link[bayesTLS:fit_4pl]{fit_4pl()}}, \code{\link[=tls_bf]{tls_bf()}}, \code{\link[=standardize_data]{standardize_data()}}
+\code{\link[=fit_4pl]{fit_4pl()}}, \code{\link[=tls_bf]{tls_bf()}}, \code{\link[=standardize_data]{standardize_data()}}
 }
