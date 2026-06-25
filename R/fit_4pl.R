@@ -176,7 +176,8 @@ print.freq_tls <- function(x, ...) {
 }
 
 # S3 generics delegate from the freq_tls workflow to its engine fit, so
-# coef()/logLik()/vcov()/nobs() work on the object fit_4pl() returns.
+# coef()/logLik()/vcov()/nobs()/confint()/summary() work on the object
+# fit_4pl() returns.
 
 #' @importFrom stats coef
 #' @export
@@ -193,3 +194,10 @@ vcov.freq_tls <- function(object, ...) stats::vcov(object$fit, ...)
 #' @importFrom stats nobs
 #' @export
 nobs.freq_tls <- function(object, ...) stats::nobs(object$fit, ...)
+
+#' @importFrom stats confint
+#' @export
+confint.freq_tls <- function(object, ...) stats::confint(object$fit, ...)
+
+#' @export
+summary.freq_tls <- function(object, ...) summary(object$fit, ...)

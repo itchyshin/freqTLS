@@ -82,6 +82,13 @@ test_that("freq_tls supports the standard S3 generics (delegating to the engine 
   expect_true(is.matrix(vcov(f)))
   expect_identical(nobs(f), nobs(f$fit))
   expect_equal(as.numeric(logLik(f)), as.numeric(logLik(f$fit)))
+  # confint() and summary() also delegate to the engine fit (not the broken
+  # stats::confint.default fall-through on the list).
+  ci <- confint(f, "CTmax", method = "wald")
+  expect_true(all(c("estimate", "conf.low", "conf.high") %in% names(ci)))
+  expect_equal(confint(f, "z", method = "wald")$estimate,
+               confint(f$fit, "z", method = "wald")$estimate)
+  expect_identical(summary(f), summary(f$fit))
 })
 
 test_that("fit_4pl rejects non-standardized data and (for now) absolute / custom bounds", {
