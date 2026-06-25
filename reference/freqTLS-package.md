@@ -36,9 +36,9 @@ Authors:
 
 - Shinichi Nakagawa <itchyshin@gmail.com>
 
-- Daniel W. A. Noble (author of the bayesTLS thermal-load-sensitivity
-  framework)
-
 - Pieter A. Arnold (co-author of the bayesTLS framework)
 
 - Patrice Pottier (co-author of the bayesTLS framework)
+
+- Daniel W. A. Noble (senior author of the bayesTLS
+  thermal-load-sensitivity framework)

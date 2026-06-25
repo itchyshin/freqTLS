@@ -4,27 +4,27 @@
 
 - **Shinichi Nakagawa**. Author, maintainer.
 
-- **Daniel W. A. Noble**. Author.  
-  author of the bayesTLS thermal-load-sensitivity framework
-
 - **Pieter A. Arnold**. Author.  
   co-author of the bayesTLS framework
 
 - **Patrice Pottier**. Author.  
   co-author of the bayesTLS framework
 
+- **Daniel W. A. Noble**. Author.  
+  senior author of the bayesTLS thermal-load-sensitivity framework
+
 ## Citation
 
 Source:
 [`inst/CITATION`](https://github.com/itchyshin/freqTLS/blob/main/inst/CITATION)
 
-Nakagawa S (2026). *freqTLS: Profile-Likelihood Inference for Thermal
-Load Sensitivity Models*. R package version 0.1.0,
-<https://github.com/itchyshin/freqTLS>.
+Nakagawa S, Arnold P, Pottier P, Noble D (2026). *freqTLS:
+Profile-Likelihood Inference for Thermal Load Sensitivity Models*. R
+package version 0.1.0, <https://github.com/itchyshin/freqTLS>.
 
     @Manual{,
       title = {freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity Models},
-      author = {Shinichi Nakagawa},
+      author = {Shinichi Nakagawa and Pieter A. Arnold and Patrice Pottier and Daniel W. A. Noble},
       year = {2026},
       note = {R package version 0.1.0},
       url = {https://github.com/itchyshin/freqTLS},
