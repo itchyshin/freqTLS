@@ -123,8 +123,11 @@ res <- lapply(seq_len(nrow(to_run)), function(i) run_scenario(to_run[i, ]))
 per_sim_all <- dplyr::bind_rows(lapply(res, `[[`, "per_sim"))
 summary_all <- dplyr::bind_rows(lapply(res, `[[`, "summary"))
 
-saveRDS(per_sim_all, file.path(OUT_DIR, "per_sim_sanity.rds"))
-saveRDS(summary_all, file.path(OUT_DIR, "summary_sanity.rds"))
+# OUT_TAG keys the output files, so a SLURM job array (one scenario per task) can
+# write side by side without clobbering. Default "sanity" for an interactive run.
+TAG <- Sys.getenv("OUT_TAG", "sanity")
+saveRDS(per_sim_all, file.path(OUT_DIR, paste0("per_sim_", TAG, ".rds")))
+saveRDS(summary_all, file.path(OUT_DIR, paste0("summary_", TAG, ".rds")))
 
 # Headline: freqTLS recovery & coverage vs the t-corrected classical two-stage.
 cat("\n=========== freqTLS sanity: recovery & 95% coverage by method ===========\n")
