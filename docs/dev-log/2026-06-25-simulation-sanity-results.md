@@ -27,8 +27,12 @@ so the merge is direct (`scripts/simulations/compare_to_bayes.R`).
 2. **The twin recovers the truth ≈ as well as the posterior.** On interior designs
    (constant-shape model ≈ correct), freqTLS bias ≈ 0 and **coverage ≈ 0.94–0.96
    (nominal)** — often *closer* to 0.95 than bayesTLS, which over-covers (~0.98) —
-   with **narrower intervals**. The profile-t calibration delivers nominal coverage
-   without the Bayesian width penalty (the efficiency claim).
+   with **narrower intervals on these interior-design simulations** (where Bayes
+   over-covers). The profile-t calibration delivers nominal coverage without a
+   width penalty here. (On the real benchmark datasets — shrimp, zebrafish — the
+   freqTLS and bayesTLS widths come out *comparable*; see
+   `vignette("comparing-to-bayesTLS")`. "Narrower" is the controlled-simulation
+   efficiency result, not a universal claim.)
 3. **Threshold choice matters on misspecified shapes.** Mean coverage over all 29
    scenarios: relative `joint_4pl` freqTLS **0.850** vs bayes 0.941; absolute
    `joint_4pl_abs` freqTLS **0.921** vs bayes 0.948. The relative figure is pulled

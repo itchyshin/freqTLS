@@ -100,9 +100,13 @@ zhat  <- est$estimate[est$parameter == "z"]
 
 PSII function collapses near **`r round(ctmax, 1)` °C** at a one-hour exposure,
 with a thermal sensitivity `z` of about **`r round(zhat, 1)` °C per tenfold change
-in exposure time**. These are confidence intervals from the profile likelihood —
-the parameter values the data do not reject at the 95% level — not credible
-intervals or posterior summaries.
+in exposure time**. Crucially, this `CTmax` is the 4PL midpoint of a **sublethal,
+functional** endpoint — the temperature at which half of photosystem-II efficiency
+is lost — not the lethal temperature at which the plant dies. It is **not**
+directly comparable to the lethal `CTmax` values in the animal case studies (see
+the summary vignette's note on non-comparable endpoints). These are confidence
+intervals from the profile likelihood — the parameter values the data do not
+reject at the 95% level — not credible intervals or posterior summaries.
 
 ### The Confidence Eye
 

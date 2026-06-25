@@ -66,10 +66,14 @@ There are `r nrow(mort)` cells (a temperature × duration × sex grid),
 
 * **`time` is in minutes.** The reference exposure for this study is **4 hours =
   240 minutes**, so we set `tref = 240`.
-* The threshold is **absolute** (a fixed 50% survival), following Ørsted, rather
-  than the relative midpoint used for the shrimp and zebrafish case studies. In
-  `freqTLS` the default `derive_*` behaviour at `surv = 0.5` is exactly this
-  absolute LT50, so no extra argument is needed here.
+* We interpret the threshold as **absolute** (a fixed 50% survival), following
+  Ørsted. The model itself is still parameterised by the **relative midpoint**
+  (`CTmax` is the 4PL midpoint, the `(low + up)/2` survival level). The relative
+  and absolute thresholds coincide only when the asymptotes sit near 0 and 1 —
+  which they do for these data (`low` ≈ 0, `up` ≈ 1, confirmed in the fit below),
+  so `derive_*` at `surv = 0.5` recovers the absolute LT50 with no extra argument.
+  If your own data have asymptotes far from 0/1, the two thresholds diverge and you
+  must pass the `surv` you want explicitly.
 
 ## Fitting the model: one fit, grouped by sex
 
@@ -179,8 +183,8 @@ Both intervals **span zero**:
 * `dCTmax:F-M` = **0.024 °C, 95% CI [-0.097, 0.151]** — the sexes' four-hour
   `CTmax` values are indistinguishable.
 * `dz:F-M` = **0.054 [-0.021, 0.128]** on the log-`z` scale (a `z` ratio of
-  `exp(0.054)` ≈ 1.06, i.e. males about 6% steeper), with a confidence interval
-  that includes 0 (ratio 1).
+  `exp(0.054)` ≈ 1.06, a point estimate of about a 6% difference in `z` between
+  the sexes), with a confidence interval that includes 0 (ratio 1).
 
 This agrees with the published finding: Ørsted reported a sex difference in `z`
 whose interval spans zero, i.e. **no clear sex difference in thermal sensitivity

@@ -179,8 +179,8 @@ knitr::kable(
   data.frame(
     "Sample size"             = sub("mid", "medium", cal$cell),
     "Residual df"             = cal$median_df,
-    "Coverage (asymptotic z)" = sprintf("%.3f", cal$cov_CTmax_z),
-    "Coverage (profile-t)"    = sprintf("%.3f", cal$cov_CTmax_t),
+    "Coverage (Wald, z-ref)"  = sprintf("%.3f", cal$cov_CTmax_z),
+    "Coverage (Wald, t-ref)"  = sprintf("%.3f", cal$cov_CTmax_t),
     "Extra width"             = sprintf("%+.0f%%", 100 * (cal$width_CTmax_t / cal$width_CTmax_z - 1)),
     check.names = FALSE
   ),
@@ -197,6 +197,12 @@ t-calibration restores it to ~96%, at the cost of ~14% extra width. By
 essentially nothing. The widening is therefore self-cancelling: it pays for the
 small-sample optimism of the asymptotics, then steps out of the way as data
 accumulate.
+
+The coverages above are for the **Wald** interval, where the *z*-versus-*t*
+reference is a clean one-line change. The default **profile** interval inherits
+the *same* small-sample correction — its cutoff is the squared *t* quantile
+`qt(df)^2` rather than `qchisq(level, 1)` — so it tracks the Wald *t*-reference
+column, not the asymptotic-*z* one.
 
 This bears on the Bayesian comparison in two ways. First, it is the honest basis
 for the "confidence" label of the previous section — here the coverage is

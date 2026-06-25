@@ -67,8 +67,10 @@ sane; the sanity test is green; no Stan in CI.
 ### Phase 6 -- Docs and pkgdown site (implemented)
 
 Owners: documentation-writer + pkgdown-editor + Pat + Darwin + literature-curator
-+ Grace. README, four vignettes (`getting-started`, `model-math`,
-`profile-likelihood`, `comparing-to-bayesTLS`), NEWS, the final `_pkgdown.yml`.
++ Grace. README, the vignette suite (`freqTLS`, `model-math`,
+`profile-likelihood`, `random-effects`, `comparing-to-bayesTLS`,
+`frequentist-and-bayesian`, `heat-injury`, and the six case studies), NEWS, the
+final `_pkgdown.yml`.
 **Gate:** `devtools::document()`, `devtools::test()`, `devtools::check()`, and
 `pkgdown::build_site()` are clean locally.
 

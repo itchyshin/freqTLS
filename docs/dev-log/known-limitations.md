@@ -18,7 +18,7 @@ capability changes.
 > below still describe the shared engine. See `NEWS.md` and the handoff in
 > `docs/dev-log/recovery-checkpoints/`.
 
-## Current status: Phase 6 (docs and pkgdown site; v0.1 surface complete)
+## Current status: v0.1.0 (full surface, six case studies, live pkgdown site)
 
 As of 2026-06-16 the full v0.1 surface is implemented and tested. The TMB 4PL
 engine, `fit_tls()`, and `simulate_tls()` (Phase 1); the S3 method surface
@@ -29,7 +29,8 @@ identifiability warnings, and the eye-style profile plot (Phase 3); prediction
 (`predict()`, `predict_survival_surface()`, `derive_lt()`) and the Confidence-Eye
 and curve/surface plots (Phase 4); the R-SHRIMP-corrected `shrimp_lethal` and
 `zebrafish_lethal` datasets and the benchmark harness (Phase 5); and the README,
-four vignettes, NEWS, and finalised pkgdown site (Phase 6) are all landed with
+the full vignette suite (model details plus six case studies), NEWS, and the live
+pkgdown site (Phases 6–7) are all landed with
 tests, documentation, examples, check-log entries, and after-task reports
 (Definition of Done). The single remaining gap is the maintainer-built bayesTLS +
 two-stage benchmark **cache** (needs Stan; see "Benchmark data and cache" below).

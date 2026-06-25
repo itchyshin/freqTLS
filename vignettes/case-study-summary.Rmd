@@ -38,7 +38,9 @@ The four shared case-study datasets span four corners of thermal physiology:
 
 * **brown shrimp** *Crangon crangon* -- a crustacean, lethal mortality, ungrouped;
 * **zebrafish** *Danio rerio* -- a fish, lethal mortality, across three life
-  stages (young embryos, old embryos, larvae);
+  stages (young embryos, old embryos, larvae); this panel uses the
+  `zebrafish_lethal` life-stage dataset — a *separate* experiment from the
+  oxygen-gradient `zebrafish_o2` data in `vignette("case-study-zebrafish")`;
 * **snow gum** *Eucalyptus pauciflora* -- a plant, a **functional** (sublethal)
   endpoint, the retained proportion of photosystem-II efficiency (`Fv/Fm`);
 * **vinegar fly** *Drosophila suzukii* -- an insect, lethal mortality, across the
@@ -49,7 +51,9 @@ compare across a crustacean, a fish (resolved by developmental stage), a plant's
 photosynthetic machinery, and an insect (resolved by sex)? `CTmax` (the critical
 temperature at a fixed reference exposure) places each taxon on the temperature
 axis; `z` (the change in temperature, in degrees Celsius, that multiplies tolerated
-exposure time tenfold) measures how steeply tolerance trades off against duration.
+exposure time tenfold) measures how sharply tolerated exposure responds to
+temperature: a *smaller* `z` is a steeper response (a small warming sharply cuts
+tolerated time), a *larger* `z` a more gradual one.
 
 **One caveat governs the whole panel.** The reference exposures differ by study,
 because each follows the convention of its source assay:
@@ -398,13 +402,16 @@ data.
 
 Three things stand out from the panel:
 
-* **The plant's photosynthetic endpoint is the steepest.** Snow gum PSII has the
-  largest `z` (about 3.7 degrees Celsius per tenfold time), so its tolerated
-  exposure collapses faster with temperature than the animals' lethal endpoints
-  (`z` between roughly 1.8 and 3.2). Its `CTmax` is also the highest, on the same
-  one-hour reference as the shrimp and zebrafish; only the *D. suzukii* `CTmax`
-  sits at a different (four-hour) reference, so that row alone is off the common
-  time scale.
+* **The plant's photosynthetic endpoint is the most gradual.** Snow gum PSII has the
+  largest `z` (about 3.7 degrees Celsius per tenfold time), so its tolerated exposure
+  collapses *most gradually* with temperature — it takes the largest temperature rise
+  to cut the tolerated time tenfold (the rate of collapse scales as `1/z`) — whereas
+  the animals' lethal endpoints (`z` between roughly 1.8 and 3.2) fall more steeply.
+  Snow gum's `CTmax` is also the highest on the shared one-hour reference, but it is
+  the temperature of half-PSII-loss, **not** a lethal temperature, so it should not be
+  read as ranking the plant above the animals on a single tolerance scale; only the
+  `z` comparison is like-for-like across all rows. (The *D. suzukii* `CTmax` sits at a
+  four-hour reference, so that row is also off the common time scale.)
 
 * **Resolving a taxon by an internal axis can matter or not.** Zebrafish life stage
   shifts `CTmax` by over a degree (old embryos are the most heat-tolerant stage),

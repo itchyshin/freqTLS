@@ -49,18 +49,25 @@ The package supports:
 
 - the single-stage 4PL thermal-load-sensitivity model with the temperature effect
   through the midpoint only (shared `low`, `up`, `k`);
-- count response data: `binomial` and `beta_binomial` (overdispersion `phi`);
-- ungrouped fits and fixed-effect groups via `~ 0 + group` on `CTmax` and
-  `log_z`;
-- Wald and profile-likelihood confidence intervals.
+- count response data (`binomial`, `beta_binomial` with overdispersion `phi`) and
+  continuous proportions (`beta`);
+- ungrouped fits, fixed-effect groups via `~ 0 + group`, per-sub-parameter fixed
+  predictors and a formula DSL (`tls_bf()`), and single random intercepts on
+  `CTmax` / `log_z` / `low` / `log_k`;
+- Wald, profile-likelihood, and parametric-bootstrap confidence intervals, with the
+  Bates–Watts profile-t small-sample calibration;
+- derived heat-injury / `T_crit` quantities and the Confidence-Eye uncertainty plot.
 
-The package does not currently support (v0.1 non-goals):
+The package does not currently support (non-goals):
 
-- Beta / continuous responses; time-to-event; multi-trait responses;
-- heat-injury / repair sub-models;
-- temperature effects on `low`, `up`, or `k`;
-- an absolute-threshold default (the default is the relative threshold);
-- random effects; a formula DSL; bootstrap CIs; CRAN hardening.
+- time-to-event or multi-trait responses;
+- temperature effects on `low`, `up`, or `k` (the constant-shape invariant);
+- a fit-time absolute-threshold option (the fit is on the relative threshold;
+  absolute / p-survival quantities come from `extract_tdt()`) or non-default
+  asymptote `bounds`;
+- correlated, crossed, or random-slope random effects, or a random effect /
+  profile coordinate for the upper asymptote `up`;
+- CRAN hardening / submission.
 
 ## Sibling boundary
 

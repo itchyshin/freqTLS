@@ -134,6 +134,12 @@ shrimp_fit <- fit_4pl(shrimp_std, t_ref = 1, family = "beta_binomial", quiet = T
 tls(shrimp_fit, method = "profile")$summary
 ```
 
+`fit_4pl()` returns a `freq_tls` **workflow object** (the twin of bayesTLS's
+`bayes_tls`): it bundles the engine fit, the standardised data, and the formula.
+Its S3 methods — `tls()`, `confint()`, `summary()`, `plot_confidence_eye()` —
+delegate to the engine fit, so you call them on the workflow object directly. The
+underlying engine fit is also available as `shrimp_fit$fit` if you want to reach it.
+
 ```{r profile-zebrafish}
 data(zebrafish_lethal)
 zebra_std <- standardize_data(
@@ -169,7 +175,7 @@ fmt <- function(est, lo, hi) {
 
 if (has_cache) {
   cache <- readRDS(cache_path)
-  pro <- confint(shrimp_fit$fit, c("CTmax", "z"), method = "profile")  # engine fit from above
+  pro <- confint(shrimp_fit, c("CTmax", "z"), method = "profile")  # confint() delegates to the engine fit
 
   pick <- function(df, parm, cols) {
     r <- df[df$dataset == "shrimp" & df$parameter == parm, ]
@@ -245,8 +251,8 @@ sp_std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
 t_fit <- system.time(
   sp_fit <- fit_4pl(sp_std, t_ref = 1, family = "beta_binomial", quiet = TRUE)
 )[["elapsed"]]
-t_wald <- system.time(invisible(confint(sp_fit$fit, c("CTmax", "z"), method = "wald")))[["elapsed"]]
-t_prof <- system.time(invisible(confint(sp_fit$fit, c("CTmax", "z"), method = "profile")))[["elapsed"]]
+t_wald <- system.time(invisible(confint(sp_fit, c("CTmax", "z"), method = "wald")))[["elapsed"]]
+t_prof <- system.time(invisible(confint(sp_fit, c("CTmax", "z"), method = "profile")))[["elapsed"]]
 
 speed <- data.frame(
   Estimator = c("freqTLS", "freqTLS", "freqTLS", "classical two-stage", "bayesTLS"),

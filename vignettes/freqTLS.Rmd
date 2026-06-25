@@ -69,7 +69,11 @@ attr(dat, "truth")[c("CTmax", "z", "phi")]
 `freqTLS` mirrors the `bayesTLS` workflow. First `standardize_data()` names the
 temperature, duration, and survival-count columns and records the data contract;
 then `fit_4pl()` fits the 4PL by maximum likelihood and returns a `freq_tls`
-workflow object. (`t_ref` is the reference time at which `CTmax` is defined.)
+workflow object. `t_ref` is the reference time at which `CTmax` is defined: the
+twin facade `fit_4pl()` uses the `bayesTLS` spelling `t_ref` (default 60), while
+the lower-level engine `fit_tls()` (below) uses `tref` (default 1) — the same
+quantity, in the data's duration unit. The simulated durations here are already in
+reference units, so we pass `1`.
 
 ```{r standardize}
 std <- standardize_data(
