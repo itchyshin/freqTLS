@@ -201,3 +201,6 @@ confint.freq_tls <- function(object, ...) stats::confint(object$fit, ...)
 
 #' @export
 summary.freq_tls <- function(object, ...) summary(object$fit, ...)
+
+#' @export
+ranef.freq_tls <- function(object, ...) ranef(object$fit, ...)

@@ -7,7 +7,8 @@
 check_tls(fit)
 }
 \arguments{
-\item{fit}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
+\item{fit}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}, or a \code{freq_tls} workflow from
+\code{\link[=fit_4pl]{fit_4pl()}}.}
 }
 \value{
 Invisibly, a character vector of the diagnostic codes that fired.

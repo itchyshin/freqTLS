@@ -21,7 +21,8 @@ plot_heat_injury(
 )
 }
 \arguments{
-\item{object}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
+\item{object}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}, or a \code{freq_tls} workflow
+from \code{\link[=fit_4pl]{fit_4pl()}}.}
 
 \item{trace}{A data frame with numeric columns \code{time} (strictly increasing,
 at least two rows) and \code{temp} (degrees C).}

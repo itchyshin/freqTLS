@@ -165,7 +165,8 @@ check_tls_data <- function(y, n, time, temp, group = NULL,
 #' [profile()] when those are called, not here, because they require the profile
 #' likelihood.
 #'
-#' @param fit A `profile_tls` fit from [fit_tls()].
+#' @param fit A `profile_tls` fit from [fit_tls()], or a `freq_tls` workflow from
+#'   [fit_4pl()].
 #' @return Invisibly, a character vector of the diagnostic codes that fired.
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
@@ -174,8 +175,9 @@ check_tls_data <- function(y, n, time, temp, group = NULL,
 #' check_tls(fit)
 #' @export
 check_tls <- function(fit) {
+  if (inherits(fit, "freq_tls")) fit <- fit$fit
   if (!inherits(fit, "profile_tls")) {
-    cli::cli_abort("{.arg fit} must be a {.cls profile_tls} object from {.fn fit_tls}.")
+    cli::cli_abort("{.arg fit} must be a {.cls profile_tls} object from {.fn fit_tls} (or a {.cls freq_tls} workflow from {.fn fit_4pl}).")
   }
   d <- fit$diag_data
   if (is.null(d)) {

@@ -89,6 +89,19 @@ test_that("freq_tls supports the standard S3 generics (delegating to the engine 
   expect_equal(confint(f, "z", method = "wald")$estimate,
                confint(f$fit, "z", method = "wald")$estimate)
   expect_identical(summary(f), summary(f$fit))
+  # check_tls() (data-adequacy diagnostic) also takes the workflow object.
+  expect_identical(suppressWarnings(check_tls(f)), suppressWarnings(check_tls(f$fit)))
+})
+
+test_that("ranef() works on a freq_tls fit with random effects", {
+  d <- simulate_tls(family = "binomial", temps = c(34, 36, 38), times = c(1, 4),
+                    reps = 1, n = 8, CTmax = 36, z = 4, re_sd = 1.2,
+                    n_re_groups = 10, seed = 42)
+  std <- standardize_data(d, temp = "temp", duration = "duration",
+                          n_total = "total", n_surv = "survived")
+  wf <- suppressWarnings(fit_4pl(std, ctmax = ~ 1 + (1 | colony),
+                                 family = "binomial", t_ref = 1, quiet = TRUE))
+  expect_equal(ranef(wf), ranef(wf$fit))
 })
 
 test_that("fit_4pl rejects non-standardized data and (for now) absolute / custom bounds", {

@@ -113,3 +113,24 @@ test_that("optional Sharpe-Schoolfield repair reduces injury and warns it is uni
   expect_lt(rep_hi$dose[nrow(rep_hi)], base$dose[nrow(base)])
   expect_gt(rep_hi$survival[nrow(rep_hi)], base$survival[nrow(base)])
 })
+
+test_that("heat-injury functions accept the freq_tls workflow, matching the engine fit", {
+  d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+  std <- standardize_data(d, temp = "temp", duration = "duration",
+                          n_total = "total", n_surv = "survived")
+  wf <- fit_4pl(std, family = "binomial", t_ref = 1, quiet = TRUE)  # freq_tls
+  expect_s3_class(wf, "freq_tls")
+  trace <- data.frame(time = seq(0, 2, by = 0.1),
+                      temp = 34 + 4 * sin(seq(0, 2, by = 0.1)))
+
+  # predict_heat_injury: the workflow object unwraps to its engine fit, so the
+  # prediction is identical to calling it on $fit directly.
+  expect_identical(predict_heat_injury(wf, trace),
+                   predict_heat_injury(wf$fit, trace))
+
+  # heat_injury_envelope + plot_heat_injury also take the workflow (envelope uses
+  # the fit for both the point trajectory and the bootstrap replicates).
+  env <- heat_injury_envelope(wf, trace, nboot = 50, seed = 1)
+  expect_true(all(c("time", "survival", "conf.low", "conf.high") %in% names(env)))
+  expect_s3_class(plot_heat_injury(wf, trace, nboot = 50, seed = 1), "ggplot")
+})

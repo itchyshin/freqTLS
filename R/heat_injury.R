@@ -48,7 +48,8 @@
 #' `r_ref`, `t_a`, `t_al`, `t_ah`, `t_l`, `t_h`, `t_ref`, with the four reference
 #' temperatures in **Kelvin**.
 #'
-#' @param object A `profile_tls` fit from [fit_tls()].
+#' @param object A `profile_tls` fit from [fit_tls()], or a `freq_tls` workflow
+#'   from [fit_4pl()].
 #' @param trace A data frame with numeric columns `time` (strictly increasing,
 #'   at least two rows) and `temp` (degrees C).
 #' @param group Optional single group level (grouped fits only; required when the
@@ -80,8 +81,9 @@
 #' @export
 predict_heat_injury <- function(object, trace, group = NULL, target_surv = NULL,
                                 t_c = NULL, repair = NULL, irreversible = TRUE) {
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
-    cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
+    cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls} (or a {.cls freq_tls} workflow from {.fn fit_4pl}).")
   }
   if (!is.data.frame(trace)) {
     cli::cli_abort("{.arg trace} must be a data frame with columns {.code time} and {.code temp}.")
@@ -271,6 +273,7 @@ tls_repair_rate_schoolfield <- function(temp_c, pars) {
 heat_injury_envelope <- function(object, trace, group = NULL, target_surv = NULL,
                                  t_c = NULL, repair = NULL, irreversible = TRUE,
                                  nboot = 1000L, conf.level = 0.95, seed = NULL) {
+  if (inherits(object, "freq_tls")) object <- object$fit
   if (!is.numeric(conf.level) || length(conf.level) != 1L ||
       conf.level <= 0 || conf.level >= 1) {
     cli::cli_abort("{.arg conf.level} must be a single number in (0, 1).")
