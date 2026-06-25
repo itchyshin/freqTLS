@@ -34,15 +34,50 @@ supersedes.
 * Seven shared case-study datasets, including `aphid_tdt` (Li et al. 2023) and
   `zebrafish_o2` (Saruhashi et al. 2026).
 
+## Inference and calibration
+
+* Small-sample **Bates–Watts profile-t / Wald-t calibration**: confidence
+  intervals reference a t distribution with residual df = n − p, restoring
+  nominal coverage at small n and reducing to the asymptotic interval as n grows.
+  The evidence is a coverage + width simulation (`data-raw/calibration-study.R`):
+  at df ≈ 10 the asymptotic 95% interval covers ~0.93 and the t-correction
+  restores ~0.96.
+* A three-way **benchmark** (`data-raw/benchmark-vs-bayes.R`): freqTLS reproduces
+  bayesTLS's CTmax to ~0.07 °C on the brown-shrimp data, beside the classical
+  two-stage estimator.
+
+## Twin S3 surface
+
+* `confint()`, `summary()`, `ranef()`, and `coef()`/`logLik()`/`vcov()`/`nobs()`,
+  the heat-injury functions (`predict_heat_injury()` / `plot_heat_injury()` /
+  `heat_injury_envelope()`), and `check_tls()` all accept the `freq_tls` workflow
+  object — the whole post-fit surface works on the `fit_4pl()` result.
+* `fit_4pl(by = "g")` now labels groups by the bare factor levels
+  (`CTmax:young_embryos`), identical to the column interface, end to end.
+
+## Case studies and vignettes (render without Stan)
+
+* The **frequentist-and-bayesian** centerpiece carries the coverage panel and the
+  three-way benchmark; `comparing-to-bayesTLS` carries the live + cached
+  comparison.
+* Worked case studies mirroring the shared manuscript: brown shrimp; zebrafish
+  under hypoxia / normoxia / hyperoxia (OCLTT); cereal aphids (Li 2023);
+  *D. suzukii* by sex; snow-gum leaf PSII (a continuous-proportion beta endpoint);
+  and a cross-taxon summary.
+
+## Simulation
+
+* `scripts/simulations/` — a freqTLS (ML/TMB) twin of the bayesTLS two-stage-bias
+  simulation (shared data-generating process + scoring), with a comparison to the
+  bayesTLS results. Validated locally and on the DRAC cluster (`drac_sim.sh`).
+
 ## Engine
 
 * Asymptotes use bayesTLS's **disjoint-bounds** reparameterisation
   (`compute_4pl_bounds`); `up` is now a direct coordinate.
 * Convergence / positive-definite-Hessian status is surfaced at fit time.
 
-## In progress
+## Superseding profileTLS
 
-* The profile-t interval-calibration evidence (coverage + width simulation),
-  the three-way benchmark against bayesTLS, the case-study vignettes mirroring
-  the shared manuscript, the pkgdown site, and the formal deprecation of
-  profileTLS.
+* freqTLS supersedes **profileTLS** (the engine donor); the profileTLS site and
+  repository are being retired.
