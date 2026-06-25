@@ -9,7 +9,10 @@ bibentry(
   bibtype  = "Manual",
   title    = "freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity Models",
   author   = c(
-    person("Shinichi", "Nakagawa")
+    person("Shinichi", "Nakagawa"),
+    person("Pieter A.", "Arnold"),
+    person("Patrice", "Pottier"),
+    person("Daniel W. A.", "Noble")
   ),
   year     = "2026",
   note     = paste("R package version", meta$Version),
