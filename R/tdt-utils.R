@@ -13,9 +13,11 @@ tdt_quantile <- function(x, probs = c(0.025, 0.5, 0.975)) {
   stats::quantile(x, probs = probs, na.rm = TRUE, names = FALSE)
 }
 
-#' Format a posterior median plus credible interval as a single string
+#' Format a point estimate plus confidence interval as a single string
 #'
-#' @param median,lower,upper Numeric (scalar or vector).
+#' @param median,lower,upper Numeric (scalar or vector). `median` is the central
+#'   value (a point estimate or the median of bootstrap replicates), `lower` and
+#'   `upper` the confidence-interval endpoints.
 #' @param digits Integer rounding precision.
 #' @return Character like `"5.12 [4.87, 5.4]"`. A non-finite `median` yields
 #'   `NA_character_` (rather than `"NA [...]"`); a non-finite bound is shown as an

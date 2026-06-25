@@ -183,8 +183,8 @@
 #' under hypoxia, normoxia or hyperoxia, and scored alive/dead. One row per
 #' assay group; \code{oxygen} is the categorical moderator. Fit \code{CTmax} and
 #' \code{z} as functions of \code{oxygen} (optionally \code{ploidy}) in one joint
-#' 4PL to compare thermal tolerance across the gradient with full posterior
-#' uncertainty.
+#' 4PL to compare thermal tolerance across the gradient with profile-likelihood
+#' confidence intervals on every quantity.
 #'
 #' @format A data frame with 905 rows and 10 variables:
 #' \describe{
@@ -227,8 +227,8 @@
 #' durations and scored alive/dead after recovery. One row per assay group;
 #' \code{branch} flags the heat vs cold series. Subset to one \code{branch} (and
 #' typically one \code{age}) and fit \code{CTmax} and \code{z} as functions of
-#' \code{species} in one joint 4PL to compare species with full posterior
-#' uncertainty.
+#' \code{species} in one joint 4PL to compare species with profile-likelihood
+#' confidence intervals on every quantity.
 #'
 #' @format A data frame with 3041 rows and 7 variables:
 #' \describe{

@@ -40,8 +40,8 @@ Aphids of three ages (2, 6, 12 days old) were exposed to a heat branch
 durations and scored alive/dead after recovery. One row per assay group;
 \code{branch} flags the heat vs cold series. Subset to one \code{branch} (and
 typically one \code{age}) and fit \code{CTmax} and \code{z} as functions of
-\code{species} in one joint 4PL to compare species with full posterior
-uncertainty.
+\code{species} in one joint 4PL to compare species with profile-likelihood
+confidence intervals on every quantity.
 }
 \examples{
 \dontrun{

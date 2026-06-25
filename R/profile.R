@@ -4,7 +4,7 @@
 #' target of a [fit_tls()] model. For the target it fixes the corresponding
 #' internal (unconstrained) coordinate on a grid, re-optimises the remaining
 #' coordinates at each grid point, and returns the deviance
-#' `D = 2 * (logLik_hat - logLik_profile)` together with the chi-square cutoff and
+#' `D = 2 * (logLik_hat - logLik_profile)` together with the profile-t cutoff and
 #' the profile-likelihood confidence interval. Because the profile is taken on the
 #' unconstrained coordinate and the endpoints are then transformed by a monotone
 #' function, the interval is exactly equivariant: the `z` interval equals `exp()`
@@ -29,10 +29,10 @@
 #'   `dCTmax:<a>-<b>`, `dlog_z:<a>-<b>` \tab contrast recoding \tab identity \cr
 #' }
 #'
-#' `up` has no single internal coordinate under the nested-gap asymptote
-#' reparameterisation (`up = low + (1 - low) * plogis(beta_up)`); profiling it
-#' would require rebuilding the compiled objective on a re-rooted `(up, low)`
-#' pair. freqTLS instead falls back to the delta-method Wald interval for `up`
+#' Under the disjoint-bounds parameterisation `up = up_min + up_w * plogis(beta_up)`
+#' has its own coordinate `beta_up`, but freqTLS does not yet profile it (the profile
+#' path is wired for `low` but not `up` — symmetric work, simply not implemented).
+#' freqTLS falls back to the delta-method Wald interval for `up`
 #' and says so (SPEC.md S10). Group contrasts (`dCTmax`, `dlog_z`) are profiled
 #' directly by recoding the design so the contrast is itself a coordinate.
 #'
@@ -94,11 +94,11 @@ profile.profile_tls <- function(fitted, parm, level = 0.95, npoints = 30L,
     ))
   }
 
-  # `up` has no single internal coordinate; fall back to Wald/delta and say so.
+  # `up` is not yet profiled (disjoint-bounds beta_up); fall back to Wald/delta and say so.
   if (identical(target$kind, "up")) {
     cli::cli_inform(c(
       "{.val {target$parm}} is profiled with the delta-method Wald interval.",
-      i = "The nested-gap asymptote reparameterisation has no single internal coordinate for {.val up} (SPEC.md S10)."
+      i = "The profile path is not yet wired for the disjoint-bounds {.val up} coordinate {.code beta_up} (SPEC.md S10)."
     ))
     return(tls_up_wald_profile(fitted, level, target$parm))
   }
@@ -152,7 +152,7 @@ tls_resolve_target <- function(fit, parm) {
     return(tls_resolve_contrast(fit, parm))
   }
 
-  # up (or up:<g>): handled specially (no single internal coordinate; Wald).
+  # up (or up:<g>): handled specially (beta_up not yet profiled; Wald).
   if (parm == "up" || grepl("^up:", parm)) {
     return(list(kind = "up", parm = parm, transformation = "identity"))
   }
@@ -488,7 +488,7 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
     ))
   }
 
-  # warning 10: MLE on a boundary -> chi-square calibration unreliable. The
+  # warning 10: MLE on a boundary -> interval calibration unreliable. The
   # deviance at the MLE should be ~0; a clearly negative minimum elsewhere
   # signals the reported MLE is not the profile optimum.
   dev_at_hat <- dev_fun(theta_hat)
@@ -496,7 +496,7 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
   if (is.finite(min_dev) && min_dev < -1e-3) {
     cli::cli_warn(c(
       "The profile deviance for {.val {target$parm}} dips below zero away from the reported MLE (min {signif(min_dev, 3)}).",
-      i = "The reported optimum may be on a boundary or not a true interior maximum; the chi-square calibration of the interval is unreliable (SPEC.md S10, warning 10)."
+      i = "The reported optimum may be on a boundary or not a true interior maximum; the profile-t calibration of the interval is unreliable (SPEC.md S10, warning 10)."
     ))
   }
 
@@ -631,7 +631,7 @@ tls_profile_multimodal <- function(grid, dev, theta_hat) {
 #' @param dev_fun Deviance function on the internal coordinate.
 #' @param theta_hat Fitted MLE of the coordinate.
 #' @param direction `-1` (lower) or `+1` (upper).
-#' @param cutoff `qchisq(level, 1)`.
+#' @param cutoff Deviance cutoff `qt(1 - alpha/2, df)^2` (profile-t).
 #' @param se Curvature SE (for the initial step); may be `NA`.
 #' @param grid,dev Pre-computed grid and deviance (used to seed the bracket).
 #' @return The internal-coordinate endpoint, or `NA_real_`.
@@ -888,8 +888,8 @@ tls_contrast_refit <- function(fit, target) {
 
 #' Wald/delta-method "profile" object for the upper asymptote `up`
 #'
-#' `up` has no single internal coordinate under the nested-gap reparameterisation,
-#' so freqTLS reports the delta-method Wald interval for it (SPEC.md S10). The
+#' Under disjoint bounds `up` has its own coordinate `beta_up`, but freqTLS does not
+#' yet profile it, so it reports the delta-method Wald interval for `up` (SPEC.md S10). The
 #' returned object has the `"profile_tls_profile"` shape but carries no deviance
 #' curve (`deviance` is empty) and an `interval_type`/`scale` of `"wald"`.
 #'
@@ -911,7 +911,7 @@ tls_up_wald_profile <- function(fit, level, parm = "up") {
       conf.low = if (nrow(row)) row$conf.low[1L] else NA_real_,
       conf.high = if (nrow(row)) row$conf.high[1L] else NA_real_,
       conf.status = "wald_fallback",
-      cutoff = stats::qchisq(level, df = 1),
+      cutoff = stats::qt(1 - (1 - level) / 2, df = tls_ci_df(fit))^2,
       level = level,
       scale = "identity",
       transformation = "identity"
@@ -947,7 +947,7 @@ print.profile_tls_profile <- function(x, digits = 4, ...) {
 #'
 #' `plot()` for a `"profile_tls_profile"` object draws the likelihood-ratio
 #' deviance curve against the natural-scale parameter. A dotted horizontal line
-#' marks the chi-square cutoff `qchisq(level, 1)`; a solid vertical line marks the
+#' marks the profile-t cutoff `qt(1 - alpha/2, df)^2`; a solid vertical line marks the
 #' point estimate; dashed vertical lines mark the interval endpoints when they
 #' are finite. The wording is deliberately "confidence" -- this
 #' is a likelihood curve, never a posterior (SPEC.md S13). A non-closing side is
@@ -996,7 +996,7 @@ plot.profile_tls_profile <- function(x, ...) {
 
   caption <- paste0(
     "Profile likelihood-ratio confidence interval at ",
-    round(100 * x$level), "% (chi-square, 1 df). Scale: ", x$scale, "."
+    round(100 * x$level), "% (profile-t). Scale: ", x$scale, "."
   )
   if (!is.null(open_note)) caption <- paste0(caption, " ", open_note, ".")
 

@@ -18,8 +18,9 @@ freqTLS uses the column contract
 - **zebrafish** (`zebrafish_lethal`, grouped by life stage): `temp = assay_temp`,
   `duration = duration_h`, `total = n_total`, `survived = n_surv` (shipped
   correctly), `group = life_stage`.
-- **D. suzukii** (`dsuzukii_lethal`, grouped by sex): `temp = temp`,
-  `duration = time` (minutes), `total = total`, `survived = survived`,
+- **D. suzukii** (`dsuzukii`, per-individual, grouped by sex): aggregate the 0/1
+  `dead` indicator to `(temp, time, sex)` cells (`total = n()`,
+  `survived = sum(dead == 0)`); then `temp = temp`, `duration = time` (minutes),
   `group = sex`, `tref = 240` minutes. Count data, so the full three-way applies.
 - **snow-gum PSII** (`snowgum_psii`, ungrouped, **continuous proportion**):
   `temp = temp`, `duration = duration` (minutes), `proportion = prop`,
@@ -33,11 +34,13 @@ The bayesTLS shipped `shrimp_lethal` death counts are corrupted upstream. The CS
 column `Mortality_after_trial` is a **proportion** (for example `0.0909 = 1/11`,
 `0.5 = 5/10`), but the upstream `make_datasets.R:25` mislabels it a death count
 and `:34` applies `as.integer(...)`, which floors proportions below 1 to 0, so the
-shipped death counts collapse to nearly all zero. freqTLS rebuilds from the CSV
-with `deaths = round(prop * N)` (hence `survived = N - round(prop * N)`), asserts
-the rebuilt death distribution is sane, documents the rebuild in `R/data.R`, files
-a friendly upstream report, and verifies the rebuilt `.rda` before finalising
-(`data-raw/make_benchmark_data.R`).
+shipped death counts collapse to nearly all zero. freqTLS sidesteps this by
+vendoring the **raw CSV proportion** (`Mortality_after_trial`) together with
+`N_individuals_after_trial`, rather than any baked-in counts;
+`standardize_data(mortality = "Mortality_after_trial")` then rebuilds the death
+counts as `round(prop * N)` (hence `survived = N - round(prop * N)`) at fit time.
+`R/data.R` documents the vendored proportion, and the vendored `.rda` is verified
+against the CSV before finalising.
 
 ## Three-way comparison (no reimplementation)
 

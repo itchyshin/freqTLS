@@ -17,7 +17,7 @@ and `docs/design/03-likelihoods.md` (AGENTS.md design rule 1).
 | Beta | `beta_tls()` | 2 | proportion `y` in (0, 1) | `phi` (dispersion) | log |
 
 All families share the survival mean model (the 4PL curve with the direct
-`CTmax`/`z` midpoint and nested-gap asymptotes). The beta-binomial and beta
+`CTmax`/`z` midpoint and disjoint-bounds asymptotes). The beta-binomial and beta
 families add a single dispersion parameter `phi`; the beta family models a
 continuous proportion directly with `y ~ Beta(p * phi, (1 - p) * phi)` and needs
 no `n` (a dummy `n` is supplied internally and ignored by the likelihood).

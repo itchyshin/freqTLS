@@ -132,8 +132,9 @@ get_z(fit)
 The reason for the direct `CTmax`/`z` parameterisation is that both headline quantities
 are model *coordinates*, so they can be profiled directly. `confint()` with
 `method = "profile"` (the default) inverts the likelihood-ratio test: the interval is
-the set of values whose deviance from the maximum stays below the chi-square cutoff,
-found by root-finding on each side of the MLE.
+the set of values whose deviance from the maximum stays below the profile-$t$ cutoff (a
+squared Student-$t$ quantile on the residual degrees of freedom, not $\chi^2_1$; see
+`vignette("frequentist-and-bayesian")`), found by root-finding on each side of the MLE.
 
 ```{r confint}
 confint(fit, parm = "CTmax", method = "profile")

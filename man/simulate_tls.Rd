@@ -84,7 +84,7 @@ engine. It may be combined with \code{re_sd} (both intercepts share the one
 intercepts on the lower asymptote \code{low} (logit scale)} and on the steepness
 \strong{\code{log(k)}} — the shape-coordinate analogues of \code{re_sd} / \code{re_sd_z}
 (\code{low_g = plogis(qlogis(low) + d_g)}, \code{k_g = exp(log(k) + e_g)}; \code{up} tracks
-\code{low} through the fixed nested gap). They combine freely with \code{re_sd} /
+\code{low} by a fixed head-room fraction). They combine freely with \code{re_sd} /
 \code{re_sd_z}; realised deviations are in \code{attr(, "truth")$b_low} / \verb{$b_logk}.}
 
 \item{n_re_groups}{Number of random-effect groups (required with any \verb{re_sd*}).}

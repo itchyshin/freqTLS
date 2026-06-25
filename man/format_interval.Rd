@@ -2,12 +2,14 @@
 % Please edit documentation in R/tdt-utils.R
 \name{format_interval}
 \alias{format_interval}
-\title{Format a posterior median plus credible interval as a single string}
+\title{Format a point estimate plus confidence interval as a single string}
 \usage{
 format_interval(median, lower, upper, digits = 2)
 }
 \arguments{
-\item{median, lower, upper}{Numeric (scalar or vector).}
+\item{median, lower, upper}{Numeric (scalar or vector). \code{median} is the central
+value (a point estimate or the median of bootstrap replicates), \code{lower} and
+\code{upper} the confidence-interval endpoints.}
 
 \item{digits}{Integer rounding precision.}
 }
@@ -17,7 +19,7 @@ Character like \code{"5.12 [4.87, 5.4]"}. A non-finite \code{median} yields
 en dash, so the strings stay table-ready.
 }
 \description{
-Format a posterior median plus credible interval as a single string
+Format a point estimate plus confidence interval as a single string
 }
 \examples{
 format_interval(5.123, 4.872, 5.401)

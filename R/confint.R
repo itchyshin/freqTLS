@@ -5,13 +5,17 @@
 #'
 #' * `method = "profile"` (default) computes profile-likelihood confidence
 #'   intervals by inverting the likelihood-ratio test: the interval is
-#'   `{psi : D(psi) <= qchisq(level, 1)}`, found by [stats::uniroot()] on each
+#'   `{psi : D(psi) <= qt(1 - alpha/2, df)^2}`, found by [stats::uniroot()] on each
 #'   side of the MLE on the unconstrained internal coordinate, with the endpoints
-#'   transformed to the natural scale. These intervals are prior-free and respect
-#'   asymmetry. They are equivariant under monotone reparameterisation, so the
-#'   `z` interval equals `exp()` of the internal `log_z` interval.
-#' * `method = "wald"` reuses the Phase-2 Wald path: `estimate +/- z * se` on the
-#'   internal (link) scale, back-transformed.
+#'   transformed to the natural scale. The cutoff is the squared profile-t
+#'   quantile on `df = n - p` residual degrees of freedom (Bates-Watts profile-t),
+#'   not `qchisq(level, 1)`; the two coincide as `df -> Inf`. These intervals are
+#'   prior-free and respect asymmetry. They are equivariant under monotone
+#'   reparameterisation, so the `z` interval equals `exp()` of the internal
+#'   `log_z` interval.
+#' * `method = "wald"` reuses the Phase-2 Wald path: `estimate +/- t * se` (with
+#'   `t = qt(1 - alpha/2, df)` on `df = n - p`) on the internal (link) scale,
+#'   back-transformed.
 #' * `method = "bootstrap"` returns prior-free parametric-bootstrap percentile
 #'   intervals: survival counts are regenerated at the observed design from the
 #'   fitted 4PL, the model is refitted `nboot` times, and the interval is the
@@ -25,8 +29,8 @@
 #' returned -- the parity with a Bayesian fit, which always yields one. Set
 #' `fallback = FALSE` to keep the strict profile behaviour, which returns `NA` on
 #' the open side (never a fabricated bound) with a warning that the parameter is
-#' weakly identified (SPEC.md S10, R-PROFILE). The upper asymptote `up` has no
-#' single internal coordinate under the nested-gap reparameterisation and is
+#' weakly identified (SPEC.md S10, R-PROFILE). The upper asymptote `up` has its own
+#' coordinate `beta_up` under disjoint bounds but is not yet profiled, so it is
 #' reported with the delta-method Wald interval under the profile/Wald methods,
 #' with a message.
 #'

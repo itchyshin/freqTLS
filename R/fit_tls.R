@@ -244,8 +244,8 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
     b_logz_start <- rep(0, re_logz_spec$n)
     re_random <- c(re_random, "b_logz")
   }
-  # Random intercepts on the shape coordinates low / log_k (not the upper-asymptote
-  # gap, which has no single coordinate). Same byte-identical guard: an empty b_*
+  # Random intercepts on the shape coordinates low / log_k (not the upper asymptote
+  # `up`, which has no random-intercept term). Same byte-identical guard: an empty b_*
   # vector + a mapped log_sd_* when the block is absent.
   re_low_spec <- design$re_low
   if (is.null(re_low_spec)) {
@@ -267,7 +267,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
   }
   if (length(re_random) == 0L) re_random <- NULL
 
-  # Shape-parameter designs (low, up via the nested gap, log_k). Intercept-only
+  # Shape-parameter designs (low, up via disjoint bounds, log_k). Intercept-only
   # by default (a single column of ones) so the fit is byte-identical to the
   # shared-shape model; the formula interface may supply grouped shape designs.
   X_shape_default <- matrix(1, nrow = n_obs, ncol = 1L,

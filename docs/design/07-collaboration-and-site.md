@@ -57,7 +57,7 @@ Bayesian-versus-likelihood contrast; both are labelled clearly.
 - README: start-here links, the bayesTLS framework credit, the bounded preview
   status, install, a quick example, the model equation, the experimental
   lifecycle badge, and the data credits.
-- Vignettes: `getting-started`; `model-math` (the 4PL, the direct `CTmax`/`z`
+- Vignettes: `freqTLS`; `model-math` (the 4PL, the direct `CTmax`/`z`
   map, relative-vs-absolute, the bridge identities); `profile-likelihood` (LR
   profiles, asymmetry, profile vs Wald, the non-closing case); and
   `comparing-to-bayesTLS` (the cached three-way comparison).

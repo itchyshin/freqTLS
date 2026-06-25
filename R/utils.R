@@ -157,8 +157,8 @@ tls_name_map <- function(group_levels, family, X_low, X_up, X_logk) {
   #   >1 column, one-hot factor -> per-group `low:<level>` / `k:<level>` (natural);
   #   >1 column, general design -> per-coefficient `low:<col>` / `k:<col>` (link
   #                                scale, e.g. a continuous covariate slope).
-  # `up` has no single internal coordinate (nested gap), so beta_up keeps the
-  # name "gap" and `up` is surfaced separately (via the ADREPORTed `up` SE).
+  # `up` is reported via the ADREPORTed `up` SE (delta-method Wald), not a profile
+  # coordinate, so it is surfaced separately from the shape coordinates.
   shape_block <- function(base, natural_base, link, X) {
     nc <- ncol(X)
     if (nc == 1L) {

@@ -28,9 +28,9 @@ bibentry(
   note     = paste(
     "R package; the thermal-load-sensitivity framework that freqTLS",
     "implements (manuscript in preparation). The bundled 'shrimp_lethal',",
-    "'zebrafish_lethal', 'snowgum_psii', and 'dsuzukii_lethal' datasets are",
+    "'zebrafish_lethal', 'snowgum_psii', and 'dsuzukii' datasets are",
     "vendored from bayesTLS (CC BY 4.0); please cite bayesTLS whenever you use",
-    "them. The 'dsuzukii_lethal' data are from Orsted et al. (2024),",
+    "them. The 'dsuzukii' data are from Orsted et al. (2024),",
     "Zenodo 10.5281/zenodo.10602268."
   ),
   url      = "https://github.com/daniel1noble/bayesTLS"

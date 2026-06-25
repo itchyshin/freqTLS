@@ -83,8 +83,21 @@ beta_family <- brms::Beta(link = "identity")
 # proportions freqTLS sees (including the R-SHRIMP fix).
 data("shrimp_lethal", package = "freqTLS", envir = environment())
 data("zebrafish_lethal", package = "freqTLS", envir = environment())
-data("dsuzukii_lethal", package = "freqTLS", envir = environment())
+data("dsuzukii", package = "freqTLS", envir = environment())
 data("snowgum_psii", package = "freqTLS", envir = environment())
+
+# `dsuzukii` ships per-individual (1407 rows, a 0/1 `dead` indicator). The
+# count-based comparator below expects survival counts, so aggregate to the
+# (temp, time, sex) cells, mirroring the documented standardize_data() recipe in
+# R/data.R. NOTE: this aggregation has not been re-run locally (TMB toolchain
+# broken on this machine); re-run the cache build before trusting the cached
+# dsuzukii row.
+dsuzukii <- dplyr::summarise(
+  dplyr::group_by(dsuzukii, .data$temp, .data$time, .data$sex),
+  total    = dplyr::n(),
+  survived = sum(.data$dead == 0L),
+  .groups  = "drop"
+)
 
 # ---- 3. per-dataset benchmark configuration -------------------------------
 # Each entry pins the column contract, the native time unit + reference time,
@@ -101,7 +114,7 @@ datasets <- list(
        duration = "duration", time_unit = "hours",   tref = 1,
        group = "life_stage",  response = "count",      n_total = "total",
        n_surv = "survived",   family = bb_family,      two_stage = TRUE),
-  list(key = "dsuzukii",  data = dsuzukii_lethal,  temp = "temp",
+  list(key = "dsuzukii",  data = dsuzukii,         temp = "temp",
        duration = "time",     time_unit = "minutes", tref = 240,
        group = "sex",         response = "count",      n_total = "total",
        n_surv = "survived",   family = bb_family,      two_stage = TRUE),

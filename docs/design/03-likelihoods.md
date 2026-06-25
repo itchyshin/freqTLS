@@ -19,8 +19,8 @@ eta_i = k * (logd_i - mid_i),
 p_i  = low + (up - low) * invlogit(-eta_i),
 ```
 
-with `low = invlogit(beta_low)`, `up = low + (1 - low) * invlogit(beta_gap)`,
-`k = exp(beta_logk)`. The probability is clamped to `[eps, 1 - eps]`
+with `low = low_min + low_w * invlogit(beta_low)`,
+`up = up_min + up_w * invlogit(beta_up)`, `k = exp(beta_logk)`. The probability is clamped to `[eps, 1 - eps]`
 (`eps = 1e-12`) with a branch-free `CppAD::CondExp`, so the optimiser never sees a
 hard 0 or 1 and the gradient stays finite.
 
@@ -69,8 +69,8 @@ scale.
 
 ## Numerical stability
 
-- Positive parameters (`k`, `phi`, `z`) are on log internal scales; `low` on
-  logit; the asymptote gap on the nested-gap transform.
+- Positive parameters (`k`, `phi`, `z`) are on log internal scales; `low` and `up`
+  each on a logit onto their half-band (disjoint bounds).
 - `invlogit(-eta)` is used directly for the descending curve.
 - The probability clamp uses nested `CppAD::CondExpLt`/`CondExpGt`, never an `if`
   on a `Type`.
@@ -84,6 +84,8 @@ scale.
 ## map fixes
 
 For the binomial family, `log_phi` is mapped out (`map = list(log_phi =
-factor(NA))`) so it is not estimated. Starting values (from the SPEC):
-`beta_low = qlogis(0.02)`, `beta_gap = qlogis(0.95)`, `beta_logk = log(5)`,
+factor(NA))`) so it is not estimated. Starting values: the asymptotes start at
+`low ~ 0.05` and `up ~ 0.95` mapped onto their half-bands
+(`beta_low = qlogis((0.05 - low_min)/low_w)`,
+`beta_up = qlogis((0.95 - up_min)/up_w)`); `beta_logk = log(5)`,
 `beta_CT = median(temp)` (per group), `beta_logz = log(3)`, `log_phi = log(100)`.

@@ -39,7 +39,7 @@ An object of class \code{"profile_tls_profile"}: a list with \code{parm},
 target of a \code{\link[=fit_tls]{fit_tls()}} model. For the target it fixes the corresponding
 internal (unconstrained) coordinate on a grid, re-optimises the remaining
 coordinates at each grid point, and returns the deviance
-\code{D = 2 * (logLik_hat - logLik_profile)} together with the chi-square cutoff and
+\code{D = 2 * (logLik_hat - logLik_profile)} together with the profile-t cutoff and
 the profile-likelihood confidence interval. Because the profile is taken on the
 unconstrained coordinate and the endpoints are then transformed by a monotone
 function, the interval is exactly equivariant: the \code{z} interval equals \code{exp()}
@@ -71,10 +71,10 @@ TMB's \code{map} mechanism and the rest re-optimised, mirroring the bracket-then
 \verb{dCTmax:<a>-<b>}, \verb{dlog_z:<a>-<b>} \tab contrast recoding \tab identity \cr
 }
 
-\code{up} has no single internal coordinate under the nested-gap asymptote
-reparameterisation (\code{up = low + (1 - low) * plogis(beta_up)}); profiling it
-would require rebuilding the compiled objective on a re-rooted \verb{(up, low)}
-pair. freqTLS instead falls back to the delta-method Wald interval for \code{up}
+Under the disjoint-bounds parameterisation \code{up = up_min + up_w * plogis(beta_up)}
+has its own coordinate \code{beta_up}, but freqTLS does not yet profile it (the profile
+path is wired for \code{low} but not \code{up} -- symmetric work, simply not implemented).
+freqTLS falls back to the delta-method Wald interval for \code{up}
 and says so (SPEC.md S10). Group contrasts (\code{dCTmax}, \code{dlog_z}) are profiled
 directly by recoding the design so the contrast is itself a coordinate.
 }

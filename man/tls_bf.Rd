@@ -39,7 +39,7 @@ to share one factor or match the \code{CTmax} / \code{log_z} grouping. \code{CTm
 accept any fixed-effect formula (e.g. \code{CTmax ~ group}). A single random intercept,
 \verb{<param> ~ <fixed> + (1 | group)}, is accepted on \code{CTmax}, \code{log_z}, \code{low}, and
 \code{log_k} (one grouping factor each, intercept only) -- but not on the upper
-asymptote \code{up}, whose nested gap has no single coordinate. Putting the same
+asymptote \code{up}, for which the compiled objective has no random-intercept term. Putting the same
 grouping factor on two or more of them fits independent variances (no
 correlation term) and warns.
 }

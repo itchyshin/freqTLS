@@ -59,7 +59,7 @@
 #'   intercepts on the lower asymptote `low` (logit scale)** and on the steepness
 #'   **`log(k)`** — the shape-coordinate analogues of `re_sd` / `re_sd_z`
 #'   (`low_g = plogis(qlogis(low) + d_g)`, `k_g = exp(log(k) + e_g)`; `up` tracks
-#'   `low` through the fixed nested gap). They combine freely with `re_sd` /
+#'   `low` by a fixed head-room fraction). They combine freely with `re_sd` /
 #'   `re_sd_z`; realised deviations are in `attr(, "truth")$b_low` / `$b_logk`.
 #' @param n_re_groups Number of random-effect groups (required with any `re_sd*`).
 #' @param re_group_name Name of the grouping column added to the output for the
@@ -173,7 +173,7 @@ simulate_tls <- function(temps = seq(30, 42, by = 2),
     c_logz <- if (!is.null(re_sd_z))    stats::rnorm(n_re_groups, 0, re_sd_z)    else rep(0, n_re_groups)
     d_low  <- if (!is.null(re_sd_low))  stats::rnorm(n_re_groups, 0, re_sd_low)  else rep(0, n_re_groups)
     e_logk <- if (!is.null(re_sd_logk)) stats::rnorm(n_re_groups, 0, re_sd_logk) else rep(0, n_re_groups)
-    gap_frac <- (up[1] - low[1]) / (1 - low[1])   # fixed nested gap; up tracks low
+    gap_frac <- (up[1] - low[1]) / (1 - low[1])   # up tracks low by a fixed head-room fraction
     re_levels <- paste0("g", seq_len(n_re_groups))
 
     build_re <- function(gi) {

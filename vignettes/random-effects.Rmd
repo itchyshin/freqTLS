@@ -34,7 +34,7 @@ library(freqTLS)
 ## Fixed groups vs. a random intercept
 
 With a handful of well-sampled groups you can give each its own **fixed** `CTmax`
-(`CTmax ~ group`, see `vignette("getting-started")`). With many groups — or groups
+(`CTmax ~ group`, see `vignette("freqTLS")`). With many groups — or groups
 you regard as a sample from a population — a **random intercept**
 `CTmax ~ 1 + (1 | group)` is the better tool: it costs one variance parameter
 instead of one coefficient per group, and the group estimates borrow strength from
@@ -142,10 +142,12 @@ c(sigma_logz = round(sg, 3),
   approx_fold_spread_in_z = round(exp(sg), 3))
 ```
 
-The upper asymptote `up` is the **one shape with no random effect**: it is the
-nested gap `up = low + (1 - low) * plogis(...)`, which has no single internal
-coordinate (the same reason `up` has no profile-likelihood coordinate). Put the
-random intercept on `low` or `log_k` instead.
+The upper asymptote `up` is the **one shape with no random effect**: under the
+disjoint-bounds parameterisation `up = up_min + up_w * plogis(beta_up)` it has its
+own coordinate `beta_up`, but the compiled objective carries no random-intercept
+term for `up` (and its profile path is not wired either — the same gap that leaves
+`up` with a delta-method interval). Put the random intercept on `low` or `log_k`
+instead.
 
 ## Combining random effects, and what is out of scope
 

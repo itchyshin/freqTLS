@@ -41,8 +41,8 @@ temperatures of 26 (control), 38, 39 and 40 degrees C for 3.8--240 minutes
 under hypoxia, normoxia or hyperoxia, and scored alive/dead. One row per
 assay group; \code{oxygen} is the categorical moderator. Fit \code{CTmax} and
 \code{z} as functions of \code{oxygen} (optionally \code{ploidy}) in one joint
-4PL to compare thermal tolerance across the gradient with full posterior
-uncertainty.
+4PL to compare thermal tolerance across the gradient with profile-likelihood
+confidence intervals on every quantity.
 }
 \examples{
 \dontrun{

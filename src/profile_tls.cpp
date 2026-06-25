@@ -78,7 +78,7 @@ Type objective_function<Type>::operator()()
   // (the matrix product X_low * beta_low would re-order the gradient sum and so
   // is not used here); multiple coefficients (grouped shapes) use the
   // per-observation design matrices, the same mechanism as CTmax / log_z.
-  // Each shape sub-parameter (low, the nested gap, log_k) has its OWN design and
+  // Each shape sub-parameter (low, up, log_k) has its OWN design and
   // may be shared (a single intercept coefficient -> the bit-identical scalar
   // path) or vary per observation, INDEPENDENTLY of the others. A single-column
   // shape skips its matrix product so the shared-shape NLL is bit-identical; with

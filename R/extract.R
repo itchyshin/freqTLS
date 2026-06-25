@@ -134,8 +134,9 @@ get_shape <- function(fit, conf.int = TRUE, conf.level = 0.95) {
 #'
 #' Maps each human-facing parameter name to the link on which its Wald interval
 #' is constructed, using the fit's `name_map`. `up` is reported on the identity
-#' scale here because its Wald interval is delta-method based (the nested-gap
-#' reparameterisation has no single internal coordinate for `up`).
+#' scale here because its Wald interval is delta-method based (freqTLS does not yet
+#' profile the disjoint-bounds `up` coordinate `beta_up`; its interval comes from the
+#' ADREPORTed `up` SE).
 #'
 #' @param parameter Character vector of natural-scale parameter names.
 #' @param name_map The fit's `name_map` data frame.
@@ -156,8 +157,8 @@ tls_param_scale <- function(parameter, name_map) {
 #' Builds confidence intervals on the internal (link) scale from the fixed-effect
 #' part of the [TMB::sdreport()] and back-transforms the endpoints. `up` uses a
 #' delta-method interval on the natural scale taken from the ADREPORTed `up`
-#' standard error (it has no single internal coordinate under the nested-gap
-#' reparameterisation).
+#' standard error (freqTLS does not yet profile the disjoint-bounds `up`
+#' coordinate `beta_up`).
 #'
 #' @param fit A `profile_tls` fit.
 #' @param conf.level Confidence level.
@@ -222,7 +223,7 @@ tls_wald_natural <- function(fit, conf.level) {
   }
 
   # `up` (or per-group `up:<level>`): delta-method Wald on the natural scale from
-  # the ADREPORTed `up` SE (no single internal coordinate under the nested gap).
+  # the ADREPORTed `up` SE (disjoint-bounds beta_up not yet profiled).
   # The ADREPORT `up` order matches the estimates-table `up` rows (both in the
   # shape-design / group-level order).
   rep_sum <- summary(sdr, select = "report")

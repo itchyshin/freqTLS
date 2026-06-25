@@ -15,13 +15,15 @@ For a scalar target `psi`:
 2. Fix the unconstrained internal coordinate that maps to `psi`; re-optimise the
    remaining coordinates to get the profile log-likelihood `logLik_p(psi)`.
 3. Form the deviance `D(psi) = 2 * (logLik_hat - logLik_p(psi))`.
-4. The confidence interval is `{psi : D(psi) <= qchisq(level, 1)}`, found by
+4. The confidence interval is `{psi : D(psi) <= qt(1 - alpha/2, df)^2}`, found by
    `uniroot` on each side of the MLE.
 5. Transform the endpoints to the natural scale.
 
 At the MLE, `|D| ~ 0` (checked to about `1e-4` in tests; the verification run
-gives exactly `0`). The chi-square cutoff uses one degree of freedom per scalar
-target. The interval is asymmetric in general, and freqTLS preserves the
+gives exactly `0`). The cutoff is the **squared Student-t quantile**
+`qt(1 - alpha/2, df)^2` on `df = n - p` residual degrees of freedom (the
+Bates–Watts profile-t calibration), not `qchisq(level, 1)`; the two coincide as
+`df -> Inf`. The interval is asymmetric in general, and freqTLS preserves the
 asymmetry rather than symmetrising it.
 
 ### Implementation choices (these differ from the draft above)
@@ -75,12 +77,12 @@ then transformed by a monotone function, the interval is equivariant: the `z`
 interval is `exp()` of the `log_z` interval. A test asserts `ci_z ==
 exp(ci_log_z)` to about `1e-6`; this is the headline equivariance check.
 
-`up` is the exception: it has no single internal coordinate under the nested-gap
-parameterisation. The draft anticipated re-rooting on the native
-`(up, low-fraction)` pair; the implemented Phase 3 takes the documented Wald/delta
-fallback instead (see "Implementation choices" above), because re-rooting would
-mean shipping a second compiled parameterisation for one target. The interval is
-therefore reported with `interval_type = "wald"` and a message.
+`up` is the exception: under disjoint bounds it has its own coordinate `beta_up`,
+but freqTLS does not yet profile it. The implemented Phase 3 takes the documented
+Wald/delta fallback for `up` (see "Implementation choices" above); wiring a
+`beta_up` profile is straightforward (it is symmetric with `low`) but not yet
+done. The interval is therefore reported with `interval_type = "wald"` and a
+message.
 
 ## The 12 identifiability warnings (the bayesTLS gap-filler)
 
@@ -100,7 +102,7 @@ parameters.
    bayesTLS or bootstrap" and set a `conf.status` marker (R-PROFILE). Since v0.2,
    `confint(fallback = TRUE)` (the default) fills the open side with a parametric
    bootstrap interval; `fallback = FALSE` returns `NA` on the open side as before.
-10. The MLE is on a boundary: warn that the chi-square calibration is unreliable.
+10. The MLE is on a boundary: warn that the interval calibration is unreliable.
 11. The profile is non-monotone or multimodal.
 12. Inner re-optimisation does not converge: propagate `NA` rather than a
     misleading finite endpoint.

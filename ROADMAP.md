@@ -8,7 +8,7 @@ The authoritative fitted/planned/unsupported boundary is
 `docs/dev-log/known-limitations.md` and `docs/design/46-capability-matrix.md`;
 the live phase board is `docs/dev-log/dashboard/`.
 
-**Version status:** 0.3.0 (experimental lifecycle).
+**Version status:** 0.1.0 (experimental lifecycle).
 
 Status legend: `initial` (scaffold only, not yet implemented), `implemented`
 (landed with tests, docs, examples, check-log, and an after-task report), and

@@ -54,6 +54,28 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
   documented in `docs/design/04-profile-likelihood.md`.
 - Evidence: SPEC section 7; `docs/design/01-model-and-parameterisation.md`.
 
+## 2026-06-25: Disjoint-bounds asymptotes (supersedes the nested gap above)
+
+- Decision: parameterise the asymptotes with the bayesTLS `compute_4pl_bounds()`
+  recipe — split the feasible band `[lower, upper]` at its midpoint and map each
+  asymptote onto one half: `low = low_min + low_w * plogis(beta_low)` (lower
+  half-band) and `up = up_min + up_w * plogis(beta_up)` (upper half-band). This
+  **reverses** the 2026-06-16 nested-gap decision above.
+- Reason: matching bayesTLS exactly lets the two packages share one asymptote
+  contract (the twin goal), and gives `up` its own coordinate `beta_up` (the nested
+  gap had none). The "feasibility wall" that motivated the nested gap is just the
+  intended midpoint split, accepted here.
+- Implemented: P1 (commit `3a29ac1`) — TMB switched `beta_gap` → `beta_up`, added
+  the four bounds scalars (`low_min`/`low_w`/`up_min`/`up_w`), and `up` became a
+  direct coordinate. Bounds default to `c(0, 1)` and reduce the old arithmetic
+  exactly.
+- Consequences: `up` now has a coordinate, but its profile path is not yet wired
+  (it falls back to the delta-method Wald interval — symmetric work with `low`,
+  simply not implemented); the compiled objective has no random-intercept term for
+  `up`, so a random effect on `up` is still rejected.
+- Evidence: `src/profile_tls.cpp` (`beta_up`, disjoint bounds); `compute_4pl_bounds`
+  in `R/tdt-utils.R`; `docs/design/01-model-and-parameterisation.md`.
+
 ## 2026-06-16: Confidence Eye is the default uncertainty visual, never a posterior
 
 - Decision: the default uncertainty display is the Confidence Eye (a likelihood

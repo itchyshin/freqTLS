@@ -36,12 +36,15 @@ For a scalar target $\psi$ (say `CTmax`):
 2. Fix the internal coordinate that maps to $\psi$ at a candidate value and re-optimise
    all the other coordinates, giving the profile log-likelihood $\ell_p(\psi)$.
 3. Form the deviance $D(\psi) = 2\,(\hat\ell - \ell_p(\psi))$.
-4. The confidence interval is the set $\{\psi : D(\psi) \le \chi^2_{1,\,\mathrm{level}}\}$,
+4. The confidence interval is the set $\{\psi : D(\psi) \le t^2_{1-\alpha/2,\,\nu}\}$,
    found by root-finding on each side of the MLE.
 
-At the MLE the deviance is (numerically) zero, and the cutoff is the chi-square quantile
-with one degree of freedom. `profile()` returns the whole deviance curve plus the
-interval:
+At the MLE the deviance is (numerically) zero. The cutoff is the **squared
+Student-$t$ quantile** $t^2_{1-\alpha/2,\,\nu}$ on $\nu = n - p$ residual degrees of
+freedom (data rows minus free fixed-effect coordinates), not the $\chi^2_1$ quantile:
+this is the Bates–Watts profile-$t$ calibration, which is less optimistic at small $n$
+and converges to $\chi^2_1$ as $\nu \to \infty$ (see `vignette("frequentist-and-bayesian")`).
+`profile()` returns the whole deviance curve plus the interval:
 
 ```{r profile-object}
 set.seed(1)
@@ -55,10 +58,10 @@ c(estimate = pc$estimate, conf.low = pc$conf.low, conf.high = pc$conf.high,
 ```
 
 The deviance minimum sits essentially at zero, at the estimate. Plotting the profile
-shows the deviance curve, the chi-square cutoff line, and the interval where the curve
+shows the deviance curve, the profile-$t$ cutoff line, and the interval where the curve
 dips below it:
 
-```{r profile-plot, fig.alt = "Profile-likelihood deviance curve for CTmax: a U-shaped curve with a horizontal chi-square cutoff line; the confidence interval is where the curve lies below the cutoff."}
+```{r profile-plot, fig.alt = "Profile-likelihood deviance curve for CTmax: a U-shaped curve with a horizontal profile-t cutoff line; the confidence interval is where the curve lies below the cutoff."}
 plot(pc)
 ```
 
@@ -107,8 +110,9 @@ tidy_parameters(fit, method = "profile")[, c("parameter", "estimate", "conf.low"
 
 ### The upper asymptote `up`
 
-Under the nested-gap parameterisation `up` has no single internal coordinate, so it
-cannot be profiled on one coordinate. `freqTLS` reports `up` with the delta-method
+Under the disjoint-bounds parameterisation `up` has its own coordinate `beta_up`, but
+`freqTLS` does not yet profile it (the profile path is wired for `low` but not `up`).
+`freqTLS` reports `up` with the delta-method
 Wald interval and labels it honestly — `confint(fit, "up", method = "profile")` returns
 `interval_type = "wald"` and emits an informational message rather than silently
 substituting a different quantity.

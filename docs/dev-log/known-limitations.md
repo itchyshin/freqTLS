@@ -107,7 +107,8 @@ Additional planned v0.1 capability:
   death-time curve, and the survival surface;
 - the cached three-way benchmark against bayesTLS and the classical two-stage
   estimator on the vendored `shrimp_lethal` and `zebrafish_lethal` datasets,
-  with the shrimp counts rebuilt from the CSV proportion (R-SHRIMP).
+  with the shrimp death counts rebuilt from the vendored CSV proportion at
+  `standardize_data()` time (R-SHRIMP).
 
 ### Benchmark data and cache (Phase 5)
 
@@ -126,19 +127,22 @@ Fitted:
   (converges, pdHess TRUE). 60 complete-loss rows sit at `prop == 0` and are
   clamped inward by the beta likelihood (with a warning); the raw proportion is
   vendored unchanged.
-- `dsuzukii_lethal` (94 rows, *Drosophila suzukii* mortality counts by sex; CC BY
-  4.0, Ørsted et al. 2024, Zenodo 10.5281/zenodo.10602268) is the lethal endpoint
-  aggregated to `(temp, time, sex)` cells from the per-individual `bayesTLS`
-  object. `fit_tls(group = sex, family = "beta_binomial", tref = 240)` (240 min =
-  4 h, absolute threshold) recovers the published per-sex CTmax ~35.2 C and z
-  ~3.0/3.2 (conv 0). The sublethal heat-coma and productivity endpoints are
-  non-goals (time-to-event / hurdle models); only the lethal-by-sex subset is
-  vendored.
-- **R-SHRIMP is corrected.** The shrimp death counts are reconstructed from the
-  CSV proportion (`deaths = round(mortality_prop * total)`), because the shipped
-  `bayesTLS::shrimp_lethal` collapses mortality to {0, 1} (sum 35) where the CSV
-  implies 0..11 (sum 738); 86 rows were floored to zero upstream. The corrected
-  data span a real death range, verified against the shipped object.
+- `dsuzukii` (1407 rows, per-individual *Drosophila suzukii* mortality by sex with
+  a 0/1 `dead` indicator; CC BY 4.0, Ørsted et al. 2024, Zenodo
+  10.5281/zenodo.10602268) is the lethal endpoint. Aggregating to `(temp, time,
+  sex)` cells and fitting `fit_4pl`/`fit_tls(group = sex, family =
+  "beta_binomial", tref = 240)` (240 min = 4 h, absolute threshold) recovers the
+  published per-sex CTmax ~35.2 C and z ~3.0/3.2 (conv 0). The sublethal heat-coma
+  and productivity endpoints are non-goals (time-to-event / hurdle models); only
+  the per-individual lethal data are vendored.
+- **R-SHRIMP is handled at `standardize_data()` time.** freqTLS vendors the raw
+  CSV mortality *proportion* (`Mortality_after_trial`) with
+  `N_individuals_after_trial`, not baked-in counts.
+  `standardize_data(mortality = "Mortality_after_trial")` reconstructs the death
+  counts as `round(mortality_prop * total)` at fit time. This sidesteps the
+  upstream collapse in `bayesTLS::shrimp_lethal`, which floors mortality to {0, 1}
+  (sum 35) where the CSV implies 0..11 (sum 738) — 86 rows were zeroed upstream.
+  The vendored proportion spans the real mortality range, verified against the CSV.
 
 Not yet available (limitations):
 

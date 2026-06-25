@@ -22,7 +22,7 @@
 #' accept any fixed-effect formula (e.g. `CTmax ~ group`). A single random intercept,
 #' `<param> ~ <fixed> + (1 | group)`, is accepted on `CTmax`, `log_z`, `low`, and
 #' `log_k` (one grouping factor each, intercept only) -- but not on the upper
-#' asymptote `up`, whose nested gap has no single coordinate. Putting the same
+#' asymptote `up`, for which the compiled objective has no random-intercept term. Putting the same
 #' grouping factor on two or more of them fits independent variances (no
 #' correlation term) and warns.
 #'
@@ -278,7 +278,7 @@ tls_extract_re <- function(rhs_expr, data, param = "CTmax", quiet = FALSE) {
 #'   factor, or continuous covariate).
 #' * random-effect bars (`(1 | group)`) are parsed on `CTmax`, `log_z`, `low`, and
 #'   `log_k` (upstream, by `tls_extract_re()`), one grouping factor each; a bar on
-#'   the upper-asymptote gap `up` is rejected (no single coordinate).
+#'   the upper asymptote `up` is rejected (no random-intercept term in the objective).
 #' * the `CTmax` and `log_z` FIXED designs must produce the same columns (the
 #'   engine accepts independent lengths, but the downstream profile / contrast /
 #'   print machinery is keyed on one shared label set); their RE groupings may
@@ -335,12 +335,13 @@ tls_parse_formula <- function(formula, data, quiet = FALSE) {
     ))
   }
 
-  # ---- shape sub-parameter designs (low, up via the nested gap, log_k) ------
+  # ---- shape sub-parameter designs (low, up via disjoint bounds, log_k) -----
   # Intercept-only by default; each may be grouped or carry a continuous covariate
   # (v0.2). Since v0.3, `low` and `log_k` may also carry a single random intercept
   # `(1 | group)` (the RE bar is stripped here and the fixed design built from the
-  # fixed part). `up` is the nested gap on `low` and has no single coordinate, so a
-  # RE bar on `up` is rejected by tls_design_from_rhs (as `up` is for profiling).
+  # fixed part). Under disjoint bounds `up` has its own coordinate `beta_up`, but
+  # the compiled objective has no random-intercept term for it, so a RE bar on `up`
+  # is rejected by tls_design_from_rhs (as `up` is for profiling).
   shape_rhs_expr <- function(handle) {
     f <- formula$sub_formulas[[handle]]
     if (is.null(f)) quote(1) else tls_formula_rhs(f)
@@ -564,7 +565,7 @@ tls_design_from_rhs <- function(rhs, data, role) {
   if (tls_contains_random_bar(tls_formula_rhs(rhs))) {
     cli::cli_abort(c(
       "Random effects are supported on {.code CTmax}, {.code log_z}, {.code low}, and {.code log_k} (a single {.code (1 | group)} each), not the upper-asymptote gap {.code up}.",
-      i = "{.code up} has no single internal coordinate (the nested gap); put the random intercept on {.code low} / {.code log_k} / {.code CTmax} / {.code log_z}, or use {.code {role} ~ block} for grouped fixed effects."
+      i = "{.code up} has no random-intercept term in the compiled objective; put the random intercept on {.code low} / {.code log_k} / {.code CTmax} / {.code log_z}, or use {.code {role} ~ block} for grouped fixed effects."
     ))
   }
 

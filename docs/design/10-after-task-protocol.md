@@ -19,7 +19,7 @@ Each report should include:
 - task goal;
 - what was implemented;
 - the mathematical contract touched (the 4PL, the direct `CTmax`/`z` map, the
-  nested-gap asymptotes, the profile algorithm), where relevant;
+  disjoint-bounds asymptotes, the profile algorithm), where relevant;
 - files created or changed;
 - checks run and exact outcomes (command text, not summaries);
 - tests of the tests;

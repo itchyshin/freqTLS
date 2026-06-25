@@ -121,7 +121,8 @@ Both interfaces map to the same engine and produce numerically identical fits:
   RE-aware bootstrap (`method = "bootstrap"`) that redraws each block's deviations
   and refits. Any subset combines (same or different grouping); sharing a grouping
   factor fits independent variances and warns. The upper asymptote `up` is excluded
-  (its nested gap has no single coordinate). See `docs/design/08-random-effects.md`.
+  (the compiled objective has no random-intercept term for `up`). See
+  `docs/design/08-random-effects.md`.
 
 ## Planned (post-v0.1) and non-goals
 

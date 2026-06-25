@@ -1,7 +1,7 @@
 # Model and Parameterisation
 
 This document is the authoritative record of the freqTLS model, its direct
-`CTmax`/`z` parameterisation, the nested-gap asymptotes, and the exact
+`CTmax`/`z` parameterisation, the disjoint-bounds asymptotes, and the exact
 equivalence to the bayesTLS constant-shape model. Any change to the
 parameterisation must update this file in the same commit (AGENTS.md design rule
 3). Symbolic statements are verified against the bayesTLS source at HEAD
@@ -83,36 +83,43 @@ profile-able. Because profile likelihood is equivariant under a monotone
 reparameterisation, the `z` profile equals `exp()` of the `log_z` profile, and
 the `z` interval equals `exp()` of the `log_z` interval.
 
-## Nested-gap asymptotes
+## Disjoint-bounds asymptotes
 
-freqTLS parameterises the asymptotes so that `up > low` is guaranteed without
-a hard constraint:
+freqTLS parameterises the asymptotes with the bayesTLS `compute_4pl_bounds()`
+recipe: the feasible band `[lower, upper]` (default `[0, 1]`) is split at its
+midpoint, and `low` and `up` each map an unconstrained coefficient onto one half,
+so `up > low` is guaranteed without a hard constraint:
 
 ```
-low = plogis(beta_low),
-up  = low + (1 - low) * plogis(beta_gap).
+low = low_min + low_w * plogis(beta_low)   # lower half-band
+up  = up_min  + up_w  * plogis(beta_up)    # upper half-band
 ```
 
-This is unconstrained and smooth, and it avoids the bayesTLS disjoint-bounds
-choice that forces `low < 0.5 < up` (a feasibility wall; bayesTLS
-`utils.R:128-131`). The cost is that `up` has no single internal coordinate, so
-profiling `up` requires a one-off re-rooting on the native scale (or a Wald/delta
-fallback). See `docs/design/04-profile-likelihood.md`.
+`low` is confined below the midpoint and `up` above it (the bands meet, with a
+tiny separating gap, at the midpoint), so any `(beta_low, beta_up)` gives a valid
+ordered pair `lower < low < up < upper`. This adopts the bayesTLS disjoint-bounds
+choice (`low < midpoint < up`), so the two packages share the asymptote contract
+exactly. (Earlier freqTLS builds used a nested gap
+`up = low + (1 - low) * plogis(beta_gap)`; P1 switched to disjoint bounds — see
+`docs/dev-log/decisions.md`.) Under disjoint bounds `up` has its own coordinate
+`beta_up`; freqTLS nonetheless uses the Wald/delta interval for `up` because its
+profile path is not yet wired for `beta_up`. See
+`docs/design/04-profile-likelihood.md`.
 
 ## Internal coordinates and links
 
 | Natural parameter | Internal coordinate | Link |
 | --- | --- | --- |
-| `low` | `beta_low` | logit (`plogis`) |
-| `up` (via the gap) | `beta_gap` | nested gap |
+| `low` | `beta_low` | logit (`plogis`), onto the lower half-band |
+| `up` | `beta_up` | logit (`plogis`), onto the upper half-band |
 | `k` | `beta_logk` | log |
 | `CTmax` (per group) | `beta_CT[g]` | identity |
 | `z` (per group) | `beta_logz[g]` | log |
 | `phi` (beta-binomial) | `log_phi` | log |
 
-Positive parameters (`k`, `z`, `phi`) use a log internal scale; `low` uses logit;
-the asymptote gap uses the nested-gap transform. This keeps the optimiser
-unconstrained and the gradients finite.
+Positive parameters (`k`, `z`, `phi`) use a log internal scale; `low` and `up`
+each use a logit onto their half-band. This keeps the optimiser unconstrained and
+the gradients finite.
 
 ## Groups
 

@@ -17,7 +17,7 @@ A \code{ggplot} object (invisibly when printed for its side effect).
 \description{
 \code{plot()} for a \code{"profile_tls_profile"} object draws the likelihood-ratio
 deviance curve against the natural-scale parameter. A dotted horizontal line
-marks the chi-square cutoff \code{qchisq(level, 1)}; a solid vertical line marks the
+marks the profile-t cutoff \code{qt(1 - alpha/2, df)^2}; a solid vertical line marks the
 point estimate; dashed vertical lines mark the interval endpoints when they
 are finite. The wording is deliberately "confidence" -- this
 is a likelihood curve, never a posterior (SPEC.md S13). A non-closing side is

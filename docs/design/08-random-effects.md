@@ -18,9 +18,10 @@ and a warning is emitted (see "Independent variances").
 
 Deliberately **out of scope**, each rejected with a clear error:
 
-- a random effect on the upper asymptote `up` — its nested gap
-  (`up = low + (1 - low) * plogis(beta_gap)`) has no single internal coordinate,
-  the same reason `up` has no profile coordinate; put the RE on `low` / `log_k`;
+- a random effect on the upper asymptote `up` — the compiled objective has no
+  random-intercept term for `up` (under disjoint bounds
+  `up = up_min + up_w * plogis(beta_up)` has its own fixed coordinate, but there is
+  no `b_up` / `sd_up`); put the RE on `low` / `log_k`;
 - random slopes (`(temp | group)` and the like);
 - more than one grouping factor on a single sub-parameter / crossed or nested
   random effects;
@@ -75,9 +76,11 @@ low_i = inv_logit(X_low[i,] %*% beta_low + d_{g(i)}),   d_g ~ N(0, sigma_low^2)
 k_i   = exp(X_logk[i,] %*% beta_logk + e_{g(i)}),        e_g ~ N(0, sigma_logk^2)
 ```
 
-so `sigma_low` is a SD on the **logit** of `low` and `sigma_logk` a SD on
-`log(k)`. The upper asymptote `up = low + (1 - low) * plogis(beta_gap)` then tracks
-the shifted `low` (the gap is unchanged); there is no separate `up` random effect.
+so `sigma_low` is a SD on the internal logit coordinate `beta_low` of `low` and
+`sigma_logk` a SD on `log(k)`. Under disjoint bounds
+`up = up_min + up_w * plogis(beta_up)` is independent of `low`, so a random
+intercept on `low` shifts `low` per group while `up` stays at its population
+value; there is no separate `up` random effect.
 
 ## Engine (`src/profile_tls.cpp`)
 

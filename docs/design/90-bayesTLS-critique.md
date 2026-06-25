@@ -43,10 +43,13 @@ The `mid` slope prior is `normal(0, 0.6)`; the asymptote and `phi` priors are at
 are an implicit sensitivity check; expect divergence on sparse data (this is not
 a "bug").
 
-### REAL -- feasibility wall: disjoint asymptote bounds force low < 0.5 < up
+### RESOLVED -- disjoint asymptote bounds force low < midpoint < up
 
-`utils.R:128-131` forces `low < 0.5 < up`. This motivates the freqTLS
-nested-gap reparameterisation (`docs/design/01-model-and-parameterisation.md`).
+`utils.R:128-131` forces `low < 0.5 < up` (the midpoint split). freqTLS originally
+treated this as a feasibility wall and used a nested-gap reparameterisation; P1
+reversed that and **adopted** the same disjoint bounds (`compute_4pl_bounds()`), so
+the asymptote contract is now shared with bayesTLS
+(`docs/design/01-model-and-parameterisation.md`).
 
 ### MINOR
 

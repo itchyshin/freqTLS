@@ -65,13 +65,17 @@ A \link[tibble:tibble]{tibble} with one row per target and columns
 \itemize{
 \item \code{method = "profile"} (default) computes profile-likelihood confidence
 intervals by inverting the likelihood-ratio test: the interval is
-\code{{psi : D(psi) <= qchisq(level, 1)}}, found by \code{\link[stats:uniroot]{stats::uniroot()}} on each
+\code{{psi : D(psi) <= qt(1 - alpha/2, df)^2}}, found by \code{\link[stats:uniroot]{stats::uniroot()}} on each
 side of the MLE on the unconstrained internal coordinate, with the endpoints
-transformed to the natural scale. These intervals are prior-free and respect
-asymmetry. They are equivariant under monotone reparameterisation, so the
-\code{z} interval equals \code{exp()} of the internal \code{log_z} interval.
-\item \code{method = "wald"} reuses the Phase-2 Wald path: \verb{estimate +/- z * se} on the
-internal (link) scale, back-transformed.
+transformed to the natural scale. The cutoff is the squared profile-t
+quantile on \code{df = n - p} residual degrees of freedom (Bates-Watts profile-t),
+not \code{qchisq(level, 1)}; the two coincide as \code{df -> Inf}. These intervals are
+prior-free and respect asymmetry. They are equivariant under monotone
+reparameterisation, so the \code{z} interval equals \code{exp()} of the internal
+\code{log_z} interval.
+\item \code{method = "wald"} reuses the Phase-2 Wald path: \verb{estimate +/- t * se} (with
+\code{t = qt(1 - alpha/2, df)} on \code{df = n - p}) on the internal (link) scale,
+back-transformed.
 \item \code{method = "bootstrap"} returns prior-free parametric-bootstrap percentile
 intervals: survival counts are regenerated at the observed design from the
 fitted 4PL, the model is refitted \code{nboot} times, and the interval is the
@@ -86,8 +90,8 @@ bootstrap for the affected parameters (with a message) so an interval is still
 returned -- the parity with a Bayesian fit, which always yields one. Set
 \code{fallback = FALSE} to keep the strict profile behaviour, which returns \code{NA} on
 the open side (never a fabricated bound) with a warning that the parameter is
-weakly identified (SPEC.md S10, R-PROFILE). The upper asymptote \code{up} has no
-single internal coordinate under the nested-gap reparameterisation and is
+weakly identified (SPEC.md S10, R-PROFILE). The upper asymptote \code{up} has its own
+coordinate \code{beta_up} under disjoint bounds but is not yet profiled, so it is
 reported with the delta-method Wald interval under the profile/Wald methods,
 with a message.
 

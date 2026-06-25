@@ -100,10 +100,10 @@ Directive: *"Dan's team checked a lot — critical but balanced, don't just acce
 - **[REAL — verified data bug] Shrimp shipped counts corrupted.** CSV `Mortality_after_trial` is a **proportion** (`0.0909=1/11`, `0.5=5/10`); `make_datasets.R:25` mislabels it "death count" and `:34` does `as.integer(...)`, flooring proportions `<1` to `0`. Shipped `shrimp_lethal` deaths collapse to ~all-zero. **Action:** rebuild from CSV `deaths=round(prop*N)`; document; friendly upstream report; verify `.rda` before finalising.
 - **[REAL] No identifiability/data-adequacy guard on the Bayesian path** (none in `fit_4pl.R`/`standardize_data.R`/`priors.R`; guards live only in the classical `two_stage.R`). With weak data the priors silently identify. **freqTLS's clearest value-add** → 12 explicit warnings (§10).
 - **[REAL on sparse data] Default priors weakly-but-genuinely informative** (`mid` slope `normal(0,0.6)`; asymptote/phi priors `priors.R:55-82`), no sensitivity tooling. freqTLS's prior-free CIs are an implicit sensitivity check — expect divergence on sparse data (not a "bug").
-- **[REAL — feasibility wall] Disjoint asymptote bounds force `low<0.5<up`** (`utils.R:128-131`) — motivates nested-gap (§7).
+- **[RESOLVED — adopted] Disjoint asymptote bounds force `low<midpoint<up`** (`utils.R:128-131`) — freqTLS originally diverged (nested gap) but P1 **adopted** these disjoint bounds (§7), so the asymptote contract is shared with bayesTLS.
 - **[MINOR]** all-four `temp_effects` headline relative-z ignores shape temp-effects (correct but under-signposted; irrelevant to v0.1 constant-shape); finite-diff local-z `h=1e-3` undocumented but fine; CTmax extrapolation unflagged; T_crit rate range `c(0.1,1)` taxon-general but prose-flagged.
 
-**Net:** competently built; only the shrimp fix, the identifiability gap (our differentiator), and the asymptote reparam choice change our design. None threaten benchmark validity given the matched constant-shape/relative config.
+**Net:** competently built; only the shrimp fix and the identifiability gap (our differentiator) change our design — freqTLS otherwise mirrors bayesTLS, including adopting its disjoint-bounds asymptotes. None threaten benchmark validity given the matched constant-shape/relative config.
 
 ## 6. Locked model + equivalence (verified from bayesTLS source)
 
@@ -120,7 +120,7 @@ bayesTLS constant-shape (`temp_effects="mid"`): `mid(T)=b_mid_Intercept + b_mid_
 | **License** | **GPL-3** (override spec's MIT) | LICENSE already GPL-3; we adapt drmTMB (GPL-3) patterns. Vendored bayesTLS **data** is CC BY 4.0 → code GPL-3, attribute data. |
 | **Authorship** | Shinichi Nakagawa (`aut`,`cre`) **+ Daniel W. A. Noble, Pieter A. Arnold, Patrice Pottier (`aut`)** | TLS framework is bayesTLS's, not ours alone. Confirm with them before release (a person should agree to being listed). |
 | **Midpoint param** | Direct `CTmax` + `log_z` | makes headline quantities profile-able (§6). |
-| **Asymptote reparam** | **Nested-gap** `low=plogis(beta_low)`, `up=low+(1-low)*plogis(beta_gap)` | guarantees `up>low` unconstrained; more flexible than disjoint bounds; smoother profiles. Cost: profiling `up` needs one-off re-rooting (§10). |
+| **Asymptote reparam** | **Disjoint bounds** (bayesTLS `compute_4pl_bounds`) `low=low_min+low_w·plogis(beta_low)`, `up=up_min+up_w·plogis(beta_up)` | split `[lower,upper]` at the midpoint so `low<up` unconstrained; shares the bayesTLS contract; `up` is a direct coordinate. (P1 reversed the earlier nested gap.) Cost: `up` profile not yet wired → Wald/delta (§10). |
 | **Families v0.1** | binomial, beta-binomial(`phi`) | count data only. |
 | **Temp effect** | through `mid` only (shared `low/up/k`) | matches bayesTLS constant-shape = fair benchmark. |
 | **Groups** | fixed effects via `~ 0 + group` on CTmax & log_z | per-group CTmax_g, z_g are direct params → profile-able; contrasts via reference+contrast recoding. |
@@ -142,7 +142,7 @@ freqTLS/
 
 | File | Responsibility | Pattern from (drmTMB) |
 |---|---|---|
-| `src/profile_tls.cpp` | 4PL NLL, direct CTmax/log_z mid, nested-gap asymptotes, REPORT/ADREPORT | `src/drmTMB.cpp:1-14,1319-1328,1302-1314` |
+| `src/profile_tls.cpp` | 4PL NLL, direct CTmax/log_z mid, disjoint-bounds asymptotes, REPORT/ADREPORT | `src/drmTMB.cpp:1-14,1319-1328,1302-1314` |
 | `src/profile_tls_numeric.h` | stable `inv_logit`/`log1p_exp` (`.h`, `#ifndef`) | `src/drm_numeric.h:13-44` |
 | `src/init.c` | DLL registration | `src/init.c:1-17` |
 | `R/freqTLS-package.R` | `@useDynLib freqTLS,.registration=TRUE`, importFrom | `R/drmTMB-package.R` |
@@ -151,7 +151,7 @@ freqTLS/
 | `R/fit_engine.R` | MakeADFun→nlminb→optim fallback→sdreport; conv+pdHess | `R/drmTMB.R:350-440` |
 | `R/fit_tls.R` | public `fit_tls()` tidy-eval; starts; S3 object | `R/drmTMB.R:340-399` |
 | `R/methods.R` | print/summary/coef/vcov/logLik/AIC/nobs | `R/methods.R:2-40,1826-1864,2025-2037` |
-| `R/profile.R` | `profile.profile_tls`; tmbprofile/endpoint; χ²; transforms; open/boundary/multimodal | `R/profile.R:390-525,2300-2373,2996-3009` |
+| `R/profile.R` | `profile.profile_tls`; tmbprofile/endpoint; profile-t cutoff; transforms; open/boundary/multimodal | `R/profile.R:390-525,2300-2373,2996-3009` |
 | `R/confint.R` | `confint.profile_tls(method=c("profile","wald"))` | `R/profile.R:116-275,1468-1535` |
 | `R/diagnostics.R` | the 12 identifiability warnings (§10) | new |
 | `R/predict.R` | `predict.profile_tls(survival/link/midpoint)`, surface, `derive_lt` | drmTMB `R/predict-parameters.R` |
@@ -180,9 +180,10 @@ Authors@R: c(
 ```cpp
 DATA_VECTOR(y); DATA_VECTOR(n); DATA_VECTOR(log_time); DATA_VECTOR(temp);
 DATA_MATRIX(X_CT); DATA_MATRIX(X_logz); DATA_INTEGER(family_code); DATA_SCALAR(log10_tref);
-PARAMETER(beta_low); PARAMETER(beta_gap); PARAMETER(beta_logk);
+DATA_SCALAR(low_min); DATA_SCALAR(low_w); DATA_SCALAR(up_min); DATA_SCALAR(up_w);   // disjoint bounds
+PARAMETER(beta_low); PARAMETER(beta_up); PARAMETER(beta_logk);
 PARAMETER_VECTOR(beta_CT); PARAMETER_VECTOR(beta_logz); PARAMETER(log_phi);
-Type eps=1e-12, low=invlogit(beta_low), up=low+(Type(1)-low)*invlogit(beta_gap),
+Type eps=1e-12, low=low_min+low_w*invlogit(beta_low), up=up_min+up_w*invlogit(beta_up),
      k=exp(beta_logk), phi=exp(log_phi);
 vector<Type> CT=X_CT*beta_CT, logz=X_logz*beta_logz; Type nll=0;
 for(int i=0;i<y.size();++i){
@@ -200,11 +201,11 @@ if(family_code==1) ADREPORT(phi); return nll;
 ```
 Stability: `invlogit(-eta)`; nested `CondExp` clamp; optional shape floor on `a,b`; log-scale `k,phi,z`. Include drmTMB's Boolean.h pre-include guard; `.h` headers.
 
-`fit_tls(data, y, n, time, temp, group=NULL, family=c("beta_binomial","binomial"), tref=1, start=NULL, control=list(), trace=FALSE)` — tidy-eval columns; starts `beta_low=qlogis(0.02)`, `beta_gap=qlogis(0.95)`, `beta_logk=log(5)`, `beta_CT=median(temp)/group`, `beta_logz=log(3)`, `log_phi=log(100)`; map fixes `log_phi=factor(NA)` for binomial; S3 `class=c("profile_tls","tls_fit")` with call/family/tref/group_levels/data_summary/par/estimates/vcov/logLik/df/AIC/convergence{code,pdHess,message}/name_map/obj/opt/sdreport.
+`fit_tls(data, y, n, time, temp, group=NULL, family=c("beta_binomial","binomial"), tref=1, start=NULL, control=list(), trace=FALSE)` — tidy-eval columns; starts `beta_low=qlogis((0.05−low_min)/low_w)`, `beta_up=qlogis((0.95−up_min)/up_w)`, `beta_logk=log(5)`, `beta_CT=median(temp)/group`, `beta_logz=log(3)`, `log_phi=log(100)`; map fixes `log_phi=factor(NA)` for binomial; S3 `class=c("profile_tls","tls_fit")` with call/family/tref/group_levels/data_summary/par/estimates/vcov/logLik/df/AIC/convergence{code,pdHess,message}/name_map/obj/opt/sdreport.
 
 ## 10. Profile-likelihood strategy + diagnostics
 
-Per scalar target ψ: fit MLE `θ̂,ℓ̂`; fix ψ's unconstrained coordinate, re-optimise others; `D=2(ℓ̂-ℓ_p)`; CI = `{ψ: D ≤ qchisq(level,1)}` via `uniroot` each side; transform endpoints to natural scale.
+Per scalar target ψ: fit MLE `θ̂,ℓ̂`; fix ψ's unconstrained coordinate, re-optimise others; `D=2(ℓ̂-ℓ_p)`; CI = `{ψ: D ≤ qt(1−α/2, df)²}` (Bates–Watts profile-t, df = n−p; → χ²₁ as df→∞) via `uniroot` each side; transform endpoints to natural scale.
 
 | Target | Profile on | Transform |
 |---|---|---|
@@ -216,7 +217,7 @@ Per scalar target ψ: fit MLE `θ̂,ℓ̂`; fix ψ's unconstrained coordinate, r
 | `up` | re-root `(up,low-frac)` native | identity (else Wald/delta) |
 | contrasts `ΔCTmax`,`Δlog_z` | reference+contrast recoding | identity (ratio z=`exp(Δlog_z)`) |
 
-**12 warnings (the bayesTLS gap-filler; emit, never silent):** 1 <3 temps; 2 <3 durations (overall+per-temp); 3 no mortality; 4 all mortality; 5 threshold never crossed; 6 asymptote not approached; 7 CTmax extrapolated; 8 phi→binomial limit; 9 profile not closing (open CI + "weakly identified — consider bayesTLS/bootstrap"); 10 MLE on boundary ("χ² calibration unreliable"); 11 non-monotone/multimodal profile; 12 inner non-convergence (NA).
+**12 warnings (the bayesTLS gap-filler; emit, never silent):** 1 <3 temps; 2 <3 durations (overall+per-temp); 3 no mortality; 4 all mortality; 5 threshold never crossed; 6 asymptote not approached; 7 CTmax extrapolated; 8 phi→binomial limit; 9 profile not closing (open CI + "weakly identified — consider bayesTLS/bootstrap"); 10 MLE on boundary ("interval calibration unreliable"); 11 non-monotone/multimodal profile; 12 inner non-convergence (NA).
 
 **Ship stance:** *profile gives fast, prior-free, asymmetry-respecting CIs when the MLE is interior and the data identify ψ; for boundary asymptotes, very sparse designs, overdispersion at zero, or (future) random effects prefer bayesTLS or bootstrap — and freqTLS warns you when you're in that regime.* Never claim profile universally superior.
 
