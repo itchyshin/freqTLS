@@ -59,6 +59,37 @@
 > grepped from the output. No R code changed → the test suite is untouched
 > (still 691 PASS / 1 skip). Render outputs in `/tmp/vig-render/`.
 
+> **Reference cross-check — bayesTLS `ms/case_studies_new.qmd` (read this
+> session).** The bayesTLS *new* case studies are NOT the same analyses as
+> freqTLS's old vignettes — porting them faithfully is real work, not a rename,
+> and exposes a likely freqTLS capability gap (multi-RE). Exact recipes:
+> - **leaf PSII**: bayesTLS uses `proportion="fvfm_prop"`,
+>   `duration_unit="minutes"`, `t_ref=60` (NOT the old vignette's `tref=5`),
+>   **`random_effects=c("Day","G_Room")`**, `brms::Beta(link="identity")`, and
+>   reports **z≈5.1**. freqTLS with no REs (`t_ref=5`) gives **z=3.71** — the gap
+>   is mostly the **missing random effects** (and possibly a data-version
+>   difference: the bundled `snowgum_psii` has `plant`/`meas_day`; bayesTLS's has
+>   `Day`/`G_Room`). freqTLS supports only ONE random intercept per sub-parameter,
+>   so two REs (Day+G_Room) may not port directly — a design decision. **Do not
+>   trust leaf-PSII numbers until the RE structure + data provenance are matched.**
+> - **zebrafish**: the OLD freqTLS vignette is life-stages (`zebrafish_lethal`);
+>   bayesTLS's NEW one is OXYGEN (`zebrafish_o2`,
+>   `fit_4pl(ctmax=~0+oxygen, z=~0+oxygen, t_ref=60)`, `duration="duration_min"`,
+>   `duration_unit="minutes"`). Decide: keep the life-stage study or replace with
+>   the oxygen one (the plan's P7 lists `case-study-zebrafish-oxygen` as a CREATE).
+> - **suzukii**: bayesTLS aggregates the per-individual `dsuzukii` first —
+>   `dsuzukii |> group_by(temp, time, sex) |> summarise(n_total=n(), n_dead=sum(dead))`,
+>   then `standardize_data(mort, temp="temp", duration="time", n_total="n_total",
+>   n_dead="n_dead", duration_unit="minutes")`, then
+>   `fit_4pl(mid = ~ sex * temp_c, t_ref = 60*4)`. (`standardize_data` supports
+>   `n_dead=`.) Absolute-threshold / `T_crit` exemplar.
+> - **aphids** (a P7 CREATE): `aphid_tdt |> filter(branch=="heat", age=="6")`,
+>   `standardize_data(temp="temp", duration="duration_min", n_total="n_total",
+>   n_surv="n_surv", duration_unit="minutes")`, `fit_4pl(t_ref=60)`, by species.
+> Net: the 4 remaining case studies need **scientific direction** (which
+> zebrafish; REs for leaf; the suzukii aggregation), so they are paused for the
+> user with the exact recipes above — not rewritten blind.
+
 > **Session-3 (HEAD `fc9bb01`): the twin is now scientifically validated.**
 > - `499da87` **P5a** Bates–Watts **profile-t / Wald-t calibration** (`tls_ci_df`
 >   = n−p; qnorm→qt, qchisq→qt²; df-aware grid). Equivariance preserved.
