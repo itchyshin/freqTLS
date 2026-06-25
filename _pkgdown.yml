@@ -123,10 +123,17 @@ reference:
     desc: Generate data from the locked data-generating process.
     contents:
       - simulate_tls
+  - title: Utilities
+    desc: Small shared helpers (time conversion, interval formatting, quantiles).
+    contents:
+      - clock_to_minutes
+      - format_interval
+      - tdt_quantile
   - title: Data
     desc: Vendored benchmark datasets (credit bayesTLS, CC BY 4.0).
     contents:
       - shrimp_lethal
+      - shrimp_sublethal
       - zebrafish_lethal
       - zebrafish_o2
       - snowgum_psii
