@@ -58,7 +58,7 @@ comparison is fair (`docs/design/06-benchmark-protocol.md`):
 | --- | --- | --- |
 | Classical two-stage | `bayesTLS::ts_stage1 -> ts_stage2 -> ts_ci` | delta-method CI |
 | Bayesian | `bayesTLS::fit_4pl(temp_effects = "mid") -> extract_tdt(target_surv = "relative")` | posterior credible interval |
-| `freqTLS` | `fit_tls() -> confint(method = "profile")` | profile-likelihood confidence interval |
+| `freqTLS` | `fit_4pl() -> tls(method = "profile")` | profile-likelihood confidence interval |
 
 Under this matched configuration the Bayesian and profile-likelihood fits target the
 **same likelihood and the same fitted curve** (see `vignette("model-math")`); they differ
@@ -78,10 +78,10 @@ data(shrimp_lethal, package = "freqTLS")
 #    unit. fit_4pl() and the two-stage path both consume the standardised frame.
 std <- bayesTLS::standardize_data(
   data          = shrimp_lethal,
-  temp          = "temp",
-  duration      = "duration",
-  n_total       = "total",
-  n_surv        = "survived",
+  temp          = "Temperature_assay",
+  duration      = "Duration_exposure_hours",
+  n_total       = "N_individuals_after_trial",
+  mortality     = "Mortality_after_trial",
   duration_unit = "hours"
 )
 
@@ -102,11 +102,8 @@ btdt  <- bayesTLS::extract_tdt(
 ctmax <- bayesTLS::get_ctmax_summary(btdt)  # temp_lower / temp_median / temp_upper
 zsumm <- bayesTLS::get_z_summary(btdt)      # z_median / z_lower / z_upper
 
-# 4. Classical two-stage, same data and reference time.
-s1  <- bayesTLS::ts_stage1(
-  data = shrimp_lethal, temp = "temp", duration = "duration",
-  n_surv = "survived", n_total = "total", family = "betabinomial"
-)
+# 4. Classical two-stage, same standardised data and reference time.
+s1  <- bayesTLS::ts_stage1(std, family = "betabinomial")
 s2  <- bayesTLS::ts_stage2(s1, t_ref = 1, time_multiplier = 1)
 tci <- bayesTLS::ts_ci(s2, method = "delta", level = 0.95,
                        t_ref = 1, time_multiplier = 1)  # $CTmax_1hr and $z blocks
@@ -127,26 +124,27 @@ the same reconstructed counts.
 
 ```{r profile-shrimp}
 data(shrimp_lethal)
-shrimp_fit <- fit_tls(
+shrimp_std <- standardize_data(
   shrimp_lethal,
-  y = survived, n = total, time = duration, temp = temp,
-  family = "beta_binomial", tref = 1
+  temp = "Temperature_assay", duration = "Duration_exposure_hours",
+  n_total = "N_individuals_after_trial", mortality = "Mortality_after_trial",
+  duration_unit = "hours"
 )
-rbind(
-  CTmax = unlist(confint(shrimp_fit, "CTmax", method = "profile")[c("estimate", "conf.low", "conf.high")]),
-  z     = unlist(confint(shrimp_fit, "z",     method = "profile")[c("estimate", "conf.low", "conf.high")])
-)
+shrimp_fit <- fit_4pl(shrimp_std, t_ref = 1, family = "beta_binomial", quiet = TRUE)
+tls(shrimp_fit, method = "profile")$summary
 ```
 
 ```{r profile-zebrafish}
 data(zebrafish_lethal)
-zebra_fit <- suppressWarnings(fit_tls(
+zebra_std <- standardize_data(
   zebrafish_lethal,
-  y = survived, n = total, time = duration, temp = temp, group = life_stage,
-  family = "beta_binomial", tref = 1
-))
-# per-stage CTmax with profile intervals
-get_ctmax(zebra_fit)[, c("parameter", "estimate", "conf.low", "conf.high")]
+  temp = "assay_temp", duration = "duration_h",
+  n_total = "n_total", n_surv = "n_surv", duration_unit = "hours"
+)
+zebra_fit <- suppressWarnings(fit_4pl(zebra_std, by = "life_stage",
+                                      t_ref = 1, family = "beta_binomial", quiet = TRUE))
+# per-stage CTmax and z with profile intervals
+tls(zebra_fit, method = "profile")$summary
 ```
 
 (The zebrafish fit emits a data-adequacy warning about temperatures with fewer than three
@@ -171,7 +169,7 @@ fmt <- function(est, lo, hi) {
 
 if (has_cache) {
   cache <- readRDS(cache_path)
-  pro <- confint(shrimp_fit, c("CTmax", "z"), method = "profile")  # shrimp_fit from above
+  pro <- confint(shrimp_fit$fit, c("CTmax", "z"), method = "profile")  # engine fit from above
 
   pick <- function(df, parm, cols) {
     r <- df[df$dataset == "shrimp" & df$parameter == parm, ]
@@ -240,12 +238,15 @@ three estimators side by side on the shrimp benchmark makes the speed gap concre
 data("shrimp_lethal", package = "freqTLS", envir = environment())
 fmt_t <- function(s) if (is.na(s)) "--" else if (s < 1) sprintf("%.0f ms", s * 1000) else sprintf("%.1f s", s)
 
+sp_std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
+                           duration = "Duration_exposure_hours",
+                           n_total = "N_individuals_after_trial",
+                           mortality = "Mortality_after_trial", duration_unit = "hours")
 t_fit <- system.time(
-  sp_fit <- fit_tls(shrimp_lethal, y = survived, n = total, time = duration,
-                    temp = temp, family = "beta_binomial", tref = 1)
+  sp_fit <- fit_4pl(sp_std, t_ref = 1, family = "beta_binomial", quiet = TRUE)
 )[["elapsed"]]
-t_wald <- system.time(invisible(confint(sp_fit, c("CTmax", "z"), method = "wald")))[["elapsed"]]
-t_prof <- system.time(invisible(confint(sp_fit, c("CTmax", "z"), method = "profile")))[["elapsed"]]
+t_wald <- system.time(invisible(confint(sp_fit$fit, c("CTmax", "z"), method = "wald")))[["elapsed"]]
+t_prof <- system.time(invisible(confint(sp_fit$fit, c("CTmax", "z"), method = "profile")))[["elapsed"]]
 
 speed <- data.frame(
   Estimator = c("freqTLS", "freqTLS", "freqTLS", "classical two-stage", "bayesTLS"),
@@ -401,11 +402,10 @@ AIC asks whether the life stages differ in more than thermal *location*
 (`CTmax`, `z`):
 
 ```{r v02-stage-shape}
-stage_shape <- suppressWarnings(fit_tls(
-  tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
-         CTmax ~ life_stage, log_z ~ life_stage,
-         low ~ life_stage, up ~ life_stage, log_k ~ life_stage),
-  data = zebrafish_lethal, family = "beta_binomial", tref = 1
+stage_shape <- suppressWarnings(fit_4pl(
+  zebra_std, by = "life_stage",
+  low = ~ life_stage, up = ~ life_stage, k = ~ life_stage,
+  t_ref = 1, family = "beta_binomial", quiet = TRUE
 ))
 # zebra_fit (above) is the shared-shape fit; stage_shape lets low / up / k vary.
 c(shared_shape_AIC = round(AIC(zebra_fit), 1),
@@ -417,7 +417,7 @@ per-stage shapes. The difference is concentrated in the upper asymptote `up` (th
 maximum survival at benign exposures), not the steepness `k`:
 
 ```{r v02-up}
-stage_est <- stage_shape$estimates
+stage_est <- stage_shape$fit$estimates
 stage_est[grepl("^up:", stage_est$parameter), c("parameter", "estimate", "std.error")]
 ```
 
@@ -433,8 +433,8 @@ four-hour exposure at 32 °C:
 
 ```{r v02-derive}
 c(
-  CTmax_50pct_1h = round(derive_ctmax(shrimp_fit, surv = 0.5, duration = 1), 2),
-  surv_32C_4h    = round(tail(predict_heat_injury(shrimp_fit,
+  CTmax_50pct_1h = round(derive_ctmax(shrimp_fit$fit, surv = 0.5, duration = 1), 2),
+  surv_32C_4h    = round(tail(predict_heat_injury(shrimp_fit$fit,
                      data.frame(time = seq(0, 4, by = 0.1), temp = 32))$survival, 1), 3)
 )
 ```
