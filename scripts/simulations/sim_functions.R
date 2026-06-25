@@ -368,14 +368,20 @@ fit_joint_4pl <- function(data, nboot = 0L, seed = 1L,
   if (inherits(wf, "error")) return(utils::modifyList(fail(conditionMessage(wf)),
                                                       list(runtime_sec = runtime_sec)))
 
-  # Headline z + CTmax_1hr at the RELATIVE threshold via the stable profile path
-  # (freqTLS's default): no resampling, so the estimate stays finite even when
-  # the asymptotes sit at the boundary. CTmax is at the fit's t_ref = 60 min.
-  tr <- tryCatch(tls(wf, method = "profile")$summary, error = function(e) e)
-  if (inherits(tr, "error")) return(utils::modifyList(fail(conditionMessage(tr)),
+  # Headline z + CTmax_1hr at the RELATIVE threshold: profile CI WITHOUT the
+  # bootstrap fallback (fallback = FALSE). A degenerate boundary fit (scen1's
+  # u = 0.999) then returns NA on the non-closing side immediately, instead of
+  # hundreds of bootstrap refits per sim (which made those scenarios intractable
+  # across 1000 sims). The point estimate is still the MLE, so bias is measured
+  # everywhere; a non-closing CI is honestly counted as a coverage miss. CTmax is
+  # at the fit's t_ref = 60 min. (A user's interactive default keeps the bootstrap
+  # fallback; we disable it here only for batch-simulation throughput.)
+  ci <- tryCatch(confint(wf$fit, c("CTmax", "z"), method = "profile",
+                         fallback = FALSE), error = function(e) e)
+  if (inherits(ci, "error")) return(utils::modifyList(fail(conditionMessage(ci)),
                                                       list(runtime_sec = runtime_sec)))
-  pick <- function(q) { r <- tr[tr$quantity == q, , drop = FALSE]
-    if (!nrow(r)) empty else list(point = r$median, lower = r$lower, upper = r$upper) }
+  pick <- function(q) { r <- ci[ci$parameter == q, , drop = FALSE]
+    if (!nrow(r)) empty else list(point = r$estimate, lower = r$conf.low, upper = r$conf.high) }
 
   # Absolute threshold (literal 50% survival, the OLS-truth definition) + T_crit:
   # the parametric bootstrap, only when asked (nboot > 0). Off by default keeps
@@ -395,9 +401,14 @@ fit_joint_4pl <- function(data, nboot = 0L, seed = 1L,
 
   # Frequentist diagnostics are convergence / pdHess, not Rhat/ESS; the runner's
   # diag_summary() is Bayesian-specific, so $diagnostics stays NULL and the
-  # per-sim `success` flag (optimiser converged) carries it.
+  # per-sim `success` flag carries it: the optimiser converged AND the Hessian is
+  # positive-definite. The pdHess requirement is what cleanly excludes the
+  # degenerate boundary-asymptote fits (scen1 u = 0.999), whose CTmax MLE can run
+  # off to absurd values the scoring would otherwise average in.
+  conv <- wf$fit$convergence
   list(
-    success = isTRUE(wf$fit$convergence$code == 0), runtime_sec = runtime_sec,
+    success = isTRUE(conv$code == 0) && isTRUE(conv$pdHess),
+    runtime_sec = runtime_sec,
     z = san(pick("z")), z_abs = z_abs,
     CTmax_1hr = san(pick("CTmax")), CTmax_1hr_abs = ct_abs,
     T_crit = tcrit, draws = NULL, draws_abs = NULL, diagnostics = NULL)
