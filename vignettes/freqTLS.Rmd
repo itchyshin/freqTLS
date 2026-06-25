@@ -64,36 +64,37 @@ attribute, which is handy for checking recovery:
 attr(dat, "truth")[c("CTmax", "z", "phi")]
 ```
 
-## Fit the model
+## Standardise and fit the model
 
-`fit_tls()` references columns with tidy evaluation (bare column names, as in `dplyr`).
-You pass the success column (`y`, survivors), the trial column (`n`, total), the
-duration (`time`) and temperature (`temp`) columns, the family, and the reference time
-`tref` at which `CTmax` is defined.
+`freqTLS` mirrors the `bayesTLS` workflow. First `standardize_data()` names the
+temperature, duration, and survival-count columns and records the data contract;
+then `fit_4pl()` fits the 4PL by maximum likelihood and returns a `freq_tls`
+workflow object. (`t_ref` is the reference time at which `CTmax` is defined.)
+
+```{r standardize}
+std <- standardize_data(
+  dat,
+  temp     = "temp",
+  duration = "duration",
+  n_total  = "total",
+  n_surv   = "survived"
+)
+```
 
 ```{r fit}
-fit <- fit_tls(
-  dat,
-  y      = survived,
-  n      = total,
-  time   = duration,
-  temp   = temp,
-  family = "beta_binomial",
-  tref   = 1
-)
+fit <- fit_4pl(std, family = "beta_binomial", t_ref = 1)
 fit
 ```
 
 ### Formula interface
 
-If you prefer a `brms`/`drmTMB`-style grammar, build a model with `tls_bf()` and
-pass it as the first argument with the data in `data =`. The left-hand side names
-the survival counts (`successes | trials(total)`, or `cbind(successes,
-failures)`); the right-hand side tags the two axes with the `time()` and `temp()`
-markers. Add a sub-parameter formula for any predictor on `CTmax` or `log_z`
-(e.g. `CTmax ~ life_stage` for a grouped fit). The formula path feeds the same
-likelihood engine as the column call above, so the two fits are numerically
-identical:
+For moderators, `fit_4pl()` takes the same **direct interface** as `bayesTLS` —
+`ctmax =`, `z =`, or the `by =` shorthand (e.g. `by = "life_stage"` for a grouped
+fit). Under the hood the engine also exposes a `brms`/`drmTMB`-style grammar via
+`tls_bf()` — the left-hand side names the survival counts (`successes |
+trials(total)`), the right-hand side tags the two axes with the `time()` and
+`temp()` markers — which feeds the same likelihood, so the two fits are
+numerically identical:
 
 ```{r fit-formula}
 fit_f <- fit_tls(
