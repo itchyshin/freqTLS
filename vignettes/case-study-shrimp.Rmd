@@ -25,8 +25,9 @@ end to end on a single, well-behaved lethal dataset — fit, visualise, derive
 critical temperatures, and place the result beside the Bayesian and classical
 two-stage estimates.
 
-`shrimp_lethal` has **148 rows** at six nominal assay temperatures (roughly
-30–33 °C) crossed with exposure durations from 0.5 to 6 hours. The survival
+`shrimp_lethal` has **148 rows** at seven nominal assay temperatures (30–33 °C
+in 0.5 °C steps) crossed with exposure durations from about five minutes to six
+hours. The survival
 counts are **reconstructed** from the source CSV mortality proportions:
 `freqTLS` multiplies each proportion by the trial size and rounds, so
 `deaths = round(mortality_prop * total)` and `survived = total - deaths` (the
@@ -50,21 +51,21 @@ library(freqTLS)
 
 ## The live `freqTLS` fit
 
-The `freqTLS` fit needs nothing beyond this package. We fit the ungrouped
-shrimp 4PL by maximum likelihood and read profile-likelihood confidence
-intervals for `CTmax` and `z`.
+The `freqTLS` fit needs nothing beyond this package. We standardise the raw
+assay table with `standardize_data()`, fit the ungrouped shrimp 4PL by maximum
+likelihood with `fit_4pl()`, and read profile-likelihood confidence intervals
+for `CTmax` and `z` with `tls()`.
 
 ```{r profile-shrimp}
 data(shrimp_lethal)
-shrimp_fit <- fit_tls(
+shrimp_std <- standardize_data(
   shrimp_lethal,
-  y = survived, n = total, time = duration, temp = temp,
-  family = "beta_binomial", tref = 1
+  temp = "Temperature_assay", duration = "Duration_exposure_hours",
+  n_total = "N_individuals_after_trial", mortality = "Mortality_after_trial",
+  duration_unit = "hours"
 )
-rbind(
-  CTmax = unlist(confint(shrimp_fit, "CTmax", method = "profile")[c("estimate", "conf.low", "conf.high")]),
-  z     = unlist(confint(shrimp_fit, "z",     method = "profile")[c("estimate", "conf.low", "conf.high")])
-)
+shrimp_fit <- fit_4pl(shrimp_std, t_ref = 1, family = "beta_binomial", quiet = TRUE)
+tls(shrimp_fit, method = "profile")$summary
 ```
 
 `CTmax` lands near 31.8 °C and `z` near 2.2 °C, each with a narrow asymmetry-
@@ -140,7 +141,7 @@ fmt <- function(est, lo, hi) {
 
 if (has_cache) {
   cache <- readRDS(cache_path)
-  pro <- confint(shrimp_fit, c("CTmax", "z"), method = "profile")  # shrimp_fit from above
+  pro <- confint(shrimp_fit$fit, c("CTmax", "z"), method = "profile")  # engine fit from above
 
   pick <- function(df, parm, cols) {
     r <- df[df$dataset == "shrimp" & df$parameter == parm, ]
