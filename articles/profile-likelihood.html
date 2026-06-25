@@ -93,8 +93,9 @@ profile is, why its intervals can be asymmetric, how it differs from the
 Wald interval, and — importantly — how <code>freqTLS</code> behaves
 honestly when a profile does not close. These are likelihood intervals,
 not posteriors; the language throughout is “confidence”, never
-“posterior” or “credible”. The authoritative algorithm reference is
-<code>docs/design/04-profile-likelihood.md</code>.</p>
+“posterior” or “credible”. (The full algorithm is specified in the
+package source, in
+<code>docs/design/04-profile-likelihood.md</code>.)</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -233,7 +234,10 @@ yet profile it (the profile path is wired for <code>low</code> but not
 delta-method Wald interval and labels it honestly —
 <code>confint(fit, "up", method = "profile")</code> returns
 <code>interval_type = "wald"</code> and emits an informational message
-rather than silently substituting a different quantity.</p>
+rather than silently substituting a different quantity. If you need a
+prior-free, asymmetry-respecting interval for <code>up</code>, request
+the bootstrap:
+<code>confint(fit, "up", method = "bootstrap")</code>.</p>
 </div>
 </div>
 <div class="section level2">

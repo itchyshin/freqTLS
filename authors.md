@@ -18,12 +18,12 @@
 Source:
 [`inst/CITATION`](https://github.com/itchyshin/freqTLS/blob/main/inst/CITATION)
 
-Nakagawa S, Arnold P, Pottier P, Noble D (2026). *freqTLS:
-Profile-Likelihood Inference for Thermal Load Sensitivity Models*. R
-package version 0.1.0, <https://github.com/itchyshin/freqTLS>.
+Nakagawa S, Arnold P, Pottier P, Noble D (2026). *freqTLS: Frequentist
+Inference for Thermal Load Sensitivity Models*. R package version 0.1.0,
+<https://github.com/itchyshin/freqTLS>.
 
     @Manual{,
-      title = {freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity Models},
+      title = {freqTLS: Frequentist Inference for Thermal Load Sensitivity Models},
       author = {Shinichi Nakagawa and Pieter A. Arnold and Patrice Pottier and Daniel W. A. Noble},
       year = {2026},
       note = {R package version 0.1.0},

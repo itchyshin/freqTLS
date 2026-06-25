@@ -419,19 +419,19 @@ compilation).</caption>
 <tr class="odd">
 <td align="left">freqTLS</td>
 <td align="left">fit (ML)</td>
-<td align="left">29 ms</td>
+<td align="left">28 ms</td>
 <td align="left">live</td>
 </tr>
 <tr class="even">
 <td align="left">freqTLS</td>
 <td align="left">fit + Wald CTmax &amp; z</td>
-<td align="left">34 ms</td>
+<td align="left">33 ms</td>
 <td align="left">live</td>
 </tr>
 <tr class="odd">
 <td align="left">freqTLS</td>
 <td align="left">fit + profile CTmax &amp; z</td>
-<td align="left">814 ms</td>
+<td align="left">799 ms</td>
 <td align="left">live</td>
 </tr>
 <tr class="even">
@@ -674,6 +674,42 @@ perfectly good choice for routine work. The profile remains the default
 because it respects asymmetry without a normal approximation and now
 degrades to Wald or the bootstrap exactly where it would be
 unreliable.</p>
+<p>You can see when the automatic routing fires: the <code>method</code>
+column of <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> reads <code>wald</code> for the
+rerouted coordinate even if you asked for <code>profile</code>, and an
+informational message is emitted. To get an asymmetry-respecting
+interval for that coordinate specifically, request the bootstrap — for
+example <code>confint(fit, "phi", method = "bootstrap")</code>.</p>
+<p><strong>When to use each method:</strong></p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Method</th>
+<th>Use when</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>profile</code> (default)</td>
+<td>the headline choice — respects asymmetry, no normal approximation,
+and degrades honestly when a coordinate is weakly identified.</td>
+</tr>
+<tr class="even">
+<td><code>wald</code></td>
+<td>fast routine work; as well-calibrated as the profile for fixed
+effects in these simulations; symmetric on the link scale.</td>
+</tr>
+<tr class="odd">
+<td><code>bootstrap</code></td>
+<td>a prior-free interval that is always finite (the non-closing
+fallback), and the asymmetry-respecting option for <code>up</code>, a
+weak <code>phi</code>, or any weakly identified coordinate.</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section level2">

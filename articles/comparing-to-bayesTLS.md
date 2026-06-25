@@ -231,9 +231,9 @@ the speed gap concrete:
 
 | Estimator           | Task                       | Wall-clock | Source |
 |:--------------------|:---------------------------|:-----------|:-------|
-| freqTLS             | fit (ML)                   | 29 ms      | live   |
-| freqTLS             | fit + Wald CTmax & z       | 34 ms      | live   |
-| freqTLS             | fit + profile CTmax & z    | 814 ms     | live   |
+| freqTLS             | fit (ML)                   | 28 ms      | live   |
+| freqTLS             | fit + Wald CTmax & z       | 33 ms      | live   |
+| freqTLS             | fit + profile CTmax & z    | 799 ms     | live   |
 | classical two-stage | fit + delta CI             | 1.4 s      | cached |
 | bayesTLS            | fit (4 chains x 4000 MCMC) | 5.0 s      | cached |
 
@@ -320,6 +320,21 @@ well-calibrated as the profile for fixed effects — a perfectly good
 choice for routine work. The profile remains the default because it
 respects asymmetry without a normal approximation and now degrades to
 Wald or the bootstrap exactly where it would be unreliable.
+
+You can see when the automatic routing fires: the `method` column of
+[`confint()`](https://rdrr.io/r/stats/confint.html) reads `wald` for the
+rerouted coordinate even if you asked for `profile`, and an
+informational message is emitted. To get an asymmetry-respecting
+interval for that coordinate specifically, request the bootstrap — for
+example `confint(fit, "phi", method = "bootstrap")`.
+
+**When to use each method:**
+
+| Method | Use when |
+|----|----|
+| `profile` (default) | the headline choice — respects asymmetry, no normal approximation, and degrades honestly when a coordinate is weakly identified. |
+| `wald` | fast routine work; as well-calibrated as the profile for fixed effects in these simulations; symmetric on the link scale. |
+| `bootstrap` | a prior-free interval that is always finite (the non-closing fallback), and the asymmetry-respecting option for `up`, a weak `phi`, or any weakly identified coordinate. |
 
 ## Always an interval: the bootstrap fallback
 

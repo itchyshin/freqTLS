@@ -90,9 +90,11 @@
 <p><code>freqTLS</code> fits single-stage four-parameter logistic (4PL)
 thermal-load-sensitivity (TLS) / thermal death-time models by maximum
 likelihood, parameterised <strong>directly in <code>CTmax</code> and
-<code>z</code></strong> (thermal sensitivity), and returns prior-free,
-asymmetry-respecting <strong>profile-likelihood</strong> confidence
-intervals. It is the likelihood complement to the Bayesian <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>
+<code>z</code></strong> (thermal sensitivity — the temperature rise that
+cuts the tolerated exposure roughly tenfold), and returns prior-free
+<strong>frequentist</strong> confidence intervals — Wald,
+profile-likelihood (asymmetry-respecting, the default), and bootstrap.
+It is the likelihood complement to the Bayesian <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>
 package; the modelling framework is theirs (see
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code> for the relationship and
 credit).</p>
@@ -308,7 +310,12 @@ the observed proportions overlaid:</p>
 <p>The default uncertainty display is the <strong>Confidence
 Eye</strong>: a pale confidence lens with a hollow point estimate. It is
 freqTLS’s visual identity and deliberately avoids posterior-density
-iconography, because these are likelihood intervals.</p>
+iconography, because these are likelihood intervals. Read the lens
+<strong>width</strong> as the confidence interval and the <strong>hollow
+circle</strong> as the maximum-likelihood estimate; two eyes that
+clearly fail to overlap are distinguishable at the confidence level, and
+a hollow point with <em>no</em> lens flags a profile that did not close
+(a weakly identified parameter).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="freqTLS_files/figure-html/confidence-eye-1.png" class="r-plt" alt="Confidence Eye plot: a pale lens spanning the profile-likelihood interval with a hollow point estimate, for CTmax and z." width="576"></p>
@@ -329,7 +336,10 @@ profile-able <code>CTmax</code> and <code>z</code> per group, with one
 shared curve shape (the <code>bayesTLS</code> constant-shape
 configuration). In the formula, <code>z</code> enters on its internal
 log scale as <code>log_z</code> (and steepness as <code>log_k</code>),
-so the grouped term is written <code>log_z ~ group</code>:</p>
+so the grouped term is written <code>log_z ~ group</code>. Intervals are
+still requested by the natural-scale name (<code>z:cool</code>, not
+<code>log_z:cool</code>) — <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> converts
+internally:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat_grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span></span>
 <span>  temps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">42</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span>, reps <span class="op">=</span> <span class="fl">3</span>, n <span class="op">=</span> <span class="fl">20</span>,</span>
@@ -416,7 +426,9 @@ the variance-component uncertainty that a Wald interval would
 understate. Single random intercepts are supported on
 <code>CTmax</code>, <code>log_z</code>, <code>low</code>, and
 <code>log_k</code>; see <code><a href="../articles/random-effects.html">vignette("random-effects")</a></code> for the
-full hierarchical workflow and the few-groups caveats.</p>
+full hierarchical workflow and the few-groups caveats (the variance
+components are biased low when fewer than about eight groups are
+sampled).</p>
 </div>
 <div class="section level2">
 <h2 id="the-whole-api-at-a-glance">The whole API at a glance<a class="anchor" aria-label="anchor" href="#the-whole-api-at-a-glance"></a>
@@ -425,9 +437,10 @@ full hierarchical workflow and the few-groups caveats.</p>
 workflow, so the same <strong>standardise → fit → quantities →
 plot</strong> path runs by maximum likelihood. The map below shows the
 full surface and how each box twins a <code>bayesTLS</code> function.
-The yellow box is the frequentist-only addition (Wald / profile /
-bootstrap intervals and the Confidence Eye); the dashed red box is the
-one piece not yet ported.</p>
+The <strong>“freqTLS extras”</strong> box (gold, upper right) is the
+frequentist-only addition — Wald / profile / bootstrap intervals and the
+Confidence Eye — and the dashed <strong>“trace &amp; repair helpers —
+planned”</strong> box is the one piece not yet ported.</p>
 <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1500 880" font-family="Helvetica, Arial, sans-serif" width="100%" role="img" aria-labelledby="ftls-map-title ftls-map-desc"><title id="ftls-map-title">
 freqTLS function map
 </title>

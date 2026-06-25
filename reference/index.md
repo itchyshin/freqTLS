@@ -186,5 +186,4 @@ Vendored benchmark datasets (credit bayesTLS, CC BY 4.0).
 
 - [`freqTLS`](https://itchyshin.github.io/freqTLS/reference/freqTLS-package.md)
   [`freqTLS-package`](https://itchyshin.github.io/freqTLS/reference/freqTLS-package.md)
-  : freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity
-  Models
+  : freqTLS: Frequentist Inference for Thermal Load Sensitivity Models
