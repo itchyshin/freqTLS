@@ -13,11 +13,12 @@ development:
   mode: auto
 
 home:
-  title: freqTLS — profile-likelihood inference for thermal death-time models
+  title: freqTLS — frequentist inference for thermal death-time models
   description: >
-    Fast, prior-free profile-likelihood confidence intervals for the 4PL
-    thermal-load-sensitivity (thermal death-time) model, fitted by maximum
-    likelihood via TMB. The likelihood complement to bayesTLS.
+    Fast, prior-free frequentist confidence intervals — Wald, profile-likelihood,
+    and bootstrap — for the 4PL thermal-load-sensitivity (thermal death-time)
+    model, fitted by maximum likelihood via TMB. The likelihood complement to
+    bayesTLS.
   sidebar:
     structure: [links, license, community, citation, authors, dev]
   links:

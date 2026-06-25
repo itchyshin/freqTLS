@@ -21,10 +21,10 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 death-time model by maximum likelihood via
 [TMB](https://github.com/kaskr/adcomp), parameterised **directly** in
 `CTmax` (critical thermal maximum) and `z` (thermal sensitivity). It
-then returns prior-free, asymmetry-respecting **profile-likelihood
-confidence intervals** for binomial and beta-binomial survival counts,
-and for continuous **proportion** responses in `(0, 1)` via the beta
-family.
+then returns prior-free **frequentist confidence intervals** — Wald,
+profile-likelihood (asymmetry-respecting), and bootstrap — for binomial
+and beta-binomial survival counts, and for continuous **proportion**
+responses in `(0, 1)` via the beta family.
 
 Its signature display is the **Confidence Eye**: a pale horizontal lens
 spanning the likelihood interval, with a hollow point estimate. These
