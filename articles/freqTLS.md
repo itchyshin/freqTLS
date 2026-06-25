@@ -386,6 +386,32 @@ on `CTmax`, `log_z`, `low`, and `log_k`; see
 [`vignette("random-effects")`](https://itchyshin.github.io/freqTLS/articles/random-effects.md)
 for the full hierarchical workflow and the few-groups caveats.
 
+## The whole API at a glance
+
+`freqTLS` deliberately mirrors the `bayesTLS` workflow, so the same
+**standardise → fit → quantities → plot** path runs by maximum
+likelihood. The map below shows the full surface and how each box twins
+a `bayesTLS` function. The yellow box is the frequentist-only addition
+(Wald / profile / bootstrap intervals and the Confidence Eye); the
+dashed red box is the one piece not yet ported.
+
+![freqTLS function map: a maximum-likelihood twin of the bayesTLS
+workflow laid out in columns. DATA: standardize_data(). FIT: fit_4pl(),
+with make_4pl_formula(), tidy_parameters()/tdt_parameter_table(), and
+diagnose_tdt_fit()/check_tls(). DERIVE: tls() (with tls_z, tls_ctmax,
+tls_tcrit) and extract_tdt(), plus the
+derive_lt/derive_ctmax/derive_tcrit primitives. REPORT and ACCESS:
+get_ctmax()/get_z()/get_shape() and the
+get\_\*\_summary()/get\_\*\_draws() accessors. PREDICT:
+predict_survival_curves() and predict_heat_injury(), with a dashed box
+marking make_temperature_scenarios()/repair_rate_schoolfield() as not
+yet ported. PLOT: the plot\_\*() family, including
+plot_confidence_eye(). A separate two-stage comparison path runs
+ts_stage1() to ts_stage2() to ts_ci()/ts_curve(). A highlighted box
+lists the freqTLS-only extras: Wald, profile and bootstrap confidence
+intervals with profile-t calibration, the Confidence Eye, and twelve
+identifiability warnings.](freqTLS_function_map.svg)
+
 ## Where to next
 
 - [`vignette("model-math")`](https://itchyshin.github.io/freqTLS/articles/model-math.md)
