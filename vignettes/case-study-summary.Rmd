@@ -58,12 +58,12 @@ because each follows the convention of its source assay:
 | --- | --- | --- | --- |
 | Shrimp | lethal | 1 hour | relative midpoint |
 | Zebrafish (per stage) | lethal | 1 hour | relative midpoint |
-| Snow gum | sublethal PSII | 5 **minutes** | relative midpoint |
+| Snow gum | sublethal PSII | 1 hour | relative midpoint |
 | *D. suzukii* (per sex) | lethal | 4 hours (240 min) | absolute LT50 |
 
 Because a `CTmax` is defined *at* its reference exposure, the four `CTmax` values
 are **not** on a single common time scale: the snow gum number is "the temperature
-that halves PSII over 5 minutes", the fly number is "the temperature that kills
+that halves PSII over 1 hour", the fly number is "the temperature that kills
 half the flies over 4 hours". The panel is therefore an **illustrative
 cross-taxon synthesis**, not a single common-scale comparison. `z`, by contrast,
 is a slope -- degrees per tenfold change in time -- and is comparable across taxa
@@ -81,41 +81,41 @@ swallow the honest data-adequacy notes (for example, temperatures with few
 durations) that `freqTLS` raises -- those signals are covered in the per-study
 vignettes.
 
-The new `dsuzukii_lethal` dataset is loaded directly from the package `data/`
-directory so the vignette renders before the data object is re-installed.
+The vinegar-fly data ships per-individual (`dsuzukii`); we aggregate it to
+`(temp, time, sex)` counts in base R, exactly as the per-study vignette does.
 
 ```{r fits}
-# Shrimp: ungrouped, 1-hour reference, relative threshold.
+# Each taxon: standardize_data() its raw table, then fit_4pl(); $fit is the
+# engine fit the panel below reads.
+
+# Shrimp: ungrouped, 1-hour reference.
 data(shrimp_lethal)
-shrimp_fit <- suppressWarnings(fit_tls(
-  shrimp_lethal,
-  y = survived, n = total, time = duration, temp = temp,
-  family = "beta_binomial", tref = 1
-))
+shrimp_fit <- suppressWarnings(fit_4pl(standardize_data(
+  shrimp_lethal, temp = "Temperature_assay", duration = "Duration_exposure_hours",
+  n_total = "N_individuals_after_trial", mortality = "Mortality_after_trial",
+  duration_unit = "hours"), t_ref = 1, family = "beta_binomial", quiet = TRUE))$fit
 
-# Zebrafish: grouped by life stage, 1-hour reference, relative threshold.
+# Zebrafish: grouped by life stage, 1-hour reference.
 data(zebrafish_lethal)
-zebra_fit <- suppressWarnings(fit_tls(
-  zebrafish_lethal,
-  y = survived, n = total, time = duration, temp = temp, group = life_stage,
-  family = "beta_binomial", tref = 1
-))
+zebra_fit <- suppressWarnings(fit_4pl(standardize_data(
+  zebrafish_lethal, temp = "assay_temp", duration = "duration_h",
+  n_total = "n_total", n_surv = "n_surv", duration_unit = "hours"),
+  by = "life_stage", t_ref = 1, family = "beta_binomial", quiet = TRUE))$fit
 
-# Snow gum: ungrouped, beta family, 5-MINUTE reference (functional PSII).
+# Snow gum: ungrouped, beta family, 1-hour reference (functional PSII).
 data(snowgum_psii)
-snowgum_fit <- suppressWarnings(fit_tls(
-  snowgum_psii,
-  y = prop, time = duration, temp = temp,
-  family = "beta", tref = 5
-))
+snowgum_fit <- suppressWarnings(fit_4pl(standardize_data(
+  snowgum_psii, temp = "Temp", duration = "Time", proportion = "fvfm_prop",
+  duration_unit = "minutes"), family = "beta", t_ref = 60, quiet = TRUE))$fit
 
-# D. suzukii: grouped by sex, 4-hour (240-minute) reference, ABSOLUTE threshold.
-data(dsuzukii_lethal)
-fly_fit <- suppressWarnings(fit_tls(
-  dsuzukii_lethal,
-  y = survived, n = total, time = time, temp = temp, group = sex,
-  family = "beta_binomial", tref = 240
-))
+# D. suzukii: per-individual -> (temp, time, sex) counts; grouped by sex, 4-hour ref.
+data(dsuzukii)
+.nd <- aggregate(list(n_dead  = dsuzukii$dead), dsuzukii[c("temp", "time", "sex")], sum)
+.nt <- aggregate(list(n_total = dsuzukii$dead), dsuzukii[c("temp", "time", "sex")], length)
+fly_fit <- suppressWarnings(fit_4pl(standardize_data(
+  merge(.nd, .nt), temp = "temp", duration = "time",
+  n_total = "n_total", n_dead = "n_dead", duration_unit = "minutes"),
+  by = "sex", t_ref = 240, family = "beta_binomial", quiet = TRUE))$fit
 ```
 
 ## Assembling the cross-study table
@@ -158,7 +158,7 @@ panel <- rbind(
            c("Zebrafish: young embryos", "Zebrafish: old embryos",
              "Zebrafish: larvae", "Zebrafish: young embryos",
              "Zebrafish: old embryos", "Zebrafish: larvae")),
-  eye_rows(snowgum_fit, "Snow gum (5 min)",
+  eye_rows(snowgum_fit, "Snow gum (1 h)",
            c("CTmax", "z"),
            c("Snow gum (PSII)", "Snow gum (PSII)")),
   eye_rows(fly_fit, "D. suzukii (4 h)",
@@ -264,7 +264,7 @@ wide lens reads as a confidence *interval*, not a probability density, and a
 profile that did not close would render as a hollow point with **no** lens. All
 seven profiles here close, so every row carries a lens.
 
-```{r panel, fig.width = 7.5, fig.height = 6, fig.alt = "Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: seven pale horizontal confidence-interval lenses with hollow point estimates, one per taxon/group, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near 46.5, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, snow gum near 6.5, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour, 5 minutes, or 4 hours), underscoring that the CTmax values are not on a common time scale."}
+```{r panel, fig.width = 7.5, fig.height = 6, fig.alt = "Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: seven pale horizontal confidence-interval lenses with hollow point estimates, one per taxon/group, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near 44.6, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, snow gum near 3.7, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale."}
 # Build the honest Confidence-Eye geometry by hand so all four fits share one
 # cross-taxon panel: a cosine-tapered pale lens (width = confidence interval)
 # plus a hollow point, faceted by parameter with free x-axes. This reuses the
@@ -301,7 +301,7 @@ tref_lab <- data.frame(
                      levels = levels(panel$parameter)),
   row = panel$row[panel$parameter == "CTmax (°C)"],
   x   = panel$conf.high[panel$parameter == "CTmax (°C)"],
-  lab = c("1 h", "1 h", "1 h", "1 h", "5 min", "4 h", "4 h")
+  lab = c("1 h", "1 h", "1 h", "1 h", "1 h", "4 h", "4 h")
 )
 
 ggplot2::ggplot() +
@@ -398,13 +398,13 @@ data.
 
 Three things stand out from the panel:
 
-* **The plant's photosynthetic endpoint is the steepest.** Snow gum PSII has by far
-  the largest `z` (about 6.5 degrees Celsius per tenfold time), so its tolerated
-  exposure collapses much faster with temperature than the animals' lethal
-  endpoints (`z` between roughly 1.8 and 3.2). Its `CTmax` is also the highest, but
-  recall that this is the temperature that halves PSII over **5 minutes** -- a
-  short, hot reference -- so it is not directly comparable to the animals'
-  longer-exposure `CTmax` values.
+* **The plant's photosynthetic endpoint is the steepest.** Snow gum PSII has the
+  largest `z` (about 3.7 degrees Celsius per tenfold time), so its tolerated
+  exposure collapses faster with temperature than the animals' lethal endpoints
+  (`z` between roughly 1.8 and 3.2). Its `CTmax` is also the highest, on the same
+  one-hour reference as the shrimp and zebrafish; only the *D. suzukii* `CTmax`
+  sits at a different (four-hour) reference, so that row alone is off the common
+  time scale.
 
 * **Resolving a taxon by an internal axis can matter or not.** Zebrafish life stage
   shifts `CTmax` by over a degree (old embryos are the most heat-tolerant stage),

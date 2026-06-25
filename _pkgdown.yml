@@ -52,16 +52,38 @@ articles:
     contents:
       - case-study-shrimp
       - case-study-zebrafish
-      - case-study-leaf-psii
+      - case-study-li-aphids
       - case-study-suzukii
+      - case-study-leaf-psii
       - heat-injury
       - case-study-summary
 
 reference:
-  - title: Fitting and post-fit tools
+  - title: Fit and extract (the bayesTLS-style twin API)
     desc: >
-      Fit thermal-load-sensitivity models by maximum likelihood and inspect the
-      results.
+      The primary, bayesTLS-compatible workflow: standardise the data, fit the
+      4PL by maximum likelihood, and extract the thermal-death-time quantities.
+    contents:
+      - standardize_data
+      - make_4pl_formula
+      - fit_4pl
+      - tls
+      - extract_tdt
+      - tdt-accessors
+      - predict_survival_curves
+      - diagnose_tdt_fit
+      - tdt_parameter_table
+  - title: Classical two-stage comparator
+    desc: The per-temperature GLM + OLS estimator, for benchmarking.
+    contents:
+      - ts_stage1
+      - ts_stage2
+      - ts_ci
+      - ts_curve
+  - title: Engine (lower-level interface)
+    desc: >
+      The TMB engine the twin is built on; use it directly for full formula
+      control.
     contents:
       - fit_tls
       - tls_bf
@@ -106,8 +128,10 @@ reference:
     contents:
       - shrimp_lethal
       - zebrafish_lethal
+      - zebrafish_o2
       - snowgum_psii
-      - dsuzukii_lethal
+      - dsuzukii
+      - aphid_tdt
   - title: Package
     contents:
       - freqTLS-package
