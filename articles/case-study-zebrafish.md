@@ -185,3 +185,7 @@ feature demonstrated in
 [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md).
 As a lethal endpoint, the survival-count 4PL applies directly; the
 sublethal loss-of-equilibrium endpoint is out of scope for `freqTLS`.
+
+**Where to next:** the aphid case study adds formal species contrasts;
+[`vignette("random-effects")`](https://itchyshin.github.io/freqTLS/articles/random-effects.md)
+covers hierarchical (many-group) designs.

@@ -220,7 +220,7 @@ rbind(
 #> # A tibble: 2 × 5
 #>   parameter  estimate conf.low conf.high method   
 #>   <chr>         <dbl>    <dbl>     <dbl> <chr>    
-#> 1 dCTmax:F-M   0.0244  -0.0981     0.148 bootstrap
+#> 1 dCTmax:F-M   0.0244  -0.100      0.147 bootstrap
 #> 2 dz:F-M       0.0538  -0.0162     0.133 bootstrap
 ```
 
@@ -325,6 +325,11 @@ The Ørsted study measured two further *D. suzukii* endpoints that are
 
 This article covers the **lethal-by-sex** subset only, which is the part
 of the *D. suzukii* analysis that fits the `freqTLS` model class.
+
+**Where to next:**
+[`vignette("heat-injury")`](https://itchyshin.github.io/freqTLS/articles/heat-injury.md)
+walks through the `T_crit` / heat-injury workflow that this
+absolute-threshold fit feeds.
 
 ## Session info
 

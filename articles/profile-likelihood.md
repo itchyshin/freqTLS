@@ -206,6 +206,8 @@ ci <- tryCatch(
 #> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
 #>   non-closing side).
 #> caught warning: NA/NaN function evaluation
+#> 
+#> caught warning: NA/NaN function evaluation
 ci[, c("parameter", "conf.low", "conf.high", "estimate", "conf.status")]
 #> # A tibble: 1 × 5
 #>   parameter conf.low conf.high estimate conf.status

@@ -148,3 +148,9 @@ Formal species contrasts (a difference in `CTmax` or `z` with its own
 confidence interval and a likelihood-ratio test) are available via the
 contrast interface described in
 [`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md).
+
+**Where to next:**
+[`vignette("random-effects")`](https://itchyshin.github.io/freqTLS/articles/random-effects.md)
+for many-group hierarchical fits;
+[`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)
+for the three-way method comparison.

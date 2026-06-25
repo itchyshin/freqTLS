@@ -186,3 +186,7 @@ That is a time-to-event quantity with a different likelihood, and it is
 a deliberate **non-goal** for `freqTLS`, which fits the single binomial
 / beta-binomial survival-count 4PL. For the sublethal knockdown
 analysis, see `bayesTLS`.
+
+**Where to next:** for a grouped fit, see the zebrafish or aphid case
+study; to derive heat-injury / `T_crit` from a fit, see
+[`vignette("heat-injury")`](https://itchyshin.github.io/freqTLS/articles/heat-injury.md).

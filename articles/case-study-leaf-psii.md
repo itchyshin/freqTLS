@@ -205,3 +205,9 @@ ratio without a trials denominator. Two reminders: the endpoint is
 **functional, not lethal**, so `T_crit` is out of scope; and when a
 study has **bounded counts** (successes out of a known number tested),
 prefer `family = "beta_binomial"` over clamping a derived proportion.
+
+**Where to next:**
+[`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)
+explains why the likelihood and Bayesian fits coincide here;
+[`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)
+shows the beta family in the three-way comparison.

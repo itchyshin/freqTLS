@@ -7,7 +7,12 @@ the relative-versus-absolute survival threshold, and the exact algebraic
 bridge to [`bayesTLS`](https://github.com/daniel1noble/bayesTLS). The
 authoritative source is `docs/design/01-model-and-parameterisation.md`;
 this vignette mirrors it and checks the bridge identities numerically
-(no Stan required).
+(no Stan required). If you already trust that freqTLS and bayesTLS
+target the same fitted curve, you can skip straight to the worked
+examples in
+[`vignette("freqTLS")`](https://itchyshin.github.io/freqTLS/articles/freqTLS.md)
+and
+[`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md).
 
 ``` r
 
