@@ -48,3 +48,26 @@ test_that("no live doc claims up's 'nested gap has no single coordinate'", {
                    info = paste("present-tense nested-gap claims:",
                                 paste(bad, collapse = "; ")))
 })
+
+test_that("row counts stated in known-limitations.md match the shipped data", {
+  doc <- file.path(repo_root(), "docs", "dev-log", "known-limitations.md")
+  skip_if_not(file.exists(doc), "source tree not available")
+  txt <- paste(readLines(doc, warn = FALSE), collapse = "\n")
+  ns <- asNamespace("freqTLS")
+  data_names <- c("aphid_tdt", "dsuzukii", "shrimp_lethal", "shrimp_sublethal",
+                  "snowgum_psii", "zebrafish_lethal", "zebrafish_o2")
+  rx <- "`([a-z_]+)` \\(([0-9,]+) rows"
+  hits <- regmatches(txt, gregexpr(rx, txt, perl = TRUE))[[1]]
+  bad <- character(0)
+  for (h in hits) {
+    p <- regmatches(h, regexec(rx, h, perl = TRUE))[[1]]
+    nm <- p[2]; stated <- as.integer(gsub(",", "", p[3]))
+    if (!nm %in% data_names) next
+    actual <- nrow(get(nm, envir = ns))
+    if (!identical(stated, actual))
+      bad <- c(bad, sprintf("%s: doc says %d, data has %d", nm, stated, actual))
+  }
+  expect_identical(bad, character(0),
+                   info = paste("row-count drift in known-limitations.md:",
+                                paste(bad, collapse = "; ")))
+})

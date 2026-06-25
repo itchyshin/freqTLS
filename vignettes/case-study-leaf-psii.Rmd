@@ -175,6 +175,10 @@ Two reminders: the endpoint is **functional, not lethal**, so `T_crit` is out of
 scope; and when a study has **bounded counts** (successes out of a known number
 tested), prefer `family = "beta_binomial"` over clamping a derived proportion.
 
+**Where to next:** `vignette("frequentist-and-bayesian")` explains why the
+likelihood and Bayesian fits coincide here; `vignette("comparing-to-bayesTLS")`
+shows the beta family in the three-way comparison.
+
 ```{r session, include = FALSE}
 invisible(NULL)
 ```

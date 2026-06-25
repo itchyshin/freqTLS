@@ -328,6 +328,9 @@ here:
 This article covers the **lethal-by-sex** subset only, which is the part of the
 *D. suzukii* analysis that fits the `freqTLS` model class.
 
+**Where to next:** `vignette("heat-injury")` walks through the `T_crit` /
+heat-injury workflow that this absolute-threshold fit feeds.
+
 ## Session info
 
 ```{r session}

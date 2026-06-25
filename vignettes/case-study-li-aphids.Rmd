@@ -127,3 +127,6 @@ by group) is demonstrated in `vignette("comparing-to-bayesTLS")`. Formal
 species contrasts (a difference in `CTmax` or `z` with its own confidence
 interval and a likelihood-ratio test) are available via the contrast interface
 described in `vignette("frequentist-and-bayesian")`.
+
+**Where to next:** `vignette("random-effects")` for many-group hierarchical fits;
+`vignette("comparing-to-bayesTLS")` for the three-way method comparison.
