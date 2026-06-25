@@ -1,6 +1,6 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `73e7576`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `9fafffc`
 
 > **Session-4 (HEAD `73e7576`): P7 vignettes — 8/12 render; the freq-vs-bayes
 > story is complete.** Ran a full vignette render-sweep (the real gate: does each
@@ -16,6 +16,13 @@
 >   `73e7576` **heat-injury**: every live fit rewired
 >   `standardize_data() → fit_4pl() → tls()`; grouped via `by=`; the v0.2
 >   stage-shape fit varies `low/up/k ~ g` (AIC 1222.5 → 1187.9).
+> - `ef8991e` **confint() + summary() methods for `freq_tls`** (delegate to
+>   `$fit`) — a real twin bug fixed: `confint(fit)`/`summary(fit)` on a
+>   `fit_4pl()` result previously hit the `stats::confint.default` NA matrix /
+>   a generic list. Then `9fafffc` the **getting-started vignette** now leads
+>   with the twin API (`standardize_data → fit_4pl`); its downstream chunks
+>   (summary/confint/tidy/get_*/plots) work unchanged on the `freq_tls` thanks
+>   to the new methods. Full suite **694 PASS / 1 skip**.
 >
 > **The freq_tls-vs-`$fit` rule (learned this session, use it for the rest):**
 > `tls`, `get_ctmax`, `get_z`, `tidy_parameters`, `derive_ctmax`, `derive_tcrit`,
