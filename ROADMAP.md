@@ -82,16 +82,21 @@ then parallel P4 and P5, then P6.
 
 ## v0.1 release boundary
 
-v0.1 = count data (binomial and beta-binomial), shared shape, grouped `CTmax`/`z`,
-profile CIs (and Wald), a brms/drmTMB-style formula interface (`tls_bf()`), and the
-cached three-way benchmark. Non-goals for v0.1: Beta / continuous responses,
-time-to-event, multi-trait, random effects, bootstrap CIs, heat-injury,
-temperature effects on `low`/`up`/`k`, an absolute-threshold default, and CRAN
-hardening. (Predictors on the shape parameters, independent `CTmax` / `log_z`
-designs, and random effects through the formula interface are deferred to v0.2.)
-See `docs/design/46-capability-matrix.md`.
+**The `v0.1`/`v0.2`/`v0.3` headings below are build milestones, all released in the
+single `0.1.0` version** (the fresh fork from profileTLS). They are kept in build
+order to record how the surface grew; nothing here is unreleased.
 
-## v0.2 (in progress)
+The v0.1 milestone (core) is count data (binomial and beta-binomial), shared
+shape, grouped `CTmax`/`z`, profile CIs (and Wald), a brms/drmTMB-style formula
+interface (`tls_bf()`), and the cached three-way benchmark. The v0.2 and v0.3
+milestones (below) then added the Beta family, random effects, bootstrap CIs,
+heat-injury, and shape predictors — **all of which ship in 0.1.0**. Genuinely
+still out of scope: time-to-event, multi-trait responses, a fit-time
+absolute-threshold option and non-default `bounds`, a profile interval or random
+effect for the upper asymptote `up`, and CRAN hardening. See
+`docs/design/46-capability-matrix.md`.
+
+## v0.2 milestone (released in 0.1.0)
 
 Building beyond the v0.1 core, with complementary (not competitive) framing
 against `bayesTLS` -- the two packages are two valid lenses on the same model.
@@ -134,7 +139,7 @@ against `bayesTLS` -- the two packages are two valid lenses on the same model.
   `log_z` grouping. Per-shape engine widths (byte-identical default), link-scale
   coefficient estimates (`k:body_size` is a log-scale slope) with Wald intervals,
   and `predict()` rebuilds each shape design from `newdata`.
-## v0.3 (in progress)
+## v0.3 milestone (released in 0.1.0)
 
 * **Random intercept on `log_z` (item 5) — done.** `log_z ~ <fixed> + (1 | group)`
   adds a random intercept on thermal sensitivity, the symmetric counterpart of the

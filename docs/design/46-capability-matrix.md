@@ -6,7 +6,7 @@ fitted, planned, and unsupported. It is kept synchronized with
 the same commit when a capability changes (AGENTS.md design rule 10). The live
 phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 
-> **bayesTLS-twin redesign (in progress, 2026-06-24).** freqTLS is being rebuilt
+> **bayesTLS-twin redesign (completed; released as 0.1.0).** freqTLS has been rebuilt
 > as the frequentist twin of bayesTLS. The user-facing API is now
 > `standardize_data()` -> `fit_4pl()` -> `tls()` / `extract_tdt()` /
 > `predict_survival_curves()` / `diagnose_tdt_fit()`, with `two_stage` as the
@@ -56,7 +56,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
 | column (tidy-eval `y`/`n`/`time`/`temp`/`group`) | fitted (P1-P2) | the original interface; unchanged |
 | formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; `CTmax`/`log_z` fixed-effect predictors; v0.1 shapes are intercept-only and random effects are deferred to v0.2 |
 
-## v0.2 (in progress)
+## v0.2 milestone (released in 0.1.0)
 
 - Covariate (grouped) effects on the shape parameters (`low` / `up` / `log_k`):
   **fitted** -- via the formula interface (`low ~ group`, `up ~ group`,

@@ -23,8 +23,8 @@ death-time model by maximum likelihood via
 `CTmax` (critical thermal maximum) and `z` (thermal sensitivity). It
 then returns prior-free, asymmetry-respecting **profile-likelihood
 confidence intervals** for binomial and beta-binomial survival counts,
-and — since v0.2 — for continuous **proportion** responses in `(0, 1)`
-via the beta family.
+and for continuous **proportion** responses in `(0, 1)` via the beta
+family.
 
 Its signature display is the **Confidence Eye**: a pale horizontal lens
 spanning the likelihood interval, with a hollow point estimate. These
@@ -47,24 +47,21 @@ uses “posterior” or “credible” language.
   back to a prior-free **parametric bootstrap** so an interval is still
   returned (set `fallback = FALSE` to keep the open profile, which the
   Confidence Eye draws as an open lens).
-- Ships a tidy column interface (`fit_tls()`), a `brms`/`drmTMB`-style
-  **formula interface** (`tls_bf()`), prediction, lethal-time
-  derivation, and plotting (survival curves, the survival surface, and
-  the Confidence Eye).
-- **v0.2** adds a random intercept on `CTmax`
-  (`CTmax ~ <fixed> + (1 | group)`, with profile intervals for the fixed
-  effects), grouped covariate effects on the shape parameters (`low` /
-  `up` / `log_k`), the critical-temperature derivations `derive_ctmax()`
-  (absolute threshold) and `derive_tcrit()` (rate-multiplier), and
-  deterministic heat-injury prediction (`predict_heat_injury()`). See
-  `vignette("frequentist-and-bayesian")` for how the likelihood and
-  Bayesian paths compare.
-- **v0.3** extends random intercepts beyond `CTmax` to thermal
-  sensitivity and the curve shape: `log_z`, `low`, and `log_k` can each
-  carry `<param> ~ <fixed> + (1 | group)`. They combine freely; sharing
-  a grouping factor fits *independent* variances (no correlation term)
-  and warns. It also adds a prior-free heat-injury bootstrap confidence
-  band (`heat_injury_envelope()` and `plot_heat_injury()`).
+- Ships a tidy column interface (`fit_tls()`) and a
+  `brms`/`drmTMB`-style **formula interface** (`tls_bf()`) with
+  fixed-effect predictors on any sub-parameter (`CTmax`, `log_z`, `low`,
+  `up`, `log_k`), plus prediction, lethal-time derivation, and plotting
+  (survival curves, the survival surface, and the Confidence Eye).
+- Fits **random intercepts** on `CTmax`, `log_z`, `low`, and `log_k`
+  (`<param> ~ <fixed> + (1 | group)`), with profile intervals for the
+  fixed effects; they combine freely, and sharing a grouping factor fits
+  *independent* variances (no correlation term) and warns.
+- Derives critical temperatures — `derive_ctmax()` (absolute threshold)
+  and `derive_tcrit()` (rate-multiplier) — and predicts **heat injury**
+  under a temperature trace (`predict_heat_injury()`) with a prior-free
+  bootstrap confidence band (`heat_injury_envelope()`,
+  `plot_heat_injury()`). See `vignette("frequentist-and-bayesian")` for
+  how the likelihood and Bayesian paths compare.
 
 ## Why not the two-stage workflow
 
@@ -236,7 +233,7 @@ biased low with few groups.
 Two populations can differ not only in *where* the thermal-death curve
 sits (`CTmax`, `z`) but in its *shape* — how steeply survival collapses
 with exposure (`k`), or the background and maximum survival (`low`,
-`up`). Since v0.2 the formula interface lets `low`, `up`, and `log_k`
+`up`). The formula interface lets `low`, `up`, and `log_k`
 vary by a grouping factor, relaxing the shared-shape restriction. Here a
 heat-tolerant and a heat-sensitive population differ in both `CTmax` and
 the curve steepness `k`:
