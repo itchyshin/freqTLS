@@ -63,11 +63,14 @@ one-hour reference time.
 
 ```{r fit}
 data(shrimp_lethal)
-fit <- fit_tls(
+shrimp_std <- standardize_data(
   shrimp_lethal,
-  y = survived, n = total, time = duration, temp = temp,
-  family = "beta_binomial", tref = 1
+  temp = "Temperature_assay", duration = "Duration_exposure_hours",
+  n_total = "N_individuals_after_trial", mortality = "Mortality_after_trial",
+  duration_unit = "hours"
 )
+# The heat-injury helpers take the engine fit; fit_4pl()$fit is that engine fit.
+fit <- fit_4pl(shrimp_std, t_ref = 1, family = "beta_binomial", quiet = TRUE)$fit
 ctmax <- get_ctmax(fit)$estimate
 z     <- get_z(fit)$estimate
 up    <- tidy_parameters(fit)$estimate[tidy_parameters(fit)$parameter == "up"]
