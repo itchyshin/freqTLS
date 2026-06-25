@@ -1,6 +1,63 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `fc9bb01`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `73e7576`
+
+> **Session-4 (HEAD `73e7576`): P7 vignettes — 8/12 render; the freq-vs-bayes
+> story is complete.** Ran a full vignette render-sweep (the real gate: does each
+> `.Rmd` knit against the installed package?). 5 were already green (freqTLS,
+> model-math, profile-likelihood, random-effects, and — after this session —
+> frequentist-and-bayesian). Fixed 3 more to the twin API + current data:
+> - `4046e90` **frequentist-and-bayesian** (the centerpiece) now carries its
+>   scientific backbone — the P5 small-sample **coverage panel** (asymptotic z
+>   0.927 → profile-t 0.964 at df≈10; t≡z at df≈100) and the P6 **three-way
+>   benchmark** (CTmax within 0.07 °C of bayesTLS), both read from cache so it
+>   builds Stan-free. + Bates–Watts (1988).
+> - `bcc503d` **case-study-shrimp**, `08ed608` **comparing-to-bayesTLS**,
+>   `73e7576` **heat-injury**: every live fit rewired
+>   `standardize_data() → fit_4pl() → tls()`; grouped via `by=`; the v0.2
+>   stage-shape fit varies `low/up/k ~ g` (AIC 1222.5 → 1187.9).
+>
+> **The freq_tls-vs-`$fit` rule (learned this session, use it for the rest):**
+> `tls`, `get_ctmax`, `get_z`, `tidy_parameters`, `derive_ctmax`, `derive_tcrit`,
+> `plot_*`, `predict_survival_curves`, and `AIC`/`logLik`/`coef` **accept the
+> `freq_tls` workflow**. `confint`, `predict_heat_injury`, `plot_heat_injury`,
+> and `$estimates`/`$convergence` need the **engine fit** (`fit$fit`). Two warts
+> flagged as background tasks (chips): (1) `predict_heat_injury`/`plot_heat_injury`
+> should accept `freq_tls`; (2) `fit_4pl(by="g")` labels params
+> `CTmax:life_stage<lvl>` where the column interface gives the clean
+> `CTmax:<lvl>` (fix at `formula.R:600` / `group_levels`; threads through
+> predict/contrasts).
+>
+> **4 vignettes still fail — and it is NOT purely mechanical.** The bundled data
+> was swapped to **bayesTLS's 7 datasets**, so some case-study prose NUMBERS have
+> drifted from the old data. Confirmed: **leaf-psii** snow-gum now gives CTmax
+> **48.6** / z **3.71**, but the prose hardcodes the old **46.5** / **6.5** in 6
+> places and claims a bayesTLS comparison the cache can't back. So the remaining
+> 4 need **number verification against `ms/case_studies_new.qmd`**, not just API
+> rewiring — a call for the user / Darwin, since it changes stated scientific
+> values. Verified data maps for each (so no re-deriving):
+> - **case-study-leaf-psii** (snowgum, beta):
+>   `standardize_data(snowgum_psii, temp="Temp", duration="Time", proportion="fvfm_prop")`
+>   → `fit_4pl(family="beta", t_ref=5)`. Fix API (`confint(fit$fit, ...)`,
+>   `fit$fit$convergence`) + the 6 hardcoded numbers + the 45.9/46.5 comparison
+>   prose. (Two snowgum CSVs exist — field vs glasshouse — confirm which
+>   `snowgum_psii` is.)
+> - **case-study-zebrafish** (by life_stage): blocked on the `by=` label wart for
+>   clean Confidence-Eye `parm` labels (the eye chunks hardcode
+>   `CTmax:young_embryos`). Tables are fine via `tls()$summary`. Map:
+>   `standardize_data(zebrafish_lethal, temp="assay_temp", duration="duration_h", n_total="n_total", n_surv="n_surv", duration_unit="hours")`
+>   → `fit_4pl(by="life_stage", family="beta_binomial", t_ref=1)`.
+> - **case-study-suzukii**: dataset renamed `dsuzukii_lethal`→**`dsuzukii`** and
+>   **reshaped** — old `survived/total/time/temp/sex`; new cols
+>   `id, temp, lvl, time, sex, rep, prod, dead, t_coma`. Mapping is NOT obvious
+>   (semantics of `prod`/`dead`/`lvl`?) — read `?dsuzukii` + the data-raw build
+>   script before fitting. Absolute-threshold exemplar (`t_ref=240` min).
+> - **case-study-summary**: combines all four fits + a 7-row cross-taxon panel;
+>   do last, after the three above are settled.
+>
+> Verification: each fixed vignette knits to HTML with the expected evidence
+> grepped from the output. No R code changed → the test suite is untouched
+> (still 691 PASS / 1 skip). Render outputs in `/tmp/vig-render/`.
 
 > **Session-3 (HEAD `fc9bb01`): the twin is now scientifically validated.**
 > - `499da87` **P5a** Bates–Watts **profile-t / Wald-t calibration** (`tls_ci_df`
