@@ -1,6 +1,36 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `9fafffc`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `ff21fa7`
+
+> **Session-5 (HEAD `ff21fa7`): twin-surface completion + a simulation sanity
+> harness + the OSF artifacts.** Three user-dispatched pieces:
+> - `a7c8d92` **freq_tls accepted by the heat-injury functions + `check_tls` +
+>   `ranef`.** Audited every exported fit-taker for the `inherits(object,
+>   "freq_tls")` unwrap: `predict_heat_injury` / `plot_heat_injury` /
+>   `heat_injury_envelope` (the gap), `check_tls`, and a delegating
+>   `ranef.freq_tls` were missing it; everything else already routed through an
+>   unwrapping helper. (`summarise_observed_survival` doesn't exist.)
+> - `074fe8a` **`fit_4pl(by="g")` now labels groups cleanly** (`CTmax:young_embryos`,
+>   not `CTmax:life_stageyoung_embryos`), identical to the column interface end to
+>   end — `tls_design_from_rhs` cleaned single-factor labels only with an
+>   intercept; dropped that condition so the `~ 0 + f` cell-means form matches.
+>   Unblocks clean grouped vignette figures (zebrafish/suzukii/summary eyes).
+> - `293356b` + `ff21fa7` **freqTLS (ML/TMB) twin of the bayesTLS two-stage-bias
+>   simulation** in `scripts/simulations/` (sim_functions.R, run_simulations.R,
+>   compare_to_bayes.R). The DGP / two-stage / scoring are copied verbatim
+>   (engine-agnostic) so both packages run the SAME 28 scenarios; the one change
+>   is `fit_joint_4pl()`, which fits by ML and reads the relative z/CTmax from
+>   `confint(method="profile", fallback=FALSE)` (degenerate boundary fits return
+>   NA fast). `success` requires a pd Hessian (drops degenerate scen1 fits).
+>   Parallel fork pool. `output/` gitignored. **Full run (28×1000) is running in
+>   the background; compare_to_bayes.R merges it against the OSF results.**
+> - **OSF** (`osf.io/c6dxy`, public): confirmed access + downloaded all three
+>   tiers via bayesTLS's `scripts/fetch_artifacts.R` into `../bayesTLS/output/`
+>   (results 12 MB, models 72 MB, sim_full 2.65 GB).
+> Verification: full suite **700 PASS / 1 skip** after the R changes; sim
+> smoke-verified (scen1 boundary degenerate-but-fast; scen2 interior recovers).
+> Twin-surface S3 follow-ups from Session-4 (confint/summary) now extended to
+> ranef + heat-injury — the `freq_tls` object is accepted everywhere a fit is.
 
 > **Session-4 (HEAD `73e7576`): P7 vignettes — 8/12 render; the freq-vs-bayes
 > story is complete.** Ran a full vignette render-sweep (the real gate: does each
