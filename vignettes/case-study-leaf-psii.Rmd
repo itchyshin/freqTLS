@@ -161,7 +161,8 @@ thermal sensitivity (a higher `z`); on the bundled, batch-free data the
 likelihood and the Bayesian fit agree on a **lower marginal `z`** near
 `r round(zhat, 1)`. This is a data-provenance difference, not a difference between
 the methods: given the same rows and the same (here, no) random-effect structure,
-the profile-likelihood and posterior summaries coincide. If you need the
+the profile-likelihood and posterior summaries coincide — the data, not the prior
+or the algorithm, are driving the estimate here. If you need the
 batch-adjusted estimate, fit with a random intercept on the available batch
 column, e.g. `fit_4pl(std, ctmax = ~ 1 + (1 | plant), family = "beta")`.
 

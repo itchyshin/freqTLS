@@ -142,7 +142,7 @@ The figure below stacks the three quantities the `bayesTLS` panel shows: the
 temperature trace (with `CTmax` and `T_crit` reference lines), cumulative
 injury (100% = one lethal dose), and predicted survival.
 
-```{r plot-three, fig.height = 6.5, fig.alt = "Three stacked panels over five days. Top: the diel temperature trace oscillating between about 20 and 30 degrees C, with a dashed line at the fitted CTmax (31.8 C, above all peaks) and a dotted line at T_crit (27.4 C, crossed by the afternoon peaks). Middle: cumulative heat injury rising in daily steps and crossing the 100%-of-one-lethal-dose reference line late on day four. Bottom: predicted survival declining in steps from the fitted ceiling near 0.94 to about 0.29 by day five."}
+```{r plot-trace, fig.height = 2.6, fig.alt = "Diel temperature trace over five days: a daily cycle oscillating between about 20 and 30 degrees C, with a dashed line at the fitted CTmax (31.8 C, above all peaks) and a dotted line at T_crit (27.4 C, crossed by the afternoon peaks)."}
 panel_trace <- ggplot(hi, aes(time / 24, temp)) +
   geom_hline(yintercept = ctmax, linetype = "dashed", colour = "grey40") +
   geom_hline(yintercept = tcrit, linetype = "dotted", colour = "grey40") +
@@ -153,7 +153,10 @@ panel_trace <- ggplot(hi, aes(time / 24, temp)) +
            hjust = 0, size = 3, colour = "grey30") +
   labs(x = NULL, y = "Temp (°C)") +
   theme_bw(base_size = 11)
+print(panel_trace)
+```
 
+```{r plot-injury, fig.height = 2.6, fig.alt = "Cumulative heat injury over five days: a stepwise rise in injury percentage, crossing the 100%-of-one-lethal-dose dashed reference line near day three and reaching about 160% by day five."}
 panel_injury <- ggplot(hi, aes(time / 24, injury)) +
   geom_hline(yintercept = 100, linetype = "dashed", colour = "grey40") +
   geom_line(colour = "#762A83", linewidth = 0.6) +
@@ -161,16 +164,15 @@ panel_injury <- ggplot(hi, aes(time / 24, injury)) +
            hjust = 0, size = 3, colour = "grey30") +
   labs(x = NULL, y = "Injury (%)") +
   theme_bw(base_size = 11)
+print(panel_injury)
+```
 
+```{r plot-survival, fig.height = 2.6, fig.alt = "Predicted survival over five days: declining in steps from the fitted ceiling near 0.94, tracking each afternoon heating episode, to about 0.29 by day five."}
 panel_surv <- ggplot(hi, aes(time / 24, survival)) +
   geom_line(colour = "#1B7837", linewidth = 0.6) +
   labs(x = "Day", y = "Survival") +
   ylim(0, 1) +
   theme_bw(base_size = 11)
-
-# Simple vertical stack without extra package dependencies.
-print(panel_trace)
-print(panel_injury)
 print(panel_surv)
 ```
 

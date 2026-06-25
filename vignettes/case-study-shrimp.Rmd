@@ -84,7 +84,7 @@ confidence lens with a hollow point estimate. It carries no prior and makes no
 probability statement about the parameter — it is a likelihood confidence
 display, not a posterior density.
 
-```{r eye, fig.alt = "Confidence Eye for the shrimp CTmax and z: pale confidence lenses with hollow point estimates, the freqTLS uncertainty display. Both profiles close, so each eye is a filled lens."}
+```{r eye, fig.alt = "Confidence Eye for the shrimp CTmax and z: pale confidence lenses with hollow point estimates, the freqTLS uncertainty display. Both profiles close, so each eye is a closed lens."}
 plot_confidence_eye(shrimp_fit, parm = c("CTmax", "z"), method = "profile")
 ```
 

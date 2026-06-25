@@ -47,6 +47,10 @@ articles:
     contents:
       - comparing-to-bayesTLS
       - frequentist-and-bayesian
+  - title: Applications
+    navbar: Applications
+    contents:
+      - heat-injury
   - title: Case studies
     navbar: Case studies
     contents:
@@ -55,7 +59,6 @@ articles:
       - case-study-li-aphids
       - case-study-suzukii
       - case-study-leaf-psii
-      - heat-injury
       - case-study-summary
 
 reference:

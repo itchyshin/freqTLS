@@ -96,7 +96,7 @@ opposite ways:
   interval is largely the prior, re-expressed. The weakness is real; it has just
   been hidden behind an assumption.
 
-```{r identifiability, fig.alt = "A profile-likelihood interval that does not close on sparse data."}
+```{r identifiability}
 # Sparse design: few temperatures, so the CTmax/z slope is weakly identified.
 sparse <- simulate_tls(
   temps = c(35, 36), times = c(1, 4), reps = 2, n = 20,

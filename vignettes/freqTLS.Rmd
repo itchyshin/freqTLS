@@ -38,7 +38,8 @@ library(freqTLS)
 `simulate_tls()` draws survival counts from the locked data-generating process: a
 factorial grid of assay temperatures and exposure durations, with the 4PL evaluated at
 the supplied true `CTmax`, `z`, and shape parameters. We use the overdispersed
-beta-binomial family here (`phi` controls the overdispersion).
+beta-binomial family here; `phi` is its precision parameter — larger `phi` means
+*less* overdispersion, approaching the ordinary binomial as `phi` grows.
 
 ```{r simulate}
 set.seed(1)
@@ -184,7 +185,9 @@ column; see `vignette("case-study-leaf-psii")`).
 
 **Grouped `CTmax` and `z`.** Put a grouping factor on a sub-parameter to estimate a
 separate, directly profile-able `CTmax` and `z` per group, with one shared curve
-shape (the `bayesTLS` constant-shape configuration):
+shape (the `bayesTLS` constant-shape configuration). In the formula, `z` enters on
+its internal log scale as `log_z` (and steepness as `log_k`), so the grouped term is
+written `log_z ~ group`:
 
 ```{r grouped}
 dat_grp <- simulate_tls(

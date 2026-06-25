@@ -268,7 +268,7 @@ wide lens reads as a confidence *interval*, not a probability density, and a
 profile that did not close would render as a hollow point with **no** lens. All
 seven profiles here close, so every row carries a lens.
 
-```{r panel, fig.width = 7.5, fig.height = 6, fig.alt = "Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: seven pale horizontal confidence-interval lenses with hollow point estimates, one per taxon/group, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near 44.6, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, snow gum near 3.7, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale."}
+```{r panel, fig.width = 9, fig.height = 6, fig.alt = "Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: seven pale horizontal confidence-interval lenses with hollow point estimates, one per taxon/group, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near 44.6, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, snow gum near 3.7, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale."}
 # Build the honest Confidence-Eye geometry by hand so all four fits share one
 # cross-taxon panel: a cosine-tapered pale lens (width = confidence interval)
 # plus a hollow point, faceted by parameter with free x-axes. This reuses the
@@ -284,7 +284,7 @@ row_order <- c(
 )
 panel$row <- match(panel$label, row_order)
 panel$parameter <- factor(panel$parameter, levels = c("CTmax", "z"),
-                          labels = c("CTmax (°C)", "z (°C / decade time)"))
+                          labels = c("CTmax (°C)", "z (°C / decade)"))
 
 # One cosine-tapered lens polygon per row (tallest at the estimate, zero at each
 # bound), built per facet so the free x-axes do not distort the taper.
@@ -327,6 +327,9 @@ ggplot2::ggplot() +
   ggplot2::scale_y_continuous(
     breaks = seq_along(row_order), labels = row_order,
     trans = "reverse", expand = ggplot2::expansion(add = 0.7)
+  ) +
+  ggplot2::scale_x_continuous(
+    expand = ggplot2::expansion(mult = c(0.05, 0.20))
   ) +
   ggplot2::facet_wrap(~ parameter, scales = "free_x") +
   ggplot2::labs(

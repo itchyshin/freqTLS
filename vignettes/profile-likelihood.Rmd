@@ -164,8 +164,11 @@ The interval is open (an `NA` endpoint and an `open_*` status) rather than a con
 but unsupported bound. The Confidence Eye honours this too: a non-closing profile draws a
 **hollow point with no lens**, never a fabricated closed eye.
 
-```{r non-closing-eye, fig.alt = "Confidence Eye for a weakly identified fit: hollow point estimates with no confidence lens, signalling that the profile did not close."}
-suppressWarnings(plot_confidence_eye(sparse_fit, parm = "CTmax", method = "profile"))
+```{r non-closing-eye, fig.alt = "Confidence Eye for a weakly identified fit: a hollow point estimate with no confidence lens, signalling that the profile did not close."}
+# fallback = FALSE so the eye refuses to draw a lens when the profile does not
+# close (a hollow point only), matching the honest non-closing contract above.
+suppressWarnings(plot_confidence_eye(sparse_fit, parm = "CTmax", method = "profile",
+                                     fallback = FALSE))
 ```
 
 ## Calibration: how well do the intervals cover?
