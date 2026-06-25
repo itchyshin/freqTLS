@@ -8,10 +8,10 @@
 death-time model by maximum likelihood via
 [TMB](https://github.com/kaskr/adcomp), parameterised **directly** in
 `CTmax` (critical thermal maximum) and `z` (thermal sensitivity). It
-then returns prior-free, asymmetry-respecting **profile-likelihood
-confidence intervals** for binomial and beta-binomial survival counts,
-and — since v0.2 — for continuous **proportion** responses in `(0, 1)`
-via the beta family.
+then returns prior-free **frequentist confidence intervals** — Wald,
+profile-likelihood (asymmetry-respecting), and bootstrap — for binomial
+and beta-binomial survival counts, and for continuous **proportion**
+responses in `(0, 1)` via the beta family.
 
 Its signature display is the **Confidence Eye**: a pale horizontal lens
 spanning the likelihood interval, with a hollow point estimate. These
@@ -40,32 +40,30 @@ probability density.](reference/figures/README-readme-eye-1.png)
   (set `fallback = FALSE` to keep the open profile, which the Confidence
   Eye draws as an open lens).
 - Ships a tidy column interface
-  ([`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)),
-  a `brms`/`drmTMB`-style **formula interface**
-  ([`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md)),
-  prediction, lethal-time derivation, and plotting (survival curves, the
-  survival surface, and the Confidence Eye).
-- **v0.2** adds a random intercept on `CTmax`
-  (`CTmax ~ <fixed> + (1 | group)`, with profile intervals for the fixed
-  effects), grouped covariate effects on the shape parameters (`low` /
-  `up` / `log_k`), the critical-temperature derivations
+  ([`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md))
+  and a `brms`/`drmTMB`-style **formula interface**
+  ([`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md))
+  with fixed-effect predictors on any sub-parameter (`CTmax`, `log_z`,
+  `low`, `up`, `log_k`), plus prediction, lethal-time derivation, and
+  plotting (survival curves, the survival surface, and the Confidence
+  Eye).
+- Fits **random intercepts** on `CTmax`, `log_z`, `low`, and `log_k`
+  (`<param> ~ <fixed> + (1 | group)`), with profile intervals for the
+  fixed effects; they combine freely, and sharing a grouping factor fits
+  *independent* variances (no correlation term) and warns.
+- Derives critical temperatures —
   [`derive_ctmax()`](https://itchyshin.github.io/freqTLS/reference/derive_ctmax.md)
   (absolute threshold) and
   [`derive_tcrit()`](https://itchyshin.github.io/freqTLS/reference/derive_tcrit.md)
-  (rate-multiplier), and deterministic heat-injury prediction
-  ([`predict_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/predict_heat_injury.md)).
+  (rate-multiplier) — and predicts **heat injury** under a temperature
+  trace
+  ([`predict_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/predict_heat_injury.md))
+  with a prior-free bootstrap confidence band
+  ([`heat_injury_envelope()`](https://itchyshin.github.io/freqTLS/reference/heat_injury_envelope.md),
+  [`plot_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/plot_heat_injury.md)).
   See
   [`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)
   for how the likelihood and Bayesian paths compare.
-- **v0.3** extends random intercepts beyond `CTmax` to thermal
-  sensitivity and the curve shape: `log_z`, `low`, and `log_k` can each
-  carry `<param> ~ <fixed> + (1 | group)`. They combine freely; sharing
-  a grouping factor fits *independent* variances (no correlation term)
-  and warns. It also adds a prior-free heat-injury bootstrap confidence
-  band
-  ([`heat_injury_envelope()`](https://itchyshin.github.io/freqTLS/reference/heat_injury_envelope.md)
-  and
-  [`plot_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/plot_heat_injury.md)).
 
 ## Why not the two-stage workflow
 
@@ -255,8 +253,8 @@ biased low with few groups.
 Two populations can differ not only in *where* the thermal-death curve
 sits (`CTmax`, `z`) but in its *shape* — how steeply survival collapses
 with exposure (`k`), or the background and maximum survival (`low`,
-`up`). Since v0.2 the formula interface lets `low`, `up`, and `log_k`
-vary by a grouping factor, relaxing the shared-shape restriction. Here a
+`up`). The formula interface lets `low`, `up`, and `log_k` vary by a
+grouping factor, relaxing the shared-shape restriction. Here a
 heat-tolerant and a heat-sensitive population differ in both `CTmax` and
 the curve steepness `k`:
 

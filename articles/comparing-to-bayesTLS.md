@@ -231,9 +231,9 @@ the speed gap concrete:
 
 | Estimator           | Task                       | Wall-clock | Source |
 |:--------------------|:---------------------------|:-----------|:-------|
-| freqTLS             | fit (ML)                   | 30 ms      | live   |
-| freqTLS             | fit + Wald CTmax & z       | 35 ms      | live   |
-| freqTLS             | fit + profile CTmax & z    | 815 ms     | live   |
+| freqTLS             | fit (ML)                   | 29 ms      | live   |
+| freqTLS             | fit + Wald CTmax & z       | 34 ms      | live   |
+| freqTLS             | fit + profile CTmax & z    | 814 ms     | live   |
 | classical two-stage | fit + delta CI             | 1.4 s      | cached |
 | bayesTLS            | fit (4 chains x 4000 MCMC) | 5.0 s      | cached |
 
@@ -386,16 +386,15 @@ interval. `freqTLS` deliberately never renders a posterior-style density
 for its own intervals, and its prose uses “confidence” language, never
 “posterior” or “credible”.
 
-## Beyond the matched shape: stage-specific curves (v0.2)
+## Beyond the matched shape: stage-specific curves
 
 The three-way comparison holds the shape constant (`low`, `up`, `k`
 shared across temperatures and groups) so all three estimators target
 the *same* curve — that is what makes the benchmark fair. `freqTLS` can
-also relax that restriction: since v0.2 the shape parameters `low`,
-`up`, and `log_k` may vary by a grouping factor. Re-fitting
-`zebrafish_lethal` with stage-specific shapes and comparing by AIC asks
-whether the life stages differ in more than thermal *location* (`CTmax`,
-`z`):
+also relax that restriction: the shape parameters `low`, `up`, and
+`log_k` may vary by a grouping factor. Re-fitting `zebrafish_lethal`
+with stage-specific shapes and comparing by AIC asks whether the life
+stages differ in more than thermal *location* (`CTmax`, `z`):
 
 ``` r
 
