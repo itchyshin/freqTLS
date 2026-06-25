@@ -3,11 +3,11 @@
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) for a
 `"profile_tls_profile"` object draws the likelihood-ratio deviance curve
 against the natural-scale parameter. A dotted horizontal line marks the
-chi-square cutoff `qchisq(level, 1)`; a solid vertical line marks the
-point estimate; dashed vertical lines mark the interval endpoints when
-they are finite. The wording is deliberately "confidence" – this is a
-likelihood curve, never a posterior (SPEC.md S13). A non-closing side is
-annotated rather than drawn as a closed bound.
+profile-t cutoff `qt(1 - alpha/2, df)^2`; a solid vertical line marks
+the point estimate; dashed vertical lines mark the interval endpoints
+when they are finite. The wording is deliberately "confidence" – this is
+a likelihood curve, never a posterior (SPEC.md S13). A non-closing side
+is annotated rather than drawn as a closed bound.
 
 ## Usage
 

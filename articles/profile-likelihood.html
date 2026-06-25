@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -112,12 +114,30 @@ the profile log-likelihood
 <li>Form the deviance
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><mover><mi>ℓ</mi><mo accent="true">̂</mo></mover><mo>−</mo><msub><mi>ℓ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D(\psi) = 2\,(\hat\ell - \ell_p(\psi))</annotation></semantics></math>.</li>
 <li>The confidence interval is the set
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mi>ψ</mi><mo>:</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msubsup><mi>χ</mi><mrow><mn>1</mn><mo>,</mo><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></mrow><mn>2</mn></msubsup><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{\psi : D(\psi) \le \chi^2_{1,\,\mathrm{level}}\}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mi>ψ</mi><mo>:</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msubsup><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mi>/</mi><mn>2</mn><mo>,</mo><mspace width="0.167em"></mspace><mi>ν</mi></mrow><mn>2</mn></msubsup><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{\psi : D(\psi) \le t^2_{1-\alpha/2,\,\nu}\}</annotation></semantics></math>,
 found by root-finding on each side of the MLE.</li>
 </ol>
-<p>At the MLE the deviance is (numerically) zero, and the cutoff is the
-chi-square quantile with one degree of freedom. <code><a href="https://rdrr.io/r/stats/profile.html" class="external-link">profile()</a></code>
-returns the whole deviance curve plus the interval:</p>
+<p>At the MLE the deviance is (numerically) zero. The cutoff is the
+<strong>squared
+Student-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+quantile</strong>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mi>/</mi><mn>2</mn><mo>,</mo><mspace width="0.167em"></mspace><mi>ν</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">t^2_{1-\alpha/2,\,\nu}</annotation></semantics></math>
+on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>=</mo><mi>n</mi><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">\nu = n - p</annotation></semantics></math>
+residual degrees of freedom (data rows minus free fixed-effect
+coordinates), not the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\chi^2_1</annotation></semantics></math>
+quantile: this is the Bates–Watts
+profile-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+calibration, which is less optimistic at small
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+and converges to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\chi^2_1</annotation></semantics></math>
+as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\nu \to \infty</annotation></semantics></math>
+(see <code><a href="../articles/frequentist-and-bayesian.html">vignette("frequentist-and-bayesian")</a></code>).
+<code><a href="https://rdrr.io/r/stats/profile.html" class="external-link">profile()</a></code> returns the whole deviance curve plus the
+interval:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"beta_binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, phi <span class="op">=</span> <span class="fl">50</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -130,11 +150,12 @@ returns the whole deviance curve plus the interval:</p>
 <span><span class="co">#&gt;     estimate     conf.low    conf.high       cutoff min_deviance </span></span>
 <span><span class="co">#&gt;    36.004832    35.747797    36.268991     3.937117     0.000000</span></span></code></pre></div>
 <p>The deviance minimum sits essentially at zero, at the estimate.
-Plotting the profile shows the deviance curve, the chi-square cutoff
-line, and the interval where the curve dips below it:</p>
+Plotting the profile shows the deviance curve, the
+profile-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+cutoff line, and the interval where the curve dips below it:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pc</span><span class="op">)</span></span></code></pre></div>
-<p><img src="profile-likelihood_files/figure-html/profile-plot-1.png" class="r-plt" alt="Profile-likelihood deviance curve for CTmax: a U-shaped curve with a horizontal chi-square cutoff line; the confidence interval is where the curve lies below the cutoff." width="576"></p>
+<p><img src="profile-likelihood_files/figure-html/profile-plot-1.png" class="r-plt" alt="Profile-likelihood deviance curve for CTmax: a U-shaped curve with a horizontal profile-t cutoff line; the confidence interval is where the curve lies below the cutoff." width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="asymmetry-and-equivariance">Asymmetry and equivariance<a class="anchor" aria-label="anchor" href="#asymmetry-and-equivariance"></a>
@@ -191,8 +212,8 @@ parameter table:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">fit</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"interval_type"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"up"</span> is profiled with the delta-method Wald interval.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The nested-gap asymptote reparameterisation has no single internal coordinate</span></span>
-<span><span class="co">#&gt;   for <span style="color: #0000BB;">"up"</span> (SPEC.md S10).</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The profile path is not yet wired for the disjoint-bounds <span style="color: #0000BB;">"up"</span> coordinate</span></span>
+<span><span class="co">#&gt;   `beta_up` (SPEC.md S10).</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
 <span><span class="co">#&gt;   parameter estimate conf.low conf.high interval_type</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
@@ -205,10 +226,11 @@ parameter table:</p>
 <div class="section level3">
 <h3 id="the-upper-asymptote-up">The upper asymptote <code>up</code><a class="anchor" aria-label="anchor" href="#the-upper-asymptote-up"></a>
 </h3>
-<p>Under the nested-gap parameterisation <code>up</code> has no single
-internal coordinate, so it cannot be profiled on one coordinate.
-<code>freqTLS</code> reports <code>up</code> with the delta-method Wald
-interval and labels it honestly —
+<p>Under the disjoint-bounds parameterisation <code>up</code> has its
+own coordinate <code>beta_up</code>, but <code>freqTLS</code> does not
+yet profile it (the profile path is wired for <code>low</code> but not
+<code>up</code>). <code>freqTLS</code> reports <code>up</code> with the
+delta-method Wald interval and labels it honestly —
 <code>confint(fit, "up", method = "profile")</code> returns
 <code>interval_type = "wald"</code> and emits an informational message
 rather than silently substituting a different quantity.</p>
@@ -284,11 +306,11 @@ bound. The Confidence Eye honours this too: a non-closing profile draws
 a <strong>hollow point with no lens</strong>, never a fabricated closed
 eye.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">sparse_fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
-<span><span class="co">#&gt;   non-closing side).</span></span></code></pre></div>
-<p><img src="profile-likelihood_files/figure-html/non-closing-eye-1.png" class="r-plt" alt="Confidence Eye for a weakly identified fit: hollow point estimates with no confidence lens, signalling that the profile did not close." width="576"></p>
+<code class="sourceCode R"><span><span class="co"># fallback = FALSE so the eye refuses to draw a lens when the profile does not</span></span>
+<span><span class="co"># close (a hollow point only), matching the honest non-closing contract above.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">sparse_fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>,</span>
+<span>                                     fallback <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="profile-likelihood_files/figure-html/non-closing-eye-1.png" class="r-plt" alt="Confidence Eye for a weakly identified fit: a hollow point estimate with no confidence lens, signalling that the profile did not close." width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="calibration-how-well-do-the-intervals-cover">Calibration: how well do the intervals cover?<a class="anchor" aria-label="anchor" href="#calibration-how-well-do-the-intervals-cover"></a>

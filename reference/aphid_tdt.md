@@ -7,8 +7,8 @@ heat branch (34–40 degrees C) or a cold branch (-11 to -3 degrees C) for
 a range of durations and scored alive/dead after recovery. One row per
 assay group; `branch` flags the heat vs cold series. Subset to one
 `branch` (and typically one `age`) and fit `CTmax` and `z` as functions
-of `species` in one joint 4PL to compare species with full posterior
-uncertainty.
+of `species` in one joint 4PL to compare species with profile-likelihood
+confidence intervals on every quantity.
 
 ## Usage
 

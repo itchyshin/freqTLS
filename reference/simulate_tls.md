@@ -121,7 +121,7 @@ simulate_tls(
   asymptote `low` (logit scale)** and on the steepness **`log(k)`** —
   the shape-coordinate analogues of `re_sd` / `re_sd_z`
   (`low_g = plogis(qlogis(low) + d_g)`, `k_g = exp(log(k) + e_g)`; `up`
-  tracks `low` through the fixed nested gap). They combine freely with
+  tracks `low` by a fixed head-room fraction). They combine freely with
   `re_sd` / `re_sd_z`; realised deviations are in
   `attr(, "truth")$b_low` / `$b_logk`.
 

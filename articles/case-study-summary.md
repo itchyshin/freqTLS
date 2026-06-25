@@ -26,7 +26,10 @@ physiology:
 - **brown shrimp** *Crangon crangon* – a crustacean, lethal mortality,
   ungrouped;
 - **zebrafish** *Danio rerio* – a fish, lethal mortality, across three
-  life stages (young embryos, old embryos, larvae);
+  life stages (young embryos, old embryos, larvae); this panel uses the
+  `zebrafish_lethal` life-stage dataset — a *separate* experiment from
+  the oxygen-gradient `zebrafish_o2` data in
+  [`vignette("case-study-zebrafish")`](https://itchyshin.github.io/freqTLS/articles/case-study-zebrafish.md);
 - **snow gum** *Eucalyptus pauciflora* – a plant, a **functional**
   (sublethal) endpoint, the retained proportion of photosystem-II
   efficiency (`Fv/Fm`);
@@ -39,8 +42,9 @@ developmental stage), a plant’s photosynthetic machinery, and an insect
 (resolved by sex)? `CTmax` (the critical temperature at a fixed
 reference exposure) places each taxon on the temperature axis; `z` (the
 change in temperature, in degrees Celsius, that multiplies tolerated
-exposure time tenfold) measures how steeply tolerance trades off against
-duration.
+exposure time tenfold) measures how sharply tolerated exposure responds
+to temperature: a *smaller* `z` is a steeper response (a small warming
+sharply cuts tolerated time), a *larger* `z` a more gradual one.
 
 **One caveat governs the whole panel.** The reference exposures differ
 by study, because each follows the convention of its source assay:
@@ -266,7 +270,7 @@ row_order <- c(
 )
 panel$row <- match(panel$label, row_order)
 panel$parameter <- factor(panel$parameter, levels = c("CTmax", "z"),
-                          labels = c("CTmax (°C)", "z (°C / decade time)"))
+                          labels = c("CTmax (°C)", "z (°C / decade)"))
 
 # One cosine-tapered lens polygon per row (tallest at the estimate, zero at each
 # bound), built per facet so the free x-axes do not distort the taper.
@@ -309,6 +313,9 @@ ggplot2::ggplot() +
   ggplot2::scale_y_continuous(
     breaks = seq_along(row_order), labels = row_order,
     trans = "reverse", expand = ggplot2::expansion(add = 0.7)
+  ) +
+  ggplot2::scale_x_continuous(
+    expand = ggplot2::expansion(mult = c(0.05, 0.20))
   ) +
   ggplot2::facet_wrap(~ parameter, scales = "free_x") +
   ggplot2::labs(
@@ -413,14 +420,18 @@ no clear sex difference in either thermal limit, the same conclusion
 
 Three things stand out from the panel:
 
-- **The plant’s photosynthetic endpoint is the steepest.** Snow gum PSII
-  has the largest `z` (about 3.7 degrees Celsius per tenfold time), so
-  its tolerated exposure collapses faster with temperature than the
-  animals’ lethal endpoints (`z` between roughly 1.8 and 3.2). Its
-  `CTmax` is also the highest, on the same one-hour reference as the
-  shrimp and zebrafish; only the *D. suzukii* `CTmax` sits at a
-  different (four-hour) reference, so that row alone is off the common
-  time scale.
+- **The plant’s photosynthetic endpoint is the most gradual.** Snow gum
+  PSII has the largest `z` (about 3.7 degrees Celsius per tenfold time),
+  so its tolerated exposure collapses *most gradually* with temperature
+  — it takes the largest temperature rise to cut the tolerated time
+  tenfold (the rate of collapse scales as `1/z`) — whereas the animals’
+  lethal endpoints (`z` between roughly 1.8 and 3.2) fall more steeply.
+  Snow gum’s `CTmax` is also the highest on the shared one-hour
+  reference, but it is the temperature of half-PSII-loss, **not** a
+  lethal temperature, so it should not be read as ranking the plant
+  above the animals on a single tolerance scale; only the `z` comparison
+  is like-for-like across all rows. (The *D. suzukii* `CTmax` sits at a
+  four-hour reference, so that row is also off the common time scale.)
 
 - **Resolving a taxon by an internal axis can matter or not.** Zebrafish
   life stage shifts `CTmax` by over a degree (old embryos are the most

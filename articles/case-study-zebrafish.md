@@ -2,11 +2,14 @@
 
 This article fits a lethal thermal-death-time (TDT) model to zebrafish
 (*Danio rerio*) larvae assayed under three oxygen treatments —
-**hypoxia, normoxia, and hyperoxia** — and asks the **oxygen- and
-capacity-limited thermal tolerance** (OCLTT) question: does oxygen
-availability set the upper thermal limit? If it does, the critical
-temperature `CTmax` and the thermal-sensitivity slope `z` should shift
-with the oxygen treatment. It mirrors the zebrafish case study in
+**hypoxia, normoxia, and hyperoxia** — and asks a question motivated by
+the **oxygen- and capacity-limited thermal tolerance** (OCLTT)
+hypothesis (Pörtner 2001): does oxygen availability shift the upper
+thermal limit? OCLTT is actively debated rather than settled (see, e.g.,
+Jutfelt et al. 2018), so the framing here is hypothesis-testing, not
+mechanism confirmation: if oxygen matters, the critical temperature
+`CTmax` and the thermal-sensitivity slope `z` should shift with the
+oxygen treatment. It mirrors the zebrafish case study in
 [`bayesTLS`](https://github.com/daniel1noble/bayesTLS), fit here by
 maximum likelihood instead of MCMC.
 
@@ -102,7 +105,7 @@ ox$summary
 #> 6 hyperoxia z          3.25  2.91  3.64
 ```
 
-Read off the OCLTT signal in `CTmax` (the one-hour critical
+Evaluate the OCLTT prediction with `CTmax` (the one-hour critical
 temperature): the treatments order from lowest to highest as **hypoxia
 (31.9 °C) \< normoxia (39.0 °C) \< hyperoxia (39.1 °C)**. Under the
 OCLTT hypothesis, restricting oxygen should *lower* the thermal limit,

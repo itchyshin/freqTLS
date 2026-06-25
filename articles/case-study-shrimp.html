@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -141,7 +143,12 @@ for <code>CTmax</code> and <code>z</code> with <code><a href="../reference/tls.h
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax     31.8  31.6  31.9 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> z          2.19  1.96  2.46</span></span></code></pre></div>
 <p><code>CTmax</code> lands near 31.8 °C and <code>z</code> near 2.2 °C,
-each with a narrow asymmetry- respecting profile interval.</p>
+each with a narrow asymmetry- respecting profile interval. Biologically,
+<code>z</code> ≈ 2.2 °C is the temperature change that scales the
+tolerated exposure tenfold: an exposure that is lethal in about an hour
+at 31.8 °C would be lethal in ~6 minutes at 34.0 °C, or take ~10 hours
+at 29.6 °C. A larger <code>z</code> would mean tolerance declines more
+gradually with temperature; a smaller <code>z</code>, more steeply.</p>
 </div>
 <div class="section level2">
 <h2 id="seeing-the-fit">Seeing the fit<a class="anchor" aria-label="anchor" href="#seeing-the-fit"></a>
@@ -156,7 +163,7 @@ the parameter — it is a likelihood confidence display, not a posterior
 density.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">shrimp_fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="case-study-shrimp_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for the shrimp CTmax and z: pale confidence lenses with hollow point estimates, the freqTLS uncertainty display. Both profiles close, so each eye is a filled lens." width="576"></p>
+<p><img src="case-study-shrimp_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for the shrimp CTmax and z: pale confidence lenses with hollow point estimates, the freqTLS uncertainty display. Both profiles close, so each eye is a closed lens." width="576"></p>
 </div>
 <div class="section level3">
 <h3 id="survival-curves">Survival curves<a class="anchor" aria-label="anchor" href="#survival-curves"></a>
@@ -200,9 +207,11 @@ absolute temperature giving 50% survival at a one-hour exposure;
 the rate-multiplier <code>T_crit</code> is about 27.4 °C. These are
 deterministic transforms of the fitted <code>CTmax</code> /
 <code>z</code>, not new fits. (<code><a href="../reference/derive_tcrit.html">derive_tcrit()</a></code> prints an
-explicit lethal-endpoint caveat: on sublethal data the steeper
-<code>z</code> would make <code>T_crit</code> implausibly low. Shrimp
-lethal TDT is a lethal endpoint, so the value stands.)</p>
+explicit lethal-endpoint caveat: on a sublethal endpoint the
+<code>z</code> is estimated from a functional decline rather than death,
+so feeding it into a lethal-damage accumulator can drive
+<code>T_crit</code> to implausible values. Shrimp lethal TDT is a lethal
+endpoint, so the value stands.)</p>
 </div>
 <div class="section level2">
 <h2 id="the-three-way-comparison-with-real-numbers">The three-way comparison, with real numbers<a class="anchor" aria-label="anchor" href="#the-three-way-comparison-with-real-numbers"></a>

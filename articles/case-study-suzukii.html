@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -134,11 +136,17 @@ emphasis:</p>
 <strong><code>time</code> is in minutes.</strong> The reference
 exposure for this study is <strong>4 hours = 240 minutes</strong>, so we
 set <code>tref = 240</code>.</li>
-<li>The threshold is <strong>absolute</strong> (a fixed 50% survival),
-following Ørsted, rather than the relative midpoint used for the shrimp
-and zebrafish case studies. In <code>freqTLS</code> the default
-<code>derive_*</code> behaviour at <code>surv = 0.5</code> is exactly
-this absolute LT50, so no extra argument is needed here.</li>
+<li>We interpret the threshold as <strong>absolute</strong> (a fixed 50%
+survival), following Ørsted. The model itself is still parameterised by
+the <strong>relative midpoint</strong> (<code>CTmax</code> is the 4PL
+midpoint, the <code>(low + up)/2</code> survival level). The relative
+and absolute thresholds coincide only when the asymptotes sit near 0 and
+1 — which they do for these data (<code>low</code> ≈ 0, <code>up</code>
+≈ 1, confirmed in the fit below), so <code>derive_*</code> at
+<code>surv = 0.5</code> recovers the absolute LT50 with no extra
+argument. If your own data have asymptotes far from 0/1, the two
+thresholds diverge and you must pass the <code>surv</code> you want
+explicitly.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -302,8 +310,9 @@ indistinguishable.</li>
 <li>
 <code>dz:F-M</code> = <strong>0.054 [-0.021, 0.128]</strong> on the
 log-<code>z</code> scale (a <code>z</code> ratio of
-<code>exp(0.054)</code> ≈ 1.06, i.e. males about 6% steeper), with a
-confidence interval that includes 0 (ratio 1).</li>
+<code>exp(0.054)</code> ≈ 1.06, a point estimate of about a 6%
+difference in <code>z</code> between the sexes), with a confidence
+interval that includes 0 (ratio 1).</li>
 </ul>
 <p>This agrees with the published finding: Ørsted reported a sex
 difference in <code>z</code> whose interval spans zero, i.e. <strong>no

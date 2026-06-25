@@ -66,7 +66,12 @@ tls(shrimp_fit, method = "profile")$summary
 ```
 
 `CTmax` lands near 31.8 °C and `z` near 2.2 °C, each with a narrow
-asymmetry- respecting profile interval.
+asymmetry- respecting profile interval. Biologically, `z` ≈ 2.2 °C is
+the temperature change that scales the tolerated exposure tenfold: an
+exposure that is lethal in about an hour at 31.8 °C would be lethal in
+~6 minutes at 34.0 °C, or take ~10 hours at 29.6 °C. A larger `z` would
+mean tolerance declines more gradually with temperature; a smaller `z`,
+more steeply.
 
 ## Seeing the fit
 
@@ -84,7 +89,7 @@ plot_confidence_eye(shrimp_fit, parm = c("CTmax", "z"), method = "profile")
 
 ![Confidence Eye for the shrimp CTmax and z: pale confidence lenses with
 hollow point estimates, the freqTLS uncertainty display. Both profiles
-close, so each eye is a filled
+close, so each eye is a closed
 lens.](case-study-shrimp_files/figure-html/eye-1.png)
 
 ### Survival curves
@@ -143,9 +148,10 @@ The 50%-survival critical temperature at one hour is about 31.7 °C; the
 rate-multiplier `T_crit` is about 27.4 °C. These are deterministic
 transforms of the fitted `CTmax` / `z`, not new fits.
 ([`derive_tcrit()`](https://itchyshin.github.io/freqTLS/reference/derive_tcrit.md)
-prints an explicit lethal-endpoint caveat: on sublethal data the steeper
-`z` would make `T_crit` implausibly low. Shrimp lethal TDT is a lethal
-endpoint, so the value stands.)
+prints an explicit lethal-endpoint caveat: on a sublethal endpoint the
+`z` is estimated from a functional decline rather than death, so feeding
+it into a lethal-damage accumulator can drive `T_crit` to implausible
+values. Shrimp lethal TDT is a lethal endpoint, so the value stands.)
 
 ## The three-way comparison, with real numbers
 

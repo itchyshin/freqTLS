@@ -163,6 +163,16 @@ panel_trace <- ggplot(hi, aes(time / 24, temp)) +
            hjust = 0, size = 3, colour = "grey30") +
   labs(x = NULL, y = "Temp (°C)") +
   theme_bw(base_size = 11)
+print(panel_trace)
+```
+
+![Diel temperature trace over five days: a daily cycle oscillating
+between about 20 and 30 degrees C, with a dashed line at the fitted
+CTmax (31.8 C, above all peaks) and a dotted line at T_crit (27.4 C,
+crossed by the afternoon
+peaks).](heat-injury_files/figure-html/plot-trace-1.png)
+
+``` r
 
 panel_injury <- ggplot(hi, aes(time / 24, injury)) +
   geom_hline(yintercept = 100, linetype = "dashed", colour = "grey40") +
@@ -171,53 +181,27 @@ panel_injury <- ggplot(hi, aes(time / 24, injury)) +
            hjust = 0, size = 3, colour = "grey30") +
   labs(x = NULL, y = "Injury (%)") +
   theme_bw(base_size = 11)
+print(panel_injury)
+```
+
+![Cumulative heat injury over five days: a stepwise rise in injury
+percentage, crossing the 100%-of-one-lethal-dose dashed reference line
+near day three and reaching about 160% by day
+five.](heat-injury_files/figure-html/plot-injury-1.png)
+
+``` r
 
 panel_surv <- ggplot(hi, aes(time / 24, survival)) +
   geom_line(colour = "#1B7837", linewidth = 0.6) +
   labs(x = "Day", y = "Survival") +
   ylim(0, 1) +
   theme_bw(base_size = 11)
-
-# Simple vertical stack without extra package dependencies.
-print(panel_trace)
-```
-
-![Three stacked panels over five days. Top: the diel temperature trace
-oscillating between about 20 and 30 degrees C, with a dashed line at the
-fitted CTmax (31.8 C, above all peaks) and a dotted line at T_crit (27.4
-C, crossed by the afternoon peaks). Middle: cumulative heat injury
-rising in daily steps and crossing the 100%-of-one-lethal-dose reference
-line late on day four. Bottom: predicted survival declining in steps
-from the fitted ceiling near 0.94 to about 0.29 by day
-five.](heat-injury_files/figure-html/plot-three-1.png)
-
-``` r
-
-print(panel_injury)
-```
-
-![Three stacked panels over five days. Top: the diel temperature trace
-oscillating between about 20 and 30 degrees C, with a dashed line at the
-fitted CTmax (31.8 C, above all peaks) and a dotted line at T_crit (27.4
-C, crossed by the afternoon peaks). Middle: cumulative heat injury
-rising in daily steps and crossing the 100%-of-one-lethal-dose reference
-line late on day four. Bottom: predicted survival declining in steps
-from the fitted ceiling near 0.94 to about 0.29 by day
-five.](heat-injury_files/figure-html/plot-three-2.png)
-
-``` r
-
 print(panel_surv)
 ```
 
-![Three stacked panels over five days. Top: the diel temperature trace
-oscillating between about 20 and 30 degrees C, with a dashed line at the
-fitted CTmax (31.8 C, above all peaks) and a dotted line at T_crit (27.4
-C, crossed by the afternoon peaks). Middle: cumulative heat injury
-rising in daily steps and crossing the 100%-of-one-lethal-dose reference
-line late on day four. Bottom: predicted survival declining in steps
-from the fitted ceiling near 0.94 to about 0.29 by day
-five.](heat-injury_files/figure-html/plot-three-3.png)
+![Predicted survival over five days: declining in steps from the fitted
+ceiling near 0.94, tracking each afternoon heating episode, to about
+0.29 by day five.](heat-injury_files/figure-html/plot-survival-1.png)
 
 (The three panels share the day axis; they are printed separately to
 avoid a layout dependency. The survival curve is monotone because

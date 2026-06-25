@@ -26,8 +26,9 @@ library(freqTLS)
 draws survival counts from the locked data-generating process: a
 factorial grid of assay temperatures and exposure durations, with the
 4PL evaluated at the supplied true `CTmax`, `z`, and shape parameters.
-We use the overdispersed beta-binomial family here (`phi` controls the
-overdispersion).
+We use the overdispersed beta-binomial family here; `phi` is its
+precision parameter — larger `phi` means *less* overdispersion,
+approaching the ordinary binomial as `phi` grows.
 
 ``` r
 
@@ -78,7 +79,15 @@ names the temperature, duration, and survival-count columns and records
 the data contract; then
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
 fits the 4PL by maximum likelihood and returns a `freq_tls` workflow
-object. (`t_ref` is the reference time at which `CTmax` is defined.)
+object. `t_ref` is the reference time at which `CTmax` is defined: the
+twin facade
+[`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
+uses the `bayesTLS` spelling `t_ref` (default 60), while the lower-level
+engine
+[`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
+(below) uses `tref` (default 1) — the same quantity, in the data’s
+duration unit. The simulated durations here are already in reference
+units, so we pass `1`.
 
 ``` r
 
@@ -194,8 +203,10 @@ headline quantities are model *coordinates*, so they can be profiled
 directly. [`confint()`](https://rdrr.io/r/stats/confint.html) with
 `method = "profile"` (the default) inverts the likelihood-ratio test:
 the interval is the set of values whose deviance from the maximum stays
-below the chi-square cutoff, found by root-finding on each side of the
-MLE.
+below the profile-$`t`$ cutoff (a squared Student-$`t`$ quantile on the
+residual degrees of freedom, not $`\chi^2_1`$; see
+[`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)),
+found by root-finding on each side of the MLE.
 
 ``` r
 
@@ -276,7 +287,9 @@ proportion in (0, 1) with no trials column; see
 **Grouped `CTmax` and `z`.** Put a grouping factor on a sub-parameter to
 estimate a separate, directly profile-able `CTmax` and `z` per group,
 with one shared curve shape (the `bayesTLS` constant-shape
-configuration):
+configuration). In the formula, `z` enters on its internal log scale as
+`log_z` (and steepness as `log_k`), so the grouped term is written
+`log_z ~ group`:
 
 ``` r
 

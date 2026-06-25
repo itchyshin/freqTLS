@@ -45,9 +45,9 @@ factor or match the `CTmax` / `log_z` grouping. `CTmax` and `log_z`
 accept any fixed-effect formula (e.g. `CTmax ~ group`). A single random
 intercept, `<param> ~ <fixed> + (1 | group)`, is accepted on `CTmax`,
 `log_z`, `low`, and `log_k` (one grouping factor each, intercept only) –
-but not on the upper asymptote `up`, whose nested gap has no single
-coordinate. Putting the same grouping factor on two or more of them fits
-independent variances (no correlation term) and warns.
+but not on the upper asymptote `up`, for which the compiled objective
+has no random-intercept term. Putting the same grouping factor on two or
+more of them fits independent variances (no correlation term) and warns.
 
 ## Parser provenance
 

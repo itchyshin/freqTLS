@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -106,8 +108,10 @@ and needs no Stan, no MCMC, and no internet.</p>
 data-generating process: a factorial grid of assay temperatures and
 exposure durations, with the 4PL evaluated at the supplied true
 <code>CTmax</code>, <code>z</code>, and shape parameters. We use the
-overdispersed beta-binomial family here (<code>phi</code> controls the
-overdispersion).</p>
+overdispersed beta-binomial family here; <code>phi</code> is its
+precision parameter — larger <code>phi</code> means <em>less</em>
+overdispersion, approaching the ordinary binomial as <code>phi</code>
+grows.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span></span>
@@ -151,8 +155,13 @@ handy for checking recovery:</p>
 First <code><a href="../reference/standardize_data.html">standardize_data()</a></code> names the temperature, duration,
 and survival-count columns and records the data contract; then
 <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> fits the 4PL by maximum likelihood and returns a
-<code>freq_tls</code> workflow object. (<code>t_ref</code> is the
-reference time at which <code>CTmax</code> is defined.)</p>
+<code>freq_tls</code> workflow object. <code>t_ref</code> is the
+reference time at which <code>CTmax</code> is defined: the twin facade
+<code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> uses the <code>bayesTLS</code> spelling
+<code>t_ref</code> (default 60), while the lower-level engine
+<code><a href="../reference/fit_tls.html">fit_tls()</a></code> (below) uses <code>tref</code> (default 1) — the
+same quantity, in the data’s duration unit. The simulated durations here
+are already in reference units, so we pass <code>1</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
@@ -252,8 +261,14 @@ parameterisation is that both headline quantities are model
 <em>coordinates</em>, so they can be profiled directly.
 <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> with <code>method = "profile"</code> (the
 default) inverts the likelihood-ratio test: the interval is the set of
-values whose deviance from the maximum stays below the chi-square
-cutoff, found by root-finding on each side of the MLE.</p>
+values whose deviance from the maximum stays below the
+profile-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+cutoff (a squared
+Student-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+quantile on the residual degrees of freedom, not
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\chi^2_1</annotation></semantics></math>;
+see <code><a href="../articles/frequentist-and-bayesian.html">vignette("frequentist-and-bayesian")</a></code>), found by
+root-finding on each side of the MLE.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
@@ -312,7 +327,9 @@ continuous proportion in (0, 1) with no trials column; see
 grouping factor on a sub-parameter to estimate a separate, directly
 profile-able <code>CTmax</code> and <code>z</code> per group, with one
 shared curve shape (the <code>bayesTLS</code> constant-shape
-configuration):</p>
+configuration). In the formula, <code>z</code> enters on its internal
+log scale as <code>log_z</code> (and steepness as <code>log_k</code>),
+so the grouped term is written <code>log_z ~ group</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat_grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span></span>
 <span>  temps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">42</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">8</span><span class="op">)</span>, reps <span class="op">=</span> <span class="fl">3</span>, n <span class="op">=</span> <span class="fl">20</span>,</span>

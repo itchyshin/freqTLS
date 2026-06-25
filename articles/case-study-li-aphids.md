@@ -22,8 +22,11 @@ the source and `citation("freqTLS")` when you use it (see
 [`?aphid_tdt`](https://itchyshin.github.io/freqTLS/reference/aphid_tdt.md)).
 It records survival counts in a temperature × duration grid for the
 three species, crossed with a cold and a heat exposure **branch** and
-three nymph **ages**. We take the **heat** branch at the focal age
-(6-day-old nymphs) and let `CTmax` and `z` depend on species.
+three nymph **ages**. We take the **heat** branch at a single focal age
+(6-day-old nymphs) so the cross-species comparison is made at one
+consistent developmental stage, and let `CTmax` and `z` depend on
+species. (The other ages and the cold branch are available in
+`aphid_tdt` for the same workflow.)
 
 ``` r
 

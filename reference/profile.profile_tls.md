@@ -6,7 +6,7 @@ profile-likelihood deviance curve for one scalar target of a
 model. For the target it fixes the corresponding internal
 (unconstrained) coordinate on a grid, re-optimises the remaining
 coordinates at each grid point, and returns the deviance
-`D = 2 * (logLik_hat - logLik_profile)` together with the chi-square
+`D = 2 * (logLik_hat - logLik_profile)` together with the profile-t
 cutoff and the profile-likelihood confidence interval. Because the
 profile is taken on the unconstrained coordinate and the endpoints are
 then transformed by a monotone function, the interval is exactly
@@ -93,13 +93,13 @@ endpoint solver in `drmTMB::R/profile.R:2314-2373`. See
 | `up` | (Wald/delta fallback) | – |
 | `dCTmax:<a>-<b>`, `dlog_z:<a>-<b>` | contrast recoding | identity |
 
-`up` has no single internal coordinate under the nested-gap asymptote
-reparameterisation (`up = low + (1 - low) * plogis(beta_up)`); profiling
-it would require rebuilding the compiled objective on a re-rooted
-`(up, low)` pair. freqTLS instead falls back to the delta-method Wald
-interval for `up` and says so (SPEC.md S10). Group contrasts (`dCTmax`,
-`dlog_z`) are profiled directly by recoding the design so the contrast
-is itself a coordinate.
+Under the disjoint-bounds parameterisation
+`up = up_min + up_w * plogis(beta_up)` has its own coordinate `beta_up`,
+but freqTLS does not yet profile it (the profile path is wired for `low`
+but not `up` – symmetric work, simply not implemented). freqTLS falls
+back to the delta-method Wald interval for `up` and says so (SPEC.md
+S10). Group contrasts (`dCTmax`, `dlog_z`) are profiled directly by
+recoding the design so the contrast is itself a coordinate.
 
 ## Examples
 

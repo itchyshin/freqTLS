@@ -9,7 +9,7 @@ boundary is `docs/dev-log/known-limitations.md` and
 `docs/design/46-capability-matrix.md`; the live phase board is
 `docs/dev-log/dashboard/`.
 
-**Version status:** 0.3.0 (experimental lifecycle).
+**Version status:** 0.1.0 (experimental lifecycle).
 
 Status legend: `initial` (scaffold only, not yet implemented),
 `implemented` (landed with tests, docs, examples, check-log, and an
@@ -76,10 +76,11 @@ no Stan in CI.
 ### Phase 6 – Docs and pkgdown site (implemented)
 
 Owners: documentation-writer + pkgdown-editor + Pat + Darwin +
-literature-curator + Grace. README, four vignettes (`getting-started`,
-`model-math`, `profile-likelihood`, `comparing-to-bayesTLS`), NEWS, the
-final `_pkgdown.yml`. **Gate:** `devtools::document()`,
-`devtools::test()`, `devtools::check()`, and
+literature-curator + Grace. README, the vignette suite (`freqTLS`,
+`model-math`, `profile-likelihood`, `random-effects`,
+`comparing-to-bayesTLS`, `frequentist-and-bayesian`, `heat-injury`, and
+the six case studies), NEWS, the final `_pkgdown.yml`. **Gate:**
+`devtools::document()`, `devtools::test()`, `devtools::check()`, and
 [`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html)
 are clean locally.
 

@@ -159,7 +159,7 @@ Small shared helpers (time conversion, interval formatting, quantiles).
 - [`clock_to_minutes()`](https://itchyshin.github.io/freqTLS/reference/clock_to_minutes.md)
   : Convert various clock formats to minutes
 - [`format_interval()`](https://itchyshin.github.io/freqTLS/reference/format_interval.md)
-  : Format a posterior median plus credible interval as a single string
+  : Format a point estimate plus confidence interval as a single string
 - [`tdt_quantile()`](https://itchyshin.github.io/freqTLS/reference/tdt_quantile.md)
   : Quantile wrapper with TDT-friendly defaults
 

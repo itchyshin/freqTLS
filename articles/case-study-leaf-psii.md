@@ -106,9 +106,14 @@ est[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
 
 PSII function collapses near **44.6 °C** at a one-hour exposure, with a
 thermal sensitivity `z` of about **3.7 °C per tenfold change in exposure
-time**. These are confidence intervals from the profile likelihood — the
-parameter values the data do not reject at the 95% level — not credible
-intervals or posterior summaries.
+time**. Crucially, this `CTmax` is the 4PL midpoint of a **sublethal,
+functional** endpoint — the temperature at which half of photosystem-II
+efficiency is lost — not the lethal temperature at which the plant dies.
+It is **not** directly comparable to the lethal `CTmax` values in the
+animal case studies (see the summary vignette’s note on non-comparable
+endpoints). These are confidence intervals from the profile likelihood —
+the parameter values the data do not reject at the 95% level — not
+credible intervals or posterior summaries.
 
 ### The Confidence Eye
 
@@ -185,7 +190,8 @@ higher `z`); on the bundled, batch-free data the likelihood and the
 Bayesian fit agree on a **lower marginal `z`** near 3.7. This is a
 data-provenance difference, not a difference between the methods: given
 the same rows and the same (here, no) random-effect structure, the
-profile-likelihood and posterior summaries coincide. If you need the
+profile-likelihood and posterior summaries coincide — the data, not the
+prior or the algorithm, are driving the estimate here. If you need the
 batch-adjusted estimate, fit with a random intercept on the available
 batch column,
 e.g. `fit_4pl(std, ctmax = ~ 1 + (1 | plant), family = "beta")`.

@@ -2,8 +2,8 @@
 
 This vignette is the mathematical reference for `freqTLS`: the
 four-parameter logistic (4PL) thermal death-time curve, the direct
-`CTmax`/`z` parameterisation, the nested-gap asymptote transform, the
-relative-versus-absolute survival threshold, and the exact algebraic
+`CTmax`/`z` parameterisation, the disjoint-bounds asymptote transform,
+the relative-versus-absolute survival threshold, and the exact algebraic
 bridge to [`bayesTLS`](https://github.com/daniel1noble/bayesTLS). The
 authoritative source is `docs/design/01-model-and-parameterisation.md`;
 this vignette mirrors it and checks the bridge identities numerically
@@ -77,40 +77,46 @@ c(slope = diff(mids), minus_one_over_z = -1 / zz)
 #>       -0.2501231       -0.2501231
 ```
 
-## Nested-gap asymptotes
+## Disjoint-bounds asymptotes
 
-The asymptotes are parameterised so that $`\mathrm{up} > \mathrm{low}`$
-holds automatically, with no hard constraint and no feasibility wall:
+The asymptotes use the bayesTLS
+[`compute_4pl_bounds()`](https://itchyshin.github.io/freqTLS/reference/compute_4pl_bounds.md)
+parameterisation: the feasible band $`[\ell, u]`$ (default $`[0, 1]`$)
+is split at its midpoint, and `low` and `up` each map an unconstrained
+coefficient onto one half, so $`\mathrm{up} > \mathrm{low}`$ holds
+automatically:
 
 ``` math
-\mathrm{low} = \mathrm{logit}^{-1}(\beta_\mathrm{low}),
+\mathrm{low} = \ell_{\min} + w_\mathrm{low}\,\mathrm{logit}^{-1}(\beta_\mathrm{low}),
 \qquad
-\mathrm{up} = \mathrm{low} + (1 - \mathrm{low})\,\mathrm{logit}^{-1}(\beta_\mathrm{gap}).
+\mathrm{up}  = u_{\min}  + w_\mathrm{up}\,\mathrm{logit}^{-1}(\beta_\mathrm{up}).
 ```
 
-The gap
-$`\mathrm{up} - \mathrm{low} = (1 - \mathrm{low})\,\mathrm{logit}^{-1}(\beta_\mathrm{gap})`$
-is a fraction of the head-room above `low`, so any
-$`(\beta_\mathrm{low}, \beta_\mathrm{gap})`$ gives a valid ordered pair
-$`0 < \mathrm{low} < \mathrm{up} < 1`$. This is unconstrained and
-smooth, which keeps the optimiser and the profiles well-behaved.
+`low` is confined to the lower half-band $`[\ell_{\min}, \ell_{\max}]`$
+and `up` to the upper half-band $`[u_{\min}, u_{\max}]`$ (the bands
+meet, with a tiny separating gap, at the midpoint). Any
+$`(\beta_\mathrm{low}, \beta_\mathrm{up})`$ therefore gives a valid
+ordered pair $`\ell < \mathrm{low} < \mathrm{up} < u`$. This is
+unconstrained and smooth, which keeps the optimiser and the profiles
+well-behaved, and it matches bayesTLS exactly so the two packages share
+the asymptote contract.
 
-The trade-off is that `up` has no single internal coordinate (it depends
-on both $`\beta_\mathrm{low}`$ and $`\beta_\mathrm{gap}`$). Profiling
-`up` would require rebuilding the objective on a re-rooted
-$`(\mathrm{up}, \mathrm{low})`$ pair; `freqTLS` instead reports `up`
-with the delta-method Wald interval and says so. Every other parameter
-is profiled on a single coordinate. The full table of coordinates and
+Under this parameterisation `up` has its own coordinate
+$`\beta_\mathrm{up}`$, just like `low`. `freqTLS` nonetheless reports
+`up` with the delta-method Wald interval: its profile path is not yet
+wired for $`\beta_\mathrm{up}`$ (the work is symmetric with `low`,
+simply not yet implemented), and it says so. Every other parameter is
+profiled on its single coordinate. The full table of coordinates and
 links:
 
-| Natural parameter     | Internal coordinate | Link       |
-|-----------------------|---------------------|------------|
-| `low`                 | `beta_low`          | logit      |
-| `up` (via the gap)    | `beta_gap`          | nested gap |
-| `k`                   | `beta_logk`         | log        |
-| `CTmax` (per group)   | `beta_CT[g]`        | identity   |
-| `z` (per group)       | `beta_logz[g]`      | log        |
-| `phi` (beta-binomial) | `log_phi`           | log        |
+| Natural parameter     | Internal coordinate | Link                             |
+|-----------------------|---------------------|----------------------------------|
+| `low`                 | `beta_low`          | logit (onto the lower half-band) |
+| `up`                  | `beta_up`           | logit (onto the upper half-band) |
+| `k`                   | `beta_logk`         | log                              |
+| `CTmax` (per group)   | `beta_CT[g]`        | identity                         |
+| `z` (per group)       | `beta_logz[g]`      | log                              |
+| `phi` (beta-binomial) | `log_phi`           | log                              |
 
 ## Relative versus absolute thresholds
 

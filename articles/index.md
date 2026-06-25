@@ -22,6 +22,11 @@
   weaknesses, and the blurry
   line](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md):
 
+### Applications
+
+- [Heat injury under a temperature
+  trace](https://itchyshin.github.io/freqTLS/articles/heat-injury.md):
+
 ### Case studies
 
 - [Case study: brown-shrimp lethal
@@ -34,7 +39,5 @@
   sexes](https://itchyshin.github.io/freqTLS/articles/case-study-suzukii.md):
 - [Case study: snow-gum leaf PSII — a continuous-proportion sublethal
   endpoint](https://itchyshin.github.io/freqTLS/articles/case-study-leaf-psii.md):
-- [Heat injury under a temperature
-  trace](https://itchyshin.github.io/freqTLS/articles/heat-injury.md):
 - [Cross-case-study summary: four taxa, one
   panel](https://itchyshin.github.io/freqTLS/articles/case-study-summary.md):

@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -308,15 +310,15 @@ in <code>calibration_results.rds</code>):</p>
 <colgroup>
 <col width="14%">
 <col width="14%">
-<col width="29%">
-<col width="25%">
+<col width="28%">
+<col width="28%">
 <col width="14%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Sample size</th>
 <th align="right">Residual df</th>
-<th align="left">Coverage (asymptotic z)</th>
-<th align="left">Coverage (profile-t)</th>
+<th align="left">Coverage (Wald, z-ref)</th>
+<th align="left">Coverage (Wald, t-ref)</th>
 <th align="left">Extra width</th>
 </tr></thead>
 <tbody>
@@ -350,6 +352,13 @@ in <code>calibration_results.rds</code>):</p>
 widening is therefore self-cancelling: it pays for the small-sample
 optimism of the asymptotics, then steps out of the way as data
 accumulate.</p>
+<p>The coverages above are for the <strong>Wald</strong> interval, where
+the <em>z</em>-versus-<em>t</em> reference is a clean one-line change.
+The default <strong>profile</strong> interval inherits the <em>same</em>
+small-sample correction — its cutoff is the squared <em>t</em> quantile
+<code>qt(df)^2</code> rather than <code>qchisq(level, 1)</code> — so it
+tracks the Wald <em>t</em>-reference column, not the
+asymptotic-<em>z</em> one.</p>
 <p>This bears on the Bayesian comparison in two ways. First, it is the
 honest basis for the “confidence” label of the previous section — here
 the coverage is <em>measured</em>, not assumed. Second, it is itself a

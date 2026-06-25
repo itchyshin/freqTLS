@@ -33,16 +33,16 @@ Load Sensitivity Models*. R package version 0.1.0,
 Noble D, Arnold P, Pottier P (2026). *bayesTLS: Bayesian Thermal Load
 Sensitivity Models*. R package; the thermal-load-sensitivity framework
 that freqTLS implements (manuscript in preparation). The bundled
-'shrimp_lethal', 'zebrafish_lethal', 'snowgum_psii', and
-'dsuzukii_lethal' datasets are vendored from bayesTLS (CC BY 4.0);
-please cite bayesTLS whenever you use them. The 'dsuzukii_lethal' data
-are from Orsted et al. (2024), Zenodo 10.5281/zenodo.10602268.,
+'shrimp_lethal', 'zebrafish_lethal', 'snowgum_psii', and 'dsuzukii'
+datasets are vendored from bayesTLS (CC BY 4.0); please cite bayesTLS
+whenever you use them. The 'dsuzukii' data are from Orsted et al.
+(2024), Zenodo 10.5281/zenodo.10602268.,
 <https://github.com/daniel1noble/bayesTLS>.
 
     @Manual{,
       title = {bayesTLS: Bayesian Thermal Load Sensitivity Models},
       author = {Daniel W. A. Noble and Pieter A. Arnold and Patrice Pottier},
       year = {2026},
-      note = {R package; the thermal-load-sensitivity framework that freqTLS implements (manuscript in preparation). The bundled 'shrimp_lethal', 'zebrafish_lethal', 'snowgum_psii', and 'dsuzukii_lethal' datasets are vendored from bayesTLS (CC BY 4.0); please cite bayesTLS whenever you use them. The 'dsuzukii_lethal' data are from Orsted et al. (2024), Zenodo 10.5281/zenodo.10602268.},
+      note = {R package; the thermal-load-sensitivity framework that freqTLS implements (manuscript in preparation). The bundled 'shrimp_lethal', 'zebrafish_lethal', 'snowgum_psii', and 'dsuzukii' datasets are vendored from bayesTLS (CC BY 4.0); please cite bayesTLS whenever you use them. The 'dsuzukii' data are from Orsted et al. (2024), Zenodo 10.5281/zenodo.10602268.},
       url = {https://github.com/daniel1noble/bayesTLS},
     }

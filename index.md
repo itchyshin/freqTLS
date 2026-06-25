@@ -114,10 +114,18 @@ pak::pak("itchyshin/freqTLS")
 ## Quick start
 
 The workflow mirrors `bayesTLS` — **standardize → fit → quantities →
-plot** — so a `bayesTLS` analysis runs on `freqTLS` by changing only the
-package the data and functions come from. The engine is maximum
-likelihood (no Stan, no MCMC, no internet); uncertainty is a frequentist
-trio (Wald, profile, bootstrap) instead of a posterior.
+plot** — so most `bayesTLS` analyses run on `freqTLS` by changing little
+more than the package the data and functions come from. The engine is
+maximum likelihood (no Stan, no MCMC, no internet); uncertainty is a
+frequentist trio (Wald, profile, bootstrap) instead of a posterior. A
+few differences are deliberate and documented in
+[`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md):
+the absolute (p-survival) threshold and non-default asymptote `bounds`
+are not yet wired through the ML backbone (fit on the relative midpoint,
+then convert with
+[`extract_tdt()`](https://itchyshin.github.io/freqTLS/reference/extract_tdt.md));
+uncertainty comes as bootstrap replicates rather than posterior draws;
+and the temperature effect defaults to the constant-shape configuration.
 
 ``` r
 

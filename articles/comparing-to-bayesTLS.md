@@ -136,6 +136,18 @@ tls(shrimp_fit, method = "profile")$summary
 #> 2 z          2.19  1.96  2.46
 ```
 
+[`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
+returns a `freq_tls` **workflow object** (the twin of bayesTLS’s
+`bayes_tls`): it bundles the engine fit, the standardised data, and the
+formula. Its S3 methods —
+[`tls()`](https://itchyshin.github.io/freqTLS/reference/tls.md),
+[`confint()`](https://rdrr.io/r/stats/confint.html),
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`plot_confidence_eye()`](https://itchyshin.github.io/freqTLS/reference/plot_confidence_eye.md)
+— delegate to the engine fit, so you call them on the workflow object
+directly. The underlying engine fit is also available as
+`shrimp_fit$fit` if you want to reach it.
+
 ``` r
 
 data(zebrafish_lethal)

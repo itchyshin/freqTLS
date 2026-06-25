@@ -74,8 +74,8 @@ tidy_parameters(fit)
 #> 5 z         all     4.00     0.191     3.64      4.40   wald          log     
 tidy_parameters(fit, method = "profile")
 #> "up" is profiled with the delta-method Wald interval.
-#> ℹ The nested-gap asymptote reparameterisation has no single internal coordinate
-#>   for "up" (SPEC.md S10).
+#> ℹ The profile path is not yet wired for the disjoint-bounds "up" coordinate
+#>   `beta_up` (SPEC.md S10).
 #> # A tibble: 5 × 8
 #>   parameter group estimate std.error conf.low conf.high interval_type scale   
 #>   <chr>     <chr>    <dbl>     <dbl>    <dbl>     <dbl> <chr>         <chr>   

@@ -31,13 +31,15 @@
     <li><a class="dropdown-item" href="articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -59,7 +61,7 @@
 <div id="freqtls-roadmap" class="section level1">
 
 <p>freqTLS is the maximum-likelihood / profile-likelihood complement to <code>bayesTLS</code>: it fits the single-stage 4PL thermal-load-sensitivity model by ML via TMB, parameterised directly in <code>CTmax</code> and <code>z</code>, and returns profile-likelihood compatibility intervals. This roadmap lists the build phases and their status. The authoritative fitted/planned/unsupported boundary is <code>docs/dev-log/known-limitations.md</code> and <code>docs/design/46-capability-matrix.md</code>; the live phase board is <code>docs/dev-log/dashboard/</code>.</p>
-<p><strong>Version status:</strong> 0.3.0 (experimental lifecycle).</p>
+<p><strong>Version status:</strong> 0.1.0 (experimental lifecycle).</p>
 <p>Status legend: <code>initial</code> (scaffold only, not yet implemented), <code>implemented</code> (landed with tests, docs, examples, check-log, and an after-task report), and <code>planned</code>.</p>
 <div class="section level2">
 <h2 id="phases">Phases<a class="anchor" aria-label="anchor" href="#phases"></a></h2>
@@ -89,7 +91,7 @@
 </div>
 <div class="section level3">
 <h3 id="phase-6--docs-and-pkgdown-site-implemented">Phase 6 – Docs and pkgdown site (implemented)<a class="anchor" aria-label="anchor" href="#phase-6--docs-and-pkgdown-site-implemented"></a></h3>
-<p>Owners: documentation-writer + pkgdown-editor + Pat + Darwin + literature-curator + Grace. README, four vignettes (<code>getting-started</code>, <code>model-math</code>, <code>profile-likelihood</code>, <code>comparing-to-bayesTLS</code>), NEWS, the final <code>_pkgdown.yml</code>. <strong>Gate:</strong> <code>devtools::document()</code>, <code>devtools::test()</code>, <code>devtools::check()</code>, and <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> are clean locally.</p>
+<p>Owners: documentation-writer + pkgdown-editor + Pat + Darwin + literature-curator + Grace. README, the vignette suite (<code>freqTLS</code>, <code>model-math</code>, <code>profile-likelihood</code>, <code>random-effects</code>, <code>comparing-to-bayesTLS</code>, <code>frequentist-and-bayesian</code>, <code>heat-injury</code>, and the six case studies), NEWS, the final <code>_pkgdown.yml</code>. <strong>Gate:</strong> <code>devtools::document()</code>, <code>devtools::test()</code>, <code>devtools::check()</code>, and <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code> are clean locally.</p>
 <p>Each phase closes with an after-task report, a check-log entry, and a known-limitations / ROADMAP / README / capability-matrix sync (Definition of Done). The adversarial Definition-of-Done gate before “core done” is Rose + Pat + Fisher. Execution is sequential P0 -&gt; P1 -&gt; P2 -&gt; P3 (shared engine contract), then parallel P4 and P5, then P6.</p>
 </div>
 </div>

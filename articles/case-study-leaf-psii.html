@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -184,10 +186,16 @@ and the beta family adds one dispersion parameter, <code>phi</code>.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> z             3.71     3.18      4.27 profile</span></span></code></pre></div>
 <p>PSII function collapses near <strong>44.6 °C</strong> at a one-hour
 exposure, with a thermal sensitivity <code>z</code> of about <strong>3.7
-°C per tenfold change in exposure time</strong>. These are confidence
-intervals from the profile likelihood — the parameter values the data do
-not reject at the 95% level — not credible intervals or posterior
-summaries.</p>
+°C per tenfold change in exposure time</strong>. Crucially, this
+<code>CTmax</code> is the 4PL midpoint of a <strong>sublethal,
+functional</strong> endpoint — the temperature at which half of
+photosystem-II efficiency is lost — not the lethal temperature at which
+the plant dies. It is <strong>not</strong> directly comparable to the
+lethal <code>CTmax</code> values in the animal case studies (see the
+summary vignette’s note on non-comparable endpoints). These are
+confidence intervals from the profile likelihood — the parameter values
+the data do not reject at the 95% level — not credible intervals or
+posterior summaries.</p>
 <div class="section level3">
 <h3 id="the-confidence-eye">The Confidence Eye<a class="anchor" aria-label="anchor" href="#the-confidence-eye"></a>
 </h3>
@@ -256,7 +264,8 @@ the bundled, batch-free data the likelihood and the Bayesian fit agree
 on a <strong>lower marginal <code>z</code></strong> near 3.7. This is a
 data-provenance difference, not a difference between the methods: given
 the same rows and the same (here, no) random-effect structure, the
-profile-likelihood and posterior summaries coincide. If you need the
+profile-likelihood and posterior summaries coincide — the data, not the
+prior or the algorithm, are driving the estimate here. If you need the
 batch-adjusted estimate, fit with a random intercept on the available
 batch column,
 e.g. <code>fit_4pl(std, ctmax = ~ 1 + (1 | plant), family = "beta")</code>.</p>

@@ -175,7 +175,7 @@ small, and not at all when it is large (Bates & Watts, 1988).
 The pay-off, measured over ~500 simulated datasets per cell (cached in
 `calibration_results.rds`):
 
-| Sample size | Residual df | Coverage (asymptotic z) | Coverage (profile-t) | Extra width |
+| Sample size | Residual df | Coverage (Wald, z-ref) | Coverage (Wald, t-ref) | Extra width |
 |:---|---:|:---|:---|:---|
 | small | 10 | 0.927 | 0.964 | +14% |
 | medium | 35 | 0.946 | 0.964 | +4% |
@@ -190,6 +190,13 @@ width. By `df ≈ 100` the two references coincide (`t ≈ z`) and the
 correction costs essentially nothing. The widening is therefore
 self-cancelling: it pays for the small-sample optimism of the
 asymptotics, then steps out of the way as data accumulate.
+
+The coverages above are for the **Wald** interval, where the
+*z*-versus-*t* reference is a clean one-line change. The default
+**profile** interval inherits the *same* small-sample correction — its
+cutoff is the squared *t* quantile `qt(df)^2` rather than
+`qchisq(level, 1)` — so it tracks the Wald *t*-reference column, not the
+asymptotic-*z* one.
 
 This bears on the Bayesian comparison in two ways. First, it is the
 honest basis for the “confidence” label of the previous section — here

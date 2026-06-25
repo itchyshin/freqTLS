@@ -25,11 +25,16 @@ For a scalar target $`\psi`$ (say `CTmax`):
     log-likelihood $`\ell_p(\psi)`$.
 3.  Form the deviance $`D(\psi) = 2\,(\hat\ell - \ell_p(\psi))`$.
 4.  The confidence interval is the set
-    $`\{\psi : D(\psi) \le \chi^2_{1,\,\mathrm{level}}\}`$, found by
+    $`\{\psi : D(\psi) \le t^2_{1-\alpha/2,\,\nu}\}`$, found by
     root-finding on each side of the MLE.
 
-At the MLE the deviance is (numerically) zero, and the cutoff is the
-chi-square quantile with one degree of freedom.
+At the MLE the deviance is (numerically) zero. The cutoff is the
+**squared Student-$`t`$ quantile** $`t^2_{1-\alpha/2,\,\nu}`$ on
+$`\nu = n - p`$ residual degrees of freedom (data rows minus free
+fixed-effect coordinates), not the $`\chi^2_1`$ quantile: this is the
+Bates–Watts profile-$`t`$ calibration, which is less optimistic at small
+$`n`$ and converges to $`\chi^2_1`$ as $`\nu \to \infty`$ (see
+[`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)).
 [`profile()`](https://rdrr.io/r/stats/profile.html) returns the whole
 deviance curve plus the interval:
 
@@ -48,7 +53,7 @@ c(estimate = pc$estimate, conf.low = pc$conf.low, conf.high = pc$conf.high,
 ```
 
 The deviance minimum sits essentially at zero, at the estimate. Plotting
-the profile shows the deviance curve, the chi-square cutoff line, and
+the profile shows the deviance curve, the profile-$`t`$ cutoff line, and
 the interval where the curve dips below it:
 
 ``` r
@@ -57,7 +62,7 @@ plot(pc)
 ```
 
 ![Profile-likelihood deviance curve for CTmax: a U-shaped curve with a
-horizontal chi-square cutoff line; the confidence interval is where the
+horizontal profile-t cutoff line; the confidence interval is where the
 curve lies below the
 cutoff.](profile-likelihood_files/figure-html/profile-plot-1.png)
 
@@ -118,8 +123,8 @@ switches between the two for the whole parameter table:
 
 tidy_parameters(fit, method = "profile")[, c("parameter", "estimate", "conf.low", "conf.high", "interval_type")]
 #> "up" is profiled with the delta-method Wald interval.
-#> ℹ The nested-gap asymptote reparameterisation has no single internal coordinate
-#>   for "up" (SPEC.md S10).
+#> ℹ The profile path is not yet wired for the disjoint-bounds "up" coordinate
+#>   `beta_up` (SPEC.md S10).
 #> # A tibble: 6 × 5
 #>   parameter estimate conf.low conf.high interval_type
 #>   <chr>        <dbl>    <dbl>     <dbl> <chr>        
@@ -133,10 +138,11 @@ tidy_parameters(fit, method = "profile")[, c("parameter", "estimate", "conf.low"
 
 ### The upper asymptote `up`
 
-Under the nested-gap parameterisation `up` has no single internal
-coordinate, so it cannot be profiled on one coordinate. `freqTLS`
-reports `up` with the delta-method Wald interval and labels it honestly
-— `confint(fit, "up", method = "profile")` returns
+Under the disjoint-bounds parameterisation `up` has its own coordinate
+`beta_up`, but `freqTLS` does not yet profile it (the profile path is
+wired for `low` but not `up`). `freqTLS` reports `up` with the
+delta-method Wald interval and labels it honestly —
+`confint(fit, "up", method = "profile")` returns
 `interval_type = "wald"` and emits an informational message rather than
 silently substituting a different quantity.
 
@@ -212,13 +218,13 @@ a fabricated closed eye.
 
 ``` r
 
-suppressWarnings(plot_confidence_eye(sparse_fit, parm = "CTmax", method = "profile"))
-#> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
-#> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
-#>   non-closing side).
+# fallback = FALSE so the eye refuses to draw a lens when the profile does not
+# close (a hollow point only), matching the honest non-closing contract above.
+suppressWarnings(plot_confidence_eye(sparse_fit, parm = "CTmax", method = "profile",
+                                     fallback = FALSE))
 ```
 
-![Confidence Eye for a weakly identified fit: hollow point estimates
+![Confidence Eye for a weakly identified fit: a hollow point estimate
 with no confidence lens, signalling that the profile did not
 close.](profile-likelihood_files/figure-html/non-closing-eye-1.png)
 

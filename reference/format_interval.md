@@ -1,6 +1,6 @@
-# Format a posterior median plus credible interval as a single string
+# Format a point estimate plus confidence interval as a single string
 
-Format a posterior median plus credible interval as a single string
+Format a point estimate plus confidence interval as a single string
 
 ## Usage
 
@@ -12,7 +12,9 @@ format_interval(median, lower, upper, digits = 2)
 
 - median, lower, upper:
 
-  Numeric (scalar or vector).
+  Numeric (scalar or vector). `median` is the central value (a point
+  estimate or the median of bootstrap replicates), `lower` and `upper`
+  the confidence-interval endpoints.
 
 - digits:
 

@@ -46,13 +46,15 @@
     <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
     <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
     <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
     <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
@@ -105,9 +107,11 @@ al. 2023) under CC0; cite the source and
 <code><a href="../reference/aphid_tdt.html">?aphid_tdt</a></code>). It records survival counts in a temperature ×
 duration grid for the three species, crossed with a cold and a heat
 exposure <strong>branch</strong> and three nymph <strong>ages</strong>.
-We take the <strong>heat</strong> branch at the focal age (6-day-old
-nymphs) and let <code>CTmax</code> and <code>z</code> depend on
-species.</p>
+We take the <strong>heat</strong> branch at a single focal age
+(6-day-old nymphs) so the cross-species comparison is made at one
+consistent developmental stage, and let <code>CTmax</code> and
+<code>z</code> depend on species. (The other ages and the cold branch
+are available in <code>aphid_tdt</code> for the same workflow.)</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">aphid_tdt</span><span class="op">)</span></span>
 <span><span class="va">aphids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">aphid_tdt</span>, <span class="va">branch</span> <span class="op">==</span> <span class="st">"heat"</span> <span class="op">&amp;</span> <span class="va">age</span> <span class="op">==</span> <span class="st">"6"</span><span class="op">)</span></span>
