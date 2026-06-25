@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 880" font-family="Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 880" font-family="Helvetica, Arial, sans-serif" width="100%" role="img" aria-labelledby="ftls-map-title ftls-map-desc">
+  <title id="ftls-map-title">freqTLS function map</title>
+  <desc id="ftls-map-desc">Maximum-likelihood twin of the bayesTLS workflow. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls, with tls_z, tls_ctmax and tls_tcrit, plus extract_tdt and the derive_lt, derive_ctmax and derive_tcrit primitives); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury, with make_temperature_scenarios and repair_rate_schoolfield marked not yet ported); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists the freqTLS-only extras: Wald, profile and bootstrap confidence intervals with profile-t calibration, the Confidence Eye, and twelve identifiability warnings.</desc>
   <defs>
     <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="#555"/>
