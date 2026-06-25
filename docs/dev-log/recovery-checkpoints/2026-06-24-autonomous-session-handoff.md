@@ -1,6 +1,41 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `ff21fa7`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `7642fab`
+
+> **Session-6 (HEAD `7642fab`): P7 case studies mirror bayesTLS's new ones.**
+> With the `by=` clean-label fix in place, three case-study vignettes now render
+> against the current data, mirroring `ms/case_studies_new.qmd`:
+> - `0e6fd48` **case-study-zebrafish → OXYGEN** (the user's "switch to oxygen"):
+>   `zebrafish_o2` diploid, CTmax/z per oxygen treatment (OCLTT), `t_ref=60`.
+> - `1dfabc9` **case-study-suzukii** on the current per-individual `dsuzukii`
+>   (aggregate → `n_dead`/`n_total`, `by="sex"`, `t_ref=240`); kept the dCTmax
+>   contrast, Ørsted validation, and the three-way cache table — numbers match.
+> - `7642fab` **case-study-li-aphids** (CREATE): `aphid_tdt` heat branch / age 6,
+>   CTmax/z per species, `t_ref=60`.
+> Grouped studies use **Wald** for the per-group table + Eyes: the multi-group
+> profile falls back to a slow bootstrap on a weakly-identified group, so profile
+> (the default) is showcased on the single-fit studies (shrimp). All render
+> Stan-free; labels read off the fit (clean `CTmax:<level>`); numbers inline.
+>
+> **Two case studies still open — and why:**
+> - **case-study-leaf-psii** is BLOCKED on a real discrepancy, not mechanics.
+>   freqTLS's Beta 4PL gives **z ≈ 3.7** on `snowgum_psii` (correct map:
+>   `standardize_data(temp="Temp", duration="Time", proportion="fvfm_prop",
+>   duration_unit="minutes")` → `fit_4pl(family="beta", t_ref=60)`), but bayesTLS
+>   reports **z ≈ 5.1**. It is **not** the random effects (bayes uses Day+G_Room;
+>   the bundled data has only `meas_day` (2 levels) / `plant` (6); adding
+>   `(1|meas_day)` moves z only 3.71→3.94) and **not** `t_ref`. So a continuous-
+>   **Beta**-family difference (link/parameterisation, the data version, or a
+>   freqTLS beta bug) is unexplained — needs investigation (compare the two Beta
+>   4PL likelihoods on the same rows) before shipping a "faithful mirror" with
+>   40%-divergent z. The old vignette's hardcoded 46.5/6.5 are stale either way.
+> - **case-study-summary** (cross-taxon panel) depends on the case studies above;
+>   do it last, after leaf-PSII is settled, updating it to the current datasets.
+>
+> Also pending (P7 polish): wire the new `case-study-li-aphids` + the retitled
+> zebrafish-oxygen into `_pkgdown.yml`. Vignette render status: **11/13 render**
+> (the 8 from Session-4 + zebrafish-oxygen + suzukii + aphids; leaf-psii + summary
+> open).
 
 > **Session-5 (HEAD `ff21fa7`): twin-surface completion + a simulation sanity
 > harness + the OSF artifacts.** Three user-dispatched pieces:
