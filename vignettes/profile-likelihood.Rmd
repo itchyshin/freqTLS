@@ -22,7 +22,8 @@ vignette explains what the profile is, why its intervals can be asymmetric, how 
 differs from the Wald interval, and — importantly — how `freqTLS` behaves honestly
 when a profile does not close. These are likelihood intervals, not posteriors; the
 language throughout is "confidence", never "posterior" or "credible".
-The authoritative algorithm reference is `docs/design/04-profile-likelihood.md`.
+(The full algorithm is specified in the package source, in
+`docs/design/04-profile-likelihood.md`.)
 
 ```{r setup}
 library(freqTLS)
@@ -115,7 +116,8 @@ Under the disjoint-bounds parameterisation `up` has its own coordinate `beta_up`
 `freqTLS` reports `up` with the delta-method
 Wald interval and labels it honestly — `confint(fit, "up", method = "profile")` returns
 `interval_type = "wald"` and emits an informational message rather than silently
-substituting a different quantity.
+substituting a different quantity. If you need a prior-free, asymmetry-respecting
+interval for `up`, request the bootstrap: `confint(fit, "up", method = "bootstrap")`.
 
 ## The honest non-closing fallback
 

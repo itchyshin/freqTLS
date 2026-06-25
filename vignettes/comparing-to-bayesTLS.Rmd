@@ -345,6 +345,20 @@ profile for fixed effects — a perfectly good choice for routine work. The prof
 remains the default because it respects asymmetry without a normal approximation
 and now degrades to Wald or the bootstrap exactly where it would be unreliable.
 
+You can see when the automatic routing fires: the `method` column of `confint()`
+reads `wald` for the rerouted coordinate even if you asked for `profile`, and an
+informational message is emitted. To get an asymmetry-respecting interval for that
+coordinate specifically, request the bootstrap — for example
+`confint(fit, "phi", method = "bootstrap")`.
+
+**When to use each method:**
+
+| Method | Use when |
+| --- | --- |
+| `profile` (default) | the headline choice — respects asymmetry, no normal approximation, and degrades honestly when a coordinate is weakly identified. |
+| `wald` | fast routine work; as well-calibrated as the profile for fixed effects in these simulations; symmetric on the link scale. |
+| `bootstrap` | a prior-free interval that is always finite (the non-closing fallback), and the asymmetry-respecting option for `up`, a weak `phi`, or any weakly identified coordinate. |
+
 ## Always an interval: the bootstrap fallback
 
 A Bayesian fit always returns an interval. So does `freqTLS`: when a profile

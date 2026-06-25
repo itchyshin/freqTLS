@@ -1,4 +1,4 @@
-#' freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity Models
+#' freqTLS: Frequentist Inference for Thermal Load Sensitivity Models
 #'
 #' `freqTLS` is a maximum-likelihood / profile-likelihood complement to the
 #' Bayesian `bayesTLS` package. It fits single-stage four-parameter logistic

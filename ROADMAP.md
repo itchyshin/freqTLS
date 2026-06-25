@@ -2,8 +2,9 @@
 
 freqTLS is the maximum-likelihood / profile-likelihood complement to
 `bayesTLS`: it fits the single-stage 4PL thermal-load-sensitivity model by ML via
-TMB, parameterised directly in `CTmax` and `z`, and returns profile-likelihood
-compatibility intervals. This roadmap lists the build phases and their status.
+TMB, parameterised directly in `CTmax` and `z`, and returns Wald,
+profile-likelihood, and bootstrap confidence intervals. This roadmap lists the
+build phases and their status.
 The authoritative fitted/planned/unsupported boundary is
 `docs/dev-log/known-limitations.md` and `docs/design/46-capability-matrix.md`;
 the live phase board is `docs/dev-log/dashboard/`.
@@ -155,11 +156,11 @@ against `bayesTLS` -- the two packages are two valid lenses on the same model.
   "random effects on any sub-parameter," so REs are available on `CTmax` / `log_z`
   / `low` / `log_k` (engine `b_low` / `b_logk`, byte-identical no-RE path).
   `sigma_low` is a SD on `logit(low)`, `sigma_logk` on `log(k)` (both ML). The
-  upper asymptote `up` is excluded (its nested gap has no single coordinate). The
+  upper asymptote `up` is excluded (the compiled objective has no random-intercept term for it). The
   same-grouping independent-variance warning is generalised across all four
   coordinates. A dedicated `vignette("random-effects")` walks through the lot.
 * **Heat-injury bootstrap envelope — done.** `heat_injury_envelope()` returns a
-  prior-free parametric-bootstrap compatibility band around the
+  prior-free parametric-bootstrap confidence band around the
   `predict_heat_injury()` survival trajectory (the likelihood-path analogue of the
   `bayesTLS` posterior survival band), reusing the same dose-accumulation
   integrator; `plot_heat_injury()` draws it.

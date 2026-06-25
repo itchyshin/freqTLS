@@ -7,7 +7,7 @@ citHeader("To cite freqTLS in publications, cite the package and the bayesTLS fr
 
 bibentry(
   bibtype  = "Manual",
-  title    = "freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity Models",
+  title    = "freqTLS: Frequentist Inference for Thermal Load Sensitivity Models",
   author   = c(
     person("Shinichi", "Nakagawa"),
     person("Pieter A.", "Arnold"),

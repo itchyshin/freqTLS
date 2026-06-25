@@ -44,10 +44,10 @@ asymmetry rather than symmetrising it.
   geometrically with a curvature-scaled step) until `D` rises above the cutoff,
   then solve `D(theta) = cutoff` with `uniroot`. No bracket within the search
   means a non-closing side (warning 9) and the endpoint is returned `NA`.
-* **`up` uses the delta-method Wald fallback.** Re-rooting on a native
-  `(up, low-fraction)` pair would require rebuilding the compiled C++ objective on
-  a second parameterisation just for one target; the spec permits the Wald/delta
-  fallback instead, which freqTLS takes. `profile(fit, "up")` and
+* **`up` uses the delta-method Wald fallback.** Under disjoint bounds `up` already
+  has its own coordinate `beta_up`, but the profile path is not yet wired for it
+  (the work is symmetric with `low`); freqTLS takes the documented Wald/delta
+  fallback meanwhile. `profile(fit, "up")` and
   `confint(fit, "up", method = "profile")` emit an informational message, return
   `interval_type = "wald"`, and carry `conf.status = "wald_fallback"`. The `up`
   row of `tidy_parameters(method = "profile")` is honestly labelled `"wald"`.

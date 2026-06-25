@@ -15,8 +15,9 @@ knitr::opts_chunk$set(
 
 # freqTLS
 
-> Fast, prior-free profile-likelihood intervals for thermal-load-sensitivity
-> (thermal death-time) models — the maximum-likelihood complement to `bayesTLS`.
+> Fast, prior-free frequentist confidence intervals — Wald, profile-likelihood,
+> and bootstrap — for thermal-load-sensitivity (thermal death-time) models; the
+> maximum-likelihood complement to `bayesTLS`.
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)

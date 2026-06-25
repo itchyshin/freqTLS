@@ -54,8 +54,8 @@ Both interval methods are fitted. `tidy_parameters()` and `confint()` default to
 the **profile** intervals (`interval_type`/`method = "profile"`), which respect
 the likelihood asymmetry, and offer **Wald** intervals (`method = "wald"`) built
 on the internal link scale and back-transformed (first-order, symmetric on the
-link scale). The upper asymptote `up` has no single internal coordinate under the
-nested-gap parameterisation, so it is reported with a delta-method **Wald**
+link scale). Under disjoint bounds the upper asymptote `up` has its own coordinate
+`beta_up` but is not yet profiled, so it is reported with a delta-method **Wald**
 interval under either method (labelled `interval_type = "wald"`,
 `conf.status = "wald_fallback"`) and may slightly exceed 1 near the boundary.
 Interval coverage is simulated in `data-raw/performance-study.R` and
@@ -100,8 +100,9 @@ Additional planned v0.1 capability:
 
 - the temperature effect through the midpoint only (constant shape), matching the
   bayesTLS benchmark configuration;
-- profile-likelihood compatibility intervals for `CTmax`, `z`, `low`, `k`, `phi`,
-  with `up` via native re-rooting (or a Wald/delta fallback) and group contrasts
+- Wald, profile-likelihood, and bootstrap confidence intervals for `CTmax`, `z`,
+  `low`, `k`, `phi`, with `up` via the delta-method Wald fallback (its
+  disjoint-bounds coordinate `beta_up` is not yet profiled) and group contrasts
   `dCTmax`, `dlog_z`;
 - the 12 identifiability warnings (emitted, never silent);
 - Confidence-Eye uncertainty plots (the default), survival curves, the thermal
@@ -121,10 +122,11 @@ Fitted:
   `R/data.R`, `inst/CITATION`, `inst/COPYRIGHTS`, README). freqTLS fits both
   with sensible estimates (shrimp CTmax 31.8 C / z 2.2 C; zebrafish per-stage
   CTmax 39.8-41.4 C / z ~1.8-2.0 C; both converge, pdHess TRUE, beta-binomial).
-- `snowgum_psii` (319 rows, *Eucalyptus pauciflora* PSII; CC BY 4.0) is the
+- `snowgum_psii` (394 rows, *Eucalyptus pauciflora* PSII; CC BY 4.0) is the
   continuous-proportion dataset for the **beta** family: `prop = final_fvfm /
   initial_fvfm` over six temperatures (28-48 C) and five durations (minutes).
-  `fit_tls(family = "beta", tref = 5)` recovers CTmax ~46.5 C / z ~6.5
+  `fit_tls(family = "beta", tref = 60)` (a one-hour reference) recovers CTmax
+  ~44.6 C / z ~3.7
   (converges, pdHess TRUE). 60 complete-loss rows sit at `prop == 0` and are
   clamped inward by the beta likelihood (with a warning); the raw proportion is
   vendored unchanged.
@@ -214,8 +216,8 @@ approximation. Caveats:
   (`low` / `log_k`) are more weakly identified than `CTmax` and need data that
   informs the asymptote / steepness per group.
 - Random effects are supported on `CTmax`, `log_z`, `low`, and `log_k` only — not
-  the upper asymptote `up` (its nested gap has no single coordinate), no random
-  slopes, one grouping factor per sub-parameter.
+  the upper asymptote `up` (the compiled objective has no random-intercept term for
+  it), no random slopes, one grouping factor per sub-parameter.
 - Placing random intercepts on the **same** grouping factor for two or more
   coordinates fits **independent** variances (correlation forced to zero) and
   **warns**; any true correlation between the group-level deviations is absorbed
@@ -278,8 +280,8 @@ to the shared-shape model. Since the continuous-covariate work, each shape may
 carry its **own** design independently (a grouping factor OR a continuous
 covariate OR an intercept), no longer required to share one design or match the
 `CTmax` / `log_z` grouping. The grouped shape coordinates `low:<g>` and `k:<g>`
-get profile, Wald, and bootstrap intervals; `up:<g>` has no single coordinate
-under the nested gap, so it uses the delta-method Wald (like the scalar `up`) and
+get profile, Wald, and bootstrap intervals; `up:<g>` is not yet profiled
+(disjoint-bounds `beta_up`), so it uses the delta-method Wald (like the scalar `up`) and
 the bootstrap. A general (continuous) shape coefficient (`k:body_size`) is
 reported on its link scale (a log-scale slope) with a Wald interval; profiling a
 single continuous slope routes to Wald (no group level to address), and

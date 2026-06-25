@@ -3,9 +3,10 @@
 
 # freqTLS
 
-> Fast, prior-free profile-likelihood intervals for
-> thermal-load-sensitivity (thermal death-time) models — the
-> maximum-likelihood complement to `bayesTLS`.
+> Fast, prior-free frequentist confidence intervals — Wald,
+> profile-likelihood, and bootstrap — for thermal-load-sensitivity
+> (thermal death-time) models; the maximum-likelihood complement to
+> `bayesTLS`.
 
 <!-- badges: start -->
 

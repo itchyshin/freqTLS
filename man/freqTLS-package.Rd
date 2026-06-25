@@ -4,7 +4,7 @@
 \name{freqTLS-package}
 \alias{freqTLS}
 \alias{freqTLS-package}
-\title{freqTLS: Profile-Likelihood Inference for Thermal Load Sensitivity Models}
+\title{freqTLS: Frequentist Inference for Thermal Load Sensitivity Models}
 \description{
 \code{freqTLS} is a maximum-likelihood / profile-likelihood complement to the
 Bayesian \code{bayesTLS} package. It fits single-stage four-parameter logistic
