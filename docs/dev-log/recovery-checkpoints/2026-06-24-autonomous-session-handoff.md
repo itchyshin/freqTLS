@@ -1,6 +1,26 @@
 # Handoff — freqTLS autonomous build session (2026-06-24)
 
-**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `7642fab`
+**Branch:** `build/freqtls`  ·  **State:** clean, all green  ·  **HEAD:** `d34d8f2`
+
+> **Session-6 close: ALL 13 vignettes render (verified by a full sweep).** The two
+> case studies that were open are done:
+> - **leaf-PSII** (`4385664`) — the Beta z gap was a **data-provenance artifact,
+>   not a bug**: the shipped `snowgum_psii` is byte-identical in freqTLS and
+>   bayesTLS and has no Day/G_Room batch columns; bayesTLS's z≈5.1 came from its
+>   `eval:false` case-study chunk calling `random_effects=c("Day","G_Room")` on an
+>   unbundled raw version. On the shipped data freqTLS fits cleanly (marginal
+>   z≈3.7). Shipped with honest inline numbers + a provenance note (same rows +
+>   RE structure → likelihood and posterior coincide).
+> - **case-study-summary** (`d34d8f2`) — four taxon fits rewired to the twin;
+>   cross-taxon Confidence-Eye panel + three-way render (132 s); snow-gum
+>   reference corrected 5 min → 1 h throughout.
+> - **_pkgdown.yml** (`d34d8f2`) — `case-study-li-aphids` wired; a primary twin-API
+>   reference section added (standardize_data/fit_4pl/tls/extract_tdt/...); Data
+>   list fixed (removed the dropped `dsuzukii_lethal`; added `zebrafish_o2`,
+>   `dsuzukii`, `aphid_tdt`).
+> Remaining P7: `pkgdown::build_site()` (the rendered SITE) + a
+> README/NEWS/capability-matrix sync to the current twin + case-study set. The
+> per-case-study detail is in the Session-6 note below.
 
 > **Session-6 (HEAD `7642fab`): P7 case studies mirror bayesTLS's new ones.**
 > With the `by=` clean-label fix in place, three case-study vignettes now render
