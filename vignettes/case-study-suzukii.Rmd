@@ -37,26 +37,32 @@ library(freqTLS)
 ```
 
 ```{r load-data, include = FALSE}
-data(dsuzukii_lethal)
+data(dsuzukii)
+# Per-individual records -> survival counts per (temp, time, sex) cell.
+.nd  <- aggregate(list(n_dead  = dsuzukii$dead), dsuzukii[c("temp", "time", "sex")], sum)
+.nt  <- aggregate(list(n_total = dsuzukii$dead), dsuzukii[c("temp", "time", "sex")], length)
+mort <- merge(.nd, .nt)
 ```
 
 ## The dataset
 
-`dsuzukii_lethal` is a small, vendored lethal-mortality dataset: per-individual
-mortality from the Ørsted *D. suzukii* assays, aggregated into survival counts
-per `(temp, time, sex)` cell. It is distributed under CC BY 4.0 from the primary
-Zenodo deposit ([10.5281/zenodo.10602268](https://doi.org/10.5281/zenodo.10602268));
-cite `@orsted_suzukii_2024` and `citation("freqTLS")` when you use it.
+`dsuzukii` is the per-individual mortality data from the Ørsted *D. suzukii*
+assays, vendored from [`bayesTLS`](https://github.com/daniel1noble/bayesTLS)
+under CC BY 4.0 (primary deposit
+[10.5281/zenodo.10602268](https://doi.org/10.5281/zenodo.10602268); cite
+`@orsted_suzukii_2024` and `citation("freqTLS")`). We aggregate it to survival
+counts per `(temp, time, sex)` cell — `n_dead` of `n_total` died — exactly as the
+`bayesTLS` case study does.
 
 ```{r data-shape}
-str(dsuzukii_lethal)
-table(dsuzukii_lethal$sex)
+str(mort)
+table(mort$sex)
 ```
 
-There are `r nrow(dsuzukii_lethal)` cells (a temperature × duration × sex grid),
-`r sum(dsuzukii_lethal$sex == "F")` for females and
-`r sum(dsuzukii_lethal$sex == "M")` for males, totalling
-`r sum(dsuzukii_lethal$total)` flies. Two columns deserve emphasis:
+There are `r nrow(mort)` cells (a temperature × duration × sex grid),
+`r sum(mort$sex == "F")` for females and
+`r sum(mort$sex == "M")` for males, totalling
+`r sum(mort$n_total)` flies. Two columns deserve emphasis:
 
 * **`time` is in minutes.** The reference exposure for this study is **4 hours =
   240 minutes**, so we set `tref = 240`.
@@ -74,11 +80,14 @@ only" model. The temperature effect runs through the midpoint, so each sex gets
 its own `CTmax` and `z` while the asymptotes and steepness are pooled.
 
 ```{r fit}
-fit <- suppressWarnings(fit_tls(
-  dsuzukii_lethal,
-  y = survived, n = total, time = time, temp = temp, group = sex,
-  family = "beta_binomial", tref = 240
-))
+std <- standardize_data(
+  mort, temp = "temp", duration = "time",
+  n_total = "n_total", n_dead = "n_dead", duration_unit = "minutes"
+)
+# fit_4pl(by = "sex") gives a per-sex CTmax and z (the "sex on the midpoint"
+# model); $fit is the engine fit the extractors below read directly.
+fit <- fit_4pl(std, by = "sex", t_ref = 240, family = "beta_binomial",
+               quiet = TRUE)$fit
 fit$convergence$code   # 0 = converged
 ```
 
