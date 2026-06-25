@@ -1,0 +1,127 @@
+---
+title: "Case study: heat tolerance of three cereal aphid species (Li 2023)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case study: heat tolerance of three cereal aphid species (Li 2023)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4,
+  dpi = 96
+)
+```
+
+This article compares the heat tolerance of **three cereal aphid species** —
+*Metopolophium dirhodum*, *Rhopalosiphum padi*, and *Sitobion avenae* — from the
+thermal-tolerance assays of Li et al. (2023). It asks the comparative-physiology
+question directly: do the species differ in their critical temperature `CTmax`
+and thermal-sensitivity slope `z`? It mirrors the cereal-aphid case study in
+[`bayesTLS`](https://github.com/daniel1noble/bayesTLS), fit here by maximum
+likelihood instead of MCMC, with one `CTmax` and one `z` per species.
+
+```{r setup}
+library(freqTLS)
+```
+
+## The dataset and the question
+
+`aphid_tdt` is vendored from `bayesTLS` (Li et al. 2023) under CC0; cite the
+source and `citation("freqTLS")` when you use it (see `?aphid_tdt`). It records
+survival counts in a temperature × duration grid for the three species, crossed
+with a cold and a heat exposure **branch** and three nymph **ages**. We take the
+**heat** branch at the focal age (6-day-old nymphs) and let `CTmax` and `z`
+depend on species.
+
+```{r data}
+data(aphid_tdt)
+aphids <- subset(aphid_tdt, branch == "heat" & age == "6")
+table(aphids$species)
+```
+
+```{r standardize}
+std <- standardize_data(
+  aphids,
+  temp = "temp", duration = "duration_min",
+  n_total = "n_total", n_surv = "n_surv",
+  duration_unit = "minutes"
+)
+```
+
+The design spans `r length(unique(aphids$temp))` assay temperatures and exposures
+up to `r max(aphids$duration_min)` minutes across the three species
+(`r nrow(aphids)` rows). `species` is the covariate of interest, and `CTmax` is
+reported at a one-hour reference exposure (`t_ref = 60` minutes).
+
+## The grouped fit (live)
+
+A single `fit_4pl()` call fits all three species at once, each with its own
+`CTmax` and `z` and a shared constant 4PL shape. The fit runs by maximum
+likelihood (TMB, **no Stan**); for this well-identified three-group fit we report
+the fast Wald **confidence intervals** (the profile-likelihood intervals that are
+the `freqTLS` default are showcased on the single-fit studies, e.g.
+`vignette("case-study-shrimp")`).
+
+```{r fit}
+fit <- suppressWarnings(fit_4pl(
+  std,
+  ctmax = ~ 0 + species,
+  z     = ~ 0 + species,
+  t_ref = 60,
+  family = "beta_binomial"
+))
+ax <- tls(fit, by = "species", method = "wald")
+ax$summary
+```
+
+```{r ranking, echo = FALSE}
+ct <- ax$summary[ax$summary$quantity == "CTmax", ]
+ct <- ct[order(ct$median), ]
+```
+
+The species order from least to most heat-tolerant (one-hour `CTmax`) as
+**`r paste(ct$species, sprintf("(%.1f °C)", ct$median), collapse = " < ")`**.
+Where two species' `CTmax` intervals are disjoint the data reject equal tolerance
+at the 95% level; the table above shows which separations the data support.
+
+## A Confidence Eye per species
+
+The `freqTLS` uncertainty visual is the **Confidence Eye** — a confidence lens
+with a hollow point estimate, carrying no prior. One lens per species makes the
+`CTmax` ranking legible; the parameter names are read off the fit so they always
+match the fitted labels.
+
+```{r eye-ctmax, fig.height = 4.5, fig.alt = "Confidence Eyes for cereal-aphid CTmax by species: three pale confidence lenses with hollow point estimates, one per species, ordered along the temperature axis."}
+plot_confidence_eye(fit, parm = get_ctmax(fit)$parameter, method = "wald")
+```
+
+The same display for the thermal-sensitivity slope `z`:
+
+```{r eye-z, fig.height = 4.5, fig.alt = "Confidence Eyes for cereal-aphid z (thermal sensitivity) by species: three pale confidence lenses with hollow point estimates."}
+plot_confidence_eye(fit, parm = get_z(fit)$parameter, method = "wald")
+```
+
+## Seeing the fit
+
+The fitted survival surface, one curve per species and assay temperature, with
+the observed proportions overlaid:
+
+```{r survival, fig.height = 4.5, fig.alt = "Fitted cereal-aphid survival curves by species: probability of survival declining with exposure duration, one curve per assay temperature, the three species overlaid."}
+plot_survival_curves(fit)
+```
+
+## Boundary: what this case study does not cover
+
+We fit the **heat** branch at a single nymph **age** (6 days), letting only
+`CTmax` and `z` vary by species (the constant-shape configuration that matches
+the `bayesTLS` analysis). The cold branch, the other ages, and species-specific
+curve *shapes* are extensions: the shape covariate (letting `low`, `up`, `k` vary
+by group) is demonstrated in `vignette("comparing-to-bayesTLS")`. Formal
+species contrasts (a difference in `CTmax` or `z` with its own confidence
+interval and a likelihood-ratio test) are available via the contrast interface
+described in `vignette("frequentist-and-bayesian")`.
