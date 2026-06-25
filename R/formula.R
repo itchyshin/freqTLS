@@ -581,10 +581,13 @@ tls_design_from_rhs <- function(rhs, data, role) {
     return(list(X = X, grouped = FALSE))
   }
 
-  # Special case `~ <factor>`: emit `~ 0 + factor` so the design (and labels)
-  # match the column interface exactly. Detected as a single term, intercept
-  # present, and the term resolving to a factor / character column.
-  single_factor <- length(rhs_terms) == 1L && has_intercept &&
+  # Special case a single factor term, with OR without an intercept -- `~ factor`
+  # and the `by=` cell-means form `~ 0 + factor` both resolve to per-group
+  # cell-means here, labelled by the bare factor levels so the design and labels
+  # match the column interface exactly (clean `<level>`, not model.matrix's
+  # `<factorname><level>`). Continuous `~ 0 + x` terms are excluded by the
+  # factor/character test and fall through to the general path below.
+  single_factor <- length(rhs_terms) == 1L &&
     rhs_terms[[1L]] %in% names(data) &&
     (is.factor(data[[rhs_terms[[1L]]]]) || is.character(data[[rhs_terms[[1L]]]]))
 

@@ -53,6 +53,15 @@ test_that("fit_4pl direct grouping equals the engine column-interface grouped fi
                tolerance = 1e-5)
   expect_true(f_direct$meta$grouped)
   expect_identical(f_direct$meta$moderators, "group")
+  # The direct cell-means design (~ 0 + group) now carries the SAME clean group
+  # labels as the column interface (CTmax:A, not CTmax:groupA), end to end.
+  expect_identical(f_direct$fit$group_levels, f_col$group_levels)
+  expect_identical(get_ctmax(f_direct)$parameter, get_ctmax(f_col)$parameter)
+  expect_equal(tls(f_direct)$summary, tls(f_col)$summary, tolerance = 1e-5)
+  # by="group" is the shorthand for ~ 0 + group and gives identical labels.
+  f_by <- suppressWarnings(fit_4pl(s, by = "group", t_ref = 1,
+                                   family = "binomial", quiet = TRUE))
+  expect_identical(get_ctmax(f_by)$parameter, get_ctmax(f_col)$parameter)
 })
 
 test_that("family defaults from the standardized response type", {
