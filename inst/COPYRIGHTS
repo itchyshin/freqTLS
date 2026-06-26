@@ -9,8 +9,8 @@ file and the nature of the adaptation, before the change is treated as complete
 == Provenance ==
 
 freqTLS is the frequentist sibling of bayesTLS, forked from the profileTLS
-package (https://github.com/itchyshin/profileTLS) at commit 6f963a9 (v0.3.3),
-which it supersedes. Both are GPL (>= 3).
+package at commit 6f963a9 (v0.3.3), which it supersedes; profileTLS is now a
+private, archived predecessor. Both are GPL (>= 3).
 
 == Engineering patterns adapted from drmTMB (GPL-3) ==
 
