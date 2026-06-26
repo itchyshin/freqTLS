@@ -24,13 +24,24 @@ CI therefore does **not** cover: byte-exact `document()` regeneration,
 `R CMD check --as-cran` extra checks, or the cache rebuild. This handoff closes
 exactly that gap. Nothing here is expected to fail — it is confirmation, not repair.
 
-## 0. Fix the local toolchain (only if on the affected Mac)
+## 0. Local toolchain: do NOT try to repair the dev Mac
 
-```r
-install.packages("TMB", type = "source")   # rebuild TMB against the local Matrix ABI
-```
-then in the package directory: `R CMD INSTALL --preclean .`. Or just run on DRAC / a
-clean Linux R where TMB compiles cleanly.
+**Root cause found (2026-06-26).** On the dev Mac the R **package library is
+platform-mismatched**: `.libPaths()` resolves to an `x86_64-pc-linux-gnu-library/4.4`
+tree (Linux, R 4.4) while R itself is **macOS arm64 R 4.6**. Every installed
+`.so`/`.dylib` there (TMB included) is a Linux x86_64 build that macOS arm64 R
+cannot `dyn.load` — that is the `*** caught segfault *** ... 'invalid permissions'`
+at `dyn.load`. `install.packages("TMB", type = "source")` does **not** fix it (it
+builds against the same mismatched library paths — the compile pulls
+`.../x86_64-pc-linux-gnu-library/4.4/RcppEigen/include` under `clang -arch arm64`
+— and fails). Repairing it means rebuilding the entire package library for macOS
+arm64 R 4.6, which is out of scope for this work.
+
+**So run §1–§4 on a clean toolchain** — DRAC, or any R whose library matches its
+platform. Good news: the ubuntu **R-CMD-check** workflow already runs `test()` +
+a full `R CMD check` **green** on a correct toolchain, so §2 and most of §3 are
+already covered. The genuine residual is only the `document()` byte-exact diff
+(§1) and the benchmark-cache rebuild (§4).
 
 ## 1. Regenerate the docs and diff
 

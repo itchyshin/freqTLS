@@ -39,9 +39,9 @@ Useful links:
 Authors:
 \itemize{
   \item Shinichi Nakagawa \email{itchyshin@gmail.com}
-  \item Pieter A. Arnold (co-author of the bayesTLS framework)
-  \item Patrice Pottier (co-author of the bayesTLS framework)
-  \item Daniel W. A. Noble (senior author of the bayesTLS thermal-load-sensitivity framework)
+  \item Pieter A. Arnold (\href{https://orcid.org/0000-0002-6158-7752}{ORCID}) (co-author of the bayesTLS framework)
+  \item Patrice Pottier (\href{https://orcid.org/0000-0003-2106-6597}{ORCID}) (co-author of the bayesTLS framework)
+  \item Daniel W. A. Noble (\href{https://orcid.org/0000-0001-9460-8743}{ORCID}) (senior author of the bayesTLS thermal-load-sensitivity framework)
 }
 
 }

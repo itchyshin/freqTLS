@@ -5,11 +5,14 @@ Authors@R: c(
     person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com",
            role = c("aut", "cre")),
     person("Pieter A.", "Arnold", role = "aut",
-           comment = "co-author of the bayesTLS framework"),
+           comment = c(ORCID = "0000-0002-6158-7752",
+                       "co-author of the bayesTLS framework")),
     person("Patrice", "Pottier", role = "aut",
-           comment = "co-author of the bayesTLS framework"),
+           comment = c(ORCID = "0000-0003-2106-6597",
+                       "co-author of the bayesTLS framework")),
     person("Daniel W. A.", "Noble", role = "aut",
-           comment = "senior author of the bayesTLS thermal-load-sensitivity framework"))
+           comment = c(ORCID = "0000-0001-9460-8743",
+                       "senior author of the bayesTLS thermal-load-sensitivity framework")))
 Description: A maximum-likelihood implementation of the thermal-load-sensitivity
     (TLS) thermal death-time modelling framework introduced by Noble, Arnold and
     Pottier in the 'bayesTLS' package, providing the frequentist counterpart to
