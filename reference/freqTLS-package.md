@@ -36,9 +36,11 @@ Authors:
 
 - Shinichi Nakagawa <itchyshin@gmail.com>
 
-- Pieter A. Arnold (co-author of the bayesTLS framework)
+- Pieter A. Arnold ([ORCID](https://orcid.org/0000-0002-6158-7752))
+  (co-author of the bayesTLS framework)
 
-- Patrice Pottier (co-author of the bayesTLS framework)
+- Patrice Pottier ([ORCID](https://orcid.org/0000-0003-2106-6597))
+  (co-author of the bayesTLS framework)
 
-- Daniel W. A. Noble (senior author of the bayesTLS
-  thermal-load-sensitivity framework)
+- Daniel W. A. Noble ([ORCID](https://orcid.org/0000-0001-9460-8743))
+  (senior author of the bayesTLS thermal-load-sensitivity framework)

@@ -4,13 +4,16 @@
 
 - **Shinichi Nakagawa**. Author, maintainer.
 
-- **Pieter A. Arnold**. Author.  
+- **Pieter A. Arnold**. Author.
+  [](https://orcid.org/0000-0002-6158-7752)  
   co-author of the bayesTLS framework
 
-- **Patrice Pottier**. Author.  
+- **Patrice Pottier**. Author.
+  [](https://orcid.org/0000-0003-2106-6597)  
   co-author of the bayesTLS framework
 
-- **Daniel W. A. Noble**. Author.  
+- **Daniel W. A. Noble**. Author.
+  [](https://orcid.org/0000-0001-9460-8743)  
   senior author of the bayesTLS thermal-load-sensitivity framework
 
 ## Citation
