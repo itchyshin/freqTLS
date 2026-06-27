@@ -3,6 +3,7 @@
 ## Authors
 
 - **Shinichi Nakagawa**. Author, maintainer.
+  [](https://orcid.org/0000-0002-7765-5182)
 
 - **Pieter A. Arnold**. Author.
   [](https://orcid.org/0000-0002-6158-7752)  
