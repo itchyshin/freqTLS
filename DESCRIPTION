@@ -3,7 +3,8 @@ Title: Frequentist Inference for Thermal Load Sensitivity Models
 Version: 0.1.0
 Authors@R: c(
     person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com",
-           role = c("aut", "cre")),
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7765-5182")),
     person("Pieter A.", "Arnold", role = "aut",
            comment = c(ORCID = "0000-0002-6158-7752",
                        "co-author of the bayesTLS framework")),
