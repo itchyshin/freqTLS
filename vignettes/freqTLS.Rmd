@@ -247,21 +247,29 @@ interval would understate. Single random intercepts are supported on `CTmax`,
 hierarchical workflow and the few-groups caveats (the variance components are
 biased low when fewer than about eight groups are sampled).
 
-## The whole API at a glance
+## The core workflow at a glance
 
 `freqTLS` deliberately mirrors the `bayesTLS` workflow, so the same
-**standardise → fit → quantities → plot** path runs by maximum likelihood. The
-map below shows the full surface and how each box twins a `bayesTLS` function. The
+**standardise → fit → quantities → plot** path runs by maximum likelihood.
+The map below shows the main workflow and how each box twins a `bayesTLS`
+function. The
 **"freqTLS extras"** box (gold, upper right) is the frequentist-only addition —
 Wald / profile / bootstrap intervals and the Confidence Eye — and the dashed
 **"trace & repair helpers — planned"** box is the one piece not yet ported.
 
 ```{r function-map, echo = FALSE, results = "asis"}
 # Inline the SVG rather than include_graphics() so the figure does not depend on
-# pkgdown copying a co-located static asset. Blank lines are dropped so pandoc
-# keeps it as a single raw-HTML block; accessibility is the SVG's <title>/<desc>.
+# pkgdown copying a co-located static asset. The Pandoc raw-HTML fence is
+# essential: without it, wildcard labels such as get_*_summary() are parsed as
+# Markdown emphasis, which breaks the SVG namespace. Accessibility is provided
+# by the SVG's <title>/<desc>.
 svg_lines <- readLines("freqTLS_function_map.svg", warn = FALSE)
-cat(svg_lines[nzchar(trimws(svg_lines))], sep = "\n")
+cat(
+  "```{=html}\n",
+  paste(svg_lines, collapse = "\n"),
+  "\n```\n",
+  sep = ""
+)
 ```
 
 ## Where to next

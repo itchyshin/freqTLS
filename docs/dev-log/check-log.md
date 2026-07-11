@@ -1710,3 +1710,85 @@ Interpretation:
   vignettes Stan-free from the cache) before push; the benchmark-sanity tripwire
   could be extended to the suzukii/snowgum configs (a follow-up, noted in
   known-limitations).
+
+## 2026-07-11 -- Get-started function-map repair and CRAN-readiness audit
+
+Goal:
+
+- Repair the function map that broke into ordinary page text on the deployed
+  get-started article, then assess local and public CRAN readiness without
+  treating green development CI as submission evidence.
+
+Changes:
+
+- `vignettes/freqTLS.Rmd` now emits the inline function-map SVG inside a Pandoc
+  raw-HTML fence. This prevents wildcard labels such as `get_*_summary()` from
+  becoming HTML `<em>` elements that terminate the SVG namespace.
+- The section is now "The core workflow at a glance" rather than "The whole
+  API", because the map intentionally omits some exported utilities.
+- `tools/build-site.R` now fails when the rendered SVG is missing, unclosed,
+  contains `<em>`, loses either wildcard accessor label, or contains fewer than
+  60 SVG text nodes.
+- `devtools::document()` regenerated two hand-synchronised pages:
+  `man/profile.profile_tls.Rd` and `man/tdt_unit_to_minutes.Rd`. The latter
+  exposes a real unresolved-link warning recorded below.
+
+Checks run:
+
+- Live pre-fix browser DOM check on
+  `https://itchyshin.github.io/freqTLS/articles/freqTLS.html` -> 39 SVG text
+  nodes, 19 rectangles, two `<em>` elements inside the SVG, and stray text
+  beginning `summary() · get` immediately after the SVG.
+- `Rscript --vanilla -e 'pkgdown::build_article("freqTLS", new_process = FALSE,
+  quiet = FALSE)'` with the package installed in `/tmp/freqTLS-lib` -> article
+  built successfully.
+- Local post-fix browser DOM check -> 69 SVG text nodes, 27 rectangles, zero
+  `<em>` elements, the literal `get_*_summary() · get_*_draws()` label, a valid
+  DOM `viewBox`, and one `#where-to-next` heading after the map.
+- `R_LIBS_USER='/tmp/freqTLS-lib:/Users/z3437171/Library/R/arm64/4.6/library'
+  Rscript --vanilla tools/build-site.R` -> full site built; internal
+  `AGENTS.html`, `CLAUDE.html`, and `SPEC.html` removed; alt text filled on six
+  reference pages; the new function-map gate passed.
+- `Rscript --vanilla -e 'devtools::document()'` -> completed, with warnings for
+  the unresolved `derive_tdt_curve` link and `@noRd` text in `R/utils.R:22`;
+  regenerated the two pages named above.
+- `Rscript --vanilla -e 'devtools::test()'` ->
+  `[ FAIL 0 | WARN 0 | SKIP 1 | PASS 771 ]`. The skip message still describes
+  the benchmark cache as old profileTLS-format data.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `Rscript --vanilla -e 'devtools::check_man()'` -> unresolved
+  `derive_tdt_curve` cross-reference plus the two roxygen warnings above.
+- `Rscript --vanilla -e 'urlchecker::url_check()'` -> the pkgdown URL redirects
+  to its trailing-slash form; five DOI endpoints returned HTTP 403 to the
+  checker.
+- Strict `rcmdcheck::rcmdcheck(args = "--as-cran", error_on = "never")` ->
+  `1 ERROR | 0 WARNING | 1 NOTE`: unavailable suggested packages `bayesTLS` and
+  `covr`; incoming NOTE for new submission, the non-mainstream `bayesTLS`
+  Suggest, the redirecting pkgdown URL, and a 12,567,882-byte tarball.
+- Relaxed `rcmdcheck::rcmdcheck(args = "--as-cran",
+  env = c("_R_CHECK_FORCE_SUGGESTS_" = "false"), error_on = "never")` ->
+  `0 ERROR | 1 WARNING | 2 NOTEs`: missing `derive_tdt_curve` link; the same
+  incoming NOTE with a 12,567,884-byte tarball; and non-standard top-level
+  `output` and `scripts` directories. Compilation, installation, examples,
+  tests, vignette rebuild, and PDF/HTML manuals otherwise passed.
+- `curl -LIsS https://cran.r-project.org/package=freqTLS` -> redirect followed
+  by HTTP 404 at the package index: freqTLS is not currently on CRAN.
+- `gh issue list --state open --limit 100 --json number,title,url` -> `[]`; no
+  overlapping open issue was available to update.
+- Exact consistency scans:
+  `rg -n "whole API|full surface|function map|freqTLS extras|trace & repair"
+  README.Rmd ROADMAP.md NEWS.md docs vignettes R tests`;
+  `rg -n "posterior|credible" R vignettes README.Rmd docs`;
+  `rg -n "planned.*implemented|not implemented yet.*implemented|TODO|FIXME"
+  README.Rmd ROADMAP.md docs vignettes R tests`.
+
+Interpretation:
+
+- The function map is repaired in the local rendered artifact and protected by
+  the site build. It is not deployed yet.
+- The package is implemented broadly and its local tests are healthy, but it is
+  not CRAN-ready. Submission blockers include the unresolved Rd link, the
+  GitHub-only Suggest strategy, the 12.6 MB tarball and non-standard top-level
+  directories, missing submission metadata, and contradictory authoritative
+  scope claims across `AGENTS.md`, `SPEC.md`, README/NEWS, the capability
+  matrix, and known limitations.

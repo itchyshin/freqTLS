@@ -106,3 +106,42 @@ if (length(still_there)) {
   stop("Internal pages still present after cleanup: ",
        paste(still_there, collapse = ", "))
 }
+
+# Fail if Pandoc has interpreted wildcard function names inside the inline SVG
+# as Markdown emphasis. An HTML <em> element is a foreign-content integration
+# point: it terminates the SVG context and makes the rest of the map flow as
+# ordinary page text. This guard checks the rendered artifact, where the defect
+# occurs, rather than trusting the valid source SVG.
+article <- file.path(dst, "articles", "freqTLS.html")
+if (!file.exists(article)) {
+  stop("Rendered get-started article is missing: ", article)
+}
+
+article_html <- paste(
+  readLines(article, warn = FALSE, encoding = "UTF-8"),
+  collapse = "\n"
+)
+map_start <- regexpr(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1500 880"',
+  article_html,
+  fixed = TRUE
+)
+if (map_start[[1]] < 0L) {
+  stop("The freqTLS function map SVG was not preserved in the rendered article.")
+}
+
+map_tail <- substring(article_html, map_start[[1]])
+map_end <- regexpr("</svg>", map_tail, fixed = TRUE)
+if (map_end[[1]] < 0L) {
+  stop("The freqTLS function map has no closing </svg> tag.")
+}
+map_html <- substring(map_tail, 1L, map_end[[1]] + nchar("</svg>") - 1L)
+map_text_nodes <- lengths(regmatches(map_html, gregexpr("<text", map_html,
+                                                        fixed = TRUE)))
+
+if (grepl("<em", map_html, fixed = TRUE) ||
+    !grepl("get_*_summary()", map_html, fixed = TRUE) ||
+    !grepl("get_*_draws()", map_html, fixed = TRUE) ||
+    map_text_nodes < 60L) {
+  stop("The rendered function map was corrupted by Markdown/HTML parsing.")
+}
