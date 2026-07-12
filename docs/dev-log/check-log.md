@@ -2151,3 +2151,34 @@ Interpretation:
 - This checksum supersedes every earlier artifact. The local package, docs, and
   pkgdown gates are clean. Commit/PR-specific CI, win-builder, R-hub, final
   post-platform Grace/Rose/Pat approval, and written author consent remain open.
+
+## 2026-07-11 -- PR #2 CI setup repair
+
+Goal:
+
+- Diagnose the first four-platform PR run from logs and repair only the failing
+  workflow setup expression.
+
+Checks and finding:
+
+- `gh pr checks 2 --watch --interval 10` -> all four jobs in run
+  `29174528886` failed during `setup-r-dependencies`, before package build/check.
+- The failed logs show the pinned r-lib action generated
+  `dependencies = c(needs, ("hard", "soft"))`, which is invalid R, from the
+  workflow input `dependencies: '"hard", "soft"'`.
+- The pinned action source at commit
+  `d3c5be51b12e724e68f33216ca3c148b66d5f0b6` documents the input as an R
+  expression and interpolates it inside `c(needs, (...))`. The workflow now
+  supplies `c("hard", "soft")`; the resulting expression parses locally.
+- The run also warned that checkout v4 targets deprecated Node 20. Both
+  workflows now pin checkout v6 commit
+  `df4cb1c069e1874edd31b4311f1884172cec0e10`; its upstream `action.yml` uses
+  Node 24.
+- Both workflow files parse with Ruby YAML, all action references remain full
+  40-character SHAs, and `git diff --check` passes.
+
+Interpretation:
+
+- This was a workflow-expression failure, not a package failure. The package
+  tarball is unchanged because `.github/` and the check log are build-excluded.
+  PR #2 must rerun all four platform jobs before the CI gate can pass.
