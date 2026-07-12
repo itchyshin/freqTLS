@@ -256,9 +256,9 @@ the speed gap concrete:
 
 | Estimator           | Task                       | Wall-clock | Source |
 |:--------------------|:---------------------------|:-----------|:-------|
-| freqTLS             | fit (ML)                   | 29 ms      | live   |
-| freqTLS             | fit + Wald CTmax & z       | 34 ms      | live   |
-| freqTLS             | fit + profile CTmax & z    | 806 ms     | live   |
+| freqTLS             | fit (ML)                   | 21 ms      | live   |
+| freqTLS             | fit + Wald CTmax & z       | 25 ms      | live   |
+| freqTLS             | fit + profile CTmax & z    | 621 ms     | live   |
 | classical two-stage | fit + delta CI             | 1.4 s      | cached |
 | bayesTLS            | fit (4 chains x 4000 MCMC) | 5.0 s      | cached |
 

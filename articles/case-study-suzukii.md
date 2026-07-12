@@ -220,7 +220,7 @@ rbind(
 #> # A tibble: 2 × 5
 #>   parameter  estimate conf.low conf.high method   
 #>   <chr>         <dbl>    <dbl>     <dbl> <chr>    
-#> 1 dCTmax:F-M   0.0244  -0.0981     0.148 bootstrap
+#> 1 dCTmax:F-M   0.0244  -0.100      0.147 bootstrap
 #> 2 dz:F-M       0.0538  -0.0162     0.133 bootstrap
 ```
 
