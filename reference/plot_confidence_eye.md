@@ -9,8 +9,8 @@ along the x-axis, and the confidence interval is a short, wide pale lens
 with a hollow point estimate. The shallow horizontal lens reads as a
 confidence *interval*, never a posterior density – freqTLS intervals are
 likelihood confidence intervals, so the wording is "confidence", never
-"posterior" (SPEC.md S13). The layout follows the gllvmTMB / drmTMB
-Confidence-Eye contract.
+"posterior". The layout follows the gllvmTMB / drmTMB Confidence-Eye
+contract.
 
 ## Usage
 
@@ -82,7 +82,7 @@ A `ggplot` object.
 
 ## Details
 
-### Honest fallback (R-PROFILE)
+### Honest fallback for open profiles
 
 When a profile does not close (`conf.status` is `"open_lower"`,
 `"open_upper"`, `"open_both"`, or a bound is `NA`), no lens is drawn for

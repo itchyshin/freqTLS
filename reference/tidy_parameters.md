@@ -75,7 +75,7 @@ tidy_parameters(fit)
 tidy_parameters(fit, method = "profile")
 #> "up" is profiled with the delta-method Wald interval.
 #> ℹ The profile path is not yet wired for the disjoint-bounds "up" coordinate
-#>   `beta_up` (SPEC.md S10).
+#>   `beta_up`; use the reported Wald interval or request a bootstrap interval.
 #> # A tibble: 5 × 8
 #>   parameter group estimate std.error conf.low conf.high interval_type scale   
 #>   <chr>     <chr>    <dbl>     <dbl>    <dbl>     <dbl> <chr>         <chr>   

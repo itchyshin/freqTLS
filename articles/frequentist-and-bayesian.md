@@ -79,8 +79,8 @@ respond in opposite ways:
   [`confint()`](https://rdrr.io/r/stats/confint.html) returns `NA` on
   the open side (never a fabricated bound) or falls back to a prior-free
   bootstrap, and the package emits an explicit identifiability warning.
-  The Confidence Eye draws a hollow point with an open lens, so weak
-  data *look* weak. freqTLS surfaces twelve such data-adequacy and
+  The Confidence Eye draws a hollow point with no lens, so weak data
+  *look* weak. freqTLS surfaces twelve such data-adequacy and
   profile-geometry warnings rather than letting thin data produce
   confident-looking numbers.
 - **A prior can mask it.** Add a prior and the posterior closes: the
@@ -124,18 +124,17 @@ Both paths can fail, in different ways and with different tells:
 |----|----|----|
 | Failure modes | optimiser non-convergence (`code != 0`); non-positive-definite Hessian (`pdHess = FALSE`); a profile that does not close | divergent transitions; low effective sample size; `R-hat > 1.01`; poor mixing |
 | Diagnostics | convergence code, `pdHess`, profile geometry, the identifiability warnings | divergences, ESS, `R-hat`, trace plots |
-| Typical fixes | better starts, the built-in BFGS retry, the **bootstrap fallback** so an interval is always returned, or simplifying the model | reparameterising, more iterations/adapt-delta, or **stronger priors** |
+| Typical fixes | better starts, the built-in BFGS retry, a **bootstrap fallback**, or simplifying the model; unstable refits can still leave `NA` | reparameterising, more iterations/adapt-delta, or **stronger priors** |
 
 Two things are worth noting. First, the Bayesian fix of last resort —
 strengthening the prior — is the very lever that trades identifiability
-for prior dependence (above). Second, `freqTLS` is built to **always
-return an interval**: when a profile does not close or the Hessian is
-not positive definite,
-[`confint()`](https://rdrr.io/r/stats/confint.html) falls back to a
-prior-free parametric bootstrap, matching the “you always get an answer”
-convenience of a Bayesian fit without a prior. It runs in milliseconds
-with no Stan toolchain, where an MCMC fit takes minutes and a working
-sampler.
+for prior dependence (above). Second, when a profile does not close or
+the Hessian is not positive definite,
+[`confint()`](https://rdrr.io/r/stats/confint.html) can fall back to a
+prior-free parametric bootstrap. That route often closes the interval
+without a prior, but too few stable refits still produce `NA`; the
+failure remains visible. The likelihood path needs no Stan toolchain,
+whereas an MCMC fit needs a working sampler.
 
 ## Confidence versus credible intervals
 

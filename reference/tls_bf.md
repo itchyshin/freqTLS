@@ -37,17 +37,19 @@ and `temp(<temperature>)` (order does not matter).
 
 The remaining arguments are sub-parameter formulas keyed by their
 left-hand side, one of `low`, `up`, `log_k`, `CTmax`, or `log_z`. Any
-sub-parameter you omit defaults to `~ 1`. Since v0.2, each of `low`,
-`up`, and `log_k` may carry its **own** design independently — a
-grouping factor (`low ~ group`), a continuous covariate
-(`log_k ~ body_size`), or an intercept — no longer required to share one
-factor or match the `CTmax` / `log_z` grouping. `CTmax` and `log_z`
-accept any fixed-effect formula (e.g. `CTmax ~ group`). A single random
-intercept, `<param> ~ <fixed> + (1 | group)`, is accepted on `CTmax`,
-`log_z`, `low`, and `log_k` (one grouping factor each, intercept only) –
-but not on the upper asymptote `up`, for which the compiled objective
-has no random-intercept term. Putting the same grouping factor on two or
-more of them fits independent variances (no correlation term) and warns.
+sub-parameter you omit defaults to `~ 1`. Each of `low`, `up`, and
+`log_k` may carry its **own** design independently — a grouping factor
+(`low ~ group`), a continuous covariate (`log_k ~ body_size`), or an
+intercept — and need not share one factor or match the
+headline-parameter grouping. `CTmax` and `log_z` accept fixed-effect
+formulas but must produce the same model-matrix columns (for example,
+use `CTmax ~ group, log_z ~ group`); their supported random- intercept
+groupings may differ. A single random intercept,
+`<param> ~ <fixed> + (1 | group)`, is accepted on `CTmax`, `log_z`,
+`low`, and `log_k` (one grouping factor each, intercept only) – but not
+on the upper asymptote `up`, for which the compiled objective has no
+random-intercept term. Putting the same grouping factor on two or more
+of them fits independent variances (no correlation term) and warns.
 
 ## Parser provenance
 
@@ -57,7 +59,8 @@ formula walk, and random-bar detection) is adapted from drmTMB's
 `drm_formula()` / `parse_drm_formula_entry()` (GPL-3); see
 `inst/COPYRIGHTS`. freqTLS writes its own grammar (the
 [`time()`](https://rdrr.io/r/stats/time.html) / `temp()` axis markers,
-the five fixed sub-parameter handles, and the v0.1 restrictions).
+the five fixed sub-parameter handles, and the package's supported
+random-effect grammar).
 
 ## See also
 

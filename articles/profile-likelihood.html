@@ -54,8 +54,7 @@
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -93,9 +92,10 @@ profile is, why its intervals can be asymmetric, how it differs from the
 Wald interval, and — importantly — how <code>freqTLS</code> behaves
 honestly when a profile does not close. These are likelihood intervals,
 not posteriors; the language throughout is “confidence”, never
-“posterior” or “credible”. (The full algorithm is specified in the
-package source, in
-<code>docs/design/04-profile-likelihood.md</code>.)</p>
+“posterior” or “credible”. See <code><a href="../articles/model-math.html">vignette("model-math")</a></code> for
+the 4PL parameterisation that the profile follows. Before interpreting
+an interval, run <code>check_tls(fit)</code>; its help page maps each
+data-adequacy warning to a concrete design or analysis response.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -214,7 +214,7 @@ parameter table:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">fit</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"interval_type"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"up"</span> is profiled with the delta-method Wald interval.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The profile path is not yet wired for the disjoint-bounds <span style="color: #0000BB;">"up"</span> coordinate</span></span>
-<span><span class="co">#&gt;   `beta_up` (SPEC.md S10).</span></span>
+<span><span class="co">#&gt;   `beta_up`; use the reported Wald interval or request a bootstrap interval.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
 <span><span class="co">#&gt;   parameter estimate conf.low conf.high interval_type</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span></span>
@@ -241,13 +241,20 @@ the bootstrap:
 </div>
 </div>
 <div class="section level2">
-<h2 id="the-honest-non-closing-fallback">The honest non-closing fallback<a class="anchor" aria-label="anchor" href="#the-honest-non-closing-fallback"></a>
+<h2 id="recovery-when-a-profile-does-not-close">Recovery when a profile does not close<a class="anchor" aria-label="anchor" href="#recovery-when-a-profile-does-not-close"></a>
 </h2>
 <p>The headline value-add over the Bayesian path is that
 <code>freqTLS</code> tells you when the data do not identify a
 parameter, instead of letting a prior quietly fill the gap. When a
 profile does not rise above the cutoff on one side — because the data
-are too sparse to pin the parameter down — <code>freqTLS</code>:</p>
+are too sparse to pin the parameter down — the default
+<code>fallback = TRUE</code> first attempts a parametric bootstrap. A
+successful bootstrap returns a prior-free percentile interval and labels
+its <code>method</code> as <code>"bootstrap"</code>; too few stable or
+non-degenerate refits still leave an unavailable interval. Set
+<code>fallback = FALSE</code> when you specifically need to inspect the
+unmodified profile geometry. In that strict mode
+<code>freqTLS</code>:</p>
 <ul>
 <li>emits a warning that the parameter is <strong>weakly
 identified</strong> (“consider <code>bayesTLS</code> or a
@@ -257,10 +264,10 @@ and</li>
 <li>sets a <code>conf.status</code> marker (<code>open_lower</code>,
 <code>open_upper</code>, or <code>open_both</code>).</li>
 </ul>
-<p>Here is a deliberately sparse design — few temperatures, almost no
-mortality contrast — that does not identify <code>CTmax</code>. We catch
-the warning so the vignette builds, but show the status and the
-<code>NA</code> endpoint:</p>
+<p>Here is a deliberately sparse design — few temperatures and little
+mortality contrast — that does not identify <code>CTmax</code>. Start
+with the user-facing default: it tries bootstrap recovery after the
+profile remains open.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
 <span><span class="va">sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span></span>
@@ -275,9 +282,10 @@ the warning so the vignette builds, but show the status and the
 <span>          family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ci</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span><span class="va">ci_default</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">withCallingHandlers</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sparse_fit</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sparse_fit</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>,</span>
+<span>            fallback <span class="op">=</span> <span class="cn">TRUE</span>, nboot <span class="op">=</span> <span class="fl">1000</span>, boot_seed <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
 <span>    warning <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"caught warning: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">invokeRestart</a></span><span class="op">(</span><span class="st">"muffleWarning"</span><span class="op">)</span></span>
@@ -287,29 +295,59 @@ the warning so the vignette builds, but show the status and the
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; caught warning: Inner re-optimisation did not converge at 1 grid point while profiling <span style="color: #0000BB;">"CTmax"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Those points are reported as <span style="color: #0000BB;">"NA"</span>; the interval is taken from the points that</span></span>
-<span><span class="co">#&gt;   did converge (SPEC.md S10, warning 12).</span></span>
+<span><span class="co">#&gt;   did converge.</span></span>
 <span><span class="co">#&gt; caught warning: The profile deviance for <span style="color: #0000BB;">"CTmax"</span> is non-monotone (multiple local minima).</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The interval may not be a single connected region; inspect `plot(profile(fit,</span></span>
-<span><span class="co">#&gt;   "CTmax"))` (SPEC.md S10, warning 11).</span></span>
+<span><span class="co">#&gt;   "CTmax"))`.</span></span>
 <span><span class="co">#&gt; caught warning: The profile likelihood for <span style="color: #0000BB;">"CTmax"</span> did not close on the lower and upper sides:</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"CTmax"</span> is weakly identified.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound (R-PROFILE).</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter (SPEC.md S10, warning 9).</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
 <span><span class="co">#&gt;   non-closing side).</span></span>
-<span><span class="co">#&gt; caught warning: NA/NaN function evaluation</span></span>
-<span><span class="va">ci</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.status"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
-<span><span class="co">#&gt;   parameter conf.low conf.high estimate conf.status</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax         34.7      219.     37.8 bootstrap</span></span></code></pre></div>
-<p>The interval is open (an <code>NA</code> endpoint and an
-<code>open_*</code> status) rather than a confident but unsupported
-bound. The Confidence Eye honours this too: a non-closing profile draws
-a <strong>hollow point with no lens</strong>, never a fabricated closed
-eye.</p>
+<span><span class="va">ci_default</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"estimate"</span>, <span class="st">"method"</span>,</span>
+<span>               <span class="st">"conf.status"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
+<span><span class="co">#&gt;   parameter conf.low conf.high estimate method    conf.status</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax         34.7      219.     37.8 bootstrap bootstrap</span></span></code></pre></div>
+<p>Now disable fallback to inspect the strict profile. The open side
+remains <code>NA</code>, with an <code>open_*</code> status, rather than
+becoming a confident but unsupported bound.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ci_strict</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">withCallingHandlers</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sparse_fit</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>, fallback <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    warning <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"caught warning: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">invokeRestart</a></span><span class="op">(</span><span class="st">"muffleWarning"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="va">e</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; caught warning: Inner re-optimisation did not converge at 1 grid point while profiling <span style="color: #0000BB;">"CTmax"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Those points are reported as <span style="color: #0000BB;">"NA"</span>; the interval is taken from the points that</span></span>
+<span><span class="co">#&gt;   did converge.</span></span>
+<span><span class="co">#&gt; caught warning: The profile deviance for <span style="color: #0000BB;">"CTmax"</span> is non-monotone (multiple local minima).</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The interval may not be a single connected region; inspect `plot(profile(fit,</span></span>
+<span><span class="co">#&gt;   "CTmax"))`.</span></span>
+<span><span class="co">#&gt; caught warning: The profile likelihood for <span style="color: #0000BB;">"CTmax"</span> did not close on the lower and upper sides:</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">"CTmax"</span> is weakly identified.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter.</span></span>
+<span><span class="va">ci_strict</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"estimate"</span>, <span class="st">"method"</span>,</span>
+<span>              <span class="st">"conf.status"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
+<span><span class="co">#&gt;   parameter conf.low conf.high estimate method  conf.status</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax           <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     37.8 profile open_both</span></span></code></pre></div>
+<p>The Confidence Eye follows the same contract. With its default
+<code>fallback = TRUE</code>, a successful bootstrap recovery draws a
+bootstrap lens. For the strict diagnostic below,
+<code>fallback = FALSE</code> preserves the open profile and draws a
+<strong>hollow point with no lens</strong>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># fallback = FALSE so the eye refuses to draw a lens when the profile does not</span></span>
 <span><span class="co"># close (a hollow point only), matching the honest non-closing contract above.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">sparse_fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>,</span>
@@ -319,12 +357,12 @@ eye.</p>
 <div class="section level2">
 <h2 id="calibration-how-well-do-the-intervals-cover">Calibration: how well do the intervals cover?<a class="anchor" aria-label="anchor" href="#calibration-how-well-do-the-intervals-cover"></a>
 </h2>
-<p>A confidence interval is only as good as its coverage.
-<code>data-raw/coverage-study.R</code> simulates 200 datasets at a known
+<p>A confidence interval is only as good as its coverage. The
+repository-only coverage study simulates 200 datasets at a known
 <code>CTmax</code>/<code>z</code> under each family, fits every one by
 ML, builds 95% profile intervals, and records the empirical
-(frequentist) coverage. The summary is shipped with the package:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+(frequentist) coverage. Its summary is shipped with the package:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cov_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"coverage_results.rds"</span>, package <span class="op">=</span> <span class="st">"freqTLS"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="va">cov_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">cov_path</span><span class="op">)</span></span>
@@ -386,8 +424,10 @@ and a small fraction of profiles do not close. The honest reading is to
 treat beta-binomial profile intervals as approximate and, when coverage
 matters, calibrate them with a parametric bootstrap or use
 <code>bayesTLS</code>. This is exactly the regime the ship stance below
-warns about. Re-run <code>data-raw/coverage-study.R</code> to reproduce
-(and to regenerate the per-simulation raw data).</p>
+warns about. Repository maintainers can reproduce the study from a
+source checkout with the repository-only
+<code>data-raw/coverage-study.R</code> script; that script is not
+installed with the package.</p>
 </div>
 <div class="section level2">
 <h2 id="ship-stance">Ship stance<a class="anchor" aria-label="anchor" href="#ship-stance"></a>
@@ -395,12 +435,15 @@ warns about. Re-run <code>data-raw/coverage-study.R</code> to reproduce
 <p>The profile gives fast, prior-free, asymmetry-respecting confidence
 intervals <strong>when the MLE is interior and the data identify the
 target</strong>. For boundary asymptotes, very sparse designs,
-overdispersion concentrated at zero, or (future) random effects, prefer
-<code>bayesTLS</code> or a bootstrap — and <code>freqTLS</code> warns
-you when you are in that regime. It never claims the profile is
-universally superior to the Bayesian path. See
-<code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code> for the side-by-side
-comparison.</p>
+overdispersion concentrated at zero, or weak variance components, use
+the interval route appropriate to the fitted model. Fixed-effect
+coordinates in a random-intercept fit can be profiled under the Laplace
+approximation; variance components use log-scale Wald intervals unless
+you request the random-effects-aware parametric bootstrap.
+<code>freqTLS</code> warns you when the requested route is weak or
+unavailable. It never claims the profile is universally superior to the
+Bayesian path. See <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code> for
+the side-by-side comparison.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

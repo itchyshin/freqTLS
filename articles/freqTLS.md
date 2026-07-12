@@ -114,11 +114,12 @@ fit
 
 ### Formula interface
 
-For moderators,
+For the supported moderators,
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
-takes the same **direct interface** as `bayesTLS` — `ctmax =`, `z =`, or
-the `by =` shorthand (e.g. `by = "life_stage"` for a grouped fit). Under
-the hood the engine also exposes a `brms`/`drmTMB`-style grammar via
+takes a **similar direct interface** to `bayesTLS` — `ctmax =`, `z =`,
+or the `by =` shorthand (e.g. `by = "life_stage"` for a grouped fit).
+Under the hood the engine also exposes a `brms`/`drmTMB`-style grammar
+via
 [`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md) —
 the left-hand side names the survival counts
 (`successes | trials(total)`), the right-hand side tags the two axes
@@ -286,8 +287,8 @@ hierarchical models.
 **Other families.** Besides `"beta_binomial"`,
 [`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
 accepts `"binomial"` (no overdispersion) and `"beta"` (a continuous
-proportion in (0, 1) with no trials column; see
-[`vignette("case-study-leaf-psii")`](https://itchyshin.github.io/freqTLS/articles/case-study-leaf-psii.md)).
+proportion in (0, 1) with no trials column; the runnable example below
+uses simulated beta data).
 
 **Grouped `CTmax` and `z`.** Put a grouping factor on a sub-parameter to
 estimate a separate, directly profile-able `CTmax` and `z` per group,
@@ -421,3 +422,10 @@ planned”** box is the one piece not yet ported.
 - [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)
   — the three-way comparison (classical two-stage, Bayesian, profile
   likelihood) and the credit for the framework.
+
+Before interpreting any fitted model, run `check_tls(fit)`. The recovery
+guide in
+[`?check_tls`](https://itchyshin.github.io/freqTLS/reference/check_tls.md)
+maps each warning to the next design or analysis action; the profile
+article shows both the default bootstrap recovery attempt and the strict
+`fallback = FALSE` open-profile diagnostic.

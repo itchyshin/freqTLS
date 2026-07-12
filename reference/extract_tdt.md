@@ -77,3 +77,22 @@ value columns are `z` / `temp`.
 [`tls()`](https://itchyshin.github.io/freqTLS/reference/tls.md),
 [`get_z_summary()`](https://itchyshin.github.io/freqTLS/reference/tdt-accessors.md),
 [`get_ctmax_summary()`](https://itchyshin.github.io/freqTLS/reference/tdt-accessors.md)
+
+## Examples
+
+``` r
+# \donttest{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+tdt <- extract_tdt(fit, nboot = 10, seed = 1)
+tdt$CTmax$summary
+#> # A tibble: 1 × 3
+#>   temp_median temp_lower temp_upper
+#>         <dbl>      <dbl>      <dbl>
+#> 1        35.9       35.8       36.1
+# }
+```

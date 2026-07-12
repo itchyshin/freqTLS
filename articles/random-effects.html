@@ -54,8 +54,7 @@
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -112,10 +111,11 @@ tool: it costs one variance parameter instead of one coefficient per
 group, and the group estimates borrow strength from each other. The
 deviations <code>b_g ~ N(0, sigma_CTmax^2)</code> are integrated out by
 <code>TMB</code>’s Laplace approximation; <code>sigma_CTmax</code> is
-estimated by marginal maximum likelihood. The no-random-effects path is
-byte-identical to the fixed-effects model, so adding
-<code>(1 | group)</code> changes nothing when there is nothing to
-pool.</p>
+estimated by marginal maximum likelihood. A formula without
+<code>(1 | group)</code> uses the ordinary fixed-effects objective.
+Adding <code>(1 | group)</code> is not a no-op: it adds and integrates a
+group-level Gaussian block, even when its fitted variance is near
+zero.</p>
 </div>
 <div class="section level2">
 <h2 id="a-random-intercept-on-ctmax">A random intercept on CTmax<a class="anchor" aria-label="anchor" href="#a-random-intercept-on-ctmax"></a>
@@ -144,11 +144,12 @@ deviation of <code>CTmax</code>, in °C — directly interpretable on the
 thermal-tolerance scale. It is a maximum-likelihood variance component,
 so it is biased <strong>low</strong> when there are few groups: it is
 essentially unbiased by ~14 groups but increasingly shrunk toward zero
-below that. A focused recovery study
-(<code>data-raw/re-recovery-study.R</code>) makes the bias concrete, and
-shows the fixed-effect <code>CTmax</code> interval losing coverage in
-step — the empirical basis for the advisory <code><a href="../reference/fit_tls.html">fit_tls()</a></code> emits
-below ~8 groups:</p>
+below that. A focused recovery study makes the bias concrete and shows
+the fixed-effect <code>CTmax</code> interval losing coverage in step —
+the empirical basis for the advisory <code><a href="../reference/fit_tls.html">fit_tls()</a></code> emits below
+~8 groups. Repository maintainers can regenerate it with the source-only
+<code>data-raw/re-recovery-study.R</code> script, which is not
+installed:</p>
 <table class="table">
 <caption>Random-intercept recovery vs number of groups (true sigma_CTmax
 = 1.5; 150 sims/cell). The ML SD is biased low and the fixed-effect
@@ -195,10 +196,11 @@ groups.</caption>
 </table>
 <p>So with only a handful of groups the reported
 <code>sigma_CTmax</code> understates the true spread and the
-<code>CTmax</code> interval is optimistic; prefer
+<code>CTmax</code> interval is optimistic. Prefer
 <code>confint(method = "bootstrap")</code> (or <code>bayesTLS</code>)
-for the fixed effects, and read the variance component as a lower
-bound.</p>
+for the fixed effects, and describe the variance component as likely
+downward-biased rather than treating it as a precise estimate or a
+literal confidence bound.</p>
 <p>The conditional modes (BLUPs) — each colony’s shrunken deviation from
 the population <code>CTmax</code> — come from <code><a href="../reference/ranef.html">ranef()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -210,12 +212,36 @@ the population <code>CTmax</code> — come from <code><a href="../reference/rane
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> g10   CTmax   -<span style="color: #BB0000;">0.505</span>     0.396</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> g11   CTmax    2.16      0.396</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> g12   CTmax    0.603     0.396</span></span></code></pre></div>
-<p><code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> gives a positive (log-scale) Wald interval for
-<code>sigma_CTmax</code>, and a genuine profile-likelihood interval for
-the population <code>CTmax</code> under the random effect (each grid
-point re-runs the Laplace approximation, so it is slower than a
-fixed-effects profile):</p>
+<p>Prediction distinguishes the population curve from an observed
+colony’s conditional curve. Population predictions set the random
+intercept to zero; conditional predictions add the fitted BLUP and
+require the grouping column in <code>newdata</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">colony_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="../reference/ranef.html">ranef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">new_colony</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="fl">36</span>, duration <span class="op">=</span> <span class="fl">2</span>, colony <span class="op">=</span> <span class="va">colony_1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"population"</span>, <span class="st">"colony"</span><span class="op">)</span>,</span>
+<span>  survival <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">new_colony</span>, re.form <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">new_colony</span>, re.form <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;       target   survival</span></span>
+<span><span class="co">#&gt; 1 population 0.19888224</span></span>
+<span><span class="co">#&gt; 2     colony 0.08525094</span></span></code></pre></div>
+<p>Calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> without <code>re.form</code> on a
+random-effects fit warns and returns the population prediction. An
+unseen group cannot receive an estimated BLUP, so conditional prediction
+stops and points to <code>re.form = "population"</code>.</p>
+<p><code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> routes uncertainty by target. It gives a
+positive, log-scale Wald interval for <code>sigma_CTmax</code>. It
+profiles the population <code>CTmax</code> under the random effect,
+re-running the Laplace approximation at each grid point, so this is
+slower than a fixed-effects profile. If that fixed-effect profile does
+not close, the default fallback is Wald; request
+<code>method = "bootstrap"</code> to redraw the random effects and refit
+the full model instead.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"sigma_CTmax"</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span>
 <span>  , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
@@ -228,11 +254,14 @@ fixed-effects profile):</p>
 <span><span class="co">#&gt;   parameter conf.low conf.high method </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax         35.2      36.8 profile</span></span></code></pre></div>
-<p>The Confidence Eye stays on Wald intervals for a random-effects fit
-(a profile eye would re-run the Laplace at every grid point for every
-row), which is fast and honest — it is still a confidence interval,
-never a posterior.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>The Confidence Eye always uses Wald intervals for a random-effects
+fit, even when <code>method = "profile"</code> is requested, because a
+profile eye would re-run the Laplace approximation at every grid point
+for every row. Use <code>confint(fit, method = "profile")</code> for
+fixed-effect profiles or <code>confint(fit, method = "bootstrap")</code>
+for random-effects-aware bootstrap intervals. The eye remains a
+confidence-interval display, never a posterior.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="random-effects_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for the population CTmax of a random-intercept fit: a pale confidence lens with a hollow point estimate near 36 degrees Celsius, drawn with a Wald interval; a freqTLS uncertainty display, not a posterior density." width="576"></p>
 </div>
@@ -250,7 +279,7 @@ components live on those scales — <code>sigma_logz</code> is a SD on
 <code>sigma_logz</code> as an approximate <em>multiplicative</em> spread
 on <code>z</code>: <code>exp(sigma_logz)</code> is the fold-change
 across groups, not a z-unit SD.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">dz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                   re_sd_z <span class="op">=</span> <span class="fl">0.3</span>, n_re_groups <span class="op">=</span> <span class="fl">14</span>, seed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -279,7 +308,7 @@ delta-method interval). Put the random intercept on <code>low</code> or
 or more share the <strong>same</strong> grouping factor,
 <code>freqTLS</code> fits them as <strong>independent</strong> variances
 (all cross-correlations forced to zero) and warns:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                   re_sd <span class="op">=</span> <span class="fl">1.2</span>, re_sd_z <span class="op">=</span> <span class="fl">0.3</span>, n_re_groups <span class="op">=</span> <span class="fl">14</span>, seed <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -306,17 +335,19 @@ deliberately stops at independent random intercepts on
 <div class="section level2">
 <h2 id="the-likelihood-view-of-shrinkage">The likelihood view of shrinkage<a class="anchor" aria-label="anchor" href="#the-likelihood-view-of-shrinkage"></a>
 </h2>
-<p>A Gaussian random effect <em>is</em> a prior on the group deviations,
-and the BLUPs are shrunk toward zero exactly as a posterior mean would
-be — the empirical-Bayes view of mixed models. What stays prior-free is
-everything else: the fixed effects and the variance components are
-maximum-likelihood estimates, and their intervals are profile-likelihood
-or Wald confidence intervals, not credible intervals. That is the same
-complementary stance the rest of <code>freqTLS</code> takes toward
-<code>bayesTLS</code> (see
+<p>A Gaussian random effect is a distributional model for the latent
+group deviations, not a prior placed on the reported population
+parameters. Its conditional modes (BLUPs) have an empirical-Bayes
+interpretation and shrink toward zero. The fixed effects and variance
+components are estimated by marginal maximum likelihood, and their
+intervals are profile-likelihood intervals for fixed-effect coordinates,
+log-scale Wald intervals for variance components, or
+parametric-bootstrap intervals when explicitly requested; they are not
+credible intervals. That is the same complementary stance the rest of
+<code>freqTLS</code> takes toward <code>bayesTLS</code> (see
 <code><a href="../articles/frequentist-and-bayesian.html">vignette("frequentist-and-bayesian")</a></code>): the random effect
 buys you partial pooling without committing to priors on the parameters
-you report. ```</p>
+you report.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -39,5 +39,7 @@ A data frame with 299 rows and 5 variables:
 ## Source
 
 Brown shrimp sublethal time-to-knockdown assay (Case Study 1, sublethal
-endpoint). Raw file:
+endpoint), obtained from the bayesTLS package distribution by Noble,
+Arnold, and Pottier (2026), licensed CC BY 4.0. freqTLS dropped excluded
+rows and converted the clock times to elapsed minutes. Raw file:
 `system.file("extdata", "data_sublethal_TDT_brown_shrimp.csv", package = "freqTLS")`.
