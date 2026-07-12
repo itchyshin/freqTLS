@@ -2372,3 +2372,42 @@ Interpretation:
 - The exact replacement artifact removes both DESCRIPTION spell flags and has a
   large local vignette-runtime reduction. External Windows timing, final-head
   CI/R-hub, and fresh completion verdicts remain required before resubmission.
+
+## 2026-07-12 -- Contrast-direction and deterministic-cache audit correction
+
+Goal:
+
+- Close the fresh Grace/Rose findings before treating the incoming-pretest fix
+  as a resubmission candidate.
+
+Changes and evidence:
+
+- `dCTmax:A-B`, `dlog_z:A-B`, and `dz:A-B` now mean group A minus group B in
+  both profile refitting and bootstrap extraction. Design docs, roxygen,
+  generated Rd, NEWS, tests, and the *D. suzukii* article use that convention.
+- The cache generator now uses `fallback = FALSE` for the 12 headline profiles
+  and fixed seeds `20260712` / `20260713` with `nboot = 1000` for the two
+  contrast sets. Metadata records the exact generation commit
+  `589e3af6c7c226c571ddcbf682f86a578f77ad9c`, all three input MD5 values,
+  `nboot`, and both seeds.
+- Two consecutive cache builds returned identical SHA-256
+  `3b4ee270de90fcf7ffab42850da953353515ce9509bb54fee7a2ffdec1edc8a2`.
+- The cache test pins the exact generation commit/checksums/configuration,
+  expects 12 profile/`ok` headline rows and the deterministic contrast split
+  (one profile, seven bootstrap fallbacks), and checks finite endpoints.
+- Targeted `group|case-study-summary-cache|bootstrap` tests -> 77 passes; both
+  changed case-study vignettes rendered successfully.
+- Full `devtools::test()` -> 827 passes, zero failures/warnings/skips in
+  117.9 seconds.
+- Final exact `freqTLS_0.1.0.tar.gz` -> SHA-256
+  `ad637914a1b59d93196a4193807ff5ece904705aec586c136ff62429f38ef994`,
+  about 2.1 MiB, 212 entries.
+- Strict `R CMD check --as-cran` on that artifact -> zero errors, zero warnings,
+  one NOTE (`New submission`); tests 31 seconds wall, vignette rebuilding
+  68 seconds wall, manuals passed.
+
+Interpretation:
+
+- The audit findings are fixed in code, generated artifacts, tests, and public
+  prose. All external gates and fresh verdicts must now target the `ad637914`
+  artifact; predecessor replacement results are timing evidence only.

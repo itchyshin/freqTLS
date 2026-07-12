@@ -23,7 +23,7 @@ not add a spelling whitelist because direct prose made both flags disappear. We
 did not remove or skip tests, reduce bootstrap replicate counts to misleading
 values, hide the whole vignette suite, or merely explain the 11-minute timing.
 We chose a small versioned cache for the redundant synthesis while retaining
-live fits and intervals in individual articles and the 819-test suite.
+live fits and intervals in individual articles and the 827-test suite.
 
 ## 4. Files Touched
 
@@ -49,8 +49,8 @@ live fits and intervals in individual articles and the 819-test suite.
 - Debian incoming pre-test -> one DESCRIPTION/new-submission NOTE; all
   substantive checks passed.
 - `Rscript --vanilla -e 'devtools::document()'` -> clean regeneration.
-- `Rscript --vanilla -e 'devtools::test(stop_on_failure=TRUE)'` -> 819 passes,
-  zero failures/warnings/skips in 117.7 seconds.
+- `Rscript --vanilla -e 'devtools::test(stop_on_failure=TRUE)'` -> 827 passes,
+  zero failures/warnings/skips in 117.9 seconds.
 - `Rscript --vanilla -e 'devtools::check()'` -> `Status: OK`, 0 errors,
   0 warnings, 0 notes in 5 minutes 19.8 seconds; vignette rebuild 76 seconds.
 - `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> no problems.
@@ -59,10 +59,11 @@ live fits and intervals in individual articles and the 819-test suite.
   GNU TLS connection failure; these are external endpoint behavior, not broken
   package targets.
 - `R CMD build .` -> exact tarball SHA-256
-  `6c2bcadb9b9bd4448ae0e53a97bb2417a87dac76cd6e5620e50a87b933b58160`,
+  `ad637914a1b59d93196a4193807ff5ece904705aec586c136ff62429f38ef994`,
   212 entries, about 2.1 MiB.
 - `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> 0 errors, 0 warnings,
-  1 NOTE (`New submission`); no spell flags; vignettes 76 seconds wall.
+  1 NOTE (`New submission`); no spell flags; tests 31 seconds and vignettes
+  68 seconds wall.
 - Clean installation and neutral-directory rendering of the installed main and
   summary vignettes -> passed; cache row counts 12/8; SVG 69/27/0.
 
@@ -74,13 +75,13 @@ profile status, both contrast methods, and valid method/status pairs. The test
 would fail for the earlier assumed `closed` status or if bootstrap fallback were
 silently relabelled as profile. Existing bootstrap, group, profile, random-
 effect, and malformed-input tests remain enabled and account for the increase
-from 800 to 819 passing assertions.
+from 800 to 827 passing assertions.
 
 ## 7a. Issue Ledger
 
 - `CRAN-SPELL`: fixed; strict incoming feasibility reports no misspellings.
 - `CRAN-TIME`: locally fixed; vignette rebuilding fell from the incoming
-  Windows 375 seconds to 76 seconds on local strict check. External Windows
+  Windows 375 seconds to 68 seconds on local strict check. External Windows
   confirmation remains required.
 - `CONTRAST-METHOD-CLAIM`: fixed; seven bootstrap-fallback rows are labelled
   bootstrap rather than profile.
