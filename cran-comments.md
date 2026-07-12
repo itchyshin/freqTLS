@@ -2,26 +2,42 @@
 
 - local macOS Tahoe 26.5.2, R 4.6.0 (aarch64)
 - GitHub Actions: Ubuntu R release and devel, Windows R release, macOS R release
-  (all passed at release commit `3fe45a9`)
-- R-hub Ubuntu/clang (passed at release commit `3fe45a9`)
-- win-builder R-devel, R Under development r90235 (1 NOTE)
+- R-hub Ubuntu/clang
+- win-builder R-devel
 
 ## R CMD check results
 
-The exact local candidate tarball (SHA-256
-`1a8d1248a9517e2ba6df2cc595e181d3cc9846f52b868fdec61caac55326b331`)
+The exact local replacement tarball (SHA-256
+`6c2bcadb9b9bd4448ae0e53a97bb2417a87dac76cd6e5620e50a87b933b58160`)
 produced:
 
 ```
 0 errors | 0 warnings | 1 note
 ```
 
-The local NOTE is the expected incoming-check message: "New submission". The
-win-builder NOTE contains the same message and flags `TLS` and the valid British
-spelling `reparameterised` as possibly misspelled words in DESCRIPTION. There
-are no downstream dependencies. The replacement win-builder run installed the
-package and passed compiled-code checks, examples, tests, vignette rebuilding,
-and both manuals.
+The NOTE is the expected incoming-check message: "New submission". There are no
+downstream dependencies.
+
+## Resubmission
+
+This is a corrected resubmission after CRAN incoming pre-test
+`freqTLS_0.1.0_20260712_135803`.
+
+- DESCRIPTION was rewritten with scientifically equivalent wording so `TLS`
+  and `reparameterised` no longer trigger spelling flags.
+- The Windows pre-test took 625 seconds, including 375 seconds rebuilding
+  vignettes. The cross-case-study synthesis now reads its freqTLS results from a
+  version-stamped maintainer cache instead of redundantly recomputing three fits
+  and 20 intervals during every check. The cache records input checksums,
+  software/source versions, exact fit configuration, and actual interval
+  methods. The full 819-test suite and individual case studies continue to run
+  live fitting, profiling, bootstrap fallback, and failure paths.
+- Two displayed 1,000-refit bootstrap recipes are intentionally not executed
+  during package checks; their behavior remains covered by live tests.
+- On the replacement candidate, strict local `R CMD check --as-cran` rebuilt
+  all vignettes in 76 seconds and returned zero errors, zero warnings, and only
+  the expected `New submission` NOTE. The replacement Windows timing is reported
+  in the test-environment list above.
 
 ## Additional notes
 

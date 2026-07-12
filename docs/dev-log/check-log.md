@@ -2300,3 +2300,74 @@ Interpretation:
   landing of this evidence-only batch, not a candidate defect. Commit, push,
   and clean-tree verification close the completion-adversary gate without
   rebuilding the byte-identical, already verified tarball.
+
+## 2026-07-12 -- CRAN incoming-pretest rejection and remediation
+
+Goal:
+
+- Fix every issue in CRAN incoming pre-test
+  `freqTLS_0.1.0_20260712_135803` without weakening the package tests or the
+  scientific interval contract.
+
+Incoming evidence:
+
+- Windows `00check.log` -> `Status: 1 NOTE`; substantive checks all passed.
+  Timings were 625 seconds overall, 375 seconds for vignette rebuilding,
+  89 seconds for tests, 20 seconds for examples, 36 seconds for manuals, and
+  22 seconds for R code problems. The incoming NOTE flagged `TLS` and
+  `reparameterised`; the additional wrapper NOTE was `Overall checktime 11 min
+  > 10 min`.
+- Debian `00check.log` -> `Status: 1 NOTE`; substantive checks all passed.
+  Vignettes took 177 seconds and tests 38 seconds. The only NOTE was the same
+  new-submission/DESCRIPTION spelling report.
+- Per-vignette/chunk timing -> `case-study-summary.Rmd` was the dominant local
+  article; its contrast chunk repeatedly ran default bootstrap fallback after
+  open contrast profiles. Six of eight contrast rows were bootstrap fallbacks,
+  although the article called all eight profile intervals.
+
+Remediation and current checks:
+
+- DESCRIPTION now says `thermal-load-sensitivity framework for thermal
+  death-time modelling` and that the midpoint `is written directly in terms of`
+  `CTmax` and `z`, removing both spell flags without changing the model claim.
+- `data-raw/build_case_study_summary_cache.R` generated
+  `inst/extdata/case_study_summary_cache.rds`: 12 headline profile rows, eight
+  contrast rows with actual methods, input MD5 values, package/source/R/TMB
+  versions, and exact model configuration.
+- `vignettes/case-study-summary.Rmd` now reads the cache; its clean local render
+  fell to 1.15 seconds. Two 1,000-refit bootstrap recipes are display-only, with
+  explicit interactive-run guidance. Tests and individual case studies retain
+  live bootstrap/profile coverage.
+- `Rscript --vanilla -e 'devtools::test(stop_on_failure=TRUE)'` -> 819 passes,
+  zero failures/warnings/skips in 117.7 seconds.
+- `Rscript --vanilla -e 'devtools::check()'` -> `Status: OK`, zero errors,
+  warnings, or notes in 5 minutes 19.8 seconds; vignette rebuilding took
+  72 seconds elapsed / 76 seconds wall.
+
+Interpretation:
+
+- The local source closes the two incoming issue classes with a wide vignette-
+  timing margin and without removing live validation. Exact-tarball strict
+  checks and external Windows timing remain required before resubmission.
+
+Exact replacement-artifact evidence:
+
+- `R CMD build .` -> `freqTLS_0.1.0.tar.gz`, 212 entries, about 2.1 MiB,
+  SHA-256 `6c2bcadb9b9bd4448ae0e53a97bb2417a87dac76cd6e5620e50a87b933b58160`.
+- Tar inventory scan -> the versioned summary cache is present; no `output/`,
+  `scripts/`, `data-raw/`, governance, licensing-pending material, snow-gum,
+  Kristineberg, environmental traces, or compiled artifacts are present.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> zero errors, zero warnings,
+  one NOTE (`New submission`). No possible-misspelling report remains;
+  `--run-donttest` took 119 seconds wall, tests 32 seconds wall, and vignette
+  rebuilding 76 seconds wall. PDF and HTML manuals passed.
+- Clean install to `/tmp/freqtls-replacement-lib`, followed by neutral-directory
+  renders of installed `freqTLS.Rmd` and `case-study-summary.Rmd` -> success.
+  The installed cache has 12 panel and eight contrast rows. The installed
+  function-map SVG has 69 `<text>`, 27 `<rect>`, and zero `<em>` elements.
+
+Interpretation:
+
+- The exact replacement artifact removes both DESCRIPTION spell flags and has a
+  large local vignette-runtime reduction. External Windows timing, final-head
+  CI/R-hub, and fresh completion verdicts remain required before resubmission.

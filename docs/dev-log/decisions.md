@@ -4,6 +4,27 @@ Durable design decisions for freqTLS, append-only. Each entry records what was
 decided, why, the alternatives, and what future work must respect. The canonical
 specification is `SPEC.md`; these entries record the decisions that shaped it.
 
+## 2026-07-12: Remediate the first CRAN incoming pre-test
+
+- Decision: resubmit version 0.1.0 after removing the two DESCRIPTION spell
+  flags and the redundant cross-case-study live profile computations that pushed
+  Windows incoming check time above ten minutes.
+- DESCRIPTION: keep the scientific meaning but use spell-neutral prose instead
+  of the parenthetical acronym `TLS` and `reparameterised`. This supersedes the
+  earlier release-closeout choice to explain rather than change those flags.
+- Runtime: ship a version-stamped, provenance-recorded
+  `case_study_summary_cache.rds` built from the same live freqTLS fits. The
+  individual case studies and full test suite continue to exercise fitting,
+  profiling, contrasts, bootstrap fallback, and failure paths. Two 1,000-refit
+  bootstrap recipes remain visible but are not executed during package checks.
+- Accuracy correction: the cross-study article now records each contrast's
+  actual interval method. Six of eight profile requests used the documented
+  bootstrap fallback; calling all eight intervals profile-likelihood intervals
+  was incorrect and is superseded.
+- Boundary: the first upload was confirmed but rejected before publication.
+  It must not be described as released or on CRAN; a replacement exact tarball
+  and new external checks are required.
+
 ## 2026-07-12: Close the 0.1.0 author-consent gate
 
 - Decision: retain the `aut` roles for Pieter A. Arnold, Patrice Pottier, and

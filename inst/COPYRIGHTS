@@ -107,3 +107,11 @@ package simulations or fits. They are covered by the freqTLS package licence
 except where a cache incorporates third-party data; the component ledger records
 those dependencies explicitly. freqTLS code remains GPL (>= 3); third-party
 data retain their stated licences.
+
+The cross-case-study cache `inst/extdata/case_study_summary_cache.rds` is built
+by `data-raw/build_case_study_summary_cache.R` from the shipped brown-shrimp,
+life-stage zebrafish, and Drosophila suzukii datasets. It stores freqTLS profile
+and documented bootstrap-fallback summaries plus version, configuration, and
+input-checksum metadata. The cache compilation is package-generated evidence;
+the three input datasets retain their CC BY 4.0 attribution and terms recorded
+in the component ledger.
