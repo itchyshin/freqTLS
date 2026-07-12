@@ -393,7 +393,7 @@ does not manufacture certainty: too few valid or non-degenerate bootstrap fits
 can still produce an unavailable bound. Set `fallback = FALSE` to retain the
 open profile explicitly.
 
-```{r bootstrap-demo}
+```{r bootstrap-demo, eval = FALSE}
 # A deliberately sparse design where the CTmax profile does not close.
 sparse <- simulate_tls(family = "binomial", temps = c(35, 36), times = c(1, 2),
                        reps = 2, n = 10, CTmax = 36, z = 4, seed = 9)
@@ -416,6 +416,9 @@ data.frame(
 When enough bootstrap refits remain stable and non-degenerate, `freqTLS` can
 provide a prior-free interval after an open profile. Sparse or boundary designs
 can still leave a bound unavailable; the status column reports that outcome.
+This 1,000-refit recipe is displayed rather than executed during package checks;
+run it interactively for the full comparison. The live strict-profile example
+and fallback recipe are also explained in `vignette("profile-likelihood")`.
 
 ## The teaching device: posterior density versus Confidence Eye
 

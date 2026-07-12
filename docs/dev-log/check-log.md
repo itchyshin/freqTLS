@@ -2300,3 +2300,197 @@ Interpretation:
   landing of this evidence-only batch, not a candidate defect. Commit, push,
   and clean-tree verification close the completion-adversary gate without
   rebuilding the byte-identical, already verified tarball.
+
+## 2026-07-12 -- CRAN incoming-pretest rejection and remediation
+
+Goal:
+
+- Fix every issue in CRAN incoming pre-test
+  `freqTLS_0.1.0_20260712_135803` without weakening the package tests or the
+  scientific interval contract.
+
+Incoming evidence:
+
+- Windows `00check.log` -> `Status: 1 NOTE`; substantive checks all passed.
+  Timings were 625 seconds overall, 375 seconds for vignette rebuilding,
+  89 seconds for tests, 20 seconds for examples, 36 seconds for manuals, and
+  22 seconds for R code problems. The incoming NOTE flagged `TLS` and
+  `reparameterised`; the additional wrapper NOTE was `Overall checktime 11 min
+  > 10 min`.
+- Debian `00check.log` -> `Status: 1 NOTE`; substantive checks all passed.
+  Vignettes took 177 seconds and tests 38 seconds. The only NOTE was the same
+  new-submission/DESCRIPTION spelling report.
+- Per-vignette/chunk timing -> `case-study-summary.Rmd` was the dominant local
+  article; its contrast chunk repeatedly ran default bootstrap fallback after
+  open contrast profiles. The deterministic replacement cache has seven
+  bootstrap-fallback contrast rows and one closed profile,
+  although the article called all eight profile intervals.
+
+Remediation and current checks:
+
+- DESCRIPTION now says `thermal-load-sensitivity framework for thermal
+  death-time modelling` and that the midpoint `is written directly in terms of`
+  `CTmax` and `z`, removing both spell flags without changing the model claim.
+- `data-raw/build_case_study_summary_cache.R` generated
+  `inst/extdata/case_study_summary_cache.rds`: 12 headline profile rows, eight
+  contrast rows with actual methods, input MD5 values, package/source/R/TMB
+  versions, and exact model configuration.
+- `vignettes/case-study-summary.Rmd` now reads the cache; its clean local render
+  fell to 1.15 seconds. Two 1,000-refit bootstrap recipes are display-only, with
+  explicit interactive-run guidance. Tests and individual case studies retain
+  live bootstrap/profile coverage.
+- `Rscript --vanilla -e 'devtools::test(stop_on_failure=TRUE)'` -> 819 passes,
+  zero failures/warnings/skips in 117.7 seconds.
+- `Rscript --vanilla -e 'devtools::check()'` -> `Status: OK`, zero errors,
+  warnings, or notes in 5 minutes 19.8 seconds; vignette rebuilding took
+  72 seconds elapsed / 76 seconds wall.
+
+Interpretation:
+
+- The local source closes the two incoming issue classes with a wide vignette-
+  timing margin and without removing live validation. Exact-tarball strict
+  checks and external Windows timing remain required before resubmission.
+
+Exact replacement-artifact evidence:
+
+- `R CMD build .` -> `freqTLS_0.1.0.tar.gz`, 212 entries, about 2.1 MiB,
+  SHA-256 `6c2bcadb9b9bd4448ae0e53a97bb2417a87dac76cd6e5620e50a87b933b58160`.
+- Tar inventory scan -> the versioned summary cache is present; no `output/`,
+  `scripts/`, `data-raw/`, governance, licensing-pending material, snow-gum,
+  Kristineberg, environmental traces, or compiled artifacts are present.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> zero errors, zero warnings,
+  one NOTE (`New submission`). No possible-misspelling report remains;
+  `--run-donttest` took 119 seconds wall, tests 32 seconds wall, and vignette
+  rebuilding 76 seconds wall. PDF and HTML manuals passed.
+- Clean install to `/tmp/freqtls-replacement-lib`, followed by neutral-directory
+  renders of installed `freqTLS.Rmd` and `case-study-summary.Rmd` -> success.
+  The installed cache has 12 panel and eight contrast rows. The installed
+  function-map SVG has 69 `<text>`, 27 `<rect>`, and zero `<em>` elements.
+
+Interpretation:
+
+- The exact replacement artifact removes both DESCRIPTION spell flags and has a
+  large local vignette-runtime reduction. External Windows timing, final-head
+  CI/R-hub, and fresh completion verdicts remain required before resubmission.
+
+## 2026-07-12 -- Contrast-direction and deterministic-cache audit correction
+
+Goal:
+
+- Close the fresh Grace/Rose findings before treating the incoming-pretest fix
+  as a resubmission candidate.
+
+Changes and evidence:
+
+- `dCTmax:A-B`, `dlog_z:A-B`, and `dz:A-B` now mean group A minus group B in
+  both profile refitting and bootstrap extraction. Design docs, roxygen,
+  generated Rd, NEWS, tests, and the *D. suzukii* article use that convention.
+- The cache generator now uses `fallback = FALSE` for the 12 headline profiles
+  and fixed seeds `20260712` / `20260713` with `nboot = 1000` for the two
+  contrast sets. Metadata records the exact generation commit
+  `589e3af6c7c226c571ddcbf682f86a578f77ad9c`, all three input MD5 values,
+  `nboot`, and both seeds.
+- Two consecutive cache builds returned identical SHA-256
+  `3b4ee270de90fcf7ffab42850da953353515ce9509bb54fee7a2ffdec1edc8a2`.
+- The cache test pins the exact generation commit/checksums/configuration,
+  expects 12 profile/`ok` headline rows and the deterministic contrast split
+  (one profile, seven bootstrap fallbacks), and checks finite endpoints.
+- Targeted `group|case-study-summary-cache|bootstrap` tests -> 77 passes; both
+  changed case-study vignettes rendered successfully.
+- Full `devtools::test()` -> 827 passes, zero failures/warnings/skips in
+  117.9 seconds.
+- Final exact `freqTLS_0.1.0.tar.gz` -> SHA-256
+  `ad637914a1b59d93196a4193807ff5ece904705aec586c136ff62429f38ef994`,
+  about 2.1 MiB, 212 entries.
+- Strict `R CMD check --as-cran` on that artifact -> zero errors, zero warnings,
+  one NOTE (`New submission`); tests 31 seconds wall, vignette rebuilding
+  68 seconds wall, manuals passed.
+
+Interpretation:
+
+- The audit findings are fixed in code, generated artifacts, tests, and public
+  prose. All external gates and fresh verdicts must now target the `ad637914`
+  artifact; predecessor replacement results are timing evidence only.
+
+## 2026-07-12 -- Final Rose cleanup and exact replacement candidate
+
+Goal:
+
+- Remove the last stale reader-facing profile count and contradictory internal
+  contrast comment, then reconcile the after-task record before resubmission.
+
+Changes and checks:
+
+- `vignettes/case-study-summary.Rmd` now states that all 12 headline profiles
+  close: six groups for each of two parameters. `R/profile.R` now describes the
+  internal reference/alternate recoding consistently with public `A-B` meaning
+  A minus B.
+- The remediation after-task report now lists the contrast implementation,
+  documentation, tests, NEWS, and generated Rd files and identifies the
+  contrast semantic change and its directed regression tests.
+- `Rscript --vanilla -e 'devtools::document()'` -> passed.
+- `Rscript --vanilla -e 'devtools::test(filter="group|case-study-summary-cache", stop_on_failure=TRUE)'`
+  -> 48 passes, zero failures/warnings/skips in 2.6 seconds.
+- Installed-package renders of `case-study-summary.Rmd` and
+  `case-study-suzukii.Rmd` -> passed.
+- `Rscript '/Users/z3437171/Dropbox/Github Local/Shinichi/tools/check-after-task.R' docs/dev-log/after-task/2026-07-12-cran-incoming-pretest-remediation.md`
+  -> structure check passed.
+- `Rscript tools/build-site.R` -> passed; privacy cleanup removed internal hub
+  pages. Generated source and HTML contain the corrected 12-profile wording.
+- `Rscript --vanilla -e 'devtools::test(stop_on_failure=TRUE)'` -> 827 passes,
+  zero failures/warnings/skips in 122.8 seconds.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> no problems.
+- `R CMD build .` -> `freqTLS_0.1.0.tar.gz`, SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`,
+  about 1.5 MiB and 212 entries; excluded-path and compiled-artifact inventory
+  scan returned no hits.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> zero errors, zero warnings,
+  one expected `New submission` NOTE; `--run-donttest` 121 seconds elapsed /
+  126 seconds wall, tests 31/34 seconds, vignettes 67/77 seconds, and both
+  manuals passed.
+
+Interpretation:
+
+- Local source, rendered site, exact tarball inventory, and strict check are
+  ready. External GitHub, R-hub, win-builder timing, and fresh completion
+  verdicts must target this exact `e3b38ef...f62be` candidate; all earlier
+  external results are predecessor evidence only.
+
+## 2026-07-12 -- Exact replacement external gate complete
+
+Goal:
+
+- Prove that the exact final replacement candidate closes Uwe Ligges's vignette
+  timing request and passes every external platform and completion gate before
+  CRAN resubmission.
+
+Evidence:
+
+- Exact tarball: `freqTLS_0.1.0.tar.gz`, SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`,
+  1,552,384 bytes and 212 entries.
+- `gh run view 29196192961` at source HEAD
+  `7097a1333fc15b31c65b2863ab74039faca23724` -> success on Ubuntu R release,
+  Ubuntu R devel, Windows R release, and macOS R release.
+- `gh run view 29196204879` at the same source HEAD -> R-hub Ubuntu/clang
+  success.
+- `curl -fsSL https://win-builder.r-project.org/z8E3gcN9PWek/00check.log` ->
+  package `freqTLS` version `0.1.0`; `Status: 1 NOTE`; the only NOTE is `New
+  submission`. Installation took 87 seconds and checking took 431 seconds;
+  tests took 89 seconds and vignette rebuilding 165 seconds. No spelling or
+  overall-checktime NOTE appears.
+- Uwe Ligges's rejection reply identified the original 375-second vignette
+  rebuild as the main problem and asked for toy data, fewer iterations, or
+  precomputed lengthy results. The versioned cross-case cache implements the
+  permitted precomputed-results route while live tests and individual case
+  studies retain executable coverage.
+- Fresh exact-artifact verdicts: Pat READY; Rose READY; Grace no local blocker
+  with all stated external conditions now satisfied.
+
+Interpretation:
+
+- Every technical, licensing, provenance, author-consent, installed-user, and
+  external-platform gate is closed for the exact replacement tarball. The next
+  actions are evidence-only merge, CRAN resubmission/confirmation, and public
+  package/check-page verification. Do not claim publication before those pages
+  exist.

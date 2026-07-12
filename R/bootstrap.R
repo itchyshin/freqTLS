@@ -277,7 +277,7 @@ tls_boot_target <- function(parm, fit, reps) {
   }
   ident <- function(x) x
 
-  # Group contrasts: dCTmax:<a>-<b>, dz:<a>-<b>, dlog_z:<a>-<b>.
+  # Group contrasts use their written direction: <a>-<b> means group a minus b.
   if (grepl("^d(CTmax|z|log_z):", parm)) {
     m <- regmatches(parm, regexec("^d(CTmax|z|log_z):(.+)-(.+)$", parm))[[1L]]
     if (length(m) == 4L) {
@@ -287,16 +287,16 @@ tls_boot_target <- function(parm, fit, reps) {
         if (!all(c(na, nb) %in% cn)) {
           cli::cli_abort("Contrast groups {.val {a}}/{.val {b}} must be levels of the fit.")
         }
-        return(list(values = reps[, nb] - reps[, na], backtransform = ident,
-                    estimate = est_of(nb) - est_of(na), scale = "identity"))
+        return(list(values = reps[, na] - reps[, nb], backtransform = ident,
+                    estimate = est_of(na) - est_of(nb), scale = "identity"))
       }
       # z / log_z contrast: a difference of log z (so the z ratio is exp()).
       na <- paste0("z:", a); nb <- paste0("z:", b)
       if (!all(c(na, nb) %in% cn)) {
         cli::cli_abort("Contrast groups {.val {a}}/{.val {b}} must be levels of the fit.")
       }
-      return(list(values = log(reps[, nb]) - log(reps[, na]), backtransform = ident,
-                  estimate = log(est_of(nb)) - log(est_of(na)), scale = "log"))
+      return(list(values = log(reps[, na]) - log(reps[, nb]), backtransform = ident,
+                  estimate = log(est_of(na)) - log(est_of(nb)), scale = "log"))
     }
   }
 

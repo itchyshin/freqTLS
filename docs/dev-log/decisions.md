@@ -4,6 +4,27 @@ Durable design decisions for freqTLS, append-only. Each entry records what was
 decided, why, the alternatives, and what future work must respect. The canonical
 specification is `SPEC.md`; these entries record the decisions that shaped it.
 
+## 2026-07-12: Remediate the first CRAN incoming pre-test
+
+- Decision: resubmit version 0.1.0 after removing the two DESCRIPTION spell
+  flags and the redundant cross-case-study live profile computations that pushed
+  Windows incoming check time above ten minutes.
+- DESCRIPTION: keep the scientific meaning but use spell-neutral prose instead
+  of the parenthetical acronym `TLS` and `reparameterised`. This supersedes the
+  earlier release-closeout choice to explain rather than change those flags.
+- Runtime: ship a version-stamped, provenance-recorded
+  `case_study_summary_cache.rds` built from the same live freqTLS fits. The
+  individual case studies and full test suite continue to exercise fitting,
+  profiling, contrasts, bootstrap fallback, and failure paths. Two 1,000-refit
+  bootstrap recipes remain visible but are not executed during package checks.
+- Accuracy correction: the cross-study article now records each contrast's
+  actual interval method. Seven of eight profile requests use the documented
+  bootstrap fallback; calling all eight intervals profile-likelihood intervals
+  was incorrect and is superseded.
+- Boundary: the first upload was confirmed but rejected before publication.
+  It must not be described as released or on CRAN; a replacement exact tarball
+  and new external checks are required.
+
 ## 2026-07-12: Close the 0.1.0 author-consent gate
 
 - Decision: retain the `aut` roles for Pieter A. Arnold, Patrice Pottier, and
@@ -386,3 +407,18 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
   gains `re_sd_low` / `re_sd_logk` (RNG-stream-preserving for existing calls).
 - Evidence: `src/profile_tls.cpp`, `R/formula.R`, `R/utils.R`, `R/simulate.R`,
   `tests/testthat/test-shape-random-effects.R`, `docs/design/08-random-effects.md`.
+
+## 2026-07-12 -- Exact CRAN replacement candidate is frozen
+
+- Decision: freeze `freqTLS_0.1.0.tar.gz` with SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`
+  as the CRAN resubmission artifact. Release-paperwork edits under build-excluded
+  paths may record external outcomes, but no installed byte may change without
+  rebuilding and repeating every exact-artifact gate.
+- Why: this artifact passed local strict checking, the four-platform GitHub
+  matrix, R-hub Ubuntu/clang, and win-builder R-devel in 431 seconds with only
+  the expected `New submission` NOTE. It also passed the fresh Grace/Rose/Pat
+  completion audit, and its author-consent and redistribution gates are closed.
+- Consequence: resubmit this exact file, then verify CRAN acceptance and public
+  package/check pages before changing release-candidate wording or claiming the
+  package is on CRAN.

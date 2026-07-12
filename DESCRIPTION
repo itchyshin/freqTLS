@@ -15,11 +15,11 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-9460-8743",
                        "senior author of the bayesTLS thermal-load-sensitivity framework")))
 Description: A maximum-likelihood implementation of the thermal-load-sensitivity
-    (TLS) thermal death-time modelling framework introduced by Noble, Arnold and
+    framework for thermal death-time modelling introduced by Noble, Arnold and
     Pottier in the 'bayesTLS' package, providing the frequentist counterpart to
     that Bayesian workflow. The modelling idea and the four-parameter logistic
     parameterisation are theirs; 'freqTLS' contributes a 'Template Model Builder'
-    ('TMB') likelihood with the midpoint reparameterised directly in critical
+    ('TMB') likelihood whose midpoint is written directly in terms of critical
     thermal maximum ('CTmax') and
     thermal sensitivity (z) so both headline quantities are estimable, and reports
     uncertainty through a unified trio of frequentist intervals -- Wald (delta),

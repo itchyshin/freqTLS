@@ -137,8 +137,10 @@ unmodified profile geometry. In that strict mode `freqTLS`:
 * sets a `conf.status` marker (`open_lower`, `open_upper`, or `open_both`).
 
 Here is a deliberately sparse design — few temperatures and little mortality contrast —
-that does not identify `CTmax`. Start with the user-facing default: it tries bootstrap
-recovery after the profile remains open.
+that does not identify `CTmax`. We fit it live, then show the user-facing bootstrap
+recovery recipe separately. A 1,000-refit bootstrap is intentionally not executed
+during package checks; run that displayed chunk interactively when you need the
+fallback interval.
 
 ```{r non-closing}
 set.seed(7)
@@ -153,7 +155,9 @@ sparse_fit <- suppressWarnings(
   fit_tls(sparse, y = survived, n = total, time = duration, temp = temp,
           family = "binomial", tref = 1)
 )
+```
 
+```{r bootstrap-fallback-recipe, eval = FALSE}
 ci_default <- tryCatch(
   withCallingHandlers(
     confint(sparse_fit, "CTmax", method = "profile",
