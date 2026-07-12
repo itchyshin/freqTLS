@@ -263,7 +263,15 @@ Wald / profile / bootstrap intervals and the Confidence Eye — and the dashed
 # essential: without it, wildcard labels such as get_*_summary() are parsed as
 # Markdown emphasis, which breaks the SVG namespace. Accessibility is provided
 # by the SVG's <title>/<desc>.
-svg_lines <- readLines("freqTLS_function_map.svg", warn = FALSE)
+svg_candidates <- c(
+  "freqTLS_function_map.svg",
+  system.file("doc", "freqTLS_function_map.svg", package = "freqTLS")
+)
+svg_path <- svg_candidates[nzchar(svg_candidates) & file.exists(svg_candidates)][1]
+if (is.na(svg_path)) {
+  stop("The installed freqTLS function-map SVG is missing.")
+}
+svg_lines <- readLines(svg_path, warn = FALSE)
 cat(
   "```{=html}\n",
   paste(svg_lines, collapse = "\n"),

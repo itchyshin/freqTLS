@@ -183,21 +183,27 @@ freqTLS/
 | `R/plotting.R` | survival curves, tdt curve, surface, **Confidence-Eye** profile/interval plots (§13) | **gllvmTMB `R/plot-loadings-confidence-eye.R` + `R/loading-uncertainty-helpers.R` (`.eye_polygon_df`)**; drmTMB `R/plot-corpairs.R`, `R/profile.R:495-525` |
 | `R/extract.R` | `tidy_parameters`,`get_ctmax`,`get_z`,`get_shape` | broom-style, new |
 | `R/utils.R` | name-mapping, transforms, clamps, `%||%` | `R/profile.R:775-785` |
-| `R/data.R` | docs for vendored `shrimp_lethal`,`zebrafish_lethal` + CC-BY attribution + R-SHRIMP note | drmTMB data docs |
+| `R/data.R` | docs and source-specific attribution for all six shipped datasets, including the R-SHRIMP note | drmTMB data docs |
 | installed raw CSVs + `standardize_data(mortality = ...)` | reconstruct shrimp counts from the vendored proportion at fit time (R-SHRIMP) | — |
 | `data-raw/build_benchmark_cache.R` | maintainer-run: fit bayesTLS + two-stage → version-stamped cache | — |
 
-**DESCRIPTION — `Authors@R`** (fill ORCIDs before release):
+**DESCRIPTION — `Authors@R`** (synchronized release-candidate contract):
 ```r
 Authors@R: c(
-  person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com", role = c("aut","cre")),
-  person("Daniel W. A.", "Noble", email = "daniel.noble@anu.edu.au", role = "aut",
-         comment = "author of the bayesTLS thermal-load-sensitivity framework that freqTLS implements"),
-  person("Pieter A.", "Arnold", role = "aut", comment = "co-author of the bayesTLS framework"),
-  person("Patrice", "Pottier", email = "patrice.pottier@bioenv.gu.se", role = "aut",
-         comment = "co-author of the bayesTLS framework"))
+  person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com",
+         role = c("aut", "cre", "cph"),
+         comment = c(ORCID = "0000-0002-7765-5182")),
+  person("Pieter A.", "Arnold", role = "aut",
+         comment = c(ORCID = "0000-0002-6158-7752",
+                     "co-author of the bayesTLS framework")),
+  person("Patrice", "Pottier", role = "aut",
+         comment = c(ORCID = "0000-0003-2106-6597",
+                     "co-author of the bayesTLS framework")),
+  person("Daniel W. A.", "Noble", role = "aut",
+         comment = c(ORCID = "0000-0001-9460-8743",
+                     "senior author of the bayesTLS thermal-load-sensitivity framework")))
 ```
-`Description:` states plainly that freqTLS implements the TLS framework **introduced by Noble, Arnold & Pottier (bayesTLS)**; freqTLS contributes the TMB ML likelihood, direct CTmax/z reparameterisation, and profile-likelihood CIs. Other fields: `Imports: TMB, stats, utils, Matrix, rlang, ggplot2, tibble, cli`; `LinkingTo: RcppEigen, TMB`; `Suggests: testthat (>=3.0.0), withr, knitr, rmarkdown, pkgdown, covr, bayesTLS, glmmTMB`; `Config/testthat/edition: 3`; `LazyData: true`. No Makevars needed.
+`Description:` states plainly that freqTLS implements the TLS framework **introduced by Noble, Arnold & Pottier (bayesTLS)**; freqTLS contributes the TMB ML likelihood, direct CTmax/z reparameterisation, and profile-likelihood CIs. Current fields: `Imports: cli, ggplot2, MASS, parallel, rlang, stats, tibble, TMB, utils`; `LinkingTo: RcppEigen, TMB`; `Suggests: glmmTMB, knitr, rmarkdown, testthat (>= 3.0.0)`; `Config/testthat/edition: 3`; `LazyData: true`. No Makevars are needed.
 
 ## 9. TMB engine core (load-bearing)
 

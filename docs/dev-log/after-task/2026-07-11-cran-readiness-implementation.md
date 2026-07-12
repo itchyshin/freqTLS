@@ -163,3 +163,35 @@ landed, platform-checked candidate. Finally,
 record written consent from Pieter A. Arnold, Patrice Pottier, and Daniel W. A.
 Noble before retaining their `aut` roles and uploading. Do not claim the package
 is on CRAN until its public CRAN package and check pages exist.
+
+## Sol completion-audit remediation
+
+Fresh Grace, Rose, and Pat Sol audits defaulted to NOT READY and found defects
+that the ordinary package check did not expose: three callable internal help
+topics lacked return-value documentation; the README's grouped-fit instruction
+used an unstandardized object without the named group; prediction help omitted
+fixed-design covariates and formula-recovery limits; the installed main-vignette
+source lacked its SVG dependency; two unused environmental traces lacked a
+complete underlying-data redistribution chain; SPEC metadata/dependencies and
+the five-article count had drifted.
+
+All findings were repaired. The environmental traces moved to the build-excluded
+licensing-pending tree; the component ledger, current decision, SPEC, provenance,
+ROADMAP, and known limitations were synchronized. The README now executes a
+well-identified grouped simulation and fit. Prediction help includes continuous
+fixed-design and population/conditional random-effect examples. The SVG is
+installed through `vignettes/.install_extras`, and a neutral-directory render of
+the installed `freqTLS.Rmd` succeeds. New tripwires cover callable return-value
+documentation, the five-article/six-dataset distinction, environmental-trace
+exclusion, and the installed SVG declaration.
+
+The replacement exact tarball is `freqTLS_0.1.0.tar.gz`, 1,551,284 bytes and 210
+entries, SHA-256
+`1a8d1248a9517e2ba6df2cc595e181d3cc9846f52b868fdec61caac55326b331`.
+It passes strict `R CMD check --as-cran` with zero errors, zero warnings, and only
+the expected `New submission` NOTE. The predecessor head passed the four-platform
+GitHub matrix and R-hub Ubuntu/clang; both must rerun on the replacement head.
+A first predecessor win-builder attempt stopped before installation because the
+server library lacked `cli` (and lacked `curl` for incoming URL/DOI checks), so
+it is infrastructure evidence rather than a package result. The replacement
+tarball was resubmitted successfully and its result remains pending.

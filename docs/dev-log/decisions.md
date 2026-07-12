@@ -28,6 +28,19 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
 - Historical task reports remain unchanged; this dated decision and the current
   component ledger carry the correction.
 
+## 2026-07-11: Exclude unused environmental traces without a complete rights chain
+
+- Decision: the unused Open-Meteo/ERA5 aphid trace and Orsted/NicheMapR/NCEP
+  microclimate trace do not enter the 0.1.0 package. The records reviewed did not
+  establish compatible redistribution authority for every underlying provider.
+- Consequence: retain both files only under the build-excluded
+  `data-raw/licensing-pending/environmental-traces` tree. Restoration requires
+  compatible primary terms or written permission, complete installed
+  attribution, and a documented package consumer.
+- Rationale: a workflow or repository licence does not automatically license
+  third-party environmental values produced or redistributed through it; unused
+  files create avoidable release exposure.
+
 ## 2026-06-16: License is GPL (>= 3)
 
 - Decision: freqTLS is released under GPL (>= 3), overriding the MIT default

@@ -153,11 +153,31 @@ tls(fit)
 #> 2 z          3.90  3.43  4.38
 ```
 
-For per-group CTmax/z, pass formulas —
-`fit_4pl(dat, ctmax = ~ 0 + species, z = ~ 0 + species)` — exactly as in
-`bayesTLS`. `extract_tdt()`, `predict_survival_curves()`, and
-`diagnose_tdt_fit()` complete the twin surface; the column / formula
-engine interface (`fit_tls()`, `tls_bf()`) remains available underneath.
+For per-group `CTmax` and `z`, standardize a dataset that contains the
+grouping column, then pass matching formulas exactly as in `bayesTLS`:
+
+``` r
+grouped_dat <- simulate_tls(
+  family = "binomial", group = c("cool", "warm"), reps = 4, n = 40,
+  CTmax = c(35, 38), z = c(4, 4), seed = 2
+)
+grouped_std <- standardize_data(
+  grouped_dat, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+grouped_fit <- fit_4pl(
+  grouped_std, ctmax = ~ 0 + group, z = ~ 0 + group, t_ref = 1
+)
+# Inspect the recovered group-specific CTmax and z estimates.
+tidy_parameters(grouped_fit)[
+  grepl("^(CTmax|z):", tidy_parameters(grouped_fit)$parameter),
+  c("parameter", "estimate")
+]
+```
+
+`extract_tdt()`, `predict_survival_curves()`, and `diagnose_tdt_fit()`
+complete the twin surface; the column / formula engine interface
+(`fit_tls()`, `tls_bf()`) remains available underneath.
 
 ``` r
 # 4. Plot the fitted survival surface (the Confidence Eye is shown above)

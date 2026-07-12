@@ -37,7 +37,7 @@ Source: https://github.com/itchyshin/drmTMB (local sibling package).
   implemented independent shape designs and the limited random-intercept
   structures documented in the current package.
 - The agent-kit, dev-log discipline, and the optimizer/profile plumbing patterns
-  (planned for R/fit_engine.R, R/profile.R, R/confint.R) follow drmTMB's
+  implemented in R/fit_engine.R, R/profile.R, and R/confint.R follow drmTMB's
   governance and R/profile.R patterns.
 
 freqTLS writes independent code for the 4PL thermal-load-sensitivity
@@ -72,17 +72,18 @@ with a more specific licence.
 
 The brown-shrimp and life-stage zebrafish CSVs were obtained from bayesTLS,
 whose package distribution is CC BY 4.0. The model-ready .rda files apply the
-cleaning documented in R/data.R. The Drosophila suzukii data are from Orsted et
-al. (2024), Zenodo records 10602268/10821572, CC BY 4.0. The oxygen-gradient
+cleaning documented in R/data.R. The Drosophila suzukii assay data are from
+Orsted et al. (2024), Zenodo record 10602268, CC BY 4.0. The oxygen-gradient
 zebrafish data are from Saruhashi et al. (2026), Zenodo record 20075355,
 CC BY 4.0. The cereal-aphid data are from Li et al. (2023), Dryad
-10.5061/dryad.mcvdnck4j, CC0 1.0. The aphid temperature trace was fetched from
-the Open-Meteo Historical Weather API and is redistributed under CC BY 4.0;
-freqTLS selected three cities and the May--August 2016 window and added an
-hour-from-start column. The Orsted microclimate trace was regenerated from the
-CC BY 4.0 Zenodo workflow with NicheMapR and reduced to the documented hourly
-columns. These attributions also indicate that freqTLS transformed the source
-material.
+10.5061/dryad.mcvdnck4j, CC0 1.0. Two unused environmental traces derived from
+Open-Meteo/ERA5 and an Orsted et al. NicheMapR/NCEP workflow were reviewed for
+this release. The available records did not establish a complete redistribution
+chain for every underlying environmental-data provider, so neither trace is
+installed. They remain only in the build-excluded
+data-raw/licensing-pending/environmental-traces tree pending compatible primary
+terms or written permission. No installed vignette, example, or cache consumes
+them.
 
 The snow-gum PSII data are not CC BY 4.0. Arnold et al. (2026),
 doi:10.64898/2026.04.09.717599, release the source material under CC BY-NC 4.0.

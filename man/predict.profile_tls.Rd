@@ -15,10 +15,12 @@
 \arguments{
 \item{object}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
 
-\item{newdata}{A data frame with numeric columns \code{temp} and \code{duration}
-(and \code{group} for a grouped fit). \code{duration} must be strictly positive
-(it is \code{log10}-transformed). For \code{type = "midpoint"}, \code{duration} may be
-omitted.}
+\item{newdata}{A data frame with numeric columns \code{temp} and \code{duration}, plus
+every predictor used in the fitted \code{CTmax}, \code{log_z}, \code{low}, \code{up}, and
+\code{log_k} fixed designs. Include \code{group} for a grouped column-interface fit.
+Conditional random-effect predictions additionally require every fitted
+grouping column. \code{duration} must be strictly positive (it is
+\code{log10}-transformed). For \code{type = "midpoint"}, \code{duration} may be omitted.}
 
 \item{type}{One of \code{"survival"} (default), \code{"link"}, or \code{"midpoint"}.}
 
@@ -51,9 +53,15 @@ Three response types are available:
 column is ignored for this type but a \code{temp} column is still required).
 }
 
-For a grouped fit \code{newdata} must carry a \code{group} column whose values are a
-subset of the fit's \code{group_levels}; for an ungrouped fit any \code{group} column
-is ignored.
+\code{newdata} must also contain every predictor used by the fitted fixed-effect
+designs for \code{CTmax}, \code{log_z}, \code{low}, \code{up}, or \code{log_k}. For a grouped column-
+interface fit, supply \code{group} with values from the fitted \code{group_levels}.
+For a formula fit, a literal \code{\link[=tls_bf]{tls_bf()}} call preserves the fixed-design
+formulas needed to rebuild transformed or interacted terms. If the model was
+instead passed through a formula-object variable, \code{predict()} can rebuild
+direct numeric design columns but asks the user to refit with a literal
+\code{\link[=tls_bf]{tls_bf()}} call when a transformed or interacted design cannot be recovered
+safely.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
@@ -61,5 +69,29 @@ fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
                family = "binomial", tref = 1)
 nd <- expand.grid(temp = c(34, 36, 38), duration = c(1, 2, 4))
 predict(fit, nd, type = "survival")
+
+# A continuous predictor used by CTmax and log_z must also be in newdata.
+d$x <- rep(c(-1, 1), length.out = nrow(d))
+fit_x <- fit_tls(
+  tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+         CTmax ~ x, log_z ~ x),
+  data = d, family = "binomial", tref = 1
+)
+predict(fit_x, data.frame(temp = 36, duration = 2, x = c(-1, 1)))
+
+\donttest{
+# Choose population or fitted-group prediction explicitly for an RE fit.
+dre <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
+                    re_sd = 1, n_re_groups = 8, seed = 2)
+fit_re <- fit_tls(
+  tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+         CTmax ~ 1 + (1 | colony)),
+  data = dre, family = "binomial", tref = 1
+)
+colony <- as.character(ranef(fit_re)$group[1])
+nd_re <- data.frame(temp = 36, duration = 2, colony = colony)
+predict(fit_re, nd_re, re.form = "population")
+predict(fit_re, nd_re, re.form = "conditional")
+}
 
 }

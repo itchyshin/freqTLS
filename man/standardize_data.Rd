@@ -49,7 +49,7 @@ Converted to \code{n_surv = round((1 - mortality) * n_total)}.}
 likelihood). Mutually exclusive with the count
 arguments above.}
 
-\item{proportion_eps}{Half-open clamp applied to \code{proportion} so values sit
+\item{proportion_eps}{Boundary clamp applied to \code{proportion} so values sit
 strictly inside \verb{(0, 1)} (the Beta density is undefined
 at exactly 0 or 1). Default \code{0.001}.}
 

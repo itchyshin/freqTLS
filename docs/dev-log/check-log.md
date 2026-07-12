@@ -2182,3 +2182,67 @@ Interpretation:
 - This was a workflow-expression failure, not a package failure. The package
   tarball is unchanged because `.github/` and the check log are build-excluded.
   PR #2 must rerun all four platform jobs before the CI gate can pass.
+
+## 2026-07-11 -- Sol completion audit, licensing exclusions, and replacement candidate
+
+Goal:
+
+- Close the fresh Grace/Rose/Pat completion-audit findings, rebuild the installed
+  documentation and site, and verify a new exact CRAN source artifact.
+
+Commands and outcomes:
+
+- `Rscript --vanilla -e 'devtools::document()'` -> regenerated prediction,
+  proportion-clamp, and three internal helper topics; each callable internal
+  topic now documents parameters and return value.
+- `Rscript --vanilla -e 'devtools::test(filter =
+  "doc-consistency|predict|standardize", stop_on_failure = TRUE)'` -> 94 passes,
+  zero failures/warnings/skips after excluding dataset topics from the callable-
+  return-value tripwire.
+- Extracted `predict.profile_tls` examples with `tools::Rd2ex()` and sourced them
+  after `devtools::load_all()` -> ordinary, continuous-fixed-design, population
+  RE, and conditional RE examples all executed and returned finite predictions.
+- `Rscript --vanilla -e 'devtools::build_readme()'` -> the grouped example ran;
+  the initial small design exposed nonsensical estimates, so it was replaced by
+  a 4-replicate, 40-trial design recovering CTmax 35.1/38.0 and z 4.20/4.11.
+- `Rscript --vanilla -e 'devtools::test(stop_on_failure = TRUE)'` -> 800 passes,
+  zero failures/warnings/skips in 111.5 seconds.
+- `Rscript --vanilla -e 'devtools::check_man()'` -> clean.
+- `Rscript --vanilla -e 'devtools::check()'` -> zero errors, warnings, or notes
+  in 5 minutes 49.9 seconds.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> no problems found.
+- `Rscript --vanilla tools/build-site.R` -> full local site built; internal
+  AGENTS/CLAUDE/SPEC pages and source files removed from the public artifact;
+  changed reference pages rebuilt successfully.
+- `Rscript --vanilla -e 'urlchecker::url_check()'` -> 20 reachable endpoints;
+  the same seven publisher DOI resolvers returned automated 403 responses. Their
+  registrations were already manually verified through Crossref.
+- `R CMD build .` -> exact `freqTLS_0.1.0.tar.gz`, 1,551,284 bytes, 210 entries,
+  SHA-256 `1a8d1248a9517e2ba6df2cc595e181d3cc9846f52b868fdec61caac55326b331`.
+- Tar inventory scan -> both canonical/installed function-map SVG paths present;
+  no `output/`, `scripts/`, `data-raw/`, governance, snow-gum, Kristineberg,
+  environmental traces, licensing-pending paths, or compiled artifacts.
+- Clean install to `/tmp/freqtls-lib`, followed by rendering installed
+  `freqTLS.Rmd` from `/tmp/freqtls-neutral` -> success; installed map counts 69
+  `<text>`, 27 `<rect>`, zero `<em>`.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> zero errors, zero warnings,
+  one NOTE (`New submission`); `--run-donttest` 115 seconds, tests 30 seconds,
+  vignette rebuild 124 seconds, PDF/HTML manuals passed.
+- GitHub run `29175810837` at predecessor head `5d83d21` -> Ubuntu release,
+  Ubuntu devel, Windows release, and macOS release all passed.
+- R-hub run `29175814161` at predecessor head `5d83d21` -> Ubuntu/clang status
+  OK. Replacement-head reruns remain required.
+- First win-builder R-devel log at
+  `https://win-builder.r-project.org/jOFn6gLj3SeZ/00check.log` -> stopped at
+  dependency checking because the server lacked CRAN package `cli`; incoming
+  URL/DOI checks also reported missing `curl`. No freqTLS installation,
+  compilation, example, test, or vignette check ran. The replacement exact
+  tarball was resubmitted with HTTP 200; result pending.
+
+Interpretation:
+
+- The new local artifact closes the audit's package/documentation/licensing
+  blockers. External readiness is still unproven until the replacement head
+  passes the four-platform matrix and R-hub, win-builder returns a real package
+  result, and fresh Grace/Rose/Pat verdicts approve. Written collaborator consent
+  remains a hard upload gate.

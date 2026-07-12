@@ -32,8 +32,6 @@ submission. Any unlisted file is a release blocker.
 | `inst/extdata/data_lethal_TDT_zebrafish_oxygen.csv` | Saruhashi et al. (2026), Zenodo `10.5281/zenodo.20075355` | Saruhashi and deposit contributors | CC BY 4.0 | Vendored source sheet; downstream relabelling and column selection | builds `data/zebrafish_o2.rda` | **SHIP** with attribution and change notice |
 | `inst/extdata/data_multitrait_TDT_drosophila_suzukii.csv` | Orsted et al. (2024), Zenodo `10.5281/zenodo.10602268`, `all_data_long_R3.csv` | Orsted et al. | CC BY 4.0 | Vendored long-form source; downstream type/order normalization; `t_coma` and `prod` are retained for provenance/context only | builds `data/dsuzukii.rda`; freqTLS analyses consume only the lethal `dead` response | **SHIP** with attribution and change notice |
 | `inst/extdata/data_sublethal_TDT_brown_shrimp.csv` | `bayesTLS` Case Study 1 sublethal raw file | Brown-shrimp experiment contributors / `bayesTLS` distributors | `bayesTLS` package distribution is CC BY 4.0 | Vendored raw clock-time records; downstream exclusions and elapsed-time conversion | builds `data/shrimp_sublethal.rda` | **SHIP** with `bayesTLS` attribution |
-| `inst/extdata/data_temp_trace_aphid_summer2016.csv` | Open-Meteo Historical Weather API, ERA5 reanalysis | Open-Meteo and underlying Copernicus data providers | CC BY 4.0; attribution and modification notice required | Select Wuhan, Xinxiang, and Beijing; 2016-05-01 through 2016-08-31; retain hourly 2 m temperature; add hours from series start | aphid heat-injury source trace | **SHIP**; attribution and transformation are recorded in `inst/COPYRIGHTS` and this ledger |
-| `inst/extdata/orsted_2024/orsted2024_nichemapr_rennes_2018_hourly.csv.gz` | Orsted et al. (2024) Zenodo `10.5281/zenodo.10821572`, `microclimate_injury_accumulation.R`; NicheMapR/NCEP workflow | Orsted et al. and underlying model-data providers | Zenodo record is CC BY 4.0 | Regenerate Rennes 2018 `micro_ncep` output and retain documented hourly air/microclimate columns plus coordinates/source | *D. suzukii* field-temperature scenario source | **SHIP** with attribution and change notice |
 
 ## Maintainer-generated result caches (`inst/extdata/*.rds`)
 
@@ -58,6 +56,8 @@ submission. Any unlisted file is a release blocker.
 | `data-raw/licensing-pending/snowgum/case-study-leaf-psii.Rmd` | Analysis source derived from the restricted snow-gum data | Not built or linked by pkgdown. |
 | `data-raw/licensing-pending/kristineberg/kristineberg_sea_temp_hourly.csv.gz` | University of Gothenburg / Sven Loven Centre; no explicit redistribution licence found | Not installed; written redistribution terms required before restoration. |
 | `data-raw/licensing-pending/kristineberg/README.md` | Maintainer provenance note for the adjacent extract | Retained with the blocked data, outside the package build. |
+| `data-raw/licensing-pending/environmental-traces/data_temp_trace_aphid_summer2016.csv` | Open-Meteo Historical Weather API / ERA5-derived extract; a complete primary redistribution chain for every underlying provider was not recorded | Not installed or consumed; compatible primary terms or written permission are required before restoration. |
+| `data-raw/licensing-pending/environmental-traces/orsted_2024/orsted2024_nichemapr_rennes_2018_hourly.csv.gz` | Orsted et al. (2024) Zenodo `10.5281/zenodo.10821572` NicheMapR/NCEP-derived output; the workflow licence does not alone establish redistribution authority for the derived environmental values | Not installed or consumed; compatible underlying-data terms or written permission are required before restoration. |
 
 ## Closed packaging actions
 
@@ -68,7 +68,9 @@ submission. Any unlisted file is a release blocker.
    `freqTLS_note` states the retained scope and comparison contract.
 3. The Kristineberg extract and provenance note were moved to the same
    build-excluded tree.
-4. The final source-tarball inventory must still confirm that none of these
+4. The two unused environmental traces were moved out of `inst/extdata/` because
+   their complete underlying-data redistribution chains were not established.
+5. The final source-tarball inventory must still confirm that none of these
    paths are included and that no installed vignette, test, or example loads
    them.
 

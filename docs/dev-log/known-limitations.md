@@ -25,7 +25,7 @@ identifiability warnings, and the eye-style profile plot (Phase 3); prediction
 (`predict()`, `predict_survival_surface()`, `derive_lt()`) and the Confidence-Eye
 and curve/surface plots (Phase 4); the R-SHRIMP-corrected `shrimp_lethal` and
 `zebrafish_lethal` datasets and the benchmark harness (Phase 5); and the README,
-the full vignette suite (model details plus six case studies), NEWS, and the live
+the full vignette suite (model details plus five case-study articles), NEWS, and the live
 pkgdown site (Phases 6–7) are all landed with
 tests, documentation, examples, check-log entries, and after-task reports
 (Definition of Done). The capabilities below are the 0.1.0 candidate boundary;

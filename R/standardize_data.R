@@ -42,7 +42,7 @@
 #'                       `[0, 1]` with no denominator (modelled with a Beta
 #'                       likelihood). Mutually exclusive with the count
 #'                       arguments above.
-#' @param proportion_eps Half-open clamp applied to `proportion` so values sit
+#' @param proportion_eps Boundary clamp applied to `proportion` so values sit
 #'                       strictly inside `(0, 1)` (the Beta density is undefined
 #'                       at exactly 0 or 1). Default `0.001`.
 #' @param random_effects Optional character vector of grouping variables for

@@ -71,7 +71,7 @@ sane; the sanity test is green; no Stan in CI.
 Owners: documentation-writer + pkgdown-editor + Pat + Darwin + literature-curator
 + Grace. README, the vignette suite (`freqTLS`, `model-math`,
 `profile-likelihood`, `random-effects`, `comparing-to-bayesTLS`,
-`frequentist-and-bayesian`, `heat-injury`, and the six case studies), NEWS, the
+`frequentist-and-bayesian`, `heat-injury`, and five case-study articles), NEWS, the
 final `_pkgdown.yml`.
 **Gate:** `devtools::document()`, `devtools::test()`, `devtools::check()`, and
 `pkgdown::build_site()` are clean locally.

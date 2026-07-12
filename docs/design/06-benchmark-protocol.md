@@ -85,10 +85,12 @@ contains the input rows.
 
 Licensing is component-specific; `docs/design/47-data-license-ledger.md` is the
 release gate. Brown-shrimp and life-stage zebrafish files were obtained from the
-CC BY 4.0 `bayesTLS` distribution. The *D. suzukii* data and its regenerated
-microclimate workflow are CC BY 4.0, and the aphid data are CC0. The snow-gum
-source is **CC BY-NC 4.0**, not CC BY 4.0. Written permission or compatible
-relicensing for unrestricted CRAN redistribution is pending, so the snow-gum
-raw files, derived dataset, and case-study vignette are retained under the
-build-excluded `data-raw/licensing-pending/` tree. Attribution alone does not
-cure a non-commercial or missing-licence restriction.
+CC BY 4.0 `bayesTLS` distribution. The *D. suzukii* assay data from Zenodo
+record 10602268 are CC BY 4.0, and the aphid assay data are CC0. The unused
+NicheMapR/NCEP microclimate trace is excluded because the workflow licence did
+not establish the complete underlying-data redistribution chain. The snow-gum
+source is **CC BY-NC 4.0**, not CC BY 4.0. Both environmental traces and the
+snow-gum raw files, derived dataset, and case-study vignette are retained under
+the build-excluded `data-raw/licensing-pending/` tree until compatible terms or
+written permission are recorded. Attribution alone does not cure a
+non-commercial or missing-licence restriction.
