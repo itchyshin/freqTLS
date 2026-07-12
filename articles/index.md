@@ -37,5 +37,7 @@
   2023)](https://itchyshin.github.io/freqTLS/articles/case-study-li-aphids.md):
 - [Case study: Drosophila suzukii lethal thermal death time across
   sexes](https://itchyshin.github.io/freqTLS/articles/case-study-suzukii.md):
-- [Cross-case-study summary: three taxa, one
+- [Case study: snow-gum leaf PSII — a continuous-proportion sublethal
+  endpoint](https://itchyshin.github.io/freqTLS/articles/case-study-leaf-psii.md):
+- [Cross-case-study summary: four taxa, one
   panel](https://itchyshin.github.io/freqTLS/articles/case-study-summary.md):

@@ -45,7 +45,8 @@ the optimum, with a single all_pass flag."></head><body>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -93,22 +94,6 @@ the optimum, with a single <code>all_pass</code> flag.</p>
     <div class="dont-index"><p><code><a href="fit_4pl.html">fit_4pl()</a></code>, <code><a href="check_tls.html">check_tls()</a></code></p></div>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="standardize_data.html">standardize_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">raw</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration"</span>,</span></span>
-<span class="r-in"><span>  n_total <span class="op">=</span> <span class="st">"total"</span>, n_surv <span class="op">=</span> <span class="st">"survived"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">dat</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">diagnose_tdt_fit</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> TRUE      TRUE             0.000<span style="text-decoration: underline;">006</span>17 TRUE          nlminb     -<span style="color: #BB0000;">129.</span>        5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

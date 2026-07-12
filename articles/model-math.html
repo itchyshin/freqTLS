@@ -54,7 +54,8 @@
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -91,11 +92,12 @@ the four-parameter logistic (4PL) thermal death-time curve, the direct
 <code>CTmax</code>/<code>z</code> parameterisation, the disjoint-bounds
 asymptote transform, the relative-versus-absolute survival threshold,
 and the exact algebraic bridge to <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>.
-The package’s implementation contract is tested against these equations;
-this vignette mirrors it and checks the bridge identities numerically
-(no Stan required). If you already trust that freqTLS and bayesTLS
-target the same fitted curve, you can skip straight to the worked
-examples in <code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></code> and
+The authoritative source is
+<code>docs/design/01-model-and-parameterisation.md</code>; this vignette
+mirrors it and checks the bridge identities numerically (no Stan
+required). If you already trust that freqTLS and bayesTLS target the
+same fitted curve, you can skip straight to the worked examples in
+<code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></code> and
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>

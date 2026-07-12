@@ -4,12 +4,12 @@ death-time model to survival-count data, parameterised directly in CTmax
 and z (thermal sensitivity) so that both headline quantities can be
 profiled. Survival is modelled as a function of log10(duration); the
 midpoint moves with temperature through CTmax and z (see
-vignette("model-math")).'><meta property="og:description" content='fit_tls() fits the descending four-parameter logistic (4PL) thermal
+vignette("model-math") and docs/design/01-model-and-parameterisation.md).'><meta property="og:description" content='fit_tls() fits the descending four-parameter logistic (4PL) thermal
 death-time model to survival-count data, parameterised directly in CTmax
 and z (thermal sensitivity) so that both headline quantities can be
 profiled. Survival is modelled as a function of log10(duration); the
 midpoint moves with temperature through CTmax and z (see
-vignette("model-math")).'></head><body>
+vignette("model-math") and docs/design/01-model-and-parameterisation.md).'></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -49,7 +49,8 @@ vignette("model-math")).'></head><body>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -74,7 +75,7 @@ death-time model to survival-count data, parameterised <strong>directly in <code
 and <code>z</code></strong> (thermal sensitivity) so that both headline quantities can be
 profiled. Survival is modelled as a function of <code>log10(duration)</code>; the
 midpoint moves with temperature through <code>CTmax</code> and <code>z</code> (see
-<code><a href="../articles/model-math.html">vignette("model-math")</a></code>).</p>
+<code><a href="../articles/model-math.html">vignette("model-math")</a></code> and <code>docs/design/01-model-and-parameterisation.md</code>).</p>
     </div>
 
     <div class="section level2">
@@ -198,19 +199,6 @@ as <code>x</code> and the data frame as <code>data</code>; the brms/drmTMB-style
 response, the two axes, and the <code>CTmax</code> / <code>log_z</code> predictors. Both interfaces
 feed the same likelihood engine, so a grouped formula fit and the matching
 <code>group =</code> column fit are numerically identical.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="before-interpretation">Before interpretation<a class="anchor" aria-label="anchor" href="#before-interpretation"></a></h2>
-
-
-<p>Run <code><a href="check_tls.html">check_tls()</a></code> on the fitted object. Its help page maps every
-data-adequacy warning to a concrete design or analysis response.
-<code><a href="../articles/profile-likelihood.html">vignette("profile-likelihood")</a></code> explains strict open profiles and the
-default bootstrap recovery attempt.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="check_tls.html">check_tls()</a></code>, <code><a href="confint.profile_tls.html">confint.profile_tls()</a></code></p></div>
     </div>
 
     <div class="section level2">

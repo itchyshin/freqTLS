@@ -54,7 +54,8 @@
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -106,16 +107,16 @@ see <code><a href="../reference/shrimp_lethal.html">?shrimp_lethal</a></code>).<
 <code>tref = 1</code> hour, the <strong>relative</strong> mortality
 threshold, a <code>beta_binomial</code> family, and a constant 4PL shape
 (<code>low</code>, <code>up</code>, <code>k</code> shared across
-temperatures). This is the matched configuration for the two model-based
-fits. The classical two-stage estimate is an absolute-LT50 approximation
-for this near-0/near-1 lethal curve (see
-<code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>).</p>
+temperatures). This is the matched configuration that locks all three
+estimators to the same fitted curve
+(<code>docs/design/06-benchmark-protocol.md</code>).</p>
 <p><strong>This article builds without Stan and renders fast.</strong>
 The <code>freqTLS</code> fit runs live; the Bayesian and classical
-two-stage numbers are read from a version-stamped cache shipped with the
-package. The two chunks copied from
+two-stage numbers are read from a maintainer-built cache if it is
+present. The two chunks copied verbatim from
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code> — the live shrimp fit and
-the three-way table — render Stan-free using that cache.</p>
+the three-way table — are the parts already known to render Stan-free
+with shrimp cached.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -217,15 +218,12 @@ endpoint, so the value stands.)</p>
 </h2>
 <p>The cache holds the maintainer-built <code>bayesTLS</code>
 (posterior) and classical two-stage summaries; the <code>freqTLS</code>
-column is computed live as this page renders. The two model fits use the
-matched beta-binomial, relative-threshold, constant-shape configuration
-at <code>tref = 1</code> hour. The classical two-stage column uses
-absolute LT50 and is an approximate comparator because the fitted lethal
-asymptotes are near zero and one.</p>
+column is computed live as this page renders. All three use the matched
+configuration (beta-binomial, relative threshold, constant shape,
+<code>tref = 1</code> hour), so they target the <em>same</em> fitted
+curve.</p>
 <table style="width:100%;" class="table">
-<caption>Shrimp CTmax and z shown side by side: the two model fits use
-the relative midpoint; the classical estimator uses absolute
-LT50.</caption>
+<caption>Shrimp: the same CTmax and z from three estimators.</caption>
 <colgroup>
 <col width="20%">
 <col width="26%">
@@ -241,26 +239,28 @@ LT50.</caption>
 <tbody>
 <tr class="odd">
 <td align="left">CTmax (°C)</td>
-<td align="left">31.62 [31.34, 31.89]</td>
-<td align="left">31.72 [31.60, 31.85]</td>
+<td align="left">31.61 [31.33, 31.89]</td>
+<td align="left">31.72 [31.59, 31.86]</td>
 <td align="left">31.77 [31.63, 31.92]</td>
 </tr>
 <tr class="even">
 <td align="left">z (°C / decade)</td>
-<td align="left">2.04 [1.49, 2.60]</td>
-<td align="left">2.17 [1.95, 2.43]</td>
+<td align="left">2.06 [1.49, 2.64]</td>
+<td align="left">2.18 [1.95, 2.44]</td>
 <td align="left">2.19 [1.96, 2.46]</td>
 </tr>
 </tbody>
 </table>
-<p>The headline is the agreement between the two interval-bearing model
-fits: the <code>freqTLS</code> profile <strong>confidence</strong>
-interval and the <code>bayesTLS</code> posterior credible interval
-nearly coincide — and the <code>freqTLS</code> side is produced live, in
-milliseconds, with no Stan. That is the complementary framing made
-concrete on one dataset: under the matched configuration the likelihood
-and the posterior summarise the <em>same</em> fitted curve, one
-prior-free and by optimisation, the other with a prior and MCMC.</p>
+<p>The three estimators land on essentially the same <code>CTmax</code>
+and <code>z</code>. The headline is the agreement between the two
+interval-bearing model fits: the <code>freqTLS</code> profile
+<strong>confidence</strong> interval and the <code>bayesTLS</code>
+posterior credible interval nearly coincide — and the
+<code>freqTLS</code> side is produced live, in milliseconds, with no
+Stan. That is the complementary framing made concrete on one dataset:
+under the matched configuration the likelihood and the posterior
+summarise the <em>same</em> fitted curve, one prior-free and by
+optimisation, the other with a prior and MCMC.</p>
 </div>
 <div class="section level2">
 <h2 id="boundary-what-this-case-study-does-not-cover">Boundary: what this case study does not cover<a class="anchor" aria-label="anchor" href="#boundary-what-this-case-study-does-not-cover"></a>

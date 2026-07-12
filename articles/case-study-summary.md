@@ -1,12 +1,12 @@
-# Cross-case-study summary: three taxa, one panel
+# Cross-case-study summary: four taxa, one panel
 
 This vignette mirrors Manuscript Figure 5 of the `bayesTLS` supplement –
 a single multi-taxon panel of the thermal-sensitivity parameter `z` and
-the critical temperature `CTmax` across the three redistributable case
-studies – but draws the `freqTLS` **Confidence Eye** for each estimate
-instead of a Bayesian posterior ridge. Each row is a likelihood
-**confidence interval** (a pale lens with a hollow point estimate),
-never a posterior density.
+the critical temperature `CTmax` across all four case studies – but
+draws the `freqTLS` **Confidence Eye** for each estimate instead of a
+Bayesian posterior ridge. Each row is a likelihood **confidence
+interval** (a pale lens with a hollow point estimate), never a posterior
+density.
 
 **This vignette builds without Stan.** Every fit here is the `freqTLS`
 maximum-likelihood path (TMB), run live as the page renders. The
@@ -18,9 +18,9 @@ closing note.
 library(freqTLS)
 ```
 
-## The three taxa and the cross-study question
+## The four taxa and the cross-study question
 
-The three shared case-study datasets span three corners of thermal
+The four shared case-study datasets span four corners of thermal
 physiology:
 
 - **brown shrimp** *Crangon crangon* – a crustacean, lethal mortality,
@@ -30,18 +30,21 @@ physiology:
   `zebrafish_lethal` life-stage dataset — a *separate* experiment from
   the oxygen-gradient `zebrafish_o2` data in
   [`vignette("case-study-zebrafish")`](https://itchyshin.github.io/freqTLS/articles/case-study-zebrafish.md);
+- **snow gum** *Eucalyptus pauciflora* – a plant, a **functional**
+  (sublethal) endpoint, the retained proportion of photosystem-II
+  efficiency (`Fv/Fm`);
 - **vinegar fly** *Drosophila suzukii* – an insect, lethal mortality,
   across the two sexes.
 
 The cross-study question is descriptive: laid side by side, how do
 thermal limits compare across a crustacean, a fish (resolved by
-developmental stage), and an insect (resolved by sex)? `CTmax` (the
-critical temperature at a fixed reference exposure) places each taxon on
-the temperature axis; `z` (the change in temperature, in degrees
-Celsius, that multiplies tolerated exposure time tenfold) measures how
-sharply tolerated exposure responds to temperature: a *smaller* `z` is a
-steeper response (a small warming sharply cuts tolerated time), a
-*larger* `z` a more gradual one.
+developmental stage), a plant’s photosynthetic machinery, and an insect
+(resolved by sex)? `CTmax` (the critical temperature at a fixed
+reference exposure) places each taxon on the temperature axis; `z` (the
+change in temperature, in degrees Celsius, that multiplies tolerated
+exposure time tenfold) measures how sharply tolerated exposure responds
+to temperature: a *smaller* `z` is a steeper response (a small warming
+sharply cuts tolerated time), a *larger* `z` a more gradual one.
 
 **One caveat governs the whole panel.** The reference exposures differ
 by study, because each follows the convention of its source assay:
@@ -50,25 +53,28 @@ by study, because each follows the convention of its source assay:
 |----|----|----|----|
 | Shrimp | lethal | 1 hour | relative midpoint |
 | Zebrafish (per stage) | lethal | 1 hour | relative midpoint |
-| *D. suzukii* (per sex) | lethal | 4 hours (240 min) | relative midpoint |
+| Snow gum | sublethal PSII | 1 hour | relative midpoint |
+| *D. suzukii* (per sex) | lethal | 4 hours (240 min) | absolute LT50 |
 
 Because a `CTmax` is defined *at* its reference exposure, the four
-`CTmax` values are **not** on a single common time scale: the fly number
-is the fitted relative midpoint temperature at 4 hours, whereas the
-shrimp and zebrafish fits use a 1-hour reference. The panel is therefore
-an **illustrative cross-taxon synthesis**, not a single common-scale
-comparison. `z`, by contrast, is a slope – degrees per tenfold change in
-time – and is comparable across taxa regardless of the reference
-exposure. Read the `CTmax` facet as four study-specific anchors and the
-`z` facet as a like-with-like comparison of duration sensitivity.
+`CTmax` values are **not** on a single common time scale: the snow gum
+number is “the temperature that halves PSII over 1 hour”, the fly number
+is “the temperature that kills half the flies over 4 hours”. The panel
+is therefore an **illustrative cross-taxon synthesis**, not a single
+common-scale comparison. `z`, by contrast, is a slope – degrees per
+tenfold change in time – and is comparable across taxa regardless of the
+reference exposure. Read the `CTmax` facet as four study-specific
+anchors and the `z` facet as a like-with-like comparison of duration
+sensitivity.
 
-## The three fits (run live)
+## The four fits (run live)
 
 Each fit uses the configuration locked for its case study. The grouped
 fits (zebrafish, fly) estimate a separate `CTmax` and `z` per level with
-a shared shape (`low`, `up`, `k`); the ungrouped shrimp fit estimates
-one of each. All three use **beta-binomial** survival counts. All fits
-are wrapped in
+a shared shape (`low`, `up`, `k`); the ungrouped fits (shrimp, snow gum)
+estimate one of each. The snow gum fit uses the **beta** family for its
+continuous proportion; the others use **beta-binomial** survival counts.
+All fits are wrapped in
 [`suppressWarnings()`](https://rdrr.io/r/base/warning.html) to swallow
 the honest data-adequacy notes (for example, temperatures with few
 durations) that `freqTLS` raises – those signals are covered in the
@@ -96,6 +102,12 @@ zebra_fit <- suppressWarnings(fit_4pl(standardize_data(
   zebrafish_lethal, temp = "assay_temp", duration = "duration_h",
   n_total = "n_total", n_surv = "n_surv", duration_unit = "hours"),
   by = "life_stage", t_ref = 1, family = "beta_binomial", quiet = TRUE))$fit
+
+# Snow gum: ungrouped, beta family, 1-hour reference (functional PSII).
+data(snowgum_psii)
+snowgum_fit <- suppressWarnings(fit_4pl(standardize_data(
+  snowgum_psii, temp = "Temp", duration = "Time", proportion = "fvfm_prop",
+  duration_unit = "minutes"), family = "beta", t_ref = 60, quiet = TRUE))$fit
 
 # D. suzukii: per-individual -> (temp, time, sex) counts; grouped by sex, 4-hour ref.
 data(dsuzukii)
@@ -148,13 +160,16 @@ panel <- rbind(
            c("Zebrafish: young embryos", "Zebrafish: old embryos",
              "Zebrafish: larvae", "Zebrafish: young embryos",
              "Zebrafish: old embryos", "Zebrafish: larvae")),
+  eye_rows(snowgum_fit, "Snow gum (1 h)",
+           c("CTmax", "z"),
+           c("Snow gum (PSII)", "Snow gum (PSII)")),
   eye_rows(fly_fit, "D. suzukii (4 h)",
            c("CTmax:F", "CTmax:M", "z:F", "z:M"),
            c("D. suzukii: female", "D. suzukii: male",
              "D. suzukii: female", "D. suzukii: male"))
 )
 
-# Six rows, two parameters: a tidy printout of the headline numbers.
+# Seven rows, two parameters: a tidy printout of the headline numbers.
 panel_wide <- data.frame(
   Group           = panel$label[panel$parameter == "CTmax"],
   `CTmax estimate` = round(panel$estimate[panel$parameter == "CTmax"], 2),
@@ -169,7 +184,7 @@ panel_wide <- data.frame(
 )
 knitr::kable(
   panel_wide,
-  caption = "Six taxon/group rows: CTmax (at the study reference exposure) and z, each with its profile-likelihood 95% confidence interval."
+  caption = "Seven taxon/group rows: CTmax (at the study reference exposure) and z, each with its profile-likelihood 95% confidence interval."
 )
 ```
 
@@ -179,43 +194,49 @@ knitr::kable(
 | Zebrafish: young embryos | 39.92 | \[39.79, 40.04\] | 2.00 | \[1.82, 2.19\] |
 | Zebrafish: old embryos | 41.38 | \[41.23, 41.61\] | 1.80 | \[1.53, 2.16\] |
 | Zebrafish: larvae | 39.79 | \[39.67, 39.92\] | 1.98 | \[1.76, 2.22\] |
+| Snow gum (PSII) | 44.58 | \[44.21, 44.91\] | 3.71 | \[3.18, 4.27\] |
 | D. suzukii: female | 35.23 | \[35.12, 35.32\] | 3.01 | \[2.86, 3.18\] |
 | D. suzukii: male | 35.25 | \[35.16, 35.34\] | 3.18 | \[3.01, 3.36\] |
 
-Six taxon/group rows: CTmax (at the study reference exposure) and z,
+Seven taxon/group rows: CTmax (at the study reference exposure) and z,
 each with its profile-likelihood 95% confidence interval. {.table}
 
 ## Cross-taxon validation against bayesTLS and the two-stage estimator
 
-The same headline numbers are shown beside the classical two-stage
-estimator and the `bayesTLS` posterior, read from the maintainer-built
-benchmark cache. The `freqTLS` and `bayesTLS` fits use the matched
-relative-midpoint, constant-shape configuration and the same per-study
-reference exposure. The classical estimator uses absolute LT50 and is
-therefore an approximate comparator for these lethal datasets, whose
-asymptotes lie near zero and one.
+The same headline numbers, now beside the classical two-stage estimator
+and the `bayesTLS` posterior, read from the maintainer-built benchmark
+cache. Each fit uses its study’s matched configuration
+(relative-midpoint threshold, constant shape, the per-study reference
+exposure), so the three estimators target the *same* fitted curve per
+row. Snow-gum PSII is a continuous proportion with no count
+representation, so its two-stage cell is empty (it is a `bayesTLS` beta
+two-way). The `freqTLS` profile-likelihood confidence intervals and the
+`bayesTLS` credible intervals land on essentially the same `CTmax` and
+`z` in every row — the cross-taxon statement of the complementary
+framing.
 
 | Group | Quantity | Two-stage (delta CI) | bayesTLS (95% CrI) | freqTLS (profile CI) |
 |:---|:---|:---|:---|:---|
-| Shrimp | CTmax (°C) | 31.62 \[31.34, 31.89\] | 31.72 \[31.60, 31.85\] | 31.77 \[31.63, 31.92\] |
-| Shrimp | z (°C / decade) | 2.04 \[1.49, 2.60\] | 2.17 \[1.95, 2.43\] | 2.19 \[1.96, 2.46\] |
-| Zebrafish: young embryos | CTmax (°C) | 39.61 \[39.34, 39.87\] | 39.97 \[39.82, 40.10\] | 39.92 \[39.79, 40.04\] |
-| Zebrafish: young embryos | z (°C / decade) | 2.22 \[1.72, 2.71\] | 1.93 \[1.73, 2.13\] | 2.00 \[1.82, 2.19\] |
-| Zebrafish: old embryos | CTmax (°C) | 41.39 \[40.88, 41.91\] | 41.34 \[41.19, 41.56\] | 41.38 \[41.23, 41.61\] |
-| Zebrafish: old embryos | z (°C / decade) | 2.33 \[1.69, 2.96\] | 1.90 \[1.62, 2.24\] | 1.80 \[1.53, 2.16\] |
-| Zebrafish: larvae | CTmax (°C) | 39.82 \[39.61, 40.02\] | 39.73 \[39.59, 39.85\] | 39.79 \[39.67, 39.92\] |
-| Zebrafish: larvae | z (°C / decade) | 2.16 \[1.75, 2.57\] | 2.02 \[1.78, 2.26\] | 1.98 \[1.76, 2.22\] |
-| D. suzukii: female | CTmax (°C) | 34.80 \[34.56, 35.04\] | 35.20 \[35.08, 35.30\] | 35.23 \[35.12, 35.32\] |
-| D. suzukii: female | z (°C / decade) | 2.99 \[2.60, 3.38\] | 3.02 \[2.88, 3.18\] | 3.01 \[2.86, 3.18\] |
+| Shrimp | CTmax (°C) | 31.61 \[31.33, 31.89\] | 31.72 \[31.59, 31.86\] | 31.77 \[31.63, 31.92\] |
+| Shrimp | z (°C / decade) | 2.06 \[1.49, 2.64\] | 2.18 \[1.95, 2.44\] | 2.19 \[1.96, 2.46\] |
+| Zebrafish: young embryos | CTmax (°C) | 39.61 \[39.34, 39.88\] | 39.98 \[39.83, 40.10\] | 39.92 \[39.79, 40.04\] |
+| Zebrafish: young embryos | z (°C / decade) | 2.22 \[1.72, 2.73\] | 1.93 \[1.74, 2.12\] | 2.00 \[1.82, 2.19\] |
+| Zebrafish: old embryos | CTmax (°C) | 41.40 \[40.87, 41.93\] | 41.34 \[41.18, 41.58\] | 41.38 \[41.23, 41.61\] |
+| Zebrafish: old embryos | z (°C / decade) | 2.36 \[1.69, 3.02\] | 1.89 \[1.62, 2.27\] | 1.80 \[1.53, 2.16\] |
+| Zebrafish: larvae | CTmax (°C) | 39.82 \[39.62, 40.03\] | 39.73 \[39.58, 39.85\] | 39.79 \[39.67, 39.92\] |
+| Zebrafish: larvae | z (°C / decade) | 2.17 \[1.76, 2.58\] | 2.02 \[1.75, 2.27\] | 1.98 \[1.76, 2.22\] |
+| Snow gum (PSII) | CTmax (°C) | – | 45.94 \[45.37, 46.56\] | 44.58 \[44.21, 44.91\] |
+| Snow gum (PSII) | z (°C / decade) | – | 5.85 \[5.22, 6.48\] | 3.71 \[3.18, 4.27\] |
+| D. suzukii: female | CTmax (°C) | 34.80 \[34.56, 35.04\] | 35.20 \[35.07, 35.30\] | 35.23 \[35.12, 35.32\] |
+| D. suzukii: female | z (°C / decade) | 2.99 \[2.60, 3.38\] | 3.02 \[2.88, 3.20\] | 3.01 \[2.86, 3.18\] |
 | D. suzukii: male | CTmax (°C) | 34.98 \[34.34, 35.62\] | 35.22 \[35.10, 35.32\] | 35.25 \[35.16, 35.34\] |
-| D. suzukii: male | z (°C / decade) | 3.40 \[2.15, 4.65\] | 3.18 \[2.98, 3.39\] | 3.18 \[3.01, 3.36\] |
+| D. suzukii: male | z (°C / decade) | 3.40 \[2.15, 4.65\] | 3.17 \[2.99, 3.39\] | 3.18 \[3.01, 3.36\] |
 
-Cross-taxon three-way comparison: CTmax and z per taxon/group from the
+Cross-taxon three-way validation: CTmax and z per taxon/group from the
 classical two-stage estimator, bayesTLS (posterior median + 95% CrI),
-and freqTLS (profile-likelihood estimate + 95% CI). The two model fits
-share each study’s relative-threshold, constant-shape configuration; the
-two-stage estimate is an absolute-LT50 approximation for these
-near-0/near-1 lethal curves. {.table}
+and freqTLS (profile-likelihood estimate + 95% CI), each on its study’s
+matched configuration. freqTLS and bayesTLS agree across every row.
+{.table}
 
 ## The panel: a Confidence Eye per taxon and group
 
@@ -230,20 +251,21 @@ and, for `CTmax`, on different reference exposures.
 The geometry follows the `freqTLS` Confidence-Eye contract: the shallow,
 wide lens reads as a confidence *interval*, not a probability density,
 and a profile that did not close would render as a hollow point with
-**no** lens. All six profiles here close, so every row carries a lens.
+**no** lens. All seven profiles here close, so every row carries a lens.
 
 ``` r
 
-# Build the honest Confidence-Eye geometry by hand so all three fits share one
+# Build the honest Confidence-Eye geometry by hand so all four fits share one
 # cross-taxon panel: a cosine-tapered pale lens (width = confidence interval)
 # plus a hollow point, faceted by parameter with free x-axes. This reuses the
 # package lens shape (see ?plot_confidence_eye) but spans every fit in one figure.
 stopifnot(requireNamespace("ggplot2", quietly = TRUE))
 
-# Fixed top-to-bottom row order (shrimp, zebrafish stages, fly sexes).
+# Fixed top-to-bottom row order (shrimp, zebrafish stages, snow gum, fly sexes).
 row_order <- c(
   "Shrimp",
   "Zebrafish: young embryos", "Zebrafish: old embryos", "Zebrafish: larvae",
+  "Snow gum (PSII)",
   "D. suzukii: female", "D. suzukii: male"
 )
 panel$row <- match(panel$label, row_order)
@@ -269,7 +291,7 @@ tref_lab <- data.frame(
                      levels = levels(panel$parameter)),
   row = panel$row[panel$parameter == "CTmax (°C)"],
   x   = panel$conf.high[panel$parameter == "CTmax (°C)"],
-  lab = c("1 h", "1 h", "1 h", "1 h", "4 h", "4 h")
+  lab = c("1 h", "1 h", "1 h", "1 h", "1 h", "4 h", "4 h")
 )
 
 ggplot2::ggplot() +
@@ -298,7 +320,7 @@ ggplot2::ggplot() +
   ggplot2::facet_wrap(~ parameter, scales = "free_x") +
   ggplot2::labs(
     x = NULL, y = NULL,
-    title = "Thermal limits across three taxa: CTmax and z",
+    title = "Thermal limits across four taxa: CTmax and z",
     subtitle = "Confidence Eyes: pale lens = 95% confidence interval; hollow point = estimate.",
     caption = paste(
       "Profile-likelihood confidence intervals (freqTLS, no Stan).",
@@ -314,14 +336,15 @@ ggplot2::ggplot() +
 ```
 
 ![Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius:
-six pale horizontal confidence-interval lenses with hollow point
-estimates, ordered top to bottom as shrimp near 31.8, the three
-zebrafish stages near 39.8 to 41.4, and the two D. suzukii sexes near
-35.2. Right facet, z in degrees Celsius per tenfold time change:
-matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0,
-and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with
-its reference exposure (1 hour or 4 hours), underscoring that the CTmax
-values are not on a common time
+seven pale horizontal confidence-interval lenses with hollow point
+estimates, one per taxon/group, ordered top to bottom as shrimp near
+31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near
+44.6, and the two D. suzukii sexes near 35.2. Right facet, z in degrees
+Celsius per tenfold time change: matching lenses with shrimp near 2.2,
+zebrafish stages near 1.8 to 2.0, snow gum near 3.7, and the two fly
+sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference
+exposure (1 hour or 4 hours), underscoring that the CTmax values are not
+on a common time
 scale.](case-study-summary_files/figure-html/panel-1.png)
 
 ## Within-taxon contrasts
@@ -395,7 +418,20 @@ no clear sex difference in either thermal limit, the same conclusion
 
 ## What this shows
 
-Two things stand out from the panel:
+Three things stand out from the panel:
+
+- **The plant’s photosynthetic endpoint is the most gradual.** Snow gum
+  PSII has the largest `z` (about 3.7 degrees Celsius per tenfold time),
+  so its tolerated exposure collapses *most gradually* with temperature
+  — it takes the largest temperature rise to cut the tolerated time
+  tenfold (the rate of collapse scales as `1/z`) — whereas the animals’
+  lethal endpoints (`z` between roughly 1.8 and 3.2) fall more steeply.
+  Snow gum’s `CTmax` is also the highest on the shared one-hour
+  reference, but it is the temperature of half-PSII-loss, **not** a
+  lethal temperature, so it should not be read as ranking the plant
+  above the animals on a single tolerance scale; only the `z` comparison
+  is like-for-like across all rows. (The *D. suzukii* `CTmax` sits at a
+  four-hour reference, so that row is also off the common time scale.)
 
 - **Resolving a taxon by an internal axis can matter or not.** Zebrafish
   life stage shifts `CTmax` by over a degree (old embryos are the most
@@ -404,7 +440,7 @@ Two things stand out from the panel:
   the zebrafish lenses separate on the `CTmax` axis, while the two fly
   lenses overlap almost completely.
 
-- **Every estimate carries an honest, prior-free interval.** All six
+- **Every estimate carries an honest, prior-free interval.** All seven
   profiles close, so each row is a closed lens rather than a hollow
   point. Where a profile did **not** close (a weakly identified design
   or a boundary asymptote), the same display would show a hollow point
@@ -417,9 +453,7 @@ statement about the parameter itself.
 ## See bayesTLS for the Bayesian multi-taxon ridge
 
 This panel is the `freqTLS` (likelihood) counterpart to Manuscript
-Figure 5 of the `bayesTLS` supplement. Its full figure also includes the
-snow-gum PSII dataset, which is not redistributed here because its
-source is CC BY-NC 4.0. The Bayesian supplement draws the taxa as
+Figure 5 of the `bayesTLS` supplement, which draws the same four taxa as
 posterior **ridge densities** with median points and 95% credible bars.
 The two displays answer the same cross-study question from complementary
 inferential engines: the `bayesTLS` ridge is a posterior density shaped

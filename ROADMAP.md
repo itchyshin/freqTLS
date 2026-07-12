@@ -67,9 +67,9 @@ Florence’s figure-audit passes.
 
 ### Phase 5 – bayesTLS benchmark harness (implemented)
 
-Owners: Curie + Jason + Rose (parallel with Phase 4). The installed raw
-shrimp proportions and `standardize_data(mortality = ...)` reconstruct
-counts at fit time; `R/data.R`, `inst/CITATION`,
+Owners: Curie + Jason + Rose (parallel with Phase 4).
+`data-raw/make_benchmark_data.R` (reconstructs shrimp counts from
+proportions), `R/data.R`, `inst/CITATION`,
 `data-raw/build_benchmark_cache.R`, the cache, `test-benchmark-sanity`.
 **Gate:** the vendored shrimp counts are sane; the sanity test is green;
 no Stan in CI.
@@ -92,12 +92,12 @@ known-limitations / ROADMAP / README / capability-matrix sync
 -\> P2 -\> P3 (shared engine contract), then parallel P4 and P5, then
 P6.
 
-## v0.1.0 release-candidate boundary
+## v0.1 release boundary
 
-The `v0.1`/`v0.2`/`v0.3` headings below are historical build milestones
-folded into the single 0.1.0 release candidate. They record how the
-surface grew; they are not evidence that any version has been published
-to CRAN.
+**The `v0.1`/`v0.2`/`v0.3` headings below are build milestones, all
+released in the single `0.1.0` version** (the fresh fork from
+profileTLS). They are kept in build order to record how the surface
+grew; nothing here is unreleased.
 
 The v0.1 milestone (core) is count data (binomial and beta-binomial),
 shared shape, grouped `CTmax`/`z`, profile CIs (and Wald), a
@@ -108,10 +108,10 @@ then added the Beta family, random effects, bootstrap CIs, heat-injury,
 and shape predictors — **all of which ship in 0.1.0**. Genuinely still
 out of scope: time-to-event, multi-trait responses, a fit-time
 absolute-threshold option and non-default `bounds`, a profile interval
-or random effect for the upper asymptote `up`. CRAN hardening is the
-active release gate. See `docs/design/46-capability-matrix.md`.
+or random effect for the upper asymptote `up`, and CRAN hardening. See
+`docs/design/46-capability-matrix.md`.
 
-## v0.2 build milestone (included in the 0.1.0 candidate)
+## v0.2 milestone (released in 0.1.0)
 
 Building beyond the v0.1 core, with complementary (not competitive)
 framing against `bayesTLS` – the two packages are two valid lenses on
@@ -120,9 +120,8 @@ the same model.
 - **Parametric bootstrap CIs – done.** Prior-free percentile intervals
   via `confint(method = "bootstrap")`, and the automatic fallback for a
   non-closing profile or a non-positive-definite Hessian
-  (`fallback = TRUE`). freqTLS now attempts a finite interval without a
-  prior; unstable bootstrap fits return an explicit `NA` rather than
-  fabricating bounds.
+  (`fallback = TRUE`). freqTLS now always returns an interval, the same
+  behaviour as the Bayesian path, without a prior.
 
 - **Real `bayesTLS` benchmark cache – done.** Built from `bayesTLS`
   1.0.0.
@@ -179,8 +178,7 @@ the same model.
   (byte-identical default), link-scale coefficient estimates
   (`k:body_size` is a log-scale slope) with Wald intervals, and
   [`predict()`](https://rdrr.io/r/stats/predict.html) rebuilds each
-  shape design from `newdata`. \## v0.3 build milestone (included in the
-  0.1.0 candidate)
+  shape design from `newdata`. \## v0.3 milestone (released in 0.1.0)
 
 - **Random intercept on `log_z` (item 5) — done.**
   `log_z ~ <fixed> + (1 | group)` adds a random intercept on thermal

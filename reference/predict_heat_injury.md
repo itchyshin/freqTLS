@@ -7,9 +7,7 @@ fitted thermal-load- sensitivity curve and a temperature time-series (a
 and reads survival back off the fitted 4PL. It does **not** fit an
 injury or repair model – fitting injury / repair dynamics remains a
 `bayesTLS` concern (the complementary boundary); `predict_heat_injury()`
-only predicts injury from the already-fitted survival curve. For a
-random-effects fit it uses the population curve and does not add a
-fitted group BLUP.
+only predicts injury from the already-fitted survival curve.
 
 ## Usage
 

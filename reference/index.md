@@ -165,8 +165,7 @@ Small shared helpers (time conversion, interval formatting, quantiles).
 
 ## Data
 
-Vendored benchmark datasets; see each help page for source-specific
-credit and licence terms.
+Vendored benchmark datasets (credit bayesTLS, CC BY 4.0).
 
 - [`shrimp_lethal`](https://itchyshin.github.io/freqTLS/reference/shrimp_lethal.md)
   : Brown shrimp lethal thermal-death-time data
@@ -176,6 +175,8 @@ credit and licence terms.
   : Zebrafish lethal thermal-death-time data across life stages
 - [`zebrafish_o2`](https://itchyshin.github.io/freqTLS/reference/zebrafish_o2.md)
   : Zebrafish lethal-TDT data across an oxygen gradient
+- [`snowgum_psii`](https://itchyshin.github.io/freqTLS/reference/snowgum_psii.md)
+  : Snow gum leaf PSII functional-impairment thermal-tolerance data
 - [`dsuzukii`](https://itchyshin.github.io/freqTLS/reference/dsuzukii.md)
   : Drosophila suzukii multi-trait thermal-tolerance data
 - [`aphid_tdt`](https://itchyshin.github.io/freqTLS/reference/aphid_tdt.md)

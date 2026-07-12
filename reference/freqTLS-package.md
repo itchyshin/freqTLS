@@ -24,19 +24,19 @@ Useful links:
 
 - <https://github.com/itchyshin/freqTLS>
 
-- <https://itchyshin.github.io/freqTLS/>
+- <https://itchyshin.github.io/freqTLS>
 
 - Report bugs at <https://github.com/itchyshin/freqTLS/issues>
 
 ## Author
 
 **Maintainer**: Shinichi Nakagawa <itchyshin@gmail.com>
-([ORCID](https://orcid.org/0000-0002-7765-5182)) \[copyright holder\]
+([ORCID](https://orcid.org/0000-0002-7765-5182))
 
 Authors:
 
 - Shinichi Nakagawa <itchyshin@gmail.com>
-  ([ORCID](https://orcid.org/0000-0002-7765-5182)) \[copyright holder\]
+  ([ORCID](https://orcid.org/0000-0002-7765-5182))
 
 - Pieter A. Arnold ([ORCID](https://orcid.org/0000-0002-6158-7752))
   (co-author of the bayesTLS framework)

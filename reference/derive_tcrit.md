@@ -47,8 +47,7 @@ range of `0.1`–`1` %/hour. Unlike the Bayesian path, which samples
 `rate` to fold an operational choice into the posterior, freqTLS treats
 `rate` as a fixed input and returns the deterministic transform of the
 fitted `CTmax` and `z` (combine their confidence intervals if you need
-to propagate uncertainty). For a random-effects fit this is a
-population-level derived quantity; it does not add a group BLUP.
+to propagate uncertainty).
 
 `T_crit` assumes a **lethal endpoint**: it is a damage-accumulation
 concept, so for sublethal endpoints (knockdown, photosynthetic failure)

@@ -20,18 +20,17 @@ proportion by the trial size and rounds, so
 The benchmark configuration is fixed throughout: reference time
 `tref = 1` hour, the **relative** mortality threshold, a `beta_binomial`
 family, and a constant 4PL shape (`low`, `up`, `k` shared across
-temperatures). This is the matched configuration for the two model-based
-fits. The classical two-stage estimate is an absolute-LT50 approximation
-for this near-0/near-1 lethal curve (see
-[`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)).
+temperatures). This is the matched configuration that locks all three
+estimators to the same fitted curve
+(`docs/design/06-benchmark-protocol.md`).
 
 **This article builds without Stan and renders fast.** The `freqTLS` fit
 runs live; the Bayesian and classical two-stage numbers are read from a
-version-stamped cache shipped with the package. The two chunks copied
+maintainer-built cache if it is present. The two chunks copied verbatim
 from
 [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)
-— the live shrimp fit and the three-way table — render Stan-free using
-that cache.
+— the live shrimp fit and the three-way table — are the parts already
+known to render Stan-free with shrimp cached.
 
 ``` r
 
@@ -158,22 +157,21 @@ values. Shrimp lethal TDT is a lethal endpoint, so the value stands.)
 
 The cache holds the maintainer-built `bayesTLS` (posterior) and
 classical two-stage summaries; the `freqTLS` column is computed live as
-this page renders. The two model fits use the matched beta-binomial,
-relative-threshold, constant-shape configuration at `tref = 1` hour. The
-classical two-stage column uses absolute LT50 and is an approximate
-comparator because the fitted lethal asymptotes are near zero and one.
+this page renders. All three use the matched configuration
+(beta-binomial, relative threshold, constant shape, `tref = 1` hour), so
+they target the *same* fitted curve.
 
 | Quantity | Two-stage (delta CI) | bayesTLS (95% CrI) | freqTLS (profile CI) |
 |:---|:---|:---|:---|
-| CTmax (°C) | 31.62 \[31.34, 31.89\] | 31.72 \[31.60, 31.85\] | 31.77 \[31.63, 31.92\] |
-| z (°C / decade) | 2.04 \[1.49, 2.60\] | 2.17 \[1.95, 2.43\] | 2.19 \[1.96, 2.46\] |
+| CTmax (°C) | 31.61 \[31.33, 31.89\] | 31.72 \[31.59, 31.86\] | 31.77 \[31.63, 31.92\] |
+| z (°C / decade) | 2.06 \[1.49, 2.64\] | 2.18 \[1.95, 2.44\] | 2.19 \[1.96, 2.46\] |
 
-Shrimp CTmax and z shown side by side: the two model fits use the
-relative midpoint; the classical estimator uses absolute LT50. {.table
+Shrimp: the same CTmax and z from three estimators. {.table
 style="width:100%;"}
 
-The headline is the agreement between the two interval-bearing model
-fits: the `freqTLS` profile **confidence** interval and the `bayesTLS`
+The three estimators land on essentially the same `CTmax` and `z`. The
+headline is the agreement between the two interval-bearing model fits:
+the `freqTLS` profile **confidence** interval and the `bayesTLS`
 posterior credible interval nearly coincide — and the `freqTLS` side is
 produced live, in milliseconds, with no Stan. That is the complementary
 framing made concrete on one dataset: under the matched configuration

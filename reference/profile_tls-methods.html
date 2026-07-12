@@ -45,7 +45,8 @@ nobs. They mirror the drmTMB method idioms
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -158,24 +159,6 @@ the log-likelihood and <code>df</code>.</p></li>
 duration cells) used in the fit.</p></li>
 </ul></div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_tls.html">fit_tls</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">d</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span></span>
-<span class="r-in"><span>  family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         low          up           k       CTmax           z </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.01990609  0.97732873  4.89170992 35.92586046  3.99803066 </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 'log Lik.' -129.0538 (df=5)</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 268.1076</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/nobs.html" class="external-link">nobs</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 105</span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

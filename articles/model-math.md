@@ -5,7 +5,7 @@ four-parameter logistic (4PL) thermal death-time curve, the direct
 `CTmax`/`z` parameterisation, the disjoint-bounds asymptote transform,
 the relative-versus-absolute survival threshold, and the exact algebraic
 bridge to [`bayesTLS`](https://github.com/daniel1noble/bayesTLS). The
-package’s implementation contract is tested against these equations;
+authoritative source is `docs/design/01-model-and-parameterisation.md`;
 this vignette mirrors it and checks the bridge identities numerically
 (no Stan required). If you already trust that freqTLS and bayesTLS
 target the same fitted curve, you can skip straight to the worked

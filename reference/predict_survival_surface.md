@@ -4,12 +4,6 @@
 on a factorial grid of temperatures by durations, returning a long data
 frame suitable for a heatmap or contour plot (see
 [`plot_survival_surface()`](https://itchyshin.github.io/freqTLS/reference/plot_survival_surface.md)).
-For random-effects fits this helper returns population-level predictions
-(random intercepts set to zero); use
-`predict(..., re.form = "conditional")` for known-group conditional
-predictions. General continuous fixed designs require
-[`predict()`](https://rdrr.io/r/stats/predict.html) with their covariate
-columns supplied in `newdata`.
 
 ## Usage
 

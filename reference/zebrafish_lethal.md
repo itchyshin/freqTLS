@@ -47,9 +47,5 @@ A data frame with 323 rows and 7 variables:
 
 ## Source
 
-Zebrafish lethal-TDT assay across life stages (Case Study 2), obtained
-from the bayesTLS package distribution by Noble, Arnold, and Pottier
-(2026), licensed CC BY 4.0. freqTLS removed excluded trials, aggregated
-daily mortality counts, and derived survivors as documented above. Raw
-file:
+Zebrafish lethal-TDT assay (Case Study 2). Raw file:
 `system.file("extdata", "data_lethal_TDT_zebrafish.csv", package = "freqTLS")`.

@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Cross-case-study summary: three taxa, one panel • freqTLS</title>
+<title>Cross-case-study summary: four taxa, one panel • freqTLS</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cross-case-study summary: three taxa, one panel">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cross-case-study summary: four taxa, one panel">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -54,7 +54,8 @@
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -77,7 +78,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Cross-case-study summary: three taxa, one panel</h1>
+      <h1>Cross-case-study summary: four taxa, one panel</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/case-study-summary.Rmd" class="external-link"><code>vignettes/case-study-summary.Rmd</code></a></small>
@@ -89,11 +90,11 @@
 <p>This vignette mirrors Manuscript Figure 5 of the
 <code>bayesTLS</code> supplement – a single multi-taxon panel of the
 thermal-sensitivity parameter <code>z</code> and the critical
-temperature <code>CTmax</code> across the three redistributable case
-studies – but draws the <code>freqTLS</code> <strong>Confidence
-Eye</strong> for each estimate instead of a Bayesian posterior ridge.
-Each row is a likelihood <strong>confidence interval</strong> (a pale
-lens with a hollow point estimate), never a posterior density.</p>
+temperature <code>CTmax</code> across all four case studies – but draws
+the <code>freqTLS</code> <strong>Confidence Eye</strong> for each
+estimate instead of a Bayesian posterior ridge. Each row is a likelihood
+<strong>confidence interval</strong> (a pale lens with a hollow point
+estimate), never a posterior density.</p>
 <p><strong>This vignette builds without Stan.</strong> Every fit here is
 the <code>freqTLS</code> maximum-likelihood path (TMB), run live as the
 page renders. The Bayesian multi-taxon ridge plot is the
@@ -101,9 +102,9 @@ page renders. The Bayesian multi-taxon ridge plot is the
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="the-three-taxa-and-the-cross-study-question">The three taxa and the cross-study question<a class="anchor" aria-label="anchor" href="#the-three-taxa-and-the-cross-study-question"></a>
+<h2 id="the-four-taxa-and-the-cross-study-question">The four taxa and the cross-study question<a class="anchor" aria-label="anchor" href="#the-four-taxa-and-the-cross-study-question"></a>
 </h2>
-<p>The three shared case-study datasets span three corners of thermal
+<p>The four shared case-study datasets span four corners of thermal
 physiology:</p>
 <ul>
 <li>
@@ -117,29 +118,28 @@ dataset — a <em>separate</em> experiment from the oxygen-gradient
 <code>zebrafish_o2</code> data in
 <code><a href="../articles/case-study-zebrafish.html">vignette("case-study-zebrafish")</a></code>;</li>
 <li>
+<strong>snow gum</strong> <em>Eucalyptus pauciflora</em> – a plant,
+a <strong>functional</strong> (sublethal) endpoint, the retained
+proportion of photosystem-II efficiency (<code>Fv/Fm</code>);</li>
+<li>
 <strong>vinegar fly</strong> <em>Drosophila suzukii</em> – an
 insect, lethal mortality, across the two sexes.</li>
 </ul>
 <p>The cross-study question is descriptive: laid side by side, how do
 thermal limits compare across a crustacean, a fish (resolved by
-developmental stage), and an insect (resolved by sex)?
-<code>CTmax</code> (the critical temperature at a fixed reference
-exposure) places each taxon on the temperature axis; <code>z</code> (the
-change in temperature, in degrees Celsius, that multiplies tolerated
-exposure time tenfold) measures how sharply tolerated exposure responds
-to temperature: a <em>smaller</em> <code>z</code> is a steeper response
-(a small warming sharply cuts tolerated time), a <em>larger</em>
-<code>z</code> a more gradual one.</p>
+developmental stage), a plant’s photosynthetic machinery, and an insect
+(resolved by sex)? <code>CTmax</code> (the critical temperature at a
+fixed reference exposure) places each taxon on the temperature axis;
+<code>z</code> (the change in temperature, in degrees Celsius, that
+multiplies tolerated exposure time tenfold) measures how sharply
+tolerated exposure responds to temperature: a <em>smaller</em>
+<code>z</code> is a steeper response (a small warming sharply cuts
+tolerated time), a <em>larger</em> <code>z</code> a more gradual
+one.</p>
 <p><strong>One caveat governs the whole panel.</strong> The reference
 exposures differ by study, because each follows the convention of its
 source assay:</p>
 <table class="table">
-<colgroup>
-<col width="25%">
-<col width="25%">
-<col width="25%">
-<col width="25%">
-</colgroup>
 <thead><tr class="header">
 <th>Taxon</th>
 <th>Endpoint</th>
@@ -160,38 +160,46 @@ source assay:</p>
 <td>relative midpoint</td>
 </tr>
 <tr class="odd">
+<td>Snow gum</td>
+<td>sublethal PSII</td>
+<td>1 hour</td>
+<td>relative midpoint</td>
+</tr>
+<tr class="even">
 <td>
 <em>D. suzukii</em> (per sex)</td>
 <td>lethal</td>
 <td>4 hours (240 min)</td>
-<td>relative midpoint</td>
+<td>absolute LT50</td>
 </tr>
 </tbody>
 </table>
 <p>Because a <code>CTmax</code> is defined <em>at</em> its reference
 exposure, the four <code>CTmax</code> values are <strong>not</strong> on
-a single common time scale: the fly number is the fitted relative
-midpoint temperature at 4 hours, whereas the shrimp and zebrafish fits
-use a 1-hour reference. The panel is therefore an <strong>illustrative
-cross-taxon synthesis</strong>, not a single common-scale comparison.
-<code>z</code>, by contrast, is a slope – degrees per tenfold change in
-time – and is comparable across taxa regardless of the reference
-exposure. Read the <code>CTmax</code> facet as four study-specific
-anchors and the <code>z</code> facet as a like-with-like comparison of
-duration sensitivity.</p>
+a single common time scale: the snow gum number is “the temperature that
+halves PSII over 1 hour”, the fly number is “the temperature that kills
+half the flies over 4 hours”. The panel is therefore an
+<strong>illustrative cross-taxon synthesis</strong>, not a single
+common-scale comparison. <code>z</code>, by contrast, is a slope –
+degrees per tenfold change in time – and is comparable across taxa
+regardless of the reference exposure. Read the <code>CTmax</code> facet
+as four study-specific anchors and the <code>z</code> facet as a
+like-with-like comparison of duration sensitivity.</p>
 </div>
 <div class="section level2">
-<h2 id="the-three-fits-run-live">The three fits (run live)<a class="anchor" aria-label="anchor" href="#the-three-fits-run-live"></a>
+<h2 id="the-four-fits-run-live">The four fits (run live)<a class="anchor" aria-label="anchor" href="#the-four-fits-run-live"></a>
 </h2>
 <p>Each fit uses the configuration locked for its case study. The
 grouped fits (zebrafish, fly) estimate a separate <code>CTmax</code> and
 <code>z</code> per level with a shared shape (<code>low</code>,
-<code>up</code>, <code>k</code>); the ungrouped shrimp fit estimates one
-of each. All three use <strong>beta-binomial</strong> survival counts.
-All fits are wrapped in <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code> to swallow the
-honest data-adequacy notes (for example, temperatures with few
-durations) that <code>freqTLS</code> raises – those signals are covered
-in the per-study vignettes.</p>
+<code>up</code>, <code>k</code>); the ungrouped fits (shrimp, snow gum)
+estimate one of each. The snow gum fit uses the <strong>beta</strong>
+family for its continuous proportion; the others use
+<strong>beta-binomial</strong> survival counts. All fits are wrapped in
+<code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code> to swallow the honest data-adequacy
+notes (for example, temperatures with few durations) that
+<code>freqTLS</code> raises – those signals are covered in the per-study
+vignettes.</p>
 <p>The vinegar-fly data ships per-individual (<code>dsuzukii</code>); we
 aggregate it to <code>(temp, time, sex)</code> counts in base R, exactly
 as the per-study vignette does.</p>
@@ -212,6 +220,12 @@ as the per-study vignette does.</p>
 <span>  <span class="va">zebrafish_lethal</span>, temp <span class="op">=</span> <span class="st">"assay_temp"</span>, duration <span class="op">=</span> <span class="st">"duration_h"</span>,</span>
 <span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span>,</span>
 <span>  by <span class="op">=</span> <span class="st">"life_stage"</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
+<span></span>
+<span><span class="co"># Snow gum: ungrouped, beta family, 1-hour reference (functional PSII).</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">snowgum_psii</span><span class="op">)</span></span>
+<span><span class="va">snowgum_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">snowgum_psii</span>, temp <span class="op">=</span> <span class="st">"Temp"</span>, duration <span class="op">=</span> <span class="st">"Time"</span>, proportion <span class="op">=</span> <span class="st">"fvfm_prop"</span>,</span>
+<span>  duration_unit <span class="op">=</span> <span class="st">"minutes"</span><span class="op">)</span>, family <span class="op">=</span> <span class="st">"beta"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
 <span></span>
 <span><span class="co"># D. suzukii: per-individual -&gt; (temp, time, sex) counts; grouped by sex, 4-hour ref.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span></span>
@@ -264,13 +278,16 @@ profile closes.</p>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Zebrafish: young embryos"</span>, <span class="st">"Zebrafish: old embryos"</span>,</span>
 <span>             <span class="st">"Zebrafish: larvae"</span>, <span class="st">"Zebrafish: young embryos"</span>,</span>
 <span>             <span class="st">"Zebrafish: old embryos"</span>, <span class="st">"Zebrafish: larvae"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu">eye_rows</span><span class="op">(</span><span class="va">snowgum_fit</span>, <span class="st">"Snow gum (1 h)"</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Snow gum (PSII)"</span>, <span class="st">"Snow gum (PSII)"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="fu">eye_rows</span><span class="op">(</span><span class="va">fly_fit</span>, <span class="st">"D. suzukii (4 h)"</span>,</span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax:F"</span>, <span class="st">"CTmax:M"</span>, <span class="st">"z:F"</span>, <span class="st">"z:M"</span><span class="op">)</span>,</span>
 <span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D. suzukii: female"</span>, <span class="st">"D. suzukii: male"</span>,</span>
 <span>             <span class="st">"D. suzukii: female"</span>, <span class="st">"D. suzukii: male"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Six rows, two parameters: a tidy printout of the headline numbers.</span></span>
+<span><span class="co"># Seven rows, two parameters: a tidy printout of the headline numbers.</span></span>
 <span><span class="va">panel_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Group           <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">label</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span><span class="op">]</span>,</span>
 <span>  `CTmax estimate` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
@@ -285,10 +302,10 @@ profile closes.</p>
 <span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="va">panel_wide</span>,</span>
-<span>  caption <span class="op">=</span> <span class="st">"Six taxon/group rows: CTmax (at the study reference exposure) and z, each with its profile-likelihood 95% confidence interval."</span></span>
+<span>  caption <span class="op">=</span> <span class="st">"Seven taxon/group rows: CTmax (at the study reference exposure) and z, each with its profile-likelihood 95% confidence interval."</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>Six taxon/group rows: CTmax (at the study reference exposure)
+<caption>Seven taxon/group rows: CTmax (at the study reference exposure)
 and z, each with its profile-likelihood 95% confidence
 interval.</caption>
 <colgroup>
@@ -335,13 +352,20 @@ interval.</caption>
 <td align="left">[1.76, 2.22]</td>
 </tr>
 <tr class="odd">
+<td align="left">Snow gum (PSII)</td>
+<td align="right">44.58</td>
+<td align="left">[44.21, 44.91]</td>
+<td align="right">3.71</td>
+<td align="left">[3.18, 4.27]</td>
+</tr>
+<tr class="even">
 <td align="left">D. suzukii: female</td>
 <td align="right">35.23</td>
 <td align="left">[35.12, 35.32]</td>
 <td align="right">3.01</td>
 <td align="left">[2.86, 3.18]</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">D. suzukii: male</td>
 <td align="right">35.25</td>
 <td align="left">[35.16, 35.34]</td>
@@ -355,21 +379,24 @@ interval.</caption>
 <h2 id="cross-taxon-validation-against-bayestls-and-the-two-stage-estimator">Cross-taxon validation against bayesTLS and the two-stage
 estimator<a class="anchor" aria-label="anchor" href="#cross-taxon-validation-against-bayestls-and-the-two-stage-estimator"></a>
 </h2>
-<p>The same headline numbers are shown beside the classical two-stage
+<p>The same headline numbers, now beside the classical two-stage
 estimator and the <code>bayesTLS</code> posterior, read from the
-maintainer-built benchmark cache. The <code>freqTLS</code> and
-<code>bayesTLS</code> fits use the matched relative-midpoint,
-constant-shape configuration and the same per-study reference exposure.
-The classical estimator uses absolute LT50 and is therefore an
-approximate comparator for these lethal datasets, whose asymptotes lie
-near zero and one.</p>
+maintainer-built benchmark cache. Each fit uses its study’s matched
+configuration (relative-midpoint threshold, constant shape, the
+per-study reference exposure), so the three estimators target the
+<em>same</em> fitted curve per row. Snow-gum PSII is a continuous
+proportion with no count representation, so its two-stage cell is empty
+(it is a <code>bayesTLS</code> beta two-way). The <code>freqTLS</code>
+profile-likelihood confidence intervals and the <code>bayesTLS</code>
+credible intervals land on essentially the same <code>CTmax</code> and
+<code>z</code> in every row — the cross-taxon statement of the
+complementary framing.</p>
 <table class="table">
-<caption>Cross-taxon three-way comparison: CTmax and z per taxon/group
+<caption>Cross-taxon three-way validation: CTmax and z per taxon/group
 from the classical two-stage estimator, bayesTLS (posterior median + 95%
-CrI), and freqTLS (profile-likelihood estimate + 95% CI). The two model
-fits share each study’s relative-threshold, constant-shape
-configuration; the two-stage estimate is an absolute-LT50 approximation
-for these near-0/near-1 lethal curves.</caption>
+CrI), and freqTLS (profile-likelihood estimate + 95% CI), each on its
+study’s matched configuration. freqTLS and bayesTLS agree across every
+row.</caption>
 <colgroup>
 <col width="24%">
 <col width="15%">
@@ -388,71 +415,85 @@ for these near-0/near-1 lethal curves.</caption>
 <tr class="odd">
 <td align="left">Shrimp</td>
 <td align="left">CTmax (°C)</td>
-<td align="left">31.62 [31.34, 31.89]</td>
-<td align="left">31.72 [31.60, 31.85]</td>
+<td align="left">31.61 [31.33, 31.89]</td>
+<td align="left">31.72 [31.59, 31.86]</td>
 <td align="left">31.77 [31.63, 31.92]</td>
 </tr>
 <tr class="even">
 <td align="left">Shrimp</td>
 <td align="left">z (°C / decade)</td>
-<td align="left">2.04 [1.49, 2.60]</td>
-<td align="left">2.17 [1.95, 2.43]</td>
+<td align="left">2.06 [1.49, 2.64]</td>
+<td align="left">2.18 [1.95, 2.44]</td>
 <td align="left">2.19 [1.96, 2.46]</td>
 </tr>
 <tr class="odd">
 <td align="left">Zebrafish: young embryos</td>
 <td align="left">CTmax (°C)</td>
-<td align="left">39.61 [39.34, 39.87]</td>
-<td align="left">39.97 [39.82, 40.10]</td>
+<td align="left">39.61 [39.34, 39.88]</td>
+<td align="left">39.98 [39.83, 40.10]</td>
 <td align="left">39.92 [39.79, 40.04]</td>
 </tr>
 <tr class="even">
 <td align="left">Zebrafish: young embryos</td>
 <td align="left">z (°C / decade)</td>
-<td align="left">2.22 [1.72, 2.71]</td>
-<td align="left">1.93 [1.73, 2.13]</td>
+<td align="left">2.22 [1.72, 2.73]</td>
+<td align="left">1.93 [1.74, 2.12]</td>
 <td align="left">2.00 [1.82, 2.19]</td>
 </tr>
 <tr class="odd">
 <td align="left">Zebrafish: old embryos</td>
 <td align="left">CTmax (°C)</td>
-<td align="left">41.39 [40.88, 41.91]</td>
-<td align="left">41.34 [41.19, 41.56]</td>
+<td align="left">41.40 [40.87, 41.93]</td>
+<td align="left">41.34 [41.18, 41.58]</td>
 <td align="left">41.38 [41.23, 41.61]</td>
 </tr>
 <tr class="even">
 <td align="left">Zebrafish: old embryos</td>
 <td align="left">z (°C / decade)</td>
-<td align="left">2.33 [1.69, 2.96]</td>
-<td align="left">1.90 [1.62, 2.24]</td>
+<td align="left">2.36 [1.69, 3.02]</td>
+<td align="left">1.89 [1.62, 2.27]</td>
 <td align="left">1.80 [1.53, 2.16]</td>
 </tr>
 <tr class="odd">
 <td align="left">Zebrafish: larvae</td>
 <td align="left">CTmax (°C)</td>
-<td align="left">39.82 [39.61, 40.02]</td>
-<td align="left">39.73 [39.59, 39.85]</td>
+<td align="left">39.82 [39.62, 40.03]</td>
+<td align="left">39.73 [39.58, 39.85]</td>
 <td align="left">39.79 [39.67, 39.92]</td>
 </tr>
 <tr class="even">
 <td align="left">Zebrafish: larvae</td>
 <td align="left">z (°C / decade)</td>
-<td align="left">2.16 [1.75, 2.57]</td>
-<td align="left">2.02 [1.78, 2.26]</td>
+<td align="left">2.17 [1.76, 2.58]</td>
+<td align="left">2.02 [1.75, 2.27]</td>
 <td align="left">1.98 [1.76, 2.22]</td>
+</tr>
+<tr class="odd">
+<td align="left">Snow gum (PSII)</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">–</td>
+<td align="left">45.94 [45.37, 46.56]</td>
+<td align="left">44.58 [44.21, 44.91]</td>
+</tr>
+<tr class="even">
+<td align="left">Snow gum (PSII)</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">–</td>
+<td align="left">5.85 [5.22, 6.48]</td>
+<td align="left">3.71 [3.18, 4.27]</td>
 </tr>
 <tr class="odd">
 <td align="left">D. suzukii: female</td>
 <td align="left">CTmax (°C)</td>
 <td align="left">34.80 [34.56, 35.04]</td>
-<td align="left">35.20 [35.08, 35.30]</td>
+<td align="left">35.20 [35.07, 35.30]</td>
 <td align="left">35.23 [35.12, 35.32]</td>
 </tr>
 <tr class="even">
 <td align="left">D. suzukii: female</td>
 <td align="left">z (°C / decade)</td>
 <td align="left">2.99 [2.60, 3.38]</td>
-<td align="left">3.02 [2.88, 3.18]</td>
+<td align="left">3.02 [2.88, 3.20]</td>
 <td align="left">3.01 [2.86, 3.18]</td>
 </tr>
 <tr class="odd">
@@ -466,7 +507,7 @@ for these near-0/near-1 lethal curves.</caption>
 <td align="left">D. suzukii: male</td>
 <td align="left">z (°C / decade)</td>
 <td align="left">3.40 [2.15, 4.65]</td>
-<td align="left">3.18 [2.98, 3.39]</td>
+<td align="left">3.17 [2.99, 3.39]</td>
 <td align="left">3.18 [3.01, 3.36]</td>
 </tr>
 </tbody>
@@ -487,18 +528,19 @@ reference exposures.</p>
 contract: the shallow, wide lens reads as a confidence
 <em>interval</em>, not a probability density, and a profile that did not
 close would render as a hollow point with <strong>no</strong> lens. All
-six profiles here close, so every row carries a lens.</p>
+seven profiles here close, so every row carries a lens.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Build the honest Confidence-Eye geometry by hand so all three fits share one</span></span>
+<code class="sourceCode R"><span><span class="co"># Build the honest Confidence-Eye geometry by hand so all four fits share one</span></span>
 <span><span class="co"># cross-taxon panel: a cosine-tapered pale lens (width = confidence interval)</span></span>
 <span><span class="co"># plus a hollow point, faceted by parameter with free x-axes. This reuses the</span></span>
 <span><span class="co"># package lens shape (see ?plot_confidence_eye) but spans every fit in one figure.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Fixed top-to-bottom row order (shrimp, zebrafish stages, fly sexes).</span></span>
+<span><span class="co"># Fixed top-to-bottom row order (shrimp, zebrafish stages, snow gum, fly sexes).</span></span>
 <span><span class="va">row_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Shrimp"</span>,</span>
 <span>  <span class="st">"Zebrafish: young embryos"</span>, <span class="st">"Zebrafish: old embryos"</span>, <span class="st">"Zebrafish: larvae"</span>,</span>
+<span>  <span class="st">"Snow gum (PSII)"</span>,</span>
 <span>  <span class="st">"D. suzukii: female"</span>, <span class="st">"D. suzukii: male"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">panel</span><span class="op">$</span><span class="va">row</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">label</span>, <span class="va">row_order</span><span class="op">)</span></span>
@@ -524,7 +566,7 @@ six profiles here close, so every row carries a lens.</p>
 <span>                     levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  row <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">row</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax (°C)"</span><span class="op">]</span>,</span>
 <span>  x   <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">conf.high</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax (°C)"</span><span class="op">]</span>,</span>
-<span>  lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"4 h"</span>, <span class="st">"4 h"</span><span class="op">)</span></span>
+<span>  lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"4 h"</span>, <span class="st">"4 h"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -553,7 +595,7 @@ six profiles here close, so every row carries a lens.</p>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">parameter</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>    title <span class="op">=</span> <span class="st">"Thermal limits across three taxa: CTmax and z"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Thermal limits across four taxa: CTmax and z"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Confidence Eyes: pale lens = 95% confidence interval; hollow point = estimate."</span>,</span>
 <span>    caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
 <span>      <span class="st">"Profile-likelihood confidence intervals (freqTLS, no Stan)."</span>,</span>
@@ -566,7 +608,7 @@ six profiles here close, so every row carries a lens.</p>
 <span>    panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    plot.caption <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="case-study-summary_files/figure-html/panel-1.png" class="r-plt" alt="Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: six pale horizontal confidence-interval lenses with hollow point estimates, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale." width="864"></p>
+<p><img src="case-study-summary_files/figure-html/panel-1.png" class="r-plt" alt="Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: seven pale horizontal confidence-interval lenses with hollow point estimates, one per taxon/group, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near 44.6, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, snow gum near 3.7, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale." width="864"></p>
 </div>
 <div class="section level2">
 <h2 id="within-taxon-contrasts">Within-taxon contrasts<a class="anchor" aria-label="anchor" href="#within-taxon-contrasts"></a>
@@ -691,8 +733,22 @@ is no clear sex difference in either thermal limit, the same conclusion
 <div class="section level2">
 <h2 id="what-this-shows">What this shows<a class="anchor" aria-label="anchor" href="#what-this-shows"></a>
 </h2>
-<p>Two things stand out from the panel:</p>
+<p>Three things stand out from the panel:</p>
 <ul>
+<li><p><strong>The plant’s photosynthetic endpoint is the most
+gradual.</strong> Snow gum PSII has the largest <code>z</code> (about
+3.7 degrees Celsius per tenfold time), so its tolerated exposure
+collapses <em>most gradually</em> with temperature — it takes the
+largest temperature rise to cut the tolerated time tenfold (the rate of
+collapse scales as <code>1/z</code>) — whereas the animals’ lethal
+endpoints (<code>z</code> between roughly 1.8 and 3.2) fall more
+steeply. Snow gum’s <code>CTmax</code> is also the highest on the shared
+one-hour reference, but it is the temperature of half-PSII-loss,
+<strong>not</strong> a lethal temperature, so it should not be read as
+ranking the plant above the animals on a single tolerance scale; only
+the <code>z</code> comparison is like-for-like across all rows. (The
+<em>D. suzukii</em> <code>CTmax</code> sits at a four-hour reference, so
+that row is also off the common time scale.)</p></li>
 <li><p><strong>Resolving a taxon by an internal axis can matter or
 not.</strong> Zebrafish life stage shifts <code>CTmax</code> by over a
 degree (old embryos are the most heat-tolerant stage), whereas <em>D.
@@ -701,11 +757,11 @@ detectably. The Confidence Eyes make this visible at a glance: the
 zebrafish lenses separate on the <code>CTmax</code> axis, while the two
 fly lenses overlap almost completely.</p></li>
 <li><p><strong>Every estimate carries an honest, prior-free
-interval.</strong> All six profiles close, so each row is a closed lens
-rather than a hollow point. Where a profile did <strong>not</strong>
-close (a weakly identified design or a boundary asymptote), the same
-display would show a hollow point with no lens – never a fabricated
-closed eye.</p></li>
+interval.</strong> All seven profiles close, so each row is a closed
+lens rather than a hollow point. Where a profile did
+<strong>not</strong> close (a weakly identified design or a boundary
+asymptote), the same display would show a hollow point with no lens –
+never a fabricated closed eye.</p></li>
 </ul>
 <p>These are confidence intervals throughout: they summarise the
 likelihood’s support for each parameter and make no probability
@@ -715,12 +771,10 @@ statement about the parameter itself.</p>
 <h2 id="see-bayestls-for-the-bayesian-multi-taxon-ridge">See bayesTLS for the Bayesian multi-taxon ridge<a class="anchor" aria-label="anchor" href="#see-bayestls-for-the-bayesian-multi-taxon-ridge"></a>
 </h2>
 <p>This panel is the <code>freqTLS</code> (likelihood) counterpart to
-Manuscript Figure 5 of the <code>bayesTLS</code> supplement. Its full
-figure also includes the snow-gum PSII dataset, which is not
-redistributed here because its source is CC BY-NC 4.0. The Bayesian
-supplement draws the taxa as posterior <strong>ridge densities</strong>
-with median points and 95% credible bars. The two displays answer the
-same cross-study question from complementary inferential engines: the
+Manuscript Figure 5 of the <code>bayesTLS</code> supplement, which draws
+the same four taxa as posterior <strong>ridge densities</strong> with
+median points and 95% credible bars. The two displays answer the same
+cross-study question from complementary inferential engines: the
 <code>bayesTLS</code> ridge is a posterior density shaped by priors and
 the data, whereas the <code>freqTLS</code> Confidence Eye is a
 prior-free likelihood interval that cannot be read as a posterior. For

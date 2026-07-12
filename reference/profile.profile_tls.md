@@ -12,7 +12,7 @@ profile is taken on the unconstrained coordinate and the endpoints are
 then transformed by a monotone function, the interval is exactly
 equivariant: the `z` interval equals
 [`exp()`](https://rdrr.io/r/base/Log.html) of the internal `log_z`
-interval (the headline equivariance check).
+interval (the headline equivariance check, SPEC.md S10).
 
 ## Usage
 
@@ -73,7 +73,7 @@ The algorithm is a map-refit profile: the target coordinate is fixed
 with TMB's `map` mechanism and the rest re-optimised, mirroring the
 bracket-then- [`stats::uniroot()`](https://rdrr.io/r/stats/uniroot.html)
 endpoint solver in `drmTMB::R/profile.R:2314-2373`. See
-[`vignette("profile-likelihood")`](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md).
+`docs/design/04-profile-likelihood.md`.
 
 ## Functions
 
@@ -96,10 +96,10 @@ endpoint solver in `drmTMB::R/profile.R:2314-2373`. See
 Under the disjoint-bounds parameterisation
 `up = up_min + up_w * plogis(beta_up)` has its own coordinate `beta_up`,
 but freqTLS does not yet profile it (the profile path is wired for `low`
-but not `up` — symmetric work, simply not implemented). freqTLS falls
-back to the delta-method Wald interval for `up` and says so. Group
-contrasts (`dCTmax`, `dlog_z`) are profiled directly by recoding the
-design so the contrast is itself a coordinate.
+but not `up` – symmetric work, simply not implemented). freqTLS falls
+back to the delta-method Wald interval for `up` and says so (SPEC.md
+S10). Group contrasts (`dCTmax`, `dlog_z`) are profiled directly by
+recoding the design so the contrast is itself a coordinate.
 
 ## Examples
 
