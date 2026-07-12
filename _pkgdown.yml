@@ -59,7 +59,6 @@ articles:
       - case-study-zebrafish
       - case-study-li-aphids
       - case-study-suzukii
-      - case-study-leaf-psii
       - case-study-summary
 
 reference:
@@ -134,13 +133,12 @@ reference:
       - format_interval
       - tdt_quantile
   - title: Data
-    desc: Vendored benchmark datasets (credit bayesTLS, CC BY 4.0).
+    desc: Vendored benchmark datasets; see each help page for source-specific credit and licence terms.
     contents:
       - shrimp_lethal
       - shrimp_sublethal
       - zebrafish_lethal
       - zebrafish_o2
-      - snowgum_psii
       - dsuzukii
       - aphid_tdt
   - title: Package

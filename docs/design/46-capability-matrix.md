@@ -6,46 +6,60 @@ fitted, planned, and unsupported. It is kept synchronized with
 the same commit when a capability changes (AGENTS.md design rule 10). The live
 phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 
-> **bayesTLS-twin redesign (completed; released as 0.1.0).** freqTLS has been rebuilt
-> as the frequentist twin of bayesTLS. The user-facing API is now
+> **freqTLS 0.1.0 source surface.** freqTLS is the frequentist twin of bayesTLS;
+> this describes the implemented package source and is not a claim that 0.1.0
+> has been submitted to or published by CRAN. The user-facing API is
 > `standardize_data()` -> `fit_4pl()` -> `tls()` / `extract_tdt()` /
 > `predict_survival_curves()` / `diagnose_tdt_fit()`, with `two_stage` as the
 > classical comparator; the profileTLS names (`fit_tls`, `tidy_parameters`,
-> `get_ctmax`, ...) remain as the internal engine and still work. The
-> family x design x CI engine grid below still holds (now on disjoint-bounds
-> asymptotes); this audit grid is rewritten to the twin API at finalization
-> (benchmark + vignettes). See `NEWS.md` and
-> `docs/dev-log/recovery-checkpoints/2026-06-24-autonomous-session-handoff.md`.
+> `get_ctmax`, ...) remain as the internal engine and still work. The matrices
+> below state the current family, design, interval, and target-specific limits.
 
-## v0.1 core grid: family x design x CI
+## 0.1.0 family x design x interval grid
 
-The v0.1 surface is the full cross-product of two families, two designs, and two
-CI methods: **all 8 cells are fitted in v0.1** (on completion of Phases 1-3).
+For the ordinary curve parameters, 0.1.0 implements the full cross-product of
+three families, ungrouped/grouped designs, and Wald/profile/bootstrap confidence
+intervals. `beta` consumes a continuous proportion in `(0, 1)`; the two count
+families consume successes/trials. “Yes” means implemented with tests and
+documentation in the package source.
 
-| Family | Design | Wald CI | Profile CI |
-| --- | --- | --- | --- |
-| binomial | ungrouped | v0.1 | v0.1 |
-| binomial | grouped (`~ 0 + group`) | v0.1 | v0.1 |
-| beta-binomial | ungrouped | v0.1 | v0.1 |
-| beta-binomial | grouped (`~ 0 + group`) | v0.1 | v0.1 |
+| Family | Design | Point | Wald | Profile | Bootstrap |
+| --- | --- | --- | --- | --- | --- |
+| binomial | ungrouped | yes | yes | yes | yes |
+| binomial | grouped | yes | yes | yes | yes |
+| beta-binomial | ungrouped | yes | yes | yes | yes |
+| beta-binomial | grouped | yes | yes | yes | yes |
+| beta | ungrouped | yes | yes | yes | yes |
+| beta | grouped | yes | yes | yes | yes |
 
-"v0.1" means planned for the v0.1 release and fitted when its phase lands with
-tests, docs, examples, a check-log entry, and an after-task report. As of
-2026-06-16 (Phase 6) all of these have landed under the Definition of Done; the
-live phase board is `docs/dev-log/dashboard/status.json`.
+Grouped means per-group `CTmax` and `log_z` through the column interface or
+formula designs, with shared shapes by default. `CTmax` and `log_z` must produce
+the same fixed-effect design columns, although their random-intercept groupings
+may differ. The formula interface also allows independent fixed designs on
+`low`, `up`, and `log_k`, including
+continuous covariates, subject to the target-specific routing below.
 
-## Status of each capability (Phase 6)
+## Target-specific interval routing
 
-| Capability | Engine | R API | Point | Wald | Profile | Bootstrap |
-| --- | --- | --- | --- | --- | --- | --- |
-| binomial, ungrouped | fitted (P1) | fitted (P1) | fitted (P1) | fitted (P3) | fitted (P3) | fitted (v0.2) |
-| binomial, grouped | fitted (P1) | fitted (P2) | fitted (P2) | fitted (P3) | fitted (P3) | fitted (v0.2) |
-| beta-binomial, ungrouped | fitted (P1) | fitted (P1) | fitted (P1) | fitted (P3) | fitted (P3) | fitted (v0.2) |
-| beta-binomial, grouped | fitted (P1) | fitted (P2) | fitted (P2) | fitted (P3) | fitted (P3) | fitted (v0.2) |
-| beta, ungrouped | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) |
-| beta, grouped | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) | fitted (v0.2) |
-| Confidence-Eye display | fitted (P4) | fitted (P4) | -- | -- | fitted (P4) | -- |
-| bayesTLS benchmark (relative, constant shape) | fitted (P5) | fitted (P5) | fitted (P5) | fitted (P5) | fitted (P5) | cache built (v0.2) |
+The family grid does not imply that every target is profiled. freqTLS reports
+the actual interval route in `interval_type` and `conf.status` rather than
+silently presenting a fallback as a profile interval.
+
+| Target | Point | Wald | Profile request | Bootstrap | Important boundary |
+| --- | --- | --- | --- | --- | --- |
+| `CTmax`, `z`/`log_z`, intercept or factor-level `low`, `k`/`log_k` | yes | yes | likelihood profile | yes | a non-closing profile may use the documented bootstrap fallback |
+| `phi` (beta-binomial or beta) | yes | yes | likelihood profile | yes | weak dispersion identification can make profile coverage poor; with a weak beta-binomial `phi`, default fallback routes `CTmax`/`z` to Wald |
+| upper asymptote `up` | yes | delta-method | Wald fallback (`conf.status = "wald_fallback"`) | yes | the disjoint-bounds `beta_up` coordinate is not profiled |
+| general continuous shape slopes | yes | yes | Wald fallback | yes | no universal profile coordinate for these slopes |
+| random-effect fixed effects | yes | yes | likelihood profile with Laplace rerun | yes | a non-closing profile falls back to Wald; the Confidence Eye uses Wald for speed |
+| variance components | yes | log-scale Wald | Wald under a profile request | RE-aware bootstrap | no variance-component profile coordinate |
+| absolute/LTx and `T_crit` derived quantities | yes | not universal | not profiled | yes | deterministic post-fit transforms; relative `CTmax` remains the fitted coordinate |
+| group contrasts `dCTmax`, `dlog_z` | yes | yes | yes | yes | contrast profiles are for fixed-effect grouped fits; they are rejected for random-effect fits |
+
+The Confidence Eye visualizes the interval actually used; it is never a
+posterior density. The relative-threshold, constant-shape benchmark is a
+separate matched comparator configuration and does not expand these fitting
+claims.
 
 ### Interfaces
 
@@ -54,9 +68,9 @@ Both interfaces map to the same engine and produce numerically identical fits:
 | Interface | Status | Notes |
 | --- | --- | --- |
 | column (tidy-eval `y`/`n`/`time`/`temp`/`group`) | fitted (P1-P2) | the original interface; unchanged |
-| formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; `CTmax`/`log_z` fixed-effect predictors; v0.1 shapes are intercept-only and random effects are deferred to v0.2 |
+| formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; `CTmax` and `log_z` share fixed design columns, while `low`, `up`, and `log_k` have independent fixed designs; one limited independent random intercept on `CTmax`, `log_z`, `low`, or `log_k` per coordinate |
 
-## v0.2 milestone (released in 0.1.0)
+## Historical v0.2 build milestone (included in 0.1.0)
 
 - Covariate (grouped) effects on the shape parameters (`low` / `up` / `log_k`):
   **fitted** -- via the formula interface (`low ~ group`, `up ~ group`,
@@ -98,9 +112,9 @@ Both interfaces map to the same engine and produce numerically identical fits:
   default). Rendered as a distinct lens in the Confidence Eye. See
   `docs/design/04-profile-likelihood.md`.
 - bayesTLS benchmark cache: **built** from the real `bayesTLS` 1.0.0 + classical
-  two-stage fits (`inst/extdata/bayesTLS_benchmark_cache.rds`), covering all four
-  case-study datasets (shrimp, zebrafish per stage, and *D. suzukii* per sex as
-  three-ways; snow-gum PSII as a beta two-way with no count two-stage).
+  two-stage fits (`inst/extdata/bayesTLS_benchmark_cache.rds`), covering shrimp,
+  zebrafish per stage, and *D. suzukii* per sex in the matched relative-threshold,
+  constant-shape configuration. Snow-gum-derived rows were removed for licensing.
 - Multicore bootstrap (`cores`): **fitted** -- forked refits, reproducible
   regardless of cores.
 - `derive_ctmax()`: absolute-threshold critical temperature (closed-form inverse
@@ -123,6 +137,12 @@ Both interfaces map to the same engine and produce numerically identical fits:
   factor fits independent variances and warns. The upper asymptote `up` is excluded
   (the compiled objective has no random-intercept term for `up`). See
   `docs/design/08-random-effects.md`.
+- Random-effect prediction: **fitted** -- `predict(..., re.form = "population")`
+  sets random intercepts to zero; `re.form = "conditional"` adds fitted BLUPs
+  for known grouping levels supplied in `newdata`. Omitting `re.form` warns and
+  returns the population prediction. Specialised surface, lethal-time,
+  critical-temperature, and heat-injury helpers are population-level for
+  random-effects fits.
 
 ## Planned (post-v0.1) and non-goals
 
@@ -133,9 +153,11 @@ Both interfaces map to the same engine and produce numerically identical fits:
   the path for a correlated random structure. The single intercepts on `CTmax` /
   `log_z` / `low` / `log_k` -- with profile intervals for the fixed effects and a
   prior-free RE-aware bootstrap for the variance components -- are fitted.
-- Beta / continuous responses: **fitted in v0.2** (`family = "beta"`), with the
-  vendored `snowgum_psii` dataset (retained PSII proportion, CC BY 4.0) as the
-  real-data showcase.
+- Beta / continuous responses: **fitted in v0.2** (`family = "beta"`). The
+  simulated parameter-recovery tests and examples demonstrate this capability.
+  The snow-gum source is CC BY-NC 4.0, so its data and vignette remain in the
+  build-excluded licensing-pending area. Their exclusion does not remove the
+  tested beta engine capability.
 - Time-to-event responses: non-goal (the wider TDT literature is largely
   failure-time data; the 4PL count/proportion model is the wrong tool for it).
 - Multi-trait responses (dsuzukii): non-goal.
@@ -147,10 +169,12 @@ Both interfaces map to the same engine and produce numerically identical fits:
   section). General continuous covariates on the shapes are **also fitted** (each
   shape carries its own independent design; link-scale coefficients + Wald).
 - Absolute-threshold default: non-goal (the default is relative).
-- A formula interface (`tls_bf()`): **fitted in v0.1** (a thin front-end to the
-  column interface). Predictors on `low`/`up`/`k`, independent `CTmax` / `log_z`
-  designs, and random effects through it are deferred to v0.2.
-- CRAN hardening: non-goal for v0.1.
+- A formula interface (`tls_bf()`): **fitted** (a thin front-end to the column
+  interface). Predictors on `low`/`up`/`log_k`, shared-column fixed designs for
+  `CTmax` / `log_z`, and the limited random-intercept structures listed above
+  are included in 0.1.0.
+- CRAN hardening is release engineering rather than a model capability; this
+  matrix does not claim public CRAN availability.
 
 ## Risk register cross-reference
 
@@ -159,4 +183,6 @@ R-STALE (cache drift), R-IDENT (sparse-mortality non-identifiability), R-RELABS
 (relative vs absolute threshold), R-UNITS (time/`tref` mismatch), R-EXTRAP
 (CTmax extrapolation), R-PHI (phi convention), R-LICENSE (CC-BY attribution),
 R-PROFILE (non-closing profile), and R-POSTERIOR (a figure implying a posterior).
+R-LICENSE is enforced per component by `docs/design/47-data-license-ledger.md`;
+there is no package-wide assumption that every upstream dataset is CC BY 4.0.
 See `SPEC.md` section 14 for the full register and mitigations.

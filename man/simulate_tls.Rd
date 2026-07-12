@@ -84,8 +84,9 @@ engine. It may be combined with \code{re_sd} (both intercepts share the one
 intercepts on the lower asymptote \code{low} (logit scale)} and on the steepness
 \strong{\code{log(k)}} — the shape-coordinate analogues of \code{re_sd} / \code{re_sd_z}
 (\code{low_g = plogis(qlogis(low) + d_g)}, \code{k_g = exp(log(k) + e_g)}; \code{up} tracks
-\code{low} by a fixed head-room fraction). They combine freely with \code{re_sd} /
-\code{re_sd_z}; realised deviations are in \code{attr(, "truth")$b_low} / \verb{$b_logk}.}
+\code{low} by a fixed head-room fraction). The simulator can generate these
+deviations alongside \code{re_sd} / \code{re_sd_z}; realised deviations are in
+\code{attr(, "truth")$b_low} / \verb{$b_logk}.}
 
 \item{n_re_groups}{Number of random-effect groups (required with any \verb{re_sd*}).}
 
@@ -112,7 +113,7 @@ the TMB engine in \code{src/profile_tls.cpp}), and draws binomial or beta-binomi
 counts. The simulating truth is attached as \code{attr(, "truth")}.
 }
 \details{
-\subsection{The \code{phi} convention (R-PHI)}{
+\subsection{The \code{phi} convention}{
 
 For the beta-binomial family, \code{phi} is the \strong{sum of the Beta shape
 parameters}: counts are drawn as \code{prob <- rbeta(a = p * phi, b = (1 - p) * phi)} followed by \code{rbinom(n, prob)}. The Beta mean is \code{p} and its variance is

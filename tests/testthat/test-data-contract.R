@@ -22,8 +22,6 @@ contract <- list(
                                    "Mortality_after_trial")),
   shrimp_sublethal = list(rows = 299L,  vars = 5L,
                           cols = c("assay_temp", "time_to_event")),
-  snowgum_psii     = list(rows = 394L,  vars = 8L,
-                          cols = c("Temp", "Time", "final_fvfm", "fvfm_prop")),
   zebrafish_lethal = list(rows = 323L,  vars = 7L,
                           cols = c("assay_temp", "duration_h", "n_total",
                                    "n_surv", "life_stage")),

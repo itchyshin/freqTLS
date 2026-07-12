@@ -8,7 +8,7 @@
 #' counts. The simulating truth is attached as `attr(, "truth")`.
 #'
 #' @details
-#' ## The `phi` convention (R-PHI)
+#' ## The `phi` convention
 #' For the beta-binomial family, `phi` is the **sum of the Beta shape
 #' parameters**: counts are drawn as `prob <- rbeta(a = p * phi, b = (1 - p) *
 #' phi)` followed by `rbinom(n, prob)`. The Beta mean is `p` and its variance is
@@ -59,8 +59,9 @@
 #'   intercepts on the lower asymptote `low` (logit scale)** and on the steepness
 #'   **`log(k)`** — the shape-coordinate analogues of `re_sd` / `re_sd_z`
 #'   (`low_g = plogis(qlogis(low) + d_g)`, `k_g = exp(log(k) + e_g)`; `up` tracks
-#'   `low` by a fixed head-room fraction). They combine freely with `re_sd` /
-#'   `re_sd_z`; realised deviations are in `attr(, "truth")$b_low` / `$b_logk`.
+#'   `low` by a fixed head-room fraction). The simulator can generate these
+#'   deviations alongside `re_sd` / `re_sd_z`; realised deviations are in
+#'   `attr(, "truth")$b_low` / `$b_logk`.
 #' @param n_re_groups Number of random-effect groups (required with any `re_sd*`).
 #' @param re_group_name Name of the grouping column added to the output for the
 #'   random-effect mode (default `"colony"`).

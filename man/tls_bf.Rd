@@ -32,11 +32,13 @@ matter).
 
 The remaining arguments are sub-parameter formulas keyed by their left-hand
 side, one of \code{low}, \code{up}, \code{log_k}, \code{CTmax}, or \code{log_z}. Any sub-parameter you
-omit defaults to \code{~ 1}. Since v0.2, each of \code{low}, \code{up}, and \code{log_k} may carry
-its \strong{own} design independently — a grouping factor (\code{low ~ group}), a
-continuous covariate (\code{log_k ~ body_size}), or an intercept — no longer required
-to share one factor or match the \code{CTmax} / \code{log_z} grouping. \code{CTmax} and \code{log_z}
-accept any fixed-effect formula (e.g. \code{CTmax ~ group}). A single random intercept,
+omit defaults to \code{~ 1}. Each of \code{low}, \code{up}, and \code{log_k} may carry its
+\strong{own} design independently — a grouping factor (\code{low ~ group}), a
+continuous covariate (\code{log_k ~ body_size}), or an intercept — and need not
+share one factor or match the headline-parameter grouping. \code{CTmax} and \code{log_z}
+accept fixed-effect formulas but must produce the same model-matrix columns
+(for example, use \verb{CTmax ~ group, log_z ~ group}); their supported random-
+intercept groupings may differ. A single random intercept,
 \verb{<param> ~ <fixed> + (1 | group)}, is accepted on \code{CTmax}, \code{log_z}, \code{low}, and
 \code{log_k} (one grouping factor each, intercept only) -- but not on the upper
 asymptote \code{up}, for which the compiled objective has no random-intercept term. Putting the same
@@ -49,7 +51,8 @@ The shape of the parser (variadic capture via \code{\link[=substitute]{substitut
 formula walk, and random-bar detection) is adapted from drmTMB's
 \code{drm_formula()} / \code{parse_drm_formula_entry()} (GPL-3); see \code{inst/COPYRIGHTS}.
 freqTLS writes its own grammar (the \code{time()} / \code{temp()} axis markers, the
-five fixed sub-parameter handles, and the v0.1 restrictions).
+five fixed sub-parameter handles, and the package's supported random-effect
+grammar).
 }
 
 \examples{

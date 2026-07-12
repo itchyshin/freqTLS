@@ -99,9 +99,10 @@ parameters.
 7. `CTmax` is extrapolated beyond the duration span.
 8. `phi` is at the binomial limit (beta-binomial collapsing to binomial).
 9. The profile does not close (an open CI): warn "weakly identified -- consider
-   bayesTLS or bootstrap" and set a `conf.status` marker (R-PROFILE). Since v0.2,
-   `confint(fallback = TRUE)` (the default) fills the open side with a parametric
-   bootstrap interval; `fallback = FALSE` returns `NA` on the open side as before.
+   bayesTLS or bootstrap" and set a `conf.status` marker (R-PROFILE).
+   `confint(fallback = TRUE)` (the default) replaces the open profile interval
+   with a parametric-bootstrap interval; `fallback = FALSE` returns `NA` on the
+   open side.
 10. The MLE is on a boundary: warn that the interval calibration is unreliable.
 11. The profile is non-monotone or multimodal.
 12. Inner re-optimisation does not converge: propagate `NA` rather than a
@@ -111,13 +112,16 @@ parameters.
 
 The profile gives fast, prior-free, asymmetry-respecting confidence intervals
 when the MLE is interior and the data identify `psi`. For boundary asymptotes,
-very sparse designs, overdispersion concentrated at zero, or (future) random
-effects, the profile may not close; freqTLS warns when you are in that regime
-and, since v0.2, falls back to the parametric bootstrap below so an interval is
-still returned (the parity with bayesTLS, which always yields one). freqTLS
-never claims the profile is universally superior.
+very sparse designs, overdispersion concentrated at zero, or weakly identified
+random-effects fits, the profile may not close. freqTLS warns in that regime
+and, by default, attempts the parametric-bootstrap fallback below. That fallback
+can also be unstable and then returns `NA`; neither freqTLS nor bayesTLS is
+described as guaranteeing a finite interval. Fixed-effect targets may be
+profiled under the Laplace-integrated random-effects likelihood; variance
+components use Wald intervals unless bootstrap is requested. freqTLS never
+claims the profile is universally superior.
 
-## Parametric bootstrap fallback (v0.2)
+## Parametric bootstrap fallback
 
 When a profile does not close, or the fitted Hessian is not positive definite
 (`pdHess = FALSE`), `confint(method = "profile", fallback = TRUE)` (the default)
@@ -133,11 +137,11 @@ percentile interval of the replicate estimates. Percentiles are taken on each
 parameter's construction scale (`z`/`k`/`phi` on log, `low` on logit,
 `CTmax`/`up` on identity) and back-transformed, so the bootstrap is exactly
 equivariant in the same sense the profile is: the `z` interval equals `exp()` of
-the `log_z` interval. It is the likelihood-path analogue of the bayesTLS
-posterior interval -- both summarise estimator uncertainty without a prior. No
-Stan and no model recompilation are involved; only the response vector changes
-between replicates. A target with too few converged replicates returns `NA` with
-`conf.status = "bootstrap_unstable"` rather than a fabricated bound.
+the `log_z` interval. It is a prior-free likelihood-path alternative to the
+prior-informed bayesTLS posterior interval. No Stan and no model recompilation
+are involved; only the response vector changes between replicates. A target
+with too few converged replicates returns `NA` with `conf.status =
+"bootstrap_unstable"` rather than a fabricated bound.
 
 The refits are independent, so `cores > 1` runs them in parallel via process
 forking (`parallel::mclapply`; sequential fallback on Windows). The response
@@ -148,8 +152,8 @@ RNG, so the interval is identical for a given seed regardless of `cores`.
 
 Profile intervals are displayed as Confidence Eyes (see
 `docs/design/07-collaboration-and-site.md` and the `figure-visual-audit` skill).
-A non-closing profile renders a hollow point and an open/annotated lens, never a
-fabricated closed eye. A bootstrap fallback interval renders as its own
+A non-closing profile renders a hollow point with no lens, never a fabricated
+interval shape. A bootstrap fallback interval renders as its own
 distinctly coloured lens ("bootstrap interval"), so it is never mistaken for a
 profile interval. The interval source (profile, Wald, or bootstrap) and the
 transformation scale are exposed in the caption. freqTLS prose and figures use

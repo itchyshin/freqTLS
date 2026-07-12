@@ -140,6 +140,65 @@ test_that("grouped predict resolves per-group CTmax/z and needs a group column",
   expect_gt(s_B, s_A)
 })
 
+test_that("predict rebuilds a matching continuous CTmax/log_z fixed design", {
+  set.seed(91)
+  d <- expand.grid(temp = c(34, 36, 38), duration = c(0.5, 1, 2, 4),
+                   x = seq(-1, 1, length.out = 7))
+  CTmax <- 36 + 0.7 * d$x
+  log_z <- log(4) - 0.15 * d$x
+  mid <- -(d$temp - CTmax) / exp(log_z)
+  prob <- 0.02 + 0.96 * stats::plogis(-4 * (log10(d$duration) - mid))
+  d$total <- 50
+  d$survived <- stats::rbinom(nrow(d), d$total, prob)
+  fit <- suppressWarnings(fit_tls(
+    tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+           CTmax ~ x, log_z ~ x),
+    data = d, family = "binomial", tref = 1
+  ))
+
+  nd <- data.frame(temp = 37, duration = 2, x = c(-1, 0, 1))
+  got <- predict(fit, nd)
+  Xn <- stats::model.matrix(~x, nd)
+  ct <- as.numeric(Xn %*% unname(fit$par[names(fit$par) == "beta_CT"]))
+  z <- exp(as.numeric(Xn %*% unname(fit$par[names(fit$par) == "beta_logz"])))
+  low <- fit$estimates$estimate[fit$estimates$parameter == "low"]
+  up <- fit$estimates$estimate[fit$estimates$parameter == "up"]
+  k <- fit$estimates$estimate[fit$estimates$parameter == "k"]
+  mid <- -(nd$temp - ct) / z
+  expected <- low + (up - low) * stats::plogis(-k * (log10(nd$duration) - mid))
+
+  expect_equal(got, expected, tolerance = 1e-10)
+  expect_gt(length(unique(round(got, 10))), 1L)
+})
+
+test_that("random-effect prediction distinguishes population and conditional values", {
+  d <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
+                    re_sd = 1.5, n_re_groups = 10, seed = 42)
+  fit <- suppressWarnings(fit_tls(
+    tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+           CTmax ~ 1 + (1 | colony)),
+    data = d, family = "binomial", tref = 1
+  ))
+  lev <- ranef(fit)$group[which.max(abs(ranef(fit)$estimate))]
+  nd <- data.frame(temp = 36, duration = 2, colony = lev)
+
+  population <- predict(fit, nd, re.form = "population")
+  conditional <- predict(fit, nd, re.form = "conditional")
+  expect_false(isTRUE(all.equal(population, conditional)))
+  expect_warning(default <- predict(fit, nd), "population prediction")
+  expect_equal(default, population)
+  expect_error(
+    predict(fit, data.frame(temp = 36, duration = 2),
+            re.form = "conditional"),
+    "grouping column.*colony"
+  )
+  expect_error(
+    predict(fit, data.frame(temp = 36, duration = 2, colony = "new-colony"),
+            re.form = "conditional"),
+    "unseen.*colony"
+  )
+})
+
 test_that("derive_ctmax inverts the curve and defaults to CTmax", {
   fit <- fit_binom()
   ct <- fit$estimates$estimate[fit$estimates$parameter == "CTmax"]

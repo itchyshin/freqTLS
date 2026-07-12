@@ -42,10 +42,10 @@ under hypoxia, normoxia or hyperoxia, and scored alive/dead. One row per
 assay group; \code{oxygen} is the categorical moderator. Fit \code{CTmax} and
 \code{z} as functions of \code{oxygen} (optionally \code{ploidy}) in one joint
 4PL to compare thermal tolerance across the gradient with profile-likelihood
-confidence intervals on every quantity.
+confidence intervals on those direct parameters.
 }
 \examples{
-\dontrun{
+\donttest{
 std <- standardize_data(zebrafish_o2, temp = "temp", duration = "duration_min",
                         n_total = "n_total", n_surv = "n_surv",
                         duration_unit = "minutes")

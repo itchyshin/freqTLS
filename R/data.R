@@ -1,7 +1,7 @@
 # Documentation for the case-study datasets shipped with freqTLS.
-# The datasets are built from the raw CSVs in inst/extdata/ by
-# data-raw/make_datasets.R. Each is analysis-ready for the workflow
-# standardize_data() -> fit_4pl() -> extract_tdt().
+# The datasets are derived from the raw CSVs in inst/extdata/ using the
+# transformations recorded in the component ledger and each help topic. Each is
+# analysis-ready for standardize_data() -> fit_4pl() -> extract_tdt().
 
 #' Brown shrimp lethal thermal-death-time data
 #'
@@ -22,7 +22,10 @@
 #'         Consumed by
 #'         \code{standardize_data(mortality = "Mortality_after_trial")}.}
 #' }
-#' @source Brown shrimp lethal-TDT assay (Case Study 1). Raw file:
+#' @source Brown shrimp lethal-TDT assay (Case Study 1), obtained from the
+#'   \pkg{bayesTLS} package distribution by Noble, Arnold, and Pottier (2026),
+#'   licensed CC BY 4.0. freqTLS retains the mortality proportion and documents
+#'   its count reconstruction above. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
 #' @examples
 #' std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
@@ -49,7 +52,9 @@
 #'   \item{cup_ID}{Cup identifier, \code{Trial_ID_Sample} (grouping factor).}
 #' }
 #' @source Brown shrimp sublethal time-to-knockdown assay (Case Study 1,
-#'   sublethal endpoint). Raw file:
+#'   sublethal endpoint), obtained from the \pkg{bayesTLS} package distribution
+#'   by Noble, Arnold, and Pottier (2026), licensed CC BY 4.0. freqTLS dropped
+#'   excluded rows and converted the clock times to elapsed minutes. Raw file:
 #'   \code{system.file("extdata", "data_sublethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
 "shrimp_sublethal"
 
@@ -71,62 +76,13 @@
 #'         \code{old_embryos}, \code{larvae}.}
 #'   \item{Date_experiment}{Experiment date (grouping factor).}
 #' }
-#' @source Zebrafish lethal-TDT assay (Case Study 2). Raw file:
+#' @source Zebrafish lethal-TDT assay across life stages (Case Study 2),
+#'   obtained from the \pkg{bayesTLS} package distribution by Noble, Arnold, and
+#'   Pottier (2026), licensed CC BY 4.0. freqTLS removed excluded trials,
+#'   aggregated daily mortality counts, and derived survivors as documented
+#'   above. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_zebrafish.csv", package = "freqTLS")}.
 "zebrafish_lethal"
-
-#' Snow gum leaf PSII functional-impairment thermal-tolerance data
-#'
-#' Chlorophyll-fluorescence (\eqn{F_v/F_m}) measurements on excised snow gum
-#' (\emph{Eucalyptus pauciflora}) leaf sections before and 16--24 h after heat
-#' exposure, from Experiment 1 (post-heat light vs dark recovery) of Arnold et al.
-#' (2026). Short branches were cut from six mature trees grown outdoors in
-#' Canberra, ACT; \eqn{\sim}1 cm\eqn{^2} leaf sections were dark-adapted, given an
-#' initial \eqn{F_v/F_m}, then submerged in a temperature-controlled water bath
-#' under sub-saturating light across a grid of assay temperatures (30--56 degrees
-#' C) and exposure durations (5--120 min). After heat, paired arrays were held for
-#' 90 min in moderate light (\code{recovery = "Light"}) or in darkness
-#' (\code{recovery = "Dark"}); a final \eqn{F_v/F_m} was taken 16--24 h later. The
-#' response is the continuous proportion \code{fvfm_prop} (post/pre ratio),
-#' modelled with a Beta likelihood. The model-ready frame for the leaf PSII case
-#' study (sublethal, continuous-proportion endpoint). The light/dark contrast is a
-#' two-group categorical moderator; in the source experiment post-heat light
-#' lowered apparent heat tolerance.
-#'
-#' Two of the 396 raw rows have post/pre \eqn{F_v/F_m} marginally above 1 (both
-#' Dark, low dose) where a leaf measured slightly higher after heat than before;
-#' retained function cannot exceed 1, so these are treated as measurement noise
-#' and excluded, leaving 394 rows.
-#'
-#' @format A data frame with 394 rows and 8 variables:
-#' \describe{
-#'   \item{Temp}{Assay temperature (degrees C); 30, 35, 40, 44, 48, 52, 56.}
-#'   \item{Time}{Exposure duration (minutes); 5, 15, 30, 60, 120.}
-#'   \item{recovery}{Post-heat recovery light condition: \code{"Dark"} (darkness
-#'         immediately after heat) or \code{"Light"} (90 min moderate light
-#'         post-heat). A two-level moderator.}
-#'   \item{plant}{Replicate mature tree (factor, 6 levels); the natural random-effect
-#'         grouping.}
-#'   \item{meas_day}{Assay day (factor, 2 levels). Two levels only, so a poor
-#'         random-effect grouping; better treated as fixed or omitted.}
-#'   \item{initial_fvfm}{\eqn{F_v/F_m} measured before heat exposure.}
-#'   \item{final_fvfm}{\eqn{F_v/F_m} measured 16--24 h after heat exposure.}
-#'   \item{fvfm_prop}{Retained PSII function, \code{final_fvfm / initial_fvfm}
-#'         (a proportion in the unit interval; 0 indicates complete loss of
-#'         measurable PSII function).}
-#' }
-#' @source Arnold PA, Harris RJ, Aitken SM, Hoek MM, Cook AM, Leigh A, Nicotra AB
-#'   (2026) Towards a standard approach to investigating the thermal load
-#'   sensitivity of photosystem II via chlorophyll fluorescence. bioRxiv
-#'   \doi{10.64898/2026.04.09.717599} (CC BY-NC 4.0), Experiment 1, snow gum
-#'   slice. Raw file:
-#'   \code{system.file("extdata", "data_function_PSII_TDT_snowgum.csv", package = "freqTLS")}.
-#' @examples
-#' std <- standardize_data(snowgum_psii, temp = "Temp", duration = "Time",
-#'                         proportion = "fvfm_prop",
-#'                         random_effects = "plant",
-#'                         duration_unit = "minutes")
-"snowgum_psii"
 
 #' Drosophila suzukii multi-trait thermal-tolerance data
 #'
@@ -134,10 +90,12 @@
 #' (\emph{Drosophila suzukii}), one row per fly, carrying three thermal-tolerance
 #' endpoints measured under static heat exposures at 34--38 degrees C:
 #' a lethal endpoint (\code{dead}), a sublethal knockdown time-to-event
-#' (\code{t_coma}), and a sublethal reproductive endpoint (\code{prod}). The
-#' model-ready frame for Case Study 4; aggregate \code{dead} to counts for the
-#' beta-binomial lethal fit, or use \code{t_coma} / \code{prod} directly for the
-#' sublethal endpoints. \code{lvl} indexes the exposure-duration grid as a
+#' (\code{t_coma}), and a sublethal reproductive endpoint (\code{prod}). Only
+#' \code{dead} is a valid freqTLS response: aggregate it to counts for the
+#' beta-binomial lethal fit. The \code{t_coma} and \code{prod} columns are
+#' retained to preserve the deposited record and provide study context; they
+#' require time-to-event and reproductive-response models that freqTLS does not
+#' fit. \code{lvl} indexes the exposure-duration grid as a
 #' percentage of the estimated median time-to-coma from the authors' initial TDT
 #' curves; \code{time} is the realised duration in minutes.
 #'
@@ -162,16 +120,17 @@
 #'   article: \doi{10.1111/ele.14421}. Raw file:
 #'   \code{system.file("extdata", "data_multitrait_TDT_drosophila_suzukii.csv", package = "freqTLS")}.
 #' @examples
-#' \dontrun{
 #' # Lethal endpoint: aggregate per-individual deaths to cell counts, then
-#' # standardise for the beta-binomial 4PL.
-#' cells <- dplyr::summarise(
-#'   dplyr::group_by(dsuzukii, temp, time, sex),
-#'   n_total = dplyr::n(), n_dead = sum(dead), .groups = "drop")
+#' # prepare the data for a beta-binomial 4PL.
+#' cells <- stats::aggregate(
+#'   cbind(n_total = rep.int(1L, nrow(dsuzukii)), n_dead = dead) ~
+#'     temp + time + sex,
+#'   data = dsuzukii,
+#'   FUN = sum
+#' )
 #' std <- standardize_data(cells, temp = "temp", duration = "time",
 #'                         n_total = "n_total", n_dead = "n_dead",
-#'                         random_effects = "sex", duration_unit = "minutes")
-#' }
+#'                         duration_unit = "minutes")
 "dsuzukii"
 
 #' Zebrafish lethal-TDT data across an oxygen gradient
@@ -184,7 +143,7 @@
 #' assay group; \code{oxygen} is the categorical moderator. Fit \code{CTmax} and
 #' \code{z} as functions of \code{oxygen} (optionally \code{ploidy}) in one joint
 #' 4PL to compare thermal tolerance across the gradient with profile-likelihood
-#' confidence intervals on every quantity.
+#' confidence intervals on those direct parameters.
 #'
 #' @format A data frame with 905 rows and 10 variables:
 #' \describe{
@@ -209,7 +168,7 @@
 #'   \doi{10.1242/jeb.251548}. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_zebrafish_oxygen.csv", package = "freqTLS")}.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' std <- standardize_data(zebrafish_o2, temp = "temp", duration = "duration_min",
 #'                         n_total = "n_total", n_surv = "n_surv",
 #'                         duration_unit = "minutes")
@@ -228,7 +187,7 @@
 #' \code{branch} flags the heat vs cold series. Subset to one \code{branch} (and
 #' typically one \code{age}) and fit \code{CTmax} and \code{z} as functions of
 #' \code{species} in one joint 4PL to compare species with profile-likelihood
-#' confidence intervals on every quantity.
+#' confidence intervals on those direct parameters.
 #'
 #' @format A data frame with 3041 rows and 7 variables:
 #' \describe{
@@ -252,7 +211,7 @@
 #'   Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_aphid.csv", package = "freqTLS")}.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' a <- subset(aphid_tdt, branch == "heat" & age == "6")
 #' std <- standardize_data(a, temp = "temp", duration = "duration_min",
 #'                         n_total = "n_total", n_surv = "n_surv",

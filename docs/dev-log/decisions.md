@@ -4,6 +4,56 @@ Durable design decisions for freqTLS, append-only. Each entry records what was
 decided, why, the alternatives, and what future work must respect. The canonical
 specification is `SPEC.md`; these entries record the decisions that shaped it.
 
+## 2026-07-12: Close the 0.1.0 author-consent gate
+
+- Decision: retain the `aut` roles for Pieter A. Arnold, Patrice Pottier, and
+  Daniel W. A. Noble. The maintainer confirmed on 2026-07-12 that all three had
+  agreed to proceed with the freqTLS 0.1.0 CRAN submission through email or text
+  correspondence.
+- Evidence boundary: this repository records the maintainer's dated
+  attestation, not copies of private correspondence. The attestation supersedes
+  earlier release-audit records that described replies as pending.
+- Consequence: collaborator consent no longer blocks upload. Exact-artifact
+  review, CRAN submission, and public package/check-page verification remain
+  separate gates.
+
+## 2026-07-11: Treat 0.1.0 as one release candidate with the tested surface
+
+- Decision: the historical v0.1/v0.2/v0.3 headings are build milestones, not
+  published releases. The 0.1.0 candidate includes the implemented Beta family,
+  formula and shape-design paths, limited independent random intercepts,
+  parametric bootstrap, and deterministic heat-injury prediction.
+- Boundary: time-to-event/multivariate responses, fitted injury/repair dynamics,
+  correlated/random-slope/crossed/nested/`up` random effects, and universal
+  profile support remain unsupported. Benchmark equivalence claims apply only
+  to the matched relative-threshold, constant-shape configuration.
+- Release gate: local implementation and validation do not imply CRAN release.
+  Author consent, data redistribution authority, strict CRAN checks, and public
+  CRAN package/check pages are separate evidence tiers.
+
+## 2026-07-11: Correct snow-gum licensing; permission or exclusion
+
+- Decision: the underlying snow-gum PSII source is CC BY-NC 4.0. Earlier current
+  documentation that called it CC BY 4.0 was incorrect and is superseded.
+- Consequence: never silently relicense the data. Record written redistribution
+  permission if obtained; otherwise exclude the processed/raw data, derived
+  cache rows, installed vignette, and package claims from the CRAN candidate.
+- Historical task reports remain unchanged; this dated decision and the current
+  component ledger carry the correction.
+
+## 2026-07-11: Exclude unused environmental traces without a complete rights chain
+
+- Decision: the unused Open-Meteo/ERA5 aphid trace and Orsted/NicheMapR/NCEP
+  microclimate trace do not enter the 0.1.0 package. The records reviewed did not
+  establish compatible redistribution authority for every underlying provider.
+- Consequence: retain both files only under the build-excluded
+  `data-raw/licensing-pending/environmental-traces` tree. Restoration requires
+  compatible primary terms or written permission, complete installed
+  attribution, and a documented package consumer.
+- Rationale: a workflow or repository licence does not automatically license
+  third-party environmental values produced or redistributed through it; unused
+  files create avoidable release exposure.
+
 ## 2026-06-16: License is GPL (>= 3)
 
 - Decision: freqTLS is released under GPL (>= 3), overriding the MIT default

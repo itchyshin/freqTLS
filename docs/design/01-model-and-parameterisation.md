@@ -51,8 +51,8 @@ mid_i = log10(tref) - (T_i - CT_i) / z_i.
 
 So the temperature enters the midpoint directly through `CTmax` and `z`. The
 shape parameters `low`, `up`, `k` are shared across observations by default;
-since v0.2 they may be grouped by a factor (see `docs/dev-log/decisions.md`,
-2026-06-17), with the intercept-only default unchanged.
+the formula interface may instead give them supported fixed designs, with the
+intercept-only default unchanged (see `docs/dev-log/decisions.md`, 2026-06-17).
 
 ## Equivalence (same likelihood, same MLE)
 

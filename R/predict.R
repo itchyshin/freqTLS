@@ -15,16 +15,28 @@
 #'   `log10(duration)` axis (constant within a temperature, so the `duration`
 #'   column is ignored for this type but a `temp` column is still required).
 #'
-#' For a grouped fit `newdata` must carry a `group` column whose values are a
-#' subset of the fit's `group_levels`; for an ungrouped fit any `group` column
-#' is ignored.
+#' `newdata` must also contain every predictor used by the fitted fixed-effect
+#' designs for `CTmax`, `log_z`, `low`, `up`, or `log_k`. For a grouped column-
+#' interface fit, supply `group` with values from the fitted `group_levels`.
+#' For a formula fit, a literal [tls_bf()] call preserves the fixed-design
+#' formulas needed to rebuild transformed or interacted terms. If the model was
+#' instead passed through a formula-object variable, `predict()` can rebuild
+#' direct numeric design columns but asks the user to refit with a literal
+#' [tls_bf()] call when a transformed or interacted design cannot be recovered
+#' safely.
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
-#' @param newdata A data frame with numeric columns `temp` and `duration`
-#'   (and `group` for a grouped fit). `duration` must be strictly positive
-#'   (it is `log10`-transformed). For `type = "midpoint"`, `duration` may be
-#'   omitted.
+#' @param newdata A data frame with numeric columns `temp` and `duration`, plus
+#'   every predictor used in the fitted `CTmax`, `log_z`, `low`, `up`, and
+#'   `log_k` fixed designs. Include `group` for a grouped column-interface fit.
+#'   Conditional random-effect predictions additionally require every fitted
+#'   grouping column. `duration` must be strictly positive (it is
+#'   `log10`-transformed). For `type = "midpoint"`, `duration` may be omitted.
 #' @param type One of `"survival"` (default), `"link"`, or `"midpoint"`.
+#' @param re.form How to handle fitted random intercepts. `"population"`
+#'   (default) sets them to zero; `"conditional"` adds the fitted BLUP for each
+#'   random-effect grouping column in `newdata`. When omitted for a random-
+#'   effects fit, `predict()` warns that it is returning a population prediction.
 #' @param ... Reserved; must be empty.
 #'
 #' @return A numeric vector with one element per row of `newdata`. Survival
@@ -37,10 +49,35 @@
 #' nd <- expand.grid(temp = c(34, 36, 38), duration = c(1, 2, 4))
 #' predict(fit, nd, type = "survival")
 #'
+#' # A continuous predictor used by CTmax and log_z must also be in newdata.
+#' d$x <- rep(c(-1, 1), length.out = nrow(d))
+#' fit_x <- fit_tls(
+#'   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+#'          CTmax ~ x, log_z ~ x),
+#'   data = d, family = "binomial", tref = 1
+#' )
+#' predict(fit_x, data.frame(temp = 36, duration = 2, x = c(-1, 1)))
+#'
+#' \donttest{
+#' # Choose population or fitted-group prediction explicitly for an RE fit.
+#' dre <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
+#'                     re_sd = 1, n_re_groups = 8, seed = 2)
+#' fit_re <- fit_tls(
+#'   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
+#'          CTmax ~ 1 + (1 | colony)),
+#'   data = dre, family = "binomial", tref = 1
+#' )
+#' colony <- as.character(ranef(fit_re)$group[1])
+#' nd_re <- data.frame(temp = 36, duration = 2, colony = colony)
+#' predict(fit_re, nd_re, re.form = "population")
+#' predict(fit_re, nd_re, re.form = "conditional")
+#' }
+#'
 #' @importFrom stats predict
 #' @export
 predict.profile_tls <- function(object, newdata,
                                 type = c("survival", "link", "midpoint"),
+                                re.form = c("population", "conditional"),
                                 ...) {
   dots <- list(...)
   if (length(dots) > 0L) {
@@ -51,6 +88,8 @@ predict.profile_tls <- function(object, newdata,
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
   type <- match.arg(type)
+  re_form_missing <- missing(re.form)
+  re.form <- match.arg(re.form)
   if (missing(newdata) || !is.data.frame(newdata)) {
     cli::cli_abort("{.arg newdata} must be a data frame with columns {.code temp} and {.code duration}.")
   }
@@ -73,7 +112,14 @@ predict.profile_tls <- function(object, newdata,
   }
 
   # Resolve per-row CTmax and z from the (possibly grouped) fit.
-  pars <- tls_predict_pars(object, newdata)
+  if (isTRUE(re_form_missing) && tls_has_re(object)) {
+    cli::cli_warn(c(
+      "Returning a population prediction with fitted random intercepts set to zero.",
+      i = "Use {.code re.form = \"conditional\"} and include each fitted random-effect grouping column in {.arg newdata} to add its BLUP.",
+      i = "Use {.code re.form = \"population\"} explicitly to silence this warning."
+    ))
+  }
+  pars <- tls_predict_pars(object, newdata, re.form = re.form)
 
   log10_tref <- log10(object$tref)
   mid <- log10_tref - (temp - pars$CTmax) / pars$z
@@ -117,15 +163,18 @@ predict.profile_tls <- function(object, newdata,
 #'   per row of `newdata`.
 #' @keywords internal
 #' @noRd
-tls_predict_pars <- function(fit, newdata) {
+tls_predict_pars <- function(fit, newdata, re.form = "population") {
   est <- fit$estimates
   levels_g <- fit$group_levels
   ng <- length(levels_g)
   n_row <- nrow(newdata)
+  X_CT_fit <- fit$tmb_inputs$data$X_CT
+  X_logz_fit <- fit$tmb_inputs$data$X_logz
+  general_fixed <- ncol(X_CT_fit) > 1L && is.null(fit$diag_data$group)
 
   # Per-row group index: 1 for an ungrouped fit, else resolved and validated
   # from newdata$group.
-  if (ng == 1L) {
+  if (ng == 1L || general_fixed) {
     gi <- rep(1L, n_row)
   } else {
     if (is.null(newdata$group)) {
@@ -188,6 +237,67 @@ tls_predict_pars <- function(fit, newdata) {
     as.numeric(Xn %*% beta_of(beta_name))
   }
 
+  # CTmax and log_z share a fixed design. The legacy grouped-factor path above
+  # remains authoritative for cell means; a general design must instead be
+  # rebuilt from newdata and multiplied by the fitted link-scale coefficients.
+  # Literal tls_bf() calls retain the exact RHS. For fits made from a formula
+  # object, direct numeric columns can still be reconstructed from the stored
+  # design labels; transformed/interacted designs fail loudly rather than
+  # silently returning an intercept-only prediction.
+  fixed_rhs <- function(role) {
+    x_call <- fit$call$x
+    if (!is.call(x_call)) return(NULL)
+    head <- x_call[[1L]]
+    fun <- if (is.symbol(head)) as.character(head) else if (is.call(head)) {
+      as.character(head[[length(head)]])
+    } else ""
+    if (!identical(fun, "tls_bf")) return(NULL)
+    tf <- eval(x_call, envir = environment(predict.profile_tls))
+    f <- tf$sub_formulas[[role]]
+    if (is.null(f)) return(~1)
+    rhs <- tls_formula_rhs(f)
+    stats::as.formula(paste("~", deparse1(rhs)), env = tf$env)
+  }
+  rebuild_fixed_eta <- function(role, X_fit, beta_name) {
+    rhs <- fixed_rhs(role)
+    if (!is.null(rhs)) {
+      Xn <- tls_design_from_rhs(rhs, newdata, role)$X
+    } else {
+      cols <- colnames(X_fit)
+      direct <- setdiff(cols, "(Intercept)")
+      missing_direct <- setdiff(direct, names(newdata))
+      if (length(missing_direct) > 0L ||
+          any(!vapply(newdata[direct], is.numeric, logical(1)))) {
+        cli::cli_abort(c(
+          "Cannot rebuild the fitted {.code {role}} design from {.arg newdata}.",
+          i = "Refit with a literal {.fn tls_bf} call, or supply direct numeric design columns: {.val {direct}}."
+        ))
+      }
+      Xn <- matrix(1, nrow = n_row, ncol = length(cols),
+                   dimnames = list(NULL, cols))
+      if (length(direct) > 0L) Xn[, direct] <- as.matrix(newdata[direct])
+    }
+    if (!identical(colnames(Xn), colnames(X_fit))) {
+      cli::cli_abort(c(
+        "The {.code {role}} design in {.arg newdata} does not match the fitted design.",
+        x = "Fitted columns: {.val {colnames(X_fit)}}.",
+        x = "Prediction columns: {.val {colnames(Xn)}}."
+      ))
+    }
+    as.numeric(Xn %*% beta_of(beta_name))
+  }
+
+  CTmax <- if (general_fixed) {
+    rebuild_fixed_eta("CTmax", X_CT_fit, "beta_CT")
+  } else {
+    resolve("CTmax")
+  }
+  log_z <- if (general_fixed) {
+    rebuild_fixed_eta("log_z", X_logz_fit, "beta_logz")
+  } else {
+    log(resolve("z"))
+  }
+
   bb <- fit$tmb_inputs$data
   low <- if (needs_rebuild(X_low_fit)) {
     bb$low_min + bb$low_w * stats::plogis(rebuild_eta("low", "beta_low"))
@@ -205,7 +315,59 @@ tls_predict_pars <- function(fit, newdata) {
     resolve("up")
   }
 
-  list(CTmax = resolve("CTmax"), z = resolve("z"), low = low, up = up, k = k)
+  # Conditional predictions add the fitted group-level modes on the same scale
+  # used by the TMB objective. Population predictions leave all deviations at
+  # zero. Unknown/new groups are not silently assigned a zero BLUP.
+  if (identical(re.form, "conditional")) {
+    sdr <- fit$sdreport
+    if (is.null(sdr)) {
+      cli::cli_abort("Conditional prediction needs an available {.code sdreport}; refit and check convergence.")
+    }
+    sm <- summary(sdr, select = "random")
+    for (bk in tls_re_blocks(fit)) {
+      gv <- bk$spec$group_var
+      if (!gv %in% names(newdata)) {
+        cli::cli_abort(c(
+          "Conditional prediction needs grouping column {.code {gv}} in {.arg newdata}.",
+          i = "Use {.code re.form = \"population\"} for a prediction with random intercepts set to zero."
+        ))
+      }
+      g <- as.character(newdata[[gv]])
+      if (anyNA(g)) {
+        cli::cli_abort("{.code newdata${gv}} must not contain missing values for conditional prediction.")
+      }
+      unknown <- setdiff(unique(g), bk$spec$group_levels)
+      if (length(unknown) > 0L) {
+        cli::cli_abort(c(
+          "Conditional prediction cannot use unseen {.code {gv}} level{?s}: {.val {unknown}}.",
+          i = "Use {.code re.form = \"population\"} for new groups."
+        ))
+      }
+      rows <- which(rownames(sm) == bk$b_name)
+      b <- stats::setNames(unname(sm[rows, "Estimate"]), bk$spec$group_levels)
+      bi <- unname(b[g])
+      if (identical(bk$param, "CTmax")) CTmax <- CTmax + bi
+      if (identical(bk$param, "log_z")) log_z <- log_z + bi
+      if (identical(bk$param, "low")) {
+        eta_low <- if (ncol(X_low_fit) == 1L) {
+          rep(beta_of("beta_low")[1L], n_row)
+        } else {
+          rebuild_eta("low", "beta_low")
+        }
+        low <- bb$low_min + bb$low_w * stats::plogis(eta_low + bi)
+      }
+      if (identical(bk$param, "log_k")) {
+        eta_logk <- if (ncol(X_logk_fit) == 1L) {
+          rep(beta_of("beta_logk")[1L], n_row)
+        } else {
+          rebuild_eta("log_k", "beta_logk")
+        }
+        k <- exp(eta_logk + bi)
+      }
+    }
+  }
+
+  list(CTmax = CTmax, z = exp(log_z), low = low, up = up, k = k)
 }
 
 #' Predict a survival surface over a temperature-by-duration grid
@@ -213,6 +375,10 @@ tls_predict_pars <- function(fit, newdata) {
 #' `predict_survival_surface()` evaluates the fitted survival probability on a
 #' factorial grid of temperatures by durations, returning a long data frame
 #' suitable for a heatmap or contour plot (see [plot_survival_surface()]).
+#' For random-effects fits this helper returns population-level predictions
+#' (random intercepts set to zero); use `predict(..., re.form = "conditional")`
+#' for known-group conditional predictions. General continuous fixed designs
+#' require `predict()` with their covariate columns supplied in `newdata`.
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param temps Numeric vector of temperatures. Defaults to a length-60
@@ -311,6 +477,8 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #' The target must lie strictly between `low` and `up` for a finite crossing;
 #' otherwise the survival curve never reaches `p` and `derive_lt()` aborts with
 #' an explanatory message (confidence-language, never silent).
+#' For a random-effects fit this is a population-level derived quantity; it does
+#' not add a group BLUP.
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param p Target survival probability in `(low, up)` (default `0.5`).
@@ -390,6 +558,8 @@ derive_lt <- function(object, p = 0.5, temp, group = NULL) {
 #' \deqn{temp = CTmax - z\Big(\log_{10} duration - \log_{10} t_{ref} +
 #'   \mathrm{qlogis}\!\big(\tfrac{surv - low}{up - low}\big) / k\Big).}
 #' The target `surv` must lie strictly between `low` and `up`.
+#' For a random-effects fit this is a population-level derived quantity; it does
+#' not add a group BLUP.
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param surv Target survival probability in `(low, up)`. `NULL` (default) uses
@@ -465,6 +635,8 @@ derive_ctmax <- function(object, surv = NULL, duration = NULL, group = NULL) {
 #' operational choice into the posterior, freqTLS treats `rate` as a fixed
 #' input and returns the deterministic transform of the fitted `CTmax` and `z`
 #' (combine their confidence intervals if you need to propagate uncertainty).
+#' For a random-effects fit this is a population-level derived quantity; it does
+#' not add a group BLUP.
 #'
 #' `T_crit` assumes a **lethal endpoint**: it is a damage-accumulation concept, so
 #' for sublethal endpoints (knockdown, photosynthetic failure) the steeper `z`

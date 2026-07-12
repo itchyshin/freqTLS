@@ -43,14 +43,13 @@ coordinates at each grid point, and returns the deviance
 the profile-likelihood confidence interval. Because the profile is taken on the
 unconstrained coordinate and the endpoints are then transformed by a monotone
 function, the interval is exactly equivariant: the \code{z} interval equals \code{exp()}
-of the internal \code{log_z} interval (the headline equivariance check, SPEC.md
-S10).
+of the internal \code{log_z} interval (the headline equivariance check).
 }
 \details{
 The algorithm is a map-refit profile: the target coordinate is fixed with
 TMB's \code{map} mechanism and the rest re-optimised, mirroring the bracket-then-
 \code{\link[stats:uniroot]{stats::uniroot()}} endpoint solver in \code{drmTMB::R/profile.R:2314-2373}. See
-\code{docs/design/04-profile-likelihood.md}.
+\code{vignette("profile-likelihood")}.
 }
 \section{Functions}{
 \itemize{
@@ -73,9 +72,9 @@ TMB's \code{map} mechanism and the rest re-optimised, mirroring the bracket-then
 
 Under the disjoint-bounds parameterisation \code{up = up_min + up_w * plogis(beta_up)}
 has its own coordinate \code{beta_up}, but freqTLS does not yet profile it (the profile
-path is wired for \code{low} but not \code{up} -- symmetric work, simply not implemented).
+path is wired for \code{low} but not \code{up} — symmetric work, simply not implemented).
 freqTLS falls back to the delta-method Wald interval for \code{up}
-and says so (SPEC.md S10). Group contrasts (\code{dCTmax}, \code{dlog_z}) are profiled
+and says so. Group contrasts (\code{dCTmax}, \code{dlog_z}) are profiled
 directly by recoding the design so the contrast is itself a coordinate.
 }
 

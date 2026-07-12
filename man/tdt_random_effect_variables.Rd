@@ -6,6 +6,13 @@
 \usage{
 tdt_random_effect_variables(random_effects = NULL)
 }
+\arguments{
+\item{random_effects}{Optional character vector of grouping-variable names
+or random-intercept terms accepted by \code{\link[=tdt_format_random_effects]{tdt_format_random_effects()}}.}
+}
+\value{
+A character vector containing the unique grouping-variable names.
+}
 \description{
 Extract variable names from random-effect terms
 }

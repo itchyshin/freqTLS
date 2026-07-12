@@ -94,7 +94,7 @@ fit
 
 ### Formula interface
 
-For moderators, `fit_4pl()` takes the same **direct interface** as `bayesTLS` —
+For the supported moderators, `fit_4pl()` takes a **similar direct interface** to `bayesTLS` —
 `ctmax =`, `z =`, or the `by =` shorthand (e.g. `by = "life_stage"` for a grouped
 fit). Under the hood the engine also exposes a `brms`/`drmTMB`-style grammar via
 `tls_bf()` — the left-hand side names the survival counts (`successes |
@@ -186,7 +186,7 @@ covariate, and hierarchical models.
 
 **Other families.** Besides `"beta_binomial"`, `fit_tls()` accepts `"binomial"`
 (no overdispersion) and `"beta"` (a continuous proportion in (0, 1) with no trials
-column; see `vignette("case-study-leaf-psii")`).
+column; the runnable example below uses simulated beta data).
 
 **Grouped `CTmax` and `z`.** Put a grouping factor on a sub-parameter to estimate a
 separate, directly profile-able `CTmax` and `z` per group, with one shared curve
@@ -263,7 +263,15 @@ Wald / profile / bootstrap intervals and the Confidence Eye — and the dashed
 # essential: without it, wildcard labels such as get_*_summary() are parsed as
 # Markdown emphasis, which breaks the SVG namespace. Accessibility is provided
 # by the SVG's <title>/<desc>.
-svg_lines <- readLines("freqTLS_function_map.svg", warn = FALSE)
+svg_candidates <- c(
+  "freqTLS_function_map.svg",
+  system.file("doc", "freqTLS_function_map.svg", package = "freqTLS")
+)
+svg_path <- svg_candidates[nzchar(svg_candidates) & file.exists(svg_candidates)][1]
+if (is.na(svg_path)) {
+  stop("The installed freqTLS function-map SVG is missing.")
+}
+svg_lines <- readLines(svg_path, warn = FALSE)
 cat(
   "```{=html}\n",
   paste(svg_lines, collapse = "\n"),
@@ -282,3 +290,8 @@ cat(
   intercepts on `CTmax`, `log_z`, `low`, and `log_k`, with their diagnostics.
 * `vignette("comparing-to-bayesTLS")` — the three-way comparison (classical two-stage,
   Bayesian, profile likelihood) and the credit for the framework.
+
+Before interpreting any fitted model, run `check_tls(fit)`. The recovery guide in
+`?check_tls` maps each warning to the next design or analysis action; the profile
+article shows both the default bootstrap recovery attempt and the strict
+`fallback = FALSE` open-profile diagnostic.

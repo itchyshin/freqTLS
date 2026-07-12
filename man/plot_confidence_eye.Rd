@@ -56,11 +56,11 @@ x-axis, and the confidence interval is a short, wide pale lens with a
 hollow point estimate. The shallow horizontal lens reads as a confidence
 \emph{interval}, never a posterior density -- freqTLS intervals are likelihood
 confidence intervals, so the wording is "confidence", never
-"posterior" (SPEC.md S13). The layout follows the gllvmTMB / drmTMB
+"posterior". The layout follows the gllvmTMB / drmTMB
 Confidence-Eye contract.
 }
 \details{
-\subsection{Honest fallback (R-PROFILE)}{
+\subsection{Honest fallback for open profiles}{
 
 When a profile does not close (\code{conf.status} is \code{"open_lower"},
 \code{"open_upper"}, \code{"open_both"}, or a bound is \code{NA}), no lens is drawn for that

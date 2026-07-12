@@ -28,18 +28,22 @@ fit_4pl(
 \item{data}{Output of \code{\link[=standardize_data]{standardize_data()}}.}
 
 \item{ctmax, z, up, low, k, by}{Direct-mode formula interface; see
-\code{\link[=make_4pl_formula]{make_4pl_formula()}}. Supplying \code{ctmax}/\code{z} (or \code{by}) fits per-group CTmax/z.}
+\code{\link[=make_4pl_formula]{make_4pl_formula()}}. Supplying \code{ctmax}/\code{z} (or \code{by}) fits per-group CTmax/z;
+the two headline formulas must produce the same fixed-effect columns.}
 
 \item{threshold}{\code{"relative"} (default; CTmax/z at the curve midpoint) or
-\code{"absolute"} (at the \code{p}-survival level). \emph{Absolute is wired into the
-backbone in a later step; for now use \code{"relative"} and convert post hoc.}}
+\code{"absolute"} (at the \code{p}-survival level). The fitting backbone currently
+accepts only \code{"relative"}; obtain absolute-threshold quantities post fit
+with \code{\link[=extract_tdt]{extract_tdt()}} and \code{target_surv = "absolute"}.}
 
 \item{p}{Survival level for the absolute threshold (default 0.5).}
 
 \item{t_ref}{Reference exposure time (in the data's \code{duration_unit}) at which
 CTmax is reported. Default 60 (e.g. minutes); use \code{t_ref = 1} for hours.}
 
-\item{bounds}{Length-2 asymptote range \code{c(lower, upper)} (default \code{c(0, 1)}).}
+\item{bounds}{Asymptote range. Only \code{c(0, 1)} is currently accepted. Supply
+survival as a probability in \verb{[0, 1]} and let the model estimate \code{low} and
+\code{up} within that range; non-default bounds stop with an error.}
 
 \item{family}{\code{"beta_binomial"} (default for counts), \code{"binomial"}, or
 \code{"beta"}. \code{NULL} picks beta for a proportion response, else beta-binomial.}
@@ -61,6 +65,24 @@ directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 Returns a \code{freq_tls} workflow object; uncertainty (Wald / profile / bootstrap)
 is computed on demand by the quantity twins (\code{\link[=tls]{tls()}}, \code{confint()}).
 }
+\section{Before interpretation}{
+
+Before interpreting the fit, run \code{\link[=check_tls]{check_tls()}}. Its help page gives a recovery
+action for each data-adequacy warning; \code{vignette("profile-likelihood")} explains
+strict open profiles and the default bootstrap fallback.
+}
+
+\examples{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(
+  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+)
+coef(fit)
+}
 \seealso{
-\code{\link[=standardize_data]{standardize_data()}}, \code{\link[=make_4pl_formula]{make_4pl_formula()}}, \code{\link[=fit_tls]{fit_tls()}}
+\code{\link[=standardize_data]{standardize_data()}}, \code{\link[=make_4pl_formula]{make_4pl_formula()}}, \code{\link[=fit_tls]{fit_tls()}}, \code{\link[=check_tls]{check_tls()}}
 }

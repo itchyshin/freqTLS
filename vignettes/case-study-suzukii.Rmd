@@ -236,7 +236,7 @@ sex_levels <- fit$group_levels
 sex_label  <- c(F = "Female", M = "Male")
 
 # Live freqTLS per-sex CTmax and z as profile-likelihood confidence
-# intervals (always available; no Stan).
+# intervals (with explicit open-profile status; no Stan).
 pro <- suppressMessages(confint(
   fit,
   c(paste0("CTmax:", sex_levels), paste0("z:", sex_levels)),

@@ -1,9 +1,9 @@
 # Formula-interface tests (tls_bf + fit_tls dispatch). The grammar is a thin,
 # label-preserving front-end to the column interface, so the central contract is
 # numerical identity: a formula fit must equal the matching column fit to
-# optimiser tolerance. The error tests pin the v0.1 restrictions (shape
-# predictors and random effects deferred to v0.2) and the helpful axis / handle
-# diagnostics. One fit per shape, fixed data, so the file stays fast.
+# optimiser tolerance. The error tests pin the supported shape/random-effect
+# boundaries and the helpful axis/handle diagnostics. One fit per shape, fixed
+# data, so the file stays fast.
 
 test_that("a grouped formula fit equals the matching column fit", {
   data(zebrafish_lethal)
@@ -58,6 +58,23 @@ test_that("an ungrouped formula fit equals the ungrouped column fit", {
   expect_false(isTRUE(f_frm$data_summary$grouped))
 })
 
+test_that("CTmax and log_z reject mismatched fixed-effect columns", {
+  d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 19)
+  d$x <- seq_len(nrow(d)) / nrow(d)
+
+  expect_error(
+    freqTLS:::tls_parse_formula(
+      tls_bf(
+        survived | trials(total) ~ time(duration) + temp(temp),
+        CTmax ~ x, log_z ~ 1
+      ),
+      d, quiet = TRUE
+    ),
+    "must use the same fixed-effect predictors",
+    fixed = TRUE
+  )
+})
+
 test_that("cbind() and successes | trials() responses agree", {
   d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 12)
   d$dead <- d$total - d$survived
@@ -76,7 +93,7 @@ test_that("cbind() and successes | trials() responses agree", {
   expect_equal(unname(coef(f_cbind)), unname(coef(f_trials)), tolerance = 1e-6)
 })
 
-test_that("an independent continuous shape predictor is allowed (v0.2 relaxed)", {
+test_that("an independent continuous shape predictor is allowed", {
   d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 8)
   d$bs <- stats::runif(nrow(d), -1, 1)
   # v0.2: each shape may carry its OWN design; `log_k ~ bs` alone (low / up shared,

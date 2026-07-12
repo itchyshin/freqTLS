@@ -51,7 +51,8 @@ thermal damage as a fraction of the lethal dose and reads survival back off the
 fitted 4PL. It does \strong{not} fit an injury or repair model -- fitting injury /
 repair dynamics remains a \code{bayesTLS} concern (the complementary boundary);
 \code{predict_heat_injury()} only predicts injury from the already-fitted survival
-curve.
+curve. For a random-effects fit it uses the population curve and does not add
+a fitted group BLUP.
 }
 \details{
 \subsection{Dose-accumulation model}{

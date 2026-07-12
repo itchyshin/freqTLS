@@ -6,6 +6,14 @@
 \usage{
 tdt_format_random_effects(random_effects = NULL)
 }
+\arguments{
+\item{random_effects}{Optional character vector of grouping-variable names
+or already formatted random-intercept terms.}
+}
+\value{
+A character vector of random-intercept terms. Bare names are wrapped
+as \code{(1 | name)}; \code{NULL} or an empty input returns \code{character()}.
+}
 \description{
 Format bare names as \code{(1 | name)} random-effect terms
 }

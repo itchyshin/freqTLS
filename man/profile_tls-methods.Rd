@@ -84,4 +84,15 @@ the log-likelihood and \code{df}.
 duration cells) used in the fit.
 
 }}
+\examples{
+d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+fit <- fit_tls(
+  d, y = survived, n = total, time = duration, temp = temp,
+  family = "binomial", tref = 1, quiet = TRUE
+)
+coef(fit)
+logLik(fit)
+AIC(fit)
+nobs(fit)
+}
 \keyword{internal}

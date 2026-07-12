@@ -8,9 +8,9 @@
 # ignores .Rbuildignore and exposes no config key to exclude arbitrary files,
 # so root files like AGENTS.md, CLAUDE.md and SPEC.md are rendered to
 # AGENTS.html, CLAUDE.html and SPEC.html. Those files must stay at the repo
-# root for the AI tooling and the SPEC critique, so we remove only their
-# *rendered copies* after the build. ROADMAP.html and the changelog are
-# user-facing and are kept.
+# root for the AI tooling and the SPEC critique, so we remove their copied
+# Markdown, rendered HTML, and generated discovery-index entries after the
+# build. ROADMAP.html and the changelog are user-facing and are kept.
 #
 # This script is the single source of truth for "build the public site" and is
 # used both locally and in the pkgdown GitHub Actions workflow.
@@ -29,16 +29,48 @@ pkgdown::build_site(pkg_path, preview = FALSE, devel = FALSE,
 # Resolve the build destination from the pkgdown config (defaults to docs/).
 dst <- pkgdown::as_pkgdown(pkg_path)$dst_path
 
-internal_pages <- c("AGENTS.html", "CLAUDE.html", "SPEC.html")
-to_remove <- file.path(dst, internal_pages)
+internal_stems <- c("AGENTS", "CLAUDE", "SPEC")
+internal_pages <- paste0(internal_stems, ".html")
+internal_artifacts <- c(internal_pages, paste0(internal_stems, ".md"))
+to_remove <- file.path(dst, internal_artifacts)
 existing <- to_remove[file.exists(to_remove)]
 
 if (length(existing)) {
   file.remove(existing)
-  message("Removed internal pages from the public site: ",
+  message("Removed internal files from the public site: ",
           paste(basename(existing), collapse = ", "))
 } else {
-  message("No internal pages found in ", dst, " (nothing to remove).")
+  message("No internal files found in ", dst, " (nothing to remove).")
+}
+
+# pkgdown creates search.json and sitemap.xml before this post-build cleanup.
+# Remove the now-invalid internal URLs so search engines and the site search do
+# not advertise governance documents that are intentionally not deployed.
+search_path <- file.path(dst, "search.json")
+if (file.exists(search_path)) {
+  search <- jsonlite::fromJSON(search_path, simplifyVector = FALSE)
+  is_valid_path <- vapply(search, function(entry) {
+    path <- entry$path
+    is.character(path) && length(path) == 1L && nzchar(path)
+  }, logical(1))
+  is_internal <- vapply(search, function(entry) {
+    path <- entry$path
+    if (is.null(path) || length(path) != 1L) path <- ""
+    basename(sub("[#?].*$", "", path)) %in% internal_pages
+  }, logical(1))
+  search <- search[is_valid_path & !is_internal]
+  writeLines(
+    jsonlite::toJSON(search, auto_unbox = TRUE, null = "null", na = "null"),
+    search_path,
+    useBytes = TRUE
+  )
+}
+
+sitemap_path <- file.path(dst, "sitemap.xml")
+if (file.exists(sitemap_path)) {
+  sitemap <- readLines(sitemap_path, warn = FALSE, encoding = "UTF-8")
+  internal_url <- paste0("/(", paste(internal_stems, collapse = "|"), ")[.]html")
+  writeLines(sitemap[!grepl(internal_url, sitemap)], sitemap_path, useBytes = TRUE)
 }
 
 # ---- accessibility: alt text for the reference example figures ------------
@@ -101,10 +133,32 @@ message("Filled alt text on example figures in ", n_alt, " reference page(s).")
 
 # Fail loudly if any internal page survived, so the privacy invariant is checked
 # on every build rather than trusted.
-still_there <- internal_pages[file.exists(file.path(dst, internal_pages))]
+still_there <- internal_artifacts[file.exists(file.path(dst, internal_artifacts))]
 if (length(still_there)) {
-  stop("Internal pages still present after cleanup: ",
+  stop("Internal files still present after cleanup: ",
        paste(still_there, collapse = ", "))
+}
+
+discovery_files <- file.path(dst, c("search.json", "sitemap.xml", "llms.txt"))
+discovery_files <- discovery_files[file.exists(discovery_files)]
+discovery_text <- paste(
+  unlist(lapply(discovery_files, readLines, warn = FALSE, encoding = "UTF-8")),
+  collapse = "\n"
+)
+internal_url <- paste0("/(", paste(internal_stems, collapse = "|"), ")[.]html")
+if (grepl(internal_url, discovery_text)) {
+  stop("Internal page URL survived in a public discovery file.")
+}
+
+if (file.exists(search_path)) {
+  search <- jsonlite::fromJSON(search_path, simplifyVector = FALSE)
+  bad_path <- vapply(search, function(entry) {
+    path <- entry$path
+    !is.character(path) || length(path) != 1L || !nzchar(path)
+  }, logical(1))
+  if (any(bad_path)) {
+    stop("The public search index contains a missing or malformed path.")
+  }
 }
 
 # Fail if Pandoc has interpreted wildcard function names inside the inline SVG

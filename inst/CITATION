@@ -30,11 +30,57 @@ bibentry(
   year     = "2026",
   note     = paste(
     "R package; the thermal-load-sensitivity framework that freqTLS",
-    "implements (manuscript in preparation). The bundled 'shrimp_lethal',",
-    "'zebrafish_lethal', 'snowgum_psii', and 'dsuzukii' datasets are",
-    "vendored from bayesTLS (CC BY 4.0); please cite bayesTLS whenever you use",
-    "them. The 'dsuzukii' data are from Orsted et al. (2024),",
-    "Zenodo 10.5281/zenodo.10602268."
+    "implements (manuscript in preparation). The brown-shrimp and life-stage",
+    "zebrafish data were obtained from the CC BY 4.0 bayesTLS distribution;",
+    "please cite bayesTLS when using them. Other datasets retain their",
+    "component-specific licences and citations; see the entries below and",
+    "inst/COPYRIGHTS in the source package."
   ),
   url      = "https://github.com/daniel1noble/bayesTLS"
+)
+
+bibentry(
+  bibtype = "Misc",
+  title = "Data for: Thermal Limits of Survival and Reproduction Depend on Stress Duration: A Case Study of Drosophila suzukii",
+  author = c(
+    person("Michael", "Orsted"), person("Quentin", "Willot"),
+    person("Andreas Kirk", "Olsen"), person("Viktor", "Kongsgaard"),
+    person("Johannes", "Overgaard")
+  ),
+  year = "2024",
+  doi = "10.5281/zenodo.10602268",
+  note = "Dataset, CC BY 4.0"
+)
+
+bibentry(
+  bibtype = "Misc",
+  title = "Data for: Interspecific Differences in Thermal Tolerance Landscape Explain Aphid Community Abundance under Climate Change",
+  author = c(
+    person(c("Y", "J"), "Li"), person(c("S", "Y"), "Chen"),
+    person(c("L", "B"), "Jorgensen"), person("J", "Overgaard"),
+    person("D", "Renault"), person("H", "Colinet"),
+    person(c("C", "S"), "Ma")
+  ),
+  year = "2023",
+  doi = "10.5061/dryad.mcvdnck4j",
+  note = paste(
+    "Dataset, Dryad CC0. Associated article: Journal of Thermal Biology",
+    "114: 103583, doi:10.1016/j.jtherbio.2023.103583."
+  )
+)
+
+bibentry(
+  bibtype = "Misc",
+  title = "Data and Code for: Oxygen Availability and Oxygen Delivery but Not Oxidative Stress Shape Heat Tolerance in Diploid and Triploid Zebrafish Larvae",
+  author = c(
+    person("S", "Saruhashi"), person(c("J", "G", "J"), "Boerrigter"),
+    person(c("M", "H", "L"), "Hooymans"), person(c("B", "J"), "Sinclair"),
+    person(c("W", "C", "E", "P"), "Verberk")
+  ),
+  year = "2026",
+  doi = "10.5281/zenodo.20075355",
+  note = paste(
+    "Dataset, CC BY 4.0. Associated article: Journal of Experimental Biology",
+    "229(10): jeb251548, doi:10.1242/jeb.251548."
+  )
 )

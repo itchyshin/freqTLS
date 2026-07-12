@@ -33,3 +33,16 @@ Twins of the bayesTLS \verb{get_*_summary} / \verb{get_*_draws} accessors. \verb
 returns the median + interval tibble; \verb{*_draws} returns the per-replicate
 (bootstrap) tibble — the frequentist analogue of posterior draws.
 }
+\examples{
+\donttest{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+tdt <- extract_tdt(fit, nboot = 10, seed = 1)
+get_z_summary(tdt)
+get_ctmax_draws(tdt)
+}
+}

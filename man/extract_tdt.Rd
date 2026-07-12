@@ -49,6 +49,18 @@ replicate, and returns the same nested \verb{$z} / \verb{$CTmax} / \verb{$T_crit
 frequentist analogue of posterior draws; \verb{*_median} is the maximum-likelihood
 point estimate and \verb{*_lower} / \verb{*_upper} are bootstrap percentiles.
 }
+\examples{
+\donttest{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+tdt <- extract_tdt(fit, nboot = 10, seed = 1)
+tdt$CTmax$summary
+}
+}
 \seealso{
 \code{\link[=fit_4pl]{fit_4pl()}}, \code{\link[=tls]{tls()}}, \code{\link[=get_z_summary]{get_z_summary()}}, \code{\link[=get_ctmax_summary]{get_ctmax_summary()}}
 }

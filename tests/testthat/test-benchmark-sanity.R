@@ -9,18 +9,17 @@
 # the same model and data should agree at this level; a larger gap signals a
 # config mismatch or cache drift, not a method difference.
 #
-# Stan and bayesTLS are NOT available in CI, so the cache rds is absent there and
-# this whole file SKIPS. It only runs on a maintainer machine after
-# data-raw/build_benchmark_cache.R has produced the cache.
+# Stan and bayesTLS are not required in CI: tests read the installed maintainer
+# cache and fit freqTLS live. The cache-presence guard remains for deliberately
+# stripped installations.
 
 cache_path <- system.file("extdata", "bayesTLS_benchmark_cache.rds",
                           package = "freqTLS")
 
-# Fit freqTLS live on a (sub)dataset and return CTmax + z point estimates.
-profile_tls_points <- function(df) {
+# Fit freqTLS live on standardised data and return CTmax + z point estimates.
+profile_tls_points <- function(data) {
   fit <- suppressWarnings(
-    fit_tls(df, y = survived, n = total, time = duration, temp = temp,
-            family = "beta_binomial", tref = 1)
+    fit_4pl(data, family = "beta_binomial", t_ref = 1, quiet = TRUE)
   )
   ct <- get_ctmax(fit, conf.int = FALSE)
   z  <- get_z(fit, conf.int = FALSE)
@@ -28,21 +27,44 @@ profile_tls_points <- function(df) {
 }
 
 test_that("live freqTLS point estimates match the cached bayesTLS medians", {
-  skip(paste("Benchmark cache + profile_tls_points() helper are built from the",
-             "old profileTLS-format data; rebuilt for the bayesTLS raw datasets",
-             "(standardize_data -> fit_4pl) in P6."))
   skip_if_not(file.exists(cache_path) && nzchar(cache_path),
-              "bayesTLS benchmark cache absent (needs Stan + bayesTLS to build)")
+              "bayesTLS benchmark cache absent from this stripped installation")
 
   cache <- readRDS(cache_path)
   expect_true(all(c("meta", "bayesian", "two_stage") %in% names(cache)))
+  expect_match(cache$meta$git_sha, "^[0-9a-f]{40}$")
+  expect_identical(grepl(cache$meta$git_sha, cache$meta$source_url, fixed = TRUE),
+                   TRUE)
+  expect_identical(cache$meta$config$target_surv, "relative")
+  expect_identical(cache$meta$config$temp_effects, "mid")
+  expect_match(cache$meta$freqTLS_note, "absolute LT50", fixed = TRUE)
+  expect_match(cache$meta$freqTLS_note, "approximate comparator", fixed = TRUE)
+  expect_match(cache$meta$rshrimp_note, "installed shrimp_lethal help topic",
+               fixed = TRUE)
+  expect_false(grepl("docs/design", cache$meta$rshrimp_note, fixed = TRUE))
+  expect_setequal(names(cache$meta$datasets),
+                  c("shrimp", "zebrafish", "dsuzukii"))
+  expect_identical(any(grepl("snowgum", capture.output(str(cache)),
+                              ignore.case = TRUE)), FALSE)
   bayes <- cache$bayesian
+  expect_setequal(
+    unique(sub(":.*$", "", bayes$dataset)),
+    c("shrimp", "zebrafish", "dsuzukii")
+  )
 
   data("shrimp_lethal", package = "freqTLS", envir = environment())
   data("zebrafish_lethal", package = "freqTLS", envir = environment())
 
   # ---- shrimp (ungrouped) -------------------------------------------------
-  sp <- profile_tls_points(shrimp_lethal)
+  shrimp <- standardize_data(
+    shrimp_lethal,
+    temp = "Temperature_assay",
+    duration = "Duration_exposure_hours",
+    n_total = "N_individuals_after_trial",
+    mortality = "Mortality_after_trial",
+    duration_unit = "hours"
+  )
+  sp <- profile_tls_points(shrimp)
   b_sh_ct <- bayes$median[bayes$dataset == "shrimp" & bayes$parameter == "CTmax"]
   b_sh_z  <- bayes$median[bayes$dataset == "shrimp" & bayes$parameter == "z"]
   if (length(b_sh_ct) == 1L && is.finite(b_sh_ct)) {
@@ -55,6 +77,14 @@ test_that("live freqTLS point estimates match the cached bayesTLS medians", {
   # ---- zebrafish (per life stage) -----------------------------------------
   for (st in levels(zebrafish_lethal$life_stage)) {
     sub <- zebrafish_lethal[zebrafish_lethal$life_stage == st, , drop = FALSE]
+    sub <- standardize_data(
+      sub,
+      temp = "assay_temp",
+      duration = "duration_h",
+      n_total = "n_total",
+      n_surv = "n_surv",
+      duration_unit = "hours"
+    )
     label <- paste0("zebrafish:", st)
     bp_ct <- bayes$median[bayes$dataset == label & bayes$parameter == "CTmax"]
     bp_z  <- bayes$median[bayes$dataset == label & bayes$parameter == "z"]

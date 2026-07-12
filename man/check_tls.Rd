@@ -14,7 +14,7 @@ check_tls(fit)
 Invisibly, a character vector of the diagnostic codes that fired.
 }
 \description{
-\code{check_tls()} re-runs the data-adequacy diagnostics (SPEC.md S10, items 1-8)
+\code{check_tls()} re-runs the data-adequacy diagnostics
 on a fitted \code{profile_tls} object, including the two post-fit checks that
 \code{\link[=fit_tls]{fit_tls()}} cannot run before the model exists: whether any fitted \code{CTmax} is
 extrapolated beyond the assayed temperatures (item 7), and whether \code{phi} has
@@ -27,6 +27,30 @@ The profile-geometry diagnostics (items 9-12) are emitted by \code{\link[=confin
 \code{\link[=profile]{profile()}} when those are called, not here, because they require the profile
 likelihood.
 }
+\section{Recovery guide}{
+
+The warning code returned by \code{check_tls()} identifies the next action:
+\itemize{
+\item \code{temps}: assay at least three distinct temperatures spanning the survival
+transition.
+\item \code{durations} / \code{durations_per_temp}: assay at least three distinct durations
+per temperature, with times on both sides of the transition.
+\item \code{no_mortality}: extend to hotter or longer exposures until mortality occurs.
+\item \code{all_mortality}: add cooler or shorter exposures that retain survivors.
+\item \code{threshold}: extend the design until observed survival straddles 0.5.
+\item \code{up_not_approached} / \code{low_not_approached}: add milder / harsher conditions
+approaching survival 1 / 0, or do not interpret that asymptote.
+\item \code{ctmax_extrapolated}: expand the assayed temperature range to bracket CTmax;
+otherwise report it explicitly as extrapolated.
+\item \code{phi_binomial_limit}: consider the simpler binomial family.
+}
+
+After changing the design or family, refit and rerun \code{check_tls()}. For an
+existing data set that cannot be augmented, use the warning to limit the
+scientific claim; \code{vignette("profile-likelihood")} explains the strict
+\code{fallback = FALSE} diagnostic and the default bootstrap recovery attempt.
+}
+
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,

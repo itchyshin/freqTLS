@@ -41,10 +41,10 @@ durations and scored alive/dead after recovery. One row per assay group;
 \code{branch} flags the heat vs cold series. Subset to one \code{branch} (and
 typically one \code{age}) and fit \code{CTmax} and \code{z} as functions of
 \code{species} in one joint 4PL to compare species with profile-likelihood
-confidence intervals on every quantity.
+confidence intervals on those direct parameters.
 }
 \examples{
-\dontrun{
+\donttest{
 a <- subset(aphid_tdt, branch == "heat" & age == "6")
 std <- standardize_data(a, temp = "temp", duration = "duration_min",
                         n_total = "n_total", n_surv = "n_surv",

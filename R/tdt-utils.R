@@ -93,6 +93,13 @@ clock_to_minutes <- function(x) {
 
 #' Error on missing columns
 #'
+#' @param data A data frame or data-frame-like object whose column names are
+#'   checked.
+#' @param cols Character vector of required column names. Missing values and
+#'   empty strings are ignored.
+#' @param arg_name Label used in the error message when columns are missing.
+#' @return `TRUE`, invisibly, when every requested column is present; otherwise
+#'   the function raises an error naming the missing columns.
 #' @keywords internal
 tdt_check_columns <- function(data, cols, arg_name = "columns") {
   cols <- cols[!is.na(cols) & nzchar(cols)]
@@ -106,6 +113,10 @@ tdt_check_columns <- function(data, cols, arg_name = "columns") {
 
 #' Format bare names as `(1 | name)` random-effect terms
 #'
+#' @param random_effects Optional character vector of grouping-variable names
+#'   or already formatted random-intercept terms.
+#' @return A character vector of random-intercept terms. Bare names are wrapped
+#'   as `(1 | name)`; `NULL` or an empty input returns `character()`.
 #' @keywords internal
 tdt_format_random_effects <- function(random_effects = NULL) {
   if (is.null(random_effects) || length(random_effects) == 0) return(character())
@@ -118,6 +129,9 @@ tdt_format_random_effects <- function(random_effects = NULL) {
 
 #' Extract variable names from random-effect terms
 #'
+#' @param random_effects Optional character vector of grouping-variable names
+#'   or random-intercept terms accepted by [tdt_format_random_effects()].
+#' @return A character vector containing the unique grouping-variable names.
 #' @keywords internal
 tdt_random_effect_variables <- function(random_effects = NULL) {
   terms <- tdt_format_random_effects(random_effects)
@@ -170,7 +184,7 @@ compute_4pl_bounds <- function(lower = 0, upper = 1,
 #'
 #' Maps a free-text duration/time unit (e.g. `"hours"`, `"min"`, `"s"`) to its
 #' length in minutes. Used to derive the model-to-output `time_multiplier` in
-#' [extract_tdt()] and [derive_tdt_curve()] from a workflow's `duration_unit`.
+#' [extract_tdt()] from a workflow's `duration_unit`.
 #'
 #' @param unit Character scalar time-unit label.
 #' @return Numeric scalar: the unit's length in minutes.

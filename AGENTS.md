@@ -18,16 +18,20 @@ implementation slice.
   midpoint reparameterised **directly** in `CTmax` and `z` (thermal
   sensitivity) so that both headline quantities are direct, profile-able
   coordinates.
-- Support **count** response data only: `binomial` and `beta_binomial`
-  (overdispersion parameter `phi`).
-- Return **profile-likelihood confidence intervals** for `CTmax`, `z`, and
-  the shape parameters, displayed as Confidence Eyes (never posterior
-  densities; see the visual contract below).
-- Model the temperature effect through the midpoint only (shared `low`, `up`,
-  `k`), matching the `bayesTLS` constant-shape configuration so the two can be
-  benchmarked fairly.
-- Support fixed-effect groups on `CTmax` and `log_z` via `~ 0 + group`, so each
-  group has its own direct, profile-able `CTmax_g` and `z_g`.
+- Support count responses (`binomial`, `beta_binomial`) and continuous
+  proportions in `(0, 1)` (`beta`), with precision/overdispersion parameter
+  `phi` for the latter two families.
+- Return Wald, profile-likelihood, and parametric-bootstrap confidence
+  intervals. Profile intervals are available for supported direct fixed-effect
+  targets; `up`, variance components, and general shape slopes use the
+  documented Wald/bootstrap routes. Display intervals as Confidence Eyes,
+  never posterior densities.
+- Use the constant-shape, midpoint-only configuration by default so the
+  `bayesTLS` benchmark remains matched. Optional independent fixed-effect
+  designs may model `low`, `up`, and `log_k` outside that benchmark.
+- Support column and `tls_bf()` formula interfaces, fixed effects on direct
+  coordinates, and one independent random intercept per supported coordinate
+  (`CTmax`, `log_z`, `low`, `log_k`).
 - Benchmark freqTLS against `bayesTLS` (Bayesian) and the classical two-stage
   estimator on shared, vendored datasets, using a version-stamped cache.
 
@@ -37,17 +41,19 @@ introduced by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in the
 and `CTmax` are theirs; freqTLS contributes the TMB likelihood, the direct
 `CTmax`/`log_z` reparameterisation, and the profile-likelihood machinery.
 
-### Non-goals for v0.1
+### Non-goals for v0.1.0
 
 These belong to a later phase or to a sibling package, and must not be described
 as implemented:
 
-- Beta / continuous responses (snowgum-style proportion data); time-to-event;
-  multi-trait responses.
-- Heat-injury / repair sub-models.
-- Temperature effects on `low`, `up`, or `k`.
+- Time-to-event and multi-trait / multivariate responses.
+- Fitting heat-injury or repair-rate sub-models. Deterministic heat-injury
+  prediction from a fitted 4PL and user-supplied repair scenarios are supported.
 - Absolute-threshold default (the default is the **relative** threshold).
-- Random effects; a formula DSL; CRAN hardening.
+- Correlated, random-slope, crossed, nested, or multiple random effects per
+  coordinate; any random effect on `up`.
+- Universal profile support for `up`, variance components, or general
+  continuous shape slopes.
 
 General distributional regression belongs to `drmTMB`. The full Bayesian
 workflow, heat-injury models, and posterior inference belong to `bayesTLS`.
@@ -56,7 +62,7 @@ workflow, heat-injury models, and posterior inference belong to `bayesTLS`.
 
 Keep these stable across code, docs, tests, equations, and issues:
 `CTmax`, `z`, `log_z`, `low`, `up`, `k`, `phi`, `mid`, `tref`, `family_code`
-(0 = binomial, 1 = beta-binomial), `relative` vs `absolute` threshold. Use
+(0 = binomial, 1 = beta-binomial, 2 = beta), `relative` vs `absolute` threshold. Use
 "confidence" interval language; never "posterior" or
 "credible".
 
@@ -66,7 +72,7 @@ Keep these stable across code, docs, tests, equations, and issues:
 2. Do not add user-facing functions without roxygen2 documentation and at least
    one runnable example.
 3. Do not change the model parameterisation (the `CTmax`/`z`/`mid` mapping or
-   the nested-gap asymptotes) without updating
+   the disjoint-bounds asymptotes) without updating
    `docs/design/01-model-and-parameterisation.md`.
 4. Do not change likelihood parameterisation (the binomial or beta-binomial NLL,
    the `phi` convention, the probability clamp) without updating
@@ -74,17 +80,19 @@ Keep these stable across code, docs, tests, equations, and issues:
 5. Do not change the profile-likelihood algorithm, targets, transforms, or the
    identifiability warnings without updating
    `docs/design/04-profile-likelihood.md`.
-6. Keep the temperature effect through the midpoint only until a design decision
-   in `docs/dev-log/decisions.md` says otherwise.
+6. Keep the benchmark configuration constant-shape and midpoint-only. Shape
+   predictors outside that benchmark must remain explicit and documented in
+   `docs/dev-log/decisions.md`.
 7. Every meaningful change should update `docs/dev-log/check-log.md` with exact
    command text and an interpretation, not a summary.
 8. Every completed task or phase should create an after-task or after-phase
    report following `docs/design/10-after-task-protocol.md`.
 9. If code is ported or closely adapted from `drmTMB`, `gllvmTMB`, or another
    package, document the source file, license, and adaptation in
-   `inst/COPYRIGHTS` before treating the change as complete. Vendored `bayesTLS`
-   **data** is CC BY 4.0: attribute it in `R/data.R`, `inst/CITATION`, and the
-   README.
+   `inst/COPYRIGHTS` before treating the change as complete. Record each data
+   component's source-specific licence in the data ledger and attribution files.
+   Snow-gum source material is CC BY-NC 4.0 and must remain build-excluded unless
+   compatible written redistribution permission is recorded.
 10. Keep public capability synchronized in one commit: when a capability is
     added or removed, update `README.Rmd`, `ROADMAP.md`, `NEWS.md`,
     `docs/dev-log/known-limitations.md`, `docs/design/46-capability-matrix.md`,
@@ -107,7 +115,6 @@ Project-specific commands:
 ```sh
 Rscript tools/checkpoint.R --goal "current task" --next "next command or edit"
 sh tools/start-mission-control.sh --background   # local dashboard on port 8767
-Rscript data-raw/make_benchmark_data.R           # rebuild vendored data (R-SHRIMP)
 Rscript data-raw/build_benchmark_cache.R          # maintainer-only: bayesTLS cache
 ```
 
@@ -271,3 +278,8 @@ include reference documentation and, when substantial, an article or tutorial.
 Keep `_pkgdown.yml` synchronized with exported functions and vignettes. The
 built site is written to `pkgdown-site/` (kept out of the package build) so it
 does not collide with the durable `docs/` governance tree.
+
+<!-- shinichi-hub -->
+> Read first — personal operating contract and second brain:
+> `/Users/z3437171/Dropbox/Github Local/Shinichi/AGENTS.md` (repository rules
+> override the hub where they differ).

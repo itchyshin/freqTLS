@@ -1,7 +1,7 @@
 ## Publication plots for freqTLS fits (Phase 4, Florence-owned).
 ##
 ## The Confidence Eye is freqTLS's default uncertainty display
-## (SPEC.md S13). It REPLACES posterior-density visuals: freqTLS
+## It replaces posterior-density visuals: freqTLS
 ## intervals are likelihood *confidence* intervals, so all wording is
 ## "confidence", never "posterior"/"credible". The lens
 ## geometry adapts gllvmTMB's `.eye_polygon_df()` and
@@ -78,11 +78,11 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #' hollow point estimate. The shallow horizontal lens reads as a confidence
 #' *interval*, never a posterior density -- freqTLS intervals are likelihood
 #' confidence intervals, so the wording is "confidence", never
-#' "posterior" (SPEC.md S13). The layout follows the gllvmTMB / drmTMB
+#' "posterior". The layout follows the gllvmTMB / drmTMB
 #' Confidence-Eye contract.
 #'
 #' @details
-#' ## Honest fallback (R-PROFILE)
+#' ## Honest fallback for open profiles
 #' When a profile does not close (`conf.status` is `"open_lower"`,
 #' `"open_upper"`, `"open_both"`, or a bound is `NA`), no lens is drawn for that
 #' row: a hollow point marks the estimate and the subtitle flags the open

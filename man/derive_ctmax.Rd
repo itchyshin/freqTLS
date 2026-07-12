@@ -36,6 +36,8 @@ Solving \code{surv = low + (up - low) * plogis(-k (log10(duration) - mid))} with
 \deqn{temp = CTmax - z\Big(\log_{10} duration - \log_{10} t_{ref} +
   \mathrm{qlogis}\!\big(\tfrac{surv - low}{up - low}\big) / k\Big).}
 The target \code{surv} must lie strictly between \code{low} and \code{up}.
+For a random-effects fit this is a population-level derived quantity; it does
+not add a group BLUP.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

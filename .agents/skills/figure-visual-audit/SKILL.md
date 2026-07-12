@@ -58,9 +58,8 @@ bars, centre lines through the eye, and row guide-lines through the eye.
 - Captions must expose the interval source (profile or Wald) and the
   transformation scale.
 - Honest fallback (ties R-PROFILE): a non-closing profile renders a hollow point
-  and an open/annotated lens, never a fabricated closed eye. Reuse the
-  gllvmTMB behaviour where the eye refuses to draw a lens when no finite
-  `(lower, upper)` exists.
+  with no lens, never a fabricated closed eye. Reuse the gllvmTMB behaviour
+  where the eye refuses to draw a lens when no finite `(lower, upper)` exists.
 - The comparison vignette may place a bayesTLS posterior density beside the
   freqTLS Confidence Eye for the same `CTmax`/`z` as a deliberate teaching
   device; label both clearly.

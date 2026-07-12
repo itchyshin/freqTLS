@@ -22,11 +22,6 @@ freqTLS uses the column contract
   `dead` indicator to `(temp, time, sex)` cells (`total = n()`,
   `survived = sum(dead == 0)`); then `temp = temp`, `duration = time` (minutes),
   `group = sex`, `tref = 240` minutes. Count data, so the full three-way applies.
-- **snow-gum PSII** (`snowgum_psii`, ungrouped, **continuous proportion**):
-  `temp = temp`, `duration = duration` (minutes), `proportion = prop`,
-  `tref = 5` minutes, **beta** family. A continuous proportion has no count
-  denominator, so the classical two-stage path does not apply; this dataset is a
-  two-way `bayesTLS` (beta) vs `freqTLS` comparison.
 
 ## The R-SHRIMP data fix
 
@@ -57,25 +52,45 @@ The comparison reports point estimates plus CI width and asymmetry; zebrafish is
 midpoint threshold (R-RELABS) -- which is the `freqTLS` `CTmax` parameter -- and
 the **constant-shape** model, with the time unit and `tref` matched per dataset
 (R-UNITS: hours/`tref = 1` for shrimp and zebrafish, minutes/`tref = 240` for
-*D. suzukii*, minutes/`tref = 5` for snow-gum). The classical two-stage estimates
+*D. suzukii*). The classical two-stage estimates
 the absolute LT50 by construction; for the near-0/near-1 lethal asymptotes of the
-count datasets the relative midpoint and the absolute LT50 coincide. A fairness
+count datasets the relative midpoint and the absolute LT50 are close. A fairness
 footnote states this.
 
 ## Cache and provenance (R-STALE)
 
 Stan will not run on CI, so the benchmark reads a maintainer-built cache at
 `inst/extdata/bayesTLS_benchmark_cache.rds` (summaries plus a `meta` block:
-`bayesTLS_version`, `git_sha`, `cmdstan_version`, `date_built`, `seed`, the
-configuration, and the R-SHRIMP note). `data-raw/build_benchmark_cache.R` is the
-maintainer-run builder. The vignette `vignettes/comparing-to-bayesTLS.Rmd` shows
+`bayesTLS_version`, `git_sha`, `source_url`, `cmdstan_version`, `date_built`,
+`seed`, `config`, `datasets`, `rshrimp_note`, and `freqTLS_note`).
+`data-raw/build_benchmark_cache.R` is the
+maintainer-run builder. It requires a pinned `bayesTLS` checkout (or verified
+`BAYESTLS_GIT_SHA`) and stops rather than writing a cache with an unknown commit.
+The vignette `vignettes/comparing-to-bayesTLS.Rmd` shows
 the live bayesTLS calls with `eval = FALSE`, reads the cache with `eval = TRUE`,
 runs freqTLS live, and prints the provenance. `test-benchmark-sanity` is a
 tripwire that checks the cached numbers against a live freqTLS fit within a
 loose tolerance, and a one-command regeneration path keeps the cache current.
+The release cache was freshly rebuilt on 2026-07-11 against `bayesTLS` 1.0.0 at
+commit `578740f20f3a2e6e81b3b700b1d0f0e5a06ecf8a`, using CmdStan 2.36.0. It
+contains only shrimp, zebrafish, and *D. suzukii* summaries; permission-pending
+snow-gum material was excluded at build time. The `freqTLS_note` records that
+freqTLS is fitted live and explains the matched model configuration and the
+classical comparator's threshold difference. A future rebuild must retain the
+snow-gum exclusion unless compatible written permission is recorded; a
+numerical summary is not licence-independent merely because it no longer
+contains the input rows.
 
 ## Licence (R-LICENSE)
 
-The vendored data is CC BY 4.0. Attribution lives in `R/data.R` (`@source`),
-`inst/CITATION` (a freqTLS plus bayesTLS bibentry), and the README; freqTLS
-code is GPL-3, with provenance in `inst/COPYRIGHTS`.
+Licensing is component-specific; `docs/design/47-data-license-ledger.md` is the
+release gate. Brown-shrimp and life-stage zebrafish files were obtained from the
+CC BY 4.0 `bayesTLS` distribution. The *D. suzukii* assay data from Zenodo
+record 10602268 are CC BY 4.0, and the aphid assay data are CC0. The unused
+NicheMapR/NCEP microclimate trace is excluded because the workflow licence did
+not establish the complete underlying-data redistribution chain. The snow-gum
+source is **CC BY-NC 4.0**, not CC BY 4.0. Both environmental traces and the
+snow-gum raw files, derived dataset, and case-study vignette are retained under
+the build-excluded `data-raw/licensing-pending/` tree until compatible terms or
+written permission are recorded. Attribution alone does not cure a
+non-commercial or missing-licence restriction.

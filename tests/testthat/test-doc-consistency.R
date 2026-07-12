@@ -55,7 +55,7 @@ test_that("row counts stated in known-limitations.md match the shipped data", {
   txt <- paste(readLines(doc, warn = FALSE), collapse = "\n")
   ns <- asNamespace("freqTLS")
   data_names <- c("aphid_tdt", "dsuzukii", "shrimp_lethal", "shrimp_sublethal",
-                  "snowgum_psii", "zebrafish_lethal", "zebrafish_o2")
+                  "zebrafish_lethal", "zebrafish_o2")
   rx <- "`([a-z_]+)` \\(([0-9,]+) rows"
   hits <- regmatches(txt, gregexpr(rx, txt, perl = TRUE))[[1]]
   bad <- character(0)
@@ -70,4 +70,51 @@ test_that("row counts stated in known-limitations.md match the shipped data", {
   expect_identical(bad, character(0),
                    info = paste("row-count drift in known-limitations.md:",
                                 paste(bad, collapse = "; ")))
+})
+
+test_that("every documented callable has return-value documentation", {
+  man_dir <- file.path(repo_root(), "man")
+  skip_if_not(dir.exists(man_dir), "source tree not available")
+  rd_files <- list.files(man_dir, pattern = "[.]Rd$", full.names = TRUE)
+  missing_value <- vapply(rd_files, function(f) {
+    txt <- readLines(f, warn = FALSE)
+    is_dataset <- any(grepl("^\\\\keyword\\{datasets\\}", txt))
+    !is_dataset && any(grepl("^\\\\usage\\{", txt)) &&
+      !any(grepl("^\\\\value\\{", txt))
+  }, logical(1))
+  expect_identical(
+    basename(rd_files[missing_value]), character(0),
+    info = "Rd topics with a callable usage block must document their return value"
+  )
+})
+
+test_that("the function-map SVG is declared as an installed vignette extra", {
+  vignette_dir <- file.path(repo_root(), "vignettes")
+  source_svg <- file.path(vignette_dir, "freqTLS_function_map.svg")
+  extras <- file.path(vignette_dir, ".install_extras")
+  skip_if_not(all(file.exists(c(source_svg, extras))),
+              "source vignette tree not available")
+  installed_names <- trimws(readLines(extras, warn = FALSE))
+  expect_true("freqTLS_function_map.svg" %in% installed_names)
+})
+
+test_that("release docs distinguish five articles from six shipped datasets", {
+  files <- file.path(repo_root(),
+                     c("ROADMAP.md", "docs/dev-log/known-limitations.md"))
+  skip_if_not(all(file.exists(files)), "source tree not available")
+  txt <- paste(unlist(lapply(files, readLines, warn = FALSE)), collapse = "\n")
+  expect_false(grepl("six case studies", txt, fixed = TRUE))
+  expect_true(grepl("five case-study articles", txt, fixed = TRUE))
+})
+
+test_that("licensing-pending environmental traces are not installed", {
+  root <- repo_root()
+  installed <- file.path(
+    root, "inst", "extdata",
+    c("data_temp_trace_aphid_summer2016.csv",
+      "orsted_2024/orsted2024_nichemapr_rennes_2018_hourly.csv.gz")
+  )
+  skip_if_not(dir.exists(file.path(root, "inst", "extdata")),
+              "source tree not available")
+  expect_false(any(file.exists(installed)))
 })

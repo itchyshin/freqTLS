@@ -9,7 +9,9 @@
 #'
 #' The frequentist twin of `bayesTLS::predict_survival_curves()`. Evaluates the
 #' fitted 4PL survival probability over a temperature-by-duration grid and adds
-#' parametric-bootstrap confidence bands.
+#' parametric-bootstrap confidence bands. For random-effects fits the curves are
+#' population-level: random intercepts are integrated during bootstrap refits,
+#' but no fitted group BLUP is added to the reported curve.
 #'
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
 #' @param temps Temperatures to predict at (default: the observed assay temps).
@@ -23,6 +25,19 @@
 #'   `[<group>,] temp, duration, survival_lower, survival_median, survival_upper`)
 #'   and `$meta`.
 #' @seealso [fit_4pl()], [predict_survival_surface()], [tls()]
+#' @examples
+#' \donttest{
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' curves <- predict_survival_curves(
+#'   fit, temps = c(34, 36), durations = c(1, 4), nboot = 10, seed = 1
+#' )
+#' curves$summary
+#' }
 #' @export
 predict_survival_curves <- function(object, temps = NULL, durations = NULL,
                                     nboot = 500L, level = 0.95, seed = NULL,

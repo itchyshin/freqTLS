@@ -8,13 +8,12 @@
 #' the profile-likelihood confidence interval. Because the profile is taken on the
 #' unconstrained coordinate and the endpoints are then transformed by a monotone
 #' function, the interval is exactly equivariant: the `z` interval equals `exp()`
-#' of the internal `log_z` interval (the headline equivariance check, SPEC.md
-#' S10).
+#' of the internal `log_z` interval (the headline equivariance check).
 #'
 #' The algorithm is a map-refit profile: the target coordinate is fixed with
 #' TMB's `map` mechanism and the rest re-optimised, mirroring the bracket-then-
 #' [stats::uniroot()] endpoint solver in `drmTMB::R/profile.R:2314-2373`. See
-#' `docs/design/04-profile-likelihood.md`.
+#' `vignette("profile-likelihood")`.
 #'
 #' @section Targets:
 #' \tabular{lll}{
@@ -33,7 +32,7 @@
 #' has its own coordinate `beta_up`, but freqTLS does not yet profile it (the profile
 #' path is wired for `low` but not `up` — symmetric work, simply not implemented).
 #' freqTLS falls back to the delta-method Wald interval for `up`
-#' and says so (SPEC.md S10). Group contrasts (`dCTmax`, `dlog_z`) are profiled
+#' and says so. Group contrasts (`dCTmax`, `dlog_z`) are profiled
 #' directly by recoding the design so the contrast is itself a coordinate.
 #'
 #' @param fitted A `profile_tls` fit from [fit_tls()].
@@ -98,7 +97,7 @@ profile.profile_tls <- function(fitted, parm, level = 0.95, npoints = 30L,
   if (identical(target$kind, "up")) {
     cli::cli_inform(c(
       "{.val {target$parm}} is profiled with the delta-method Wald interval.",
-      i = "The profile path is not yet wired for the disjoint-bounds {.val up} coordinate {.code beta_up} (SPEC.md S10)."
+      i = "The profile path is not yet wired for the disjoint-bounds {.val up} coordinate {.code beta_up}; use the reported Wald interval or request a bootstrap interval."
     ))
     return(tls_up_wald_profile(fitted, level, target$parm))
   }
@@ -328,8 +327,8 @@ tls_shape_index <- function(parm, base, internal_base, par_names, levels_g) {
 #'
 #' Returns a function `f(value)` giving the profile negative log-likelihood with
 #' the target coordinate fixed at `value` and all other coordinates re-optimised
-#' from the fitted MLE (warm start). Inner non-convergence yields `NA` (SPEC.md
-#' S10, warning 12) rather than a misleading finite value.
+#' from the fitted MLE (warm start). Inner non-convergence yields `NA` rather
+#' than a misleading finite value.
 #'
 #' @param fit A `profile_tls` fit.
 #' @param target A target description (`kind = "coord"`).
@@ -484,7 +483,7 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
   if (anyNA(dev)) {
     cli::cli_warn(c(
       "Inner re-optimisation did not converge at {sum(is.na(dev))} grid point{?s} while profiling {.val {target$parm}}.",
-      i = "Those points are reported as {.val NA}; the interval is taken from the points that did converge (SPEC.md S10, warning 12)."
+      i = "Those points are reported as {.val NA}; the interval is taken from the points that did converge."
     ))
   }
 
@@ -496,7 +495,7 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
   if (is.finite(min_dev) && min_dev < -1e-3) {
     cli::cli_warn(c(
       "The profile deviance for {.val {target$parm}} dips below zero away from the reported MLE (min {signif(min_dev, 3)}).",
-      i = "The reported optimum may be on a boundary or not a true interior maximum; the profile-t calibration of the interval is unreliable (SPEC.md S10, warning 10)."
+      i = "The reported optimum may be on a boundary or not a true interior maximum; the profile-t calibration of the interval is unreliable."
     ))
   }
 
@@ -507,7 +506,7 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
   if (status_multimodal) {
     cli::cli_warn(c(
       "The profile deviance for {.val {target$parm}} is non-monotone (multiple local minima).",
-      i = "The interval may not be a single connected region; inspect {.code plot(profile(fit, \"{target$parm}\"))} (SPEC.md S10, warning 11)."
+      i = "The interval may not be a single connected region; inspect {.code plot(profile(fit, \"{target$parm}\"))}."
     ))
   }
 
@@ -524,8 +523,8 @@ tls_profile_ci_curve <- function(fit, target, level, npoints, trace) {
     # warning 9: profile did not close.
     cli::cli_warn(c(
       "The profile likelihood for {.val {target$parm}} did not close on the {open_side} side{?s}: {.val {target$parm}} is weakly identified.",
-      i = "Returning {.val NA} on the open side rather than a fabricated bound (R-PROFILE).",
-      i = "Consider {.pkg bayesTLS} or a bootstrap for this parameter (SPEC.md S10, warning 9)."
+      i = "Returning {.val NA} on the open side rather than a fabricated bound.",
+      i = "Consider {.pkg bayesTLS} or a bootstrap for this parameter."
     ))
   }
 
@@ -625,7 +624,7 @@ tls_profile_multimodal <- function(grid, dev, theta_hat) {
 #' Steps outward from the MLE along `direction` until the deviance rises above
 #' `cutoff` (a closed side), then solves `D(theta) = cutoff` with
 #' [stats::uniroot()]. Returns `NA` when no bracket is found within the search
-#' (an open / non-closing side, SPEC.md S10 warning 9). Adapted from the
+#' (an open / non-closing side). Adapted from the
 #' bracket-then-uniroot endpoint solver in `drmTMB::R/profile.R:2314-2363`.
 #'
 #' @param dev_fun Deviance function on the internal coordinate.
@@ -889,7 +888,7 @@ tls_contrast_refit <- function(fit, target) {
 #' Wald/delta-method "profile" object for the upper asymptote `up`
 #'
 #' Under disjoint bounds `up` has its own coordinate `beta_up`, but freqTLS does not
-#' yet profile it, so it reports the delta-method Wald interval for `up` (SPEC.md S10). The
+#' yet profile it, so it reports the delta-method Wald interval for `up`. The
 #' returned object has the `"profile_tls_profile"` shape but carries no deviance
 #' curve (`deviance` is empty) and an `interval_type`/`scale` of `"wald"`.
 #'
@@ -950,7 +949,7 @@ print.profile_tls_profile <- function(x, digits = 4, ...) {
 #' marks the profile-t cutoff `qt(1 - alpha/2, df)^2`; a solid vertical line marks the
 #' point estimate; dashed vertical lines mark the interval endpoints when they
 #' are finite. The wording is deliberately "confidence" -- this
-#' is a likelihood curve, never a posterior (SPEC.md S13). A non-closing side is
+#' is a likelihood curve, never a posterior. A non-closing side is
 #' annotated rather than drawn as a closed bound.
 #'
 #' This is the per-parameter profile curve; the full Confidence-Eye interval
