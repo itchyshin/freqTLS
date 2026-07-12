@@ -2,13 +2,12 @@
 # standardize_data() before fitting. These checks pin the column contract the
 # case studies and standardize_data() examples rely on.
 
-test_that("all seven case-study datasets load with their key columns", {
+test_that("all six case-study datasets load with their key columns", {
   spec <- list(
     shrimp_lethal    = c("Temperature_assay", "Duration_exposure_hours",
                          "N_individuals_after_trial", "Mortality_after_trial"),
     shrimp_sublethal = c("assay_temp", "time_to_event"),
     zebrafish_lethal = c("assay_temp", "duration_h", "n_total", "n_surv", "life_stage"),
-    snowgum_psii     = c("Temp", "Time", "fvfm_prop"),
     dsuzukii         = c("temp", "time", "sex", "dead"),
     zebrafish_o2     = c("oxygen", "temp", "duration_min", "n_total", "n_surv"),
     aphid_tdt        = c("species", "age", "branch", "temp", "duration_min",

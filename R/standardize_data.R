@@ -19,8 +19,9 @@
 #'   recorded as `"proportion"`.
 #'
 #' If the dataset spans multiple categories (life stages, species, populations,
-#' etc.), filter to one category before calling this function and fit a separate
-#' model per subset — the fitter does not estimate category-level effects.
+#' etc.), retain the grouping column. Use `fit_4pl(by = "group")` or grouped
+#' formulas in [tls_bf()] to estimate category-level effects, or filter first
+#' when separate models are scientifically preferable.
 #'
 #' @param data           Raw data frame or tibble.
 #' @param temp           Column name of the assay temperature (°C).
@@ -192,7 +193,7 @@ standardize_data <- function(data,
   if (n_temp < 2L)
     warning("Only ", n_temp, " unique assay temperature(s) after cleaning: the ",
             "temperature slope (z = -1/slope) is not identified by the data and ",
-            "would be driven entirely by the prior. Provide multiple assay ",
+            "cannot be estimated from this design. Provide multiple assay ",
             "temperatures (>= 3 recommended) for an identified z.", call. = FALSE)
 
   if (is.null(temp_mean)) temp_mean <- mean(out$temp, na.rm = TRUE)

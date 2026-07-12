@@ -22,12 +22,13 @@ knitr::opts_chunk$set(
 relationship, the credit, and a reproducible three-way comparison on the shared
 benchmark datasets.
 
-**This vignette builds without Stan.** The live `bayesTLS` (Stan) calls are shown for
-reproducibility but are **not evaluated** here; the Bayesian and classical two-stage
-numbers are read from a maintainer-built cache **if it is present**. The `freqTLS`
-fits run live. When the cache is absent (as in a fresh checkout, and in continuous
-integration), the vignette shows the recipe and the `freqTLS` side, and explains how
-to populate the cache.
+**This vignette builds without Stan.** The live `bayesTLS` (Stan) calls are shown as
+display-only R code for reproducibility; the Bayesian and classical two-stage
+numbers are read from the version-stamped maintainer-built cache shipped in
+`inst/extdata/bayesTLS_benchmark_cache.rds`. The `freqTLS` fits run live. A source
+checkout and installed package therefore use the same cached comparator results
+without requiring Stan; the recipe below explains how a maintainer rebuilds the
+cache from its pinned `bayesTLS` source commit.
 
 ```{r setup}
 library(freqTLS)
@@ -50,9 +51,12 @@ confidence intervals.
 
 ## The three-way design
 
-The benchmark compares three estimators of the same constant-shape 4PL, all locked to the
-**relative** mortality threshold and a matched time unit / reference time so the
-comparison is fair (`docs/design/06-benchmark-protocol.md`):
+The benchmark compares three estimators of the same constant-shape 4PL with a
+matched time unit and reference time. The two model fits use the **relative**
+midpoint threshold. The classical two-stage estimator uses absolute LT50; it is
+shown beside them only for lethal datasets whose fitted asymptotes are near zero
+and one, where the two thresholds are close. This is the fairness boundary used
+throughout this article:
 
 | Estimator | Path | Uncertainty |
 | --- | --- | --- |
@@ -67,10 +71,10 @@ likelihood interval.
 
 ## The reproducible recipe (not run here)
 
-These chunks are the exact `bayesTLS` calls used to build the cache on a machine with
-Stan installed. They are shown with `eval = FALSE` so this vignette never needs Stan.
+This is the exact `bayesTLS` recipe used to build the cache on a machine with Stan
+installed. It is a plain fenced code block, not an executable vignette chunk.
 
-```{r bayes-recipe, eval = FALSE}
+```r
 library(bayesTLS)
 data(shrimp_lethal, package = "freqTLS")
 
@@ -109,9 +113,14 @@ tci <- bayesTLS::ts_ci(s2, method = "delta", level = 0.95,
                        t_ref = 1, time_multiplier = 1)  # $CTmax_1hr and $z blocks
 ```
 
-To populate the cache, a maintainer runs `data-raw/build_benchmark_cache.R` on a Stan
-machine; it writes `inst/extdata/bayesTLS_benchmark_cache.rds` (the Bayesian and
-two-stage summaries plus a `meta` provenance block: `bayesTLS_version`, `git_sha`,
+To populate the cache, a maintainer works from a clone of the source repository and
+runs the repository-only script `data-raw/build_benchmark_cache.R` on a Stan machine,
+with `bayesTLS` installed from a pinned checkout and `BAYESTLS_GIT_SHA` set to its
+verified 40-character commit when the installed package lacks `RemoteSha` metadata.
+The builder refuses to write a cache if it cannot record that exact source commit.
+The script is not installed with the package; it writes
+`inst/extdata/bayesTLS_benchmark_cache.rds` (the Bayesian and
+two-stage summaries plus a `meta` provenance block: `bayesTLS_version`, `git_sha`, `source_url`,
 `cmdstan_version`, `date_built`, `seed`, the configuration, and the data-reconstruction note).
 
 ## The freqTLS side (live)
@@ -161,48 +170,62 @@ is suppressed here only to keep the vignette output tidy.)
 
 The cache holds the maintainer-built `bayesTLS` (posterior) and classical
 two-stage summaries; the `freqTLS` column is computed live as this page
-renders. All three use the matched configuration (beta-binomial, relative
-threshold, constant shape, `tref = 1` hour), so they target the *same* fitted
-curve.
+renders. The two model fits use the matched beta-binomial, relative-threshold,
+constant-shape configuration at `tref = 1` hour, so they target the same fitted
+curve. The classical column uses absolute LT50 and is the approximate comparator
+described above.
 
 ```{r three-way, echo = FALSE}
 cache_path <- system.file("extdata", "bayesTLS_benchmark_cache.rds", package = "freqTLS")
-has_cache  <- nzchar(cache_path) && file.exists(cache_path)
+if (!nzchar(cache_path) || !file.exists(cache_path)) {
+  stop("The shipped bayesTLS benchmark cache is missing; reinstall freqTLS from a complete source tarball.")
+}
+cache <- readRDS(cache_path)
 
 fmt <- function(est, lo, hi) {
   ifelse(is.na(est), "--", sprintf("%.2f [%.2f, %.2f]", est, lo, hi))
 }
 
-if (has_cache) {
-  cache <- readRDS(cache_path)
-  pro <- confint(shrimp_fit, c("CTmax", "z"), method = "profile")  # confint() delegates to the engine fit
+pro <- confint(shrimp_fit, c("CTmax", "z"), method = "profile")  # confint() delegates to the engine fit
 
-  pick <- function(df, parm, cols) {
-    r <- df[df$dataset == "shrimp" & df$parameter == parm, ]
-    stats::setNames(as.numeric(r[cols]), c("est", "lo", "hi"))
-  }
-  ts_ct <- pick(cache$two_stage, "CTmax", c("estimate", "lower", "upper"))
-  ts_z  <- pick(cache$two_stage, "z",     c("estimate", "lower", "upper"))
-  by_ct <- pick(cache$bayesian,  "CTmax", c("median",   "lower", "upper"))
-  by_z  <- pick(cache$bayesian,  "z",     c("median",   "lower", "upper"))
-  pr_ct <- pro[pro$parameter == "CTmax", ]
-  pr_z  <- pro[pro$parameter == "z", ]
-
-  knitr::kable(data.frame(
-    Quantity = c("CTmax (°C)", "z (°C / decade)"),
-    `Two-stage (delta CI)`    = c(fmt(ts_ct["est"], ts_ct["lo"], ts_ct["hi"]),
-                                  fmt(ts_z["est"],  ts_z["lo"],  ts_z["hi"])),
-    `bayesTLS (95% CrI)`      = c(fmt(by_ct["est"], by_ct["lo"], by_ct["hi"]),
-                                  fmt(by_z["est"],  by_z["lo"],  by_z["hi"])),
-    `freqTLS (profile CI)` = c(fmt(pr_ct$estimate, pr_ct$conf.low, pr_ct$conf.high),
-                                  fmt(pr_z$estimate,  pr_z$conf.low,  pr_z$conf.high)),
-    check.names = FALSE
-  ), caption = "Shrimp: the same CTmax and z from three estimators.")
-} else {
-  cat("No benchmark cache found; run data-raw/build_benchmark_cache.R on a Stan\n",
-      "machine to populate inst/extdata/bayesTLS_benchmark_cache.rds. The\n",
-      "freqTLS estimates above are live and need no Stan.\n", sep = "")
+pick <- function(df, parm, cols) {
+  r <- df[df$dataset == "shrimp" & df$parameter == parm, ]
+  stats::setNames(as.numeric(r[cols]), c("est", "lo", "hi"))
 }
+ts_ct <- pick(cache$two_stage, "CTmax", c("estimate", "lower", "upper"))
+ts_z  <- pick(cache$two_stage, "z",     c("estimate", "lower", "upper"))
+by_ct <- pick(cache$bayesian,  "CTmax", c("median",   "lower", "upper"))
+by_z  <- pick(cache$bayesian,  "z",     c("median",   "lower", "upper"))
+pr_ct <- pro[pro$parameter == "CTmax", ]
+pr_z  <- pro[pro$parameter == "z", ]
+
+knitr::kable(data.frame(
+  Quantity = c("CTmax (°C)", "z (°C / decade)"),
+  `Two-stage (delta CI)`    = c(fmt(ts_ct["est"], ts_ct["lo"], ts_ct["hi"]),
+                                fmt(ts_z["est"],  ts_z["lo"],  ts_z["hi"])),
+  `bayesTLS (95% CrI)`      = c(fmt(by_ct["est"], by_ct["lo"], by_ct["hi"]),
+                                fmt(by_z["est"],  by_z["lo"],  by_z["hi"])),
+  `freqTLS (profile CI)` = c(fmt(pr_ct$estimate, pr_ct$conf.low, pr_ct$conf.high),
+                                fmt(pr_z$estimate,  pr_z$conf.low,  pr_z$conf.high)),
+  check.names = FALSE
+), caption = "Shrimp CTmax and z shown side by side: the two model fits use the relative midpoint; the classical estimator uses absolute LT50.")
+```
+
+```{r benchmark-provenance, echo = FALSE}
+provenance <- data.frame(
+  Field = c("bayesTLS version", "bayesTLS source commit", "CmdStan version",
+            "Cache build date", "Seed", "Model threshold", "Shape design"),
+  Value = c(
+    cache$meta$bayesTLS_version,
+    cache$meta$git_sha,
+    cache$meta$cmdstan_version,
+    cache$meta$date_built,
+    cache$meta$seed,
+    cache$meta$config$target_surv,
+    cache$meta$config$temp_effects
+  )
+)
+knitr::kable(provenance, caption = "Version-stamped benchmark-cache provenance.")
 ```
 
 For the shrimp data the three estimators land on essentially the same `CTmax` and
@@ -215,7 +238,8 @@ other prior-free and by optimisation.
 ## How fast, accurate, and calibrated
 
 Accuracy and calibration below are descriptive characteristics of the likelihood
-path, measured by simulation (`data-raw/performance-study.R`) — they ask whether
+path, measured by simulation (the repository-only maintainer script
+`data-raw/performance-study.R`, which is not installed with the package) — they ask whether
 freqTLS's own intervals are trustworthy, not whether they beat `bayesTLS`
 (which buys priors, full posteriors, and the heat-injury sub-models). **Speed**,
 though, is one place a head-to-head is both fair and stark.
@@ -268,7 +292,7 @@ if (nzchar(tpath) && file.exists(tpath)) {
   speed$`Wall-clock`[speed$Estimator == "classical two-stage"] <- fmt_t(tm$seconds[tm$method == "two_stage"])
   speed$`Wall-clock`[speed$Estimator == "bayesTLS"] <- fmt_t(tm$seconds[tm$method == "bayesTLS"])
 }
-knitr::kable(speed, caption = "Wall-clock on the shrimp benchmark. freqTLS is timed live as this page renders; the two-stage and bayesTLS times are cached from data-raw/timing-study.R (the bayesTLS time is post-compile sampling + overhead, and a first fit also pays a one-time Stan compilation).")
+knitr::kable(speed, caption = "Wall-clock on the shrimp benchmark. freqTLS is timed live as this page renders; the two-stage and bayesTLS times are cached from the repository-only maintainer script data-raw/timing-study.R (not installed with the package). The bayesTLS time is post-compile sampling plus overhead, and a first fit also pays a one-time Stan compilation.")
 ```
 
 freqTLS's **profile** path runs in about a second — comparable to the classical
@@ -314,7 +338,8 @@ runaway `phi` out at each grid point, snaps to the binomial limit, and goes too
 narrow. The Wald interval propagates the flat-`phi` uncertainty through the joint
 Hessian and stays calibrated; the parametric bootstrap is a middle ground. (This
 is *not* a clamping artefact — the likelihood's numerical floors never activate
-in this regime; see `data-raw/beta-binomial-phi-study.R`.)
+in this regime; see the repository-only maintainer script
+`data-raw/beta-binomial-phi-study.R`, which is not installed with the package.)
 
 ```{r bb-phi, echo = FALSE}
 bbp_path <- system.file("extdata", "beta_binomial_phi_results.rds", package = "freqTLS")
@@ -357,15 +382,16 @@ coordinate specifically, request the bootstrap — for example
 | --- | --- |
 | `profile` (default) | the headline choice — respects asymmetry, no normal approximation, and degrades honestly when a coordinate is weakly identified. |
 | `wald` | fast routine work; as well-calibrated as the profile for fixed effects in these simulations; symmetric on the link scale. |
-| `bootstrap` | a prior-free interval that is always finite (the non-closing fallback), and the asymmetry-respecting option for `up`, a weak `phi`, or any weakly identified coordinate. |
+| `bootstrap` | a prior-free fallback that can provide an asymmetry-respecting interval for `up`, a weak `phi`, or another weakly identified coordinate; failed or degenerate replicates can still leave an open or unavailable interval. |
 
-## Always an interval: the bootstrap fallback
+## Bootstrap fallback when a profile stays open
 
-A Bayesian fit always returns an interval. So does `freqTLS`: when a profile
-does not close — a weakly identified design, a boundary asymptote — `confint()`
-falls back to a prior-free **parametric bootstrap** (the default), so you still
-get an asymmetry-respecting interval instead of `NA`. It is the likelihood-path
-analogue of the posterior: both summarise estimator uncertainty without a prior.
+When a profile does not close — for example under a weakly identified design or
+a boundary asymptote — `confint()` can fall back to a prior-free **parametric
+bootstrap**. The fallback often yields an asymmetry-respecting interval, but it
+does not manufacture certainty: too few valid or non-degenerate bootstrap fits
+can still produce an unavailable bound. Set `fallback = FALSE` to retain the
+open profile explicitly.
 
 ```{r bootstrap-demo}
 # A deliberately sparse design where the CTmax profile does not close.
@@ -387,8 +413,9 @@ data.frame(
 )
 ```
 
-The `freqTLS` interval is now available in exactly the cases where a Bayesian
-fit would also give one — without a prior, and in milliseconds.
+When enough bootstrap refits remain stable and non-degenerate, `freqTLS` can
+provide a prior-free interval after an open profile. Sparse or boundary designs
+can still leave a bound unavailable; the status column reports that outcome.
 
 ## The teaching device: posterior density versus Confidence Eye
 
@@ -442,8 +469,10 @@ stage_est[grepl("^up:", stage_est$parameter), c("parameter", "estimate", "std.er
 
 Young embryos have a markedly lower survival ceiling (`up` near 0.7) than older
 embryos and larvae (near 0.9) — a real biological difference that the matched
-constant-shape configuration, used by the classical two-stage workflow and the
-`bayesTLS` benchmark here, cannot express.
+constant-shape configuration used for the `freqTLS` and `bayesTLS` model-based
+benchmark cannot express. The classical two-stage workflow is a separate
+absolute-LT50 approximation and likewise does not model a stage-specific 4PL
+shape.
 
 `freqTLS` also reads absolute critical temperatures and predicts heat injury
 off the same fitted curve. For the (ungrouped) shrimp fit, the absolute critical
@@ -466,7 +495,8 @@ lethal-endpoint caveat.) These are deterministic transforms of the fitted
 
 * Use `freqTLS` when you want fast, prior-free, asymmetry-respecting intervals and an
   explicit identifiability check. When the profile does not close it falls back to a
-  parametric bootstrap, so it returns an interval even on sparse or boundary designs.
+  parametric bootstrap; unstable or degenerate refits can still leave the interval
+  unavailable.
 * Use `bayesTLS` when you want a full Bayesian workflow, prior information, or the
   heat-injury and repair sub-models.
 

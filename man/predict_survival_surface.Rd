@@ -27,6 +27,10 @@ A long \code{data.frame} with columns \code{temp}, \code{duration}, \code{surviv
 \code{predict_survival_surface()} evaluates the fitted survival probability on a
 factorial grid of temperatures by durations, returning a long data frame
 suitable for a heatmap or contour plot (see \code{\link[=plot_survival_surface]{plot_survival_surface()}}).
+For random-effects fits this helper returns population-level predictions
+(random intercepts set to zero); use \code{predict(..., re.form = "conditional")}
+for known-group conditional predictions. General continuous fixed designs
+require \code{predict()} with their covariate columns supplied in \code{newdata}.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

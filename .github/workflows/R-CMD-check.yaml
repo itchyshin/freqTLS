@@ -1,11 +1,16 @@
-# Local checks first (devtools::check / rcmdcheck): this CI runs on demand and on
-# PRs only, ubuntu-only, to keep Actions minutes cheap. Expand the OS matrix only
-# right before a release. No Stan / cmdstanr dependencies are needed.
+# Run the package checks used for release decisions on each major CRAN platform.
+# The comparison vignette contains display-only bayesTLS code, so no Stan or
+# cmdstanr installation is needed.
 on:
+  push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
 name: R-CMD-check
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,42 +18,41 @@ concurrency:
 
 jobs:
   R-CMD-check:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 45
 
-    name: ubuntu-latest (release)
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: ubuntu-latest, r: release}
+          - {os: ubuntu-latest, r: devel}
+          - {os: windows-latest, r: release}
+          - {os: macos-latest, r: release}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      # bayesTLS is a GitHub-only, Stan-heavy optional Suggest used only in
-      # eval=FALSE vignette chunks and one skipped test, so it is intentionally
-      # NOT installed on CI. Tell R CMD check not to require it (the no-Stan policy).
-      _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
 
-      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
         with:
-          r-version: release
+          r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
         with:
-          # Install hard deps + only the Suggests needed at check time. This skips
-          # bayesTLS (GitHub-only/Stan) and cmdstanr so CI never pulls the Stan stack.
-          dependencies: '"hard"'
+          dependencies: '"hard", "soft"'
           extra-packages: |
             any::rcmdcheck
-            any::knitr
-            any::rmarkdown
-            any::testthat
-            any::withr
           needs: check
 
-      - uses: r-lib/actions/check-r-package@v2
+      - uses: r-lib/actions/check-r-package@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
         with:
           upload-snapshots: true

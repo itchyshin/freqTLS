@@ -16,12 +16,12 @@
 #   Rscript data-raw/build_benchmark_cache.R
 #
 # Output: inst/extdata/bayesTLS_benchmark_cache.rds, a list with
-#   $meta       provenance (bayesTLS_version, git_sha, cmdstan_version,
+#   $meta       provenance (bayesTLS_version, git_sha, source_url, cmdstan_version,
 #               date_built, seed, the shared config, the per-dataset configs,
 #               and the R-SHRIMP note)
 #   $bayesian   tibble of bayesTLS posterior medians + 95% CrI for CTmax and z,
-#               keyed by `dataset`: "shrimp", "zebrafish:<stage>",
-#               "dsuzukii:<sex>", and "snowgum"
+#               keyed by `dataset`: "shrimp", "zebrafish:<stage>", and
+#               "dsuzukii:<sex>"
 #   $two_stage  tibble of classical two-stage point estimates + delta-method CIs,
 #               for the COUNT datasets only (shrimp, zebrafish, dsuzukii)
 #
@@ -30,7 +30,6 @@
 #   shrimp      count  (beta-binomial), tref = 1 hour,   ungrouped
 #   zebrafish   count  (beta-binomial), tref = 1 hour,   grouped by life_stage
 #   dsuzukii    count  (beta-binomial), tref = 240 min,  grouped by sex
-#   snowgum     proportion (Beta),      tref = 5 min,     ungrouped
 #
 # Fairness (see docs/design/06-benchmark-protocol.md): all interval-bearing model
 # fits (bayesTLS posterior, freqTLS profile) use the RELATIVE survival
@@ -38,10 +37,8 @@
 # model (temp_effects = "mid"), with the time unit and reference time matched to
 # the freqTLS fit per dataset. The classical two-stage path estimates the
 # absolute LT50 by construction; for the near-0/near-1 lethal asymptotes of these
-# count datasets the relative midpoint and the absolute LT50 coincide. The
-# snow-gum PSII endpoint is a continuous proportion with NO count representation,
-# so the count-based two-stage path does not apply there (bayesTLS + freqTLS
-# only). freqTLS itself is fitted LIVE in the vignette/test, not cached here.
+# count datasets the relative midpoint and the absolute LT50 are close. The
+# freqTLS itself is fitted LIVE in the vignette/test, not cached here.
 
 # ---- 0. hard dependency guard (do not remove) -----------------------------
 
@@ -75,23 +72,38 @@ config <- list(
 )
 
 bb_family   <- brms::brmsfamily("beta_binomial", link = "identity")
-beta_family <- brms::Beta(link = "identity")
 
 # ---- 2. data (the vendored, R-SHRIMP-corrected datasets) ------------------
 
 # Use the freqTLS datasets so the comparators see EXACTLY the counts /
-# proportions freqTLS sees (including the R-SHRIMP fix).
+# counts freqTLS sees (including the R-SHRIMP fix).
 data("shrimp_lethal", package = "freqTLS", envir = environment())
 data("zebrafish_lethal", package = "freqTLS", envir = environment())
 data("dsuzukii", package = "freqTLS", envir = environment())
-data("snowgum_psii", package = "freqTLS", envir = environment())
+
+# Normalize the installed package columns explicitly. For shrimp, the installed
+# response is the source mortality proportion; reconstruct integer deaths using
+# the documented R-SHRIMP rule before either comparator sees the data.
+shrimp_lethal <- tibble::tibble(
+  temp = shrimp_lethal$Temperature_assay,
+  duration = shrimp_lethal$Duration_exposure_hours,
+  total = as.integer(shrimp_lethal$N_individuals_after_trial),
+  survived = as.integer(shrimp_lethal$N_individuals_after_trial) -
+    round(shrimp_lethal$Mortality_after_trial *
+            shrimp_lethal$N_individuals_after_trial)
+)
+zebrafish_lethal <- tibble::tibble(
+  temp = zebrafish_lethal$assay_temp,
+  duration = zebrafish_lethal$duration_h,
+  total = as.integer(zebrafish_lethal$n_total),
+  survived = as.integer(zebrafish_lethal$n_surv),
+  life_stage = zebrafish_lethal$life_stage
+)
 
 # `dsuzukii` ships per-individual (1407 rows, a 0/1 `dead` indicator). The
 # count-based comparator below expects survival counts, so aggregate to the
 # (temp, time, sex) cells, mirroring the documented standardize_data() recipe in
-# R/data.R. NOTE: this aggregation has not been re-run locally (TMB toolchain
-# broken on this machine); re-run the cache build before trusting the cached
-# dsuzukii row.
+# R/data.R.
 dsuzukii <- dplyr::summarise(
   dplyr::group_by(dsuzukii, .data$temp, .data$time, .data$sex),
   total    = dplyr::n(),
@@ -117,11 +129,7 @@ datasets <- list(
   list(key = "dsuzukii",  data = dsuzukii,         temp = "temp",
        duration = "time",     time_unit = "minutes", tref = 240,
        group = "sex",         response = "count",      n_total = "total",
-       n_surv = "survived",   family = bb_family,      two_stage = TRUE),
-  list(key = "snowgum",   data = snowgum_psii,     temp = "temp",
-       duration = "duration", time_unit = "minutes", tref = 5,
-       group = NULL,          response = "proportion", proportion = "prop",
-       family = beta_family,  two_stage = FALSE)
+       n_surv = "survived",   family = bb_family,      two_stage = TRUE)
 )
 
 # ---- 4. Bayesian path: fit_4pl(temp_effects = "mid") -> extract_tdt --------
@@ -245,13 +253,24 @@ two_stage <- do.call(rbind, ts_rows)
 
 # ---- 7. provenance meta ----------------------------------------------------
 
-git_sha <- tryCatch(
-  system2("git", c("-C", system.file(package = "bayesTLS"), "rev-parse", "HEAD"),
-          stdout = TRUE, stderr = FALSE),
-  error = function(e) NA_character_
-)
-if (length(git_sha) != 1L || !nzchar(git_sha)) {
-  git_sha <- "unknown (install bayesTLS from a git checkout to record the SHA)"
+git_sha <- Sys.getenv("BAYESTLS_GIT_SHA", unset = "")
+if (!nzchar(git_sha)) {
+  remote_sha <- utils::packageDescription("bayesTLS", fields = "RemoteSha")
+  if (length(remote_sha) == 1L && !is.na(remote_sha)) git_sha <- remote_sha
+}
+if (!nzchar(git_sha)) {
+  git_sha <- tryCatch(
+    system2("git", c("-C", system.file(package = "bayesTLS"),
+                     "rev-parse", "HEAD"), stdout = TRUE, stderr = FALSE),
+    error = function(e) NA_character_
+  )
+}
+if (length(git_sha) != 1L || !grepl("^[0-9a-f]{40}$", git_sha)) {
+  stop(
+    "Cannot record the exact bayesTLS source commit. Install from a pinned ",
+    "Git checkout or set BAYESTLS_GIT_SHA to the verified 40-character SHA.",
+    call. = FALSE
+  )
 }
 
 cmdstan_version <- tryCatch(as.character(cmdstanr::cmdstan_version()),
@@ -281,12 +300,14 @@ rshrimp_note <- paste0(
   paste(range(shrimp_deaths), collapse = ", "), "], sum ", sum(shrimp_deaths),
   ", ", length(unique(shrimp_deaths)), " distinct values. The shipped bayesTLS ",
   "shrimp_lethal deaths collapse to {0, 1} (sum 35); see ",
-  "data-raw/make_benchmark_data.R and R/data.R."
+  "the installed shrimp_lethal help topic and comparing-to-bayesTLS vignette."
 )
 
 meta <- list(
   bayesTLS_version = as.character(utils::packageVersion("bayesTLS")),
   git_sha          = git_sha,
+  source_url       = paste0("https://github.com/daniel1noble/bayesTLS/tree/",
+                            git_sha),
   cmdstan_version  = cmdstan_version,
   date_built       = as.character(Sys.Date()),
   seed             = SEED,
@@ -296,9 +317,11 @@ meta <- list(
   freqTLS_note  = paste(
     "freqTLS is fitted LIVE in the vignette/test, not cached here. This",
     "cache holds only the bayesTLS posterior summaries and the classical",
-    "two-stage summaries, both on the relative threshold + constant-shape",
-    "config, with the reference time matched per dataset. The snow-gum PSII",
-    "continuous-proportion endpoint has no count two-stage (bayesTLS only)."
+    "two-stage summaries. The bayesTLS and freqTLS model fits use the matched",
+    "relative-threshold, constant-shape configuration; the classical two-stage",
+    "path estimates absolute LT50 and is an approximate comparator for these",
+    "near-0/near-1 lethal curves. Reference times are matched per dataset.",
+    "Permission-pending snow-gum material is intentionally excluded."
   )
 )
 

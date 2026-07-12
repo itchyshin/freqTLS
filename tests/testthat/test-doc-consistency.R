@@ -55,7 +55,7 @@ test_that("row counts stated in known-limitations.md match the shipped data", {
   txt <- paste(readLines(doc, warn = FALSE), collapse = "\n")
   ns <- asNamespace("freqTLS")
   data_names <- c("aphid_tdt", "dsuzukii", "shrimp_lethal", "shrimp_sublethal",
-                  "snowgum_psii", "zebrafish_lethal", "zebrafish_o2")
+                  "zebrafish_lethal", "zebrafish_o2")
   rx <- "`([a-z_]+)` \\(([0-9,]+) rows"
   hits <- regmatches(txt, gregexpr(rx, txt, perl = TRUE))[[1]]
   bad <- character(0)

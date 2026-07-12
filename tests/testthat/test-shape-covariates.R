@@ -75,7 +75,7 @@ test_that("grouped shape coordinates get profile and bootstrap intervals", {
   expect_true(is.finite(bl$conf.low) && is.finite(bl$conf.high))
 })
 
-test_that("a shape may be grouped while the others stay shared (v0.2 relaxed)", {
+test_that("a shape may be grouped while the others stay shared", {
   d <- simulate_tls(family = "binomial", group = c("A", "B"),
                     CTmax = c(35, 38), z = c(4, 3), low = 0.02, up = 0.98,
                     k = c(4, 8), seed = 6)

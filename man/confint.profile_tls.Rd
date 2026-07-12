@@ -46,9 +46,10 @@ fallback (default \code{1000}).}
 \item{boot_seed}{Optional integer seed making the bootstrap reproducible
 without disturbing the caller's random stream (default \code{NULL}).}
 
-\item{cores}{Number of CPU cores for the bootstrap refits (default \code{1}).
-\code{cores > 1} refits replicates in parallel by forking (Unix; sequential on
-Windows). Results are identical for a given \code{boot_seed} regardless of \code{cores}.}
+\item{cores}{Number of CPU cores for the bootstrap refits (default \code{1}, maximum
+\code{2}). Requests above two warn and use two. \code{cores > 1} refits replicates in
+parallel by forking (Unix; sequential on Windows). Results are identical for
+a given \code{boot_seed} regardless of \code{cores}.}
 
 \item{...}{Reserved; must be empty.}
 }
@@ -80,17 +81,17 @@ back-transformed.
 intervals: survival counts are regenerated at the observed design from the
 fitted 4PL, the model is refitted \code{nboot} times, and the interval is the
 percentile range of the replicate estimates. This is the likelihood-path
-analogue of the bayesTLS posterior interval, and returns a finite interval
-whenever the estimator is stable.
+analogue of the bayesTLS posterior interval. It returns a finite interval
+only when enough stable, non-degenerate refits remain.
 }
 
 When a profile does not close on one side, or the fitted Hessian is not
 positive definite (\code{pdHess = FALSE}), \code{confint()} falls back to the parametric
-bootstrap for the affected parameters (with a message) so an interval is still
-returned -- the parity with a Bayesian fit, which always yields one. Set
-\code{fallback = FALSE} to keep the strict profile behaviour, which returns \code{NA} on
+bootstrap for the affected parameters (with a message). The fallback can still
+return \code{NA} when too few valid refits remain. Set \code{fallback = FALSE} to keep
+the strict profile behaviour, which returns \code{NA} on
 the open side (never a fabricated bound) with a warning that the parameter is
-weakly identified (SPEC.md S10, R-PROFILE). The upper asymptote \code{up} has its own
+weakly identified (see \code{vignette("profile-likelihood")}). The upper asymptote \code{up} has its own
 coordinate \code{beta_up} under disjoint bounds but is not yet profiled, so it is
 reported with the delta-method Wald interval under the profile/Wald methods,
 with a message.
@@ -98,9 +99,11 @@ with a message.
 For a fit with a random intercept (\verb{CTmax ~ <fixed> + (1 | group)}),
 \code{method = "profile"} profiles the fixed-effect coordinates by re-running the
 Laplace approximation at each grid point, which is slower than a fixed-effects
-profile. \code{sigma_CTmax} keeps its log-scale Wald interval, the non-closing
-fallback uses Wald (the bootstrap does not yet carry the random block), and
-\code{method = "bootstrap"} returns the Wald intervals with a message.
+profile. Variance components keep their log-scale Wald intervals under the
+profile method, and a non-closing random-effects profile falls back to Wald.
+\code{method = "bootstrap"} instead redraws every active random-intercept block and
+refits with the Laplace approximation, returning percentile intervals when
+enough stable refits remain.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

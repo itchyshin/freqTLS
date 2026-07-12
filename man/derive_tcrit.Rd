@@ -37,6 +37,8 @@ per hour}; \code{bayesTLS} brackets observed breakpoints with a default range of
 operational choice into the posterior, freqTLS treats \code{rate} as a fixed
 input and returns the deterministic transform of the fitted \code{CTmax} and \code{z}
 (combine their confidence intervals if you need to propagate uncertainty).
+For a random-effects fit this is a population-level derived quantity; it does
+not add a group BLUP.
 
 \code{T_crit} assumes a \strong{lethal endpoint}: it is a damage-accumulation concept, so
 for sublethal endpoints (knockdown, photosynthetic failure) the steeper \code{z}

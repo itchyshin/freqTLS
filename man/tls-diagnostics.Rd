@@ -6,9 +6,8 @@
 \description{
 freqTLS emits explicit identifiability warnings rather than letting weak
 data quietly produce confident-looking estimates. This is the package's
-clearest value-add over the Bayesian path, which has no data-adequacy guard on
-the model-fitting side (see \code{docs/design/90-bayesTLS-critique.md}). The twelve
-warnings in SPEC.md S10 split into two groups:
+clearest value-add over the Bayesian path. The diagnostic contract splits into
+two groups:
 }
 \details{
 \itemize{

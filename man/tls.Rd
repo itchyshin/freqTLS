@@ -65,6 +65,19 @@ sensitivity \code{z} and \code{CTmax} — as point estimates with confidence int
 one row per group when the fit is grouped. Uncertainty uses the engine's
 profile-likelihood intervals by default (or Wald / bootstrap via \code{method}).
 }
+\examples{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(
+  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+)
+tls(fit)
+tls_z(fit)
+tls_ctmax(fit)
+}
 \seealso{
 \code{\link[=fit_4pl]{fit_4pl()}}, \code{\link[=tls_z]{tls_z()}}, \code{\link[=tls_ctmax]{tls_ctmax()}}, \code{\link[=confint.profile_tls]{confint.profile_tls()}}
 }

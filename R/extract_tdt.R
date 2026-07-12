@@ -32,6 +32,17 @@
 #'   follow bayesTLS: `z_median/z_lower/z_upper` for z; `temp_median/temp_lower/
 #'   temp_upper` for CTmax and T_crit; per-draw value columns are `z` / `temp`.
 #' @seealso [fit_4pl()], [tls()], [get_z_summary()], [get_ctmax_summary()]
+#' @examples
+#' \donttest{
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' tdt <- extract_tdt(fit, nboot = 10, seed = 1)
+#' tdt$CTmax$summary
+#' }
 #' @export
 extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
                         TC_rate_range = c(0.1, 1), nboot = 1000L,
@@ -164,6 +175,18 @@ stop_if_not_freq_tdt <- function(et) {
 #'
 #' @param et An [extract_tdt()] result.
 #' @return A tibble (see [extract_tdt()] for the column contract).
+#' @examples
+#' \donttest{
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' tdt <- extract_tdt(fit, nboot = 10, seed = 1)
+#' get_z_summary(tdt)
+#' get_ctmax_draws(tdt)
+#' }
 #' @name tdt-accessors
 NULL
 

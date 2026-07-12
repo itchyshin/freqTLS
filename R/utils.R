@@ -20,6 +20,15 @@
 #' @return Numeric value(s) on the natural scale.
 #' @keywords internal
 #' @noRd
+tls_backtransform <- function(x, link) {
+  switch(link,
+    log = exp(x),
+    logit = stats::plogis(x),
+    identity = x,
+    cli::cli_abort("Unknown link {.val {link}}.")
+  )
+}
+
 #' Residual degrees of freedom for the t-based interval calibration
 #'
 #' Bates-Watts profile-t / Wald-t intervals compare the (signed-root) statistic
@@ -34,15 +43,6 @@ tls_ci_df <- function(fit) {
   n_obs <- length(fit$diag_data$y)
   p <- length(fit$par)
   max(n_obs - p, 1L)
-}
-
-tls_backtransform <- function(x, link) {
-  switch(link,
-    log = exp(x),
-    logit = stats::plogis(x),
-    identity = x,
-    cli::cli_abort("Unknown link {.val {link}}.")
-  )
 }
 
 #' Transform a natural-scale value to its internal coordinate

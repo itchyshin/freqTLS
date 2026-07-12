@@ -36,6 +36,8 @@ at which survival equals a target \code{p} solves
 The target must lie strictly between \code{low} and \code{up} for a finite crossing;
 otherwise the survival curve never reaches \code{p} and \code{derive_lt()} aborts with
 an explanatory message (confidence-language, never silent).
+For a random-effects fit this is a population-level derived quantity; it does
+not add a group BLUP.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

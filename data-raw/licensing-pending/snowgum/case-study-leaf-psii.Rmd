@@ -32,7 +32,15 @@ library(freqTLS)
 
 ## The dataset
 
-`snowgum_psii` is vendored from `bayesTLS` under CC BY 4.0 (see `?snowgum_psii`).
+`snowgum_psii` comes from Arnold et al. (2026),
+doi:10.64898/2026.04.09.717599, under **CC BY-NC 4.0** (see
+`?snowgum_psii`). The non-commercial restriction is more specific than the
+licence on the `bayesTLS` package and must be preserved. Written permission for
+unrestricted CRAN redistribution is pending, so this dataset and this case-study
+article are **source-checkout materials and must be excluded from the CRAN source
+tarball by default**. They can enter the CRAN build only after compatible
+permission or relicensing is recorded in
+`docs/design/47-data-license-ledger.md`.
 Each row is one leaf disc heated at a `(Temp, Time)` combination; the response
 `fvfm_prop` is the **retained-PSII proportion** — the chlorophyll-fluorescence
 efficiency (Fv/Fm) after the heat dose divided by its value before. A value near
@@ -152,7 +160,7 @@ profile-likelihood machinery used for the count families.
 
 ## A note on the data and the published value
 
-The shipped `snowgum_psii` is the analysis-ready table — leaf-disc proportions on
+The source-checkout `snowgum_psii` is the analysis-ready table — leaf-disc proportions on
 a temperature × duration grid. It does **not** carry the measurement-day and
 glasshouse-room batch identifiers of the original experiment, so the fit above is
 the **marginal** (no random-effect) estimate. The published Bayesian analysis

@@ -2,8 +2,8 @@
 # user-facing API (the direct CTmax/z formula interface, `by`, `threshold`,
 # `t_ref`, `bounds`, `family`) but fits by maximum likelihood through the freqTLS
 # TMB engine (fit_tls) and returns a `freq_tls` workflow object that the quantity
-# twins (tls / extract_tdt / predict_*) read. A bayesTLS script should run on
-# freqTLS by changing only the package the data + functions come from.
+# twins (tls / extract_tdt / predict_*) read. The supported surface is similar to,
+# but not a drop-in replacement for, bayesTLS.
 
 #' Build a freqTLS 4PL formula from the direct CTmax/z interface
 #'
@@ -15,11 +15,16 @@
 #' Following the freqTLS constant-shape invariant, the asymptotes and steepness
 #' (`up`, `low`, `k`) default to **shared** (`~ 1`) so the temperature effect runs
 #' through the midpoint (CTmax / z) only; pass an explicit formula to let a shape
-#' vary. Random effects go inside the `ctmax`/`z`/`up`/`low`/`k` formulas, e.g.
-#' `ctmax = ~ 0 + grp + (1 | batch)`.
+#' vary. `ctmax` and `z` must produce the same fixed-effect model-matrix columns.
+#' Supported random intercepts go inside the `ctmax`/`z`/`low`/`k` formulas;
+#' `up` random effects are not supported. For example,
+#' `ctmax = ~ 1 + (1 | batch)` keeps the same intercept-only fixed design as the
+#' default `z = ~ 1` while adding a `CTmax` random intercept.
 #'
 #' @param ctmax,z,up,low,k One-sided formulas (or `NULL`). `ctmax`/`z` set the
-#'   CTmax / thermal-sensitivity structure; `up`/`low`/`k` the 4PL shape.
+#'   CTmax / thermal-sensitivity structure and must have the same fixed-effect
+#'   model-matrix columns; `up`/`low`/`k` set the 4PL shape. Random intercepts
+#'   are supported on `ctmax`, `z`, `low`, and `k`, but not `up`.
 #' @param by Optional single moderator column name; shorthand for
 #'   `ctmax = z = ~ 0 + by` when those are not given explicitly.
 #' @param family `"beta_binomial"`, `"binomial"`, or `"beta"` (selects the
@@ -27,6 +32,9 @@
 #'   the continuous-proportion beta family).
 #' @return A `tls_formula` object (as built by [tls_bf()]).
 #' @seealso [fit_4pl()], [tls_bf()], [standardize_data()]
+#' @examples
+#' make_4pl_formula()
+#' make_4pl_formula(by = "population", family = "binomial")
 #' @export
 make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
                              k = NULL, by = NULL, family = "beta_binomial") {
@@ -73,14 +81,18 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #'
 #' @param data Output of [standardize_data()].
 #' @param ctmax,z,up,low,k,by Direct-mode formula interface; see
-#'   [make_4pl_formula()]. Supplying `ctmax`/`z` (or `by`) fits per-group CTmax/z.
+#'   [make_4pl_formula()]. Supplying `ctmax`/`z` (or `by`) fits per-group CTmax/z;
+#'   the two headline formulas must produce the same fixed-effect columns.
 #' @param threshold `"relative"` (default; CTmax/z at the curve midpoint) or
-#'   `"absolute"` (at the `p`-survival level). *Absolute is wired into the
-#'   backbone in a later step; for now use `"relative"` and convert post hoc.*
+#'   `"absolute"` (at the `p`-survival level). The fitting backbone currently
+#'   accepts only `"relative"`; obtain absolute-threshold quantities post fit
+#'   with [extract_tdt()] and `target_surv = "absolute"`.
 #' @param p Survival level for the absolute threshold (default 0.5).
 #' @param t_ref Reference exposure time (in the data's `duration_unit`) at which
 #'   CTmax is reported. Default 60 (e.g. minutes); use `t_ref = 1` for hours.
-#' @param bounds Length-2 asymptote range `c(lower, upper)` (default `c(0, 1)`).
+#' @param bounds Asymptote range. Only `c(0, 1)` is currently accepted. Supply
+#'   survival as a probability in `[0, 1]` and let the model estimate `low` and
+#'   `up` within that range; non-default bounds stop with an error.
 #' @param family `"beta_binomial"` (default for counts), `"binomial"`, or
 #'   `"beta"`. `NULL` picks beta for a proportion response, else beta-binomial.
 #' @param method Default interval method for downstream extraction
@@ -89,7 +101,22 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #' @return A `freq_tls` object: a list with `$fit` (the engine fit), `$data`,
 #'   `$formula`, and `$meta` (threshold, t_ref, bounds, temp_mean, response_type,
 #'   family, grouped, moderators, method).
-#' @seealso [standardize_data()], [make_4pl_formula()], [fit_tls()]
+#' @section Before interpretation:
+#' Before interpreting the fit, run [check_tls()]. Its help page gives a recovery
+#' action for each data-adequacy warning; `vignette("profile-likelihood")` explains
+#' strict open profiles and the default bootstrap fallback.
+#'
+#' @seealso [standardize_data()], [make_4pl_formula()], [fit_tls()], [check_tls()]
+#' @examples
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(
+#'   dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+#' )
+#' coef(fit)
 #' @export
 fit_4pl <- function(data,
                     ctmax = NULL, z = NULL, up = NULL, low = NULL, k = NULL,
@@ -118,7 +145,7 @@ fit_4pl <- function(data,
   if (!identical(threshold, "relative"))
     cli::cli_abort(c(
       "{.code threshold = \"absolute\"} is not yet wired into the TMB backbone.",
-      i = "Fit with {.code threshold = \"relative\"} (the default); the absolute (p-survival) CTmax/z will be available via {.fn extract_tdt} once that path lands."
+      i = "Fit with {.code threshold = \"relative\"} (the default), then use {.fn extract_tdt} with {.code target_surv = \"absolute\"} for post-fit absolute-threshold quantities."
     ))
   if (!isTRUE(all.equal(as.numeric(bounds), c(0, 1))))
     cli::cli_abort(c(

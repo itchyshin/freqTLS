@@ -146,6 +146,14 @@ maps to which sub-parameter / group / `sigma_*`) is centralised in
   shifted `low`). A coordinate that is not requested draws no RNG and stays exactly
   at its scalar value, so a call using a subset is bit-identical to the previous
   behaviour. Cannot be combined with a fixed `group`.
+- **Prediction**: `predict(..., re.form = "population")` sets every random
+  intercept to zero. `predict(..., re.form = "conditional")` adds each fitted
+  BLUP on its internal coordinate and requires the corresponding grouping
+  column in `newdata`; missing or unseen levels stop rather than silently using
+  zero. Omitting `re.form` on a random-effects fit warns and returns the
+  population prediction. The specialised surface, lethal-time, critical-
+  temperature, and heat-injury helpers remain population-level for
+  random-effects fits.
 
 ## Independent variances (honest limitation)
 

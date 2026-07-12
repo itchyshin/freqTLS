@@ -21,6 +21,15 @@ Returns the fitted 4PL parameters (\code{low}, \code{up}, \code{k}, \code{CTmax}
 for over-dispersed families) as point estimates with confidence intervals, in
 bayesTLS's \verb{parameter / [group] / median / lower / upper} shape.
 }
+\examples{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+tdt_parameter_table(fit, method = "wald")
+}
 \seealso{
 \code{\link[=tls]{tls()}}, \code{\link[=tidy_parameters]{tidy_parameters()}}
 }

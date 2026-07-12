@@ -33,6 +33,18 @@
 #' @return A `tls` object: a list with `$summary` (a tibble of
 #'   `[<group>,] quantity, median, lower, upper`) and `$meta`.
 #' @seealso [fit_4pl()], [tls_z()], [tls_ctmax()], [confint.profile_tls()]
+#' @examples
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(
+#'   dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+#' )
+#' tls(fit)
+#' tls_z(fit)
+#' tls_ctmax(fit)
 #' @export
 tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
                 target_surv = "relative", lethal = FALSE, method = NULL,
@@ -162,6 +174,14 @@ print.tls <- function(x, ...) {
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
 #' @return A one-row tibble of convergence diagnostics.
 #' @seealso [fit_4pl()], [check_tls()]
+#' @examples
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' diagnose_tdt_fit(fit)
 #' @export
 diagnose_tdt_fit <- function(object) {
   fit <- if (inherits(object, "freq_tls")) object$fit else object
@@ -197,6 +217,14 @@ diagnose_tdt_fit <- function(object) {
 #' @param level Confidence level (default 0.95).
 #' @return A tibble with `parameter`, `group`, `median`, `lower`, `upper`.
 #' @seealso [tls()], [tidy_parameters()]
+#' @examples
+#' raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+#' dat <- standardize_data(
+#'   raw, temp = "temp", duration = "duration",
+#'   n_total = "total", n_surv = "survived"
+#' )
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' tdt_parameter_table(fit, method = "wald")
 #' @export
 tdt_parameter_table <- function(object, method = NULL, level = 0.95) {
   fit <- if (inherits(object, "freq_tls")) object$fit else object

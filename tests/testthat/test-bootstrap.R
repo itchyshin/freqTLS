@@ -83,6 +83,15 @@ test_that("a non-closing profile auto-falls back to a finite bootstrap interval"
   expect_true(is.finite(ci$conf.low) && is.finite(ci$conf.high))
 })
 
+test_that("bootstrap refits do not leak low-level optimiser warnings", {
+  fs <- sparse_fit()
+  expect_no_warning(
+    suppressMessages(
+      tls_bootstrap_replicates(fs, nboot = 20L, seed = 23L, cores = 1L)
+    )
+  )
+})
+
 test_that("fallback = FALSE keeps the strict profile NA on a non-closing side", {
   fs <- sparse_fit()
   ci <- suppressWarnings(
@@ -132,4 +141,20 @@ test_that("multicore bootstrap matches single-core for the same seed", {
   # Windows, which still matches).
   expect_equal(one$conf.low, two$conf.low)
   expect_equal(one$conf.high, two$conf.high)
+})
+
+test_that("bootstrap requests above two cores warn and use two deterministically", {
+  fit <- fit_boot_binom()
+  two <- suppressMessages(
+    tls_bootstrap_replicates(fit, nboot = 20L, seed = 19L, cores = 2L)
+  )
+  expect_warning(
+    capped <- suppressMessages(
+      tls_bootstrap_replicates(fit, nboot = 20L, seed = 19L, cores = 8L)
+    ),
+    "limited to 2 cores"
+  )
+
+  expect_identical(capped$converged, two$converged)
+  expect_equal(capped$replicates, two$replicates)
 })

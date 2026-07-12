@@ -1792,3 +1792,362 @@ Interpretation:
   directories, missing submission metadata, and contradictory authoritative
   scope claims across `AGENTS.md`, `SPEC.md`, README/NEWS, the capability
   matrix, and known limitations.
+
+## 2026-07-11 -- freqTLS 0.1.0 CRAN-readiness implementation
+
+Goal:
+
+- Implement the approved CRAN-readiness plan on `codex/cran-readiness`, correct
+  the snow-gum licence, exclude permission-pending components, reconcile the
+  release contract, and produce an exact locally verified source tarball.
+
+Checks run:
+
+- `Rscript --vanilla -e 'devtools::test()'` ->
+  `[ FAIL 0 | WARN 0 | SKIP 0 | PASS 772 ]` in 116 seconds. The bootstrap
+  greater-than-two-core test confirmed the warning-and-cap route.
+- `Rscript --vanilla -e 'devtools::check_man()'` -> completed with no warnings.
+- First `Rscript --vanilla -e 'devtools::check()'` -> `1 ERROR | 0 WARNING |
+  2 NOTEs`: escaped `\\donttest{}` generated an invalid example file; the
+  linked-worktree `.git` pointer and `cran-comments.md` entered the build.
+- After correcting the roxygen markup and adding anchored build exclusions,
+  `Rscript --vanilla -e 'devtools::check()'` -> `0 errors | 0 warnings |
+  0 notes`, including examples, `--run-donttest`, tests, and vignette rebuilds.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `Rscript --vanilla tools/build-site.R` -> full site built successfully;
+  internal pages removed, reference alt text filled, and the function-map gate
+  passed.
+- `Rscript --vanilla -e 'urlchecker::url_check()'` -> 20 URLs passed and seven
+  DOI resolver requests returned automated HTTP 403. Each DOI then returned
+  HTTP 200 from `https://api.crossref.org/works/<doi>` using a named user agent:
+  `10.1002/9780470316757`, `10.1080/00401706.1970.10488634`,
+  `10.1080/01621459.1975.10479864`, `10.1093/aje/kwt245`,
+  `10.1093/biomet/80.1.27`, `10.1111/j.2517-6161.1996.tb02080.x`, and
+  `10.1198/016214508000000337`.
+- `R CMD build .` -> built `freqTLS_0.1.0.tar.gz`.
+- `du -h freqTLS_0.1.0.tar.gz` -> `1.8M`.
+- `tar -tzf freqTLS_0.1.0.tar.gz` plus anchored scans -> 211 entries; no
+  `output/`, `scripts/`, `data-raw/`, governance files, `cran-comments.md`,
+  compiled artefacts, snow-gum, or Kristineberg material. Installed data are
+  six `.rda` files and 16 licensed `inst/extdata` components.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` with normal Suggests ->
+  `0 errors | 0 warnings | 1 note`; the only NOTE is `New submission`. PDF and
+  HTML manuals, examples, `--run-donttest`, tests, and vignette rebuilds passed.
+- Component-ledger coverage script -> all 22 installed `data/*.rda` and
+  `inst/extdata/**` files appear in `docs/design/47-data-license-ledger.md`.
+- Benchmark-cache audit -> no `snowgum` rows or metadata; the RDS contains a
+  dated `licensing_note` explaining the exclusion.
+- Live deployed function-map audit after pkgdown deployment -> 69 SVG text
+  nodes, 27 rectangles, zero `<em>` nodes, and no stray following text.
+- `gh issue list --state open --limit 100 --json number,title,url` -> `[]`;
+  there was no overlapping issue to update.
+- Consistency scans:
+  `rg -n "combine freely|always returns|always finite|most bayesTLS analyses|already released|on CRAN|CRAN hardening: non-goal|snowgum_psii" README.Rmd README.md ROADMAP.md NEWS.md SPEC.md AGENTS.md docs/design docs/dev-log/known-limitations.md vignettes R tests _pkgdown.yml`;
+  `rg -n "Vendored.*CC BY 4\\.0|snow.gum.*CC BY 4\\.0|CC BY 4\\.0.*snow" README.Rmd README.md SPEC.md AGENTS.md NEWS.md docs/design docs/dev-log/known-limitations.md vignettes R inst`;
+  `rg -n "snowgum_psii|case-study-leaf-psii|data_function_PSII_TDT_snowgum|kristineberg" R tests vignettes _pkgdown.yml README.Rmd NEWS.md inst/extdata`.
+
+Interpretation:
+
+- Local package, documentation, pkgdown, licensing-inventory, and exact-tarball
+  gates pass. Snow-gum is correctly recorded as CC BY-NC 4.0 and is excluded,
+  not silently relabelled. Kristineberg is also excluded pending explicit terms.
+- This is not yet an upload-ready CRAN release: the GitHub platform matrix,
+  win-builder, R-hub, Sol-level Grace/Rose/Pat review, and written confirmation
+  from Arnold, Pottier, and Noble remain open gates.
+
+## 2026-07-11 -- Post-Sol correction and replacement exact tarball
+
+Goal:
+
+- Close the first Sol adversarial review findings, rebuild all public/generated
+  artefacts, and replace the stale candidate with a tarball derived from the
+  corrected source tree.
+
+Checks run:
+
+- Source and generated-document review removed the remaining universal-interval,
+  drop-in package-switch, seven-dataset, and snow-gum cache claims. The retained
+  phrase is explicitly negative: “the packages are not drop-in replacements.”
+- `Rscript --vanilla tools/build-site.R` -> full site rebuilt successfully. The
+  post-build gate removed `AGENTS.html`, `CLAUDE.html`, `SPEC.html` and their
+  copied Markdown sources; removed 40 corresponding search-index records and
+  the sitemap URLs; filled example alt text on six reference pages; and passed
+  the function-map guard.
+- Direct site assertions -> none of `AGENTS`, `CLAUDE`, or `SPEC` remains as a
+  root HTML/Markdown file or URL in `search.json`, `sitemap.xml`, or `llms.txt`.
+  The rendered function map contains exactly 69 `<text>` nodes, 27 `<rect>`
+  nodes, and zero `<em>` nodes.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `Rscript --vanilla -e 'devtools::test()'` ->
+  `[ FAIL 0 | WARN 0 | SKIP 0 | PASS 772 ]` in 115.3 seconds.
+- `R CMD build .` -> rebuilt `freqTLS_0.1.0.tar.gz`; SHA-256
+  `fc0ee9ac4c3d0ef7c8c8a281d61d7988e31d4d8e9ad3db9ae18731946e737572`.
+- `du -h freqTLS_0.1.0.tar.gz` -> `1.8M`; `tar -tzf` -> 211 entries. Anchored
+  inventory scans found no `output/`, `scripts/`, `data-raw/`, governance tree,
+  `cran-comments.md`, `pkgdown-site/`, compiled artefacts, snow-gum, or
+  Kristineberg material.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` under R 4.6.0 on
+  aarch64 macOS -> `0 errors | 0 warnings | 1 note`. The only NOTE is
+  `New submission`; installation, compiled-code checks, examples,
+  `--run-donttest`, installed-package tests, vignette rebuilding, and PDF/HTML
+  manuals all passed.
+
+What did not go smoothly:
+
+- The first post-build search cleanup assumed every pkgdown search record had a
+  scalar `path`; one record did not, so the build stopped after site generation.
+  The filter now handles missing/non-scalar paths, and a second complete site
+  build passed the cleanup and its fail-loud invariant.
+
+Interpretation:
+
+- This SHA-256 supersedes the earlier local tarball evidence. Local source,
+  generated-site, inventory, and strict macOS CRAN checks now refer to the same
+  corrected source state. External author consent, GitHub platform CI,
+  win-builder, R-hub, and a fresh Sol Grace/Rose/Pat verdict remain required
+  before upload.
+
+## 2026-07-11 -- Pinned benchmark provenance and current exact tarball
+
+Goal:
+
+- Close the second Sol audit findings about benchmark provenance, comparator
+  thresholds, installed-user guidance, and privileged pkgdown deployment; then
+  build and check a replacement source tarball from the corrected source.
+
+Checks run:
+
+- Upstream `bayesTLS` history/API audit -> pinned commit
+  `578740f20f3a2e6e81b3b700b1d0f0e5a06ecf8a`, the latest examined 1.0.0
+  commit before the original cache date that exports the comparator API used by
+  the builder. The cache records that 40-character SHA and its exact GitHub
+  source URL.
+- Maintainer cache rebuild with `BAYESTLS_GIT_SHA=578740f20f3a2e6e81b3b700b1d0f0e5a06ecf8a`,
+  four chains, 4,000 iterations, seed 123, and CmdStan 2.36.0 -> completed for
+  shrimp, three zebrafish stages, and two *D. suzukii* sexes. Cache SHA-256 after
+  the final metadata correction is
+  `081fac1e97b02662071a2e764d953dba1dae033e9941e5266bbefa3872fa663f`.
+- Comparator-contract review -> `freqTLS` and `bayesTLS` are described only as
+  matched relative-threshold, constant-shape model fits. The classical
+  two-stage route is now consistently identified as an absolute-LT50
+  approximation for the near-0/near-1 lethal curves. A cache test asserts this
+  distinction.
+- `Rscript --vanilla -e 'devtools::test()'` after the Sol corrections ->
+  `[ FAIL 0 | WARN 0 | SKIP 0 | PASS 779 ]` in 114.4 seconds.
+- `Rscript --vanilla -e 'devtools::test(filter = "benchmark-sanity", reporter = "summary")'`
+  after the metadata wording correction -> 16 expectations passed.
+- `Rscript --vanilla tools/build-site.R` -> complete site build passed; 405
+  valid search records, zero malformed paths or internal governance URLs, and
+  function-map counts of 69 `<text>`, 27 `<rect>`, and zero `<em>` nodes.
+- `.github/workflows/pkgdown.yaml` review -> deployment occurs only after a
+  successful `R-CMD-check` `workflow_run` whose `head_branch` is `main`; PR-head
+  code is never checked out under the workflow's `contents: write` permission.
+  Both workflow files parse as YAML.
+- `R CMD build .` -> current exact candidate `freqTLS_0.1.0.tar.gz`, SHA-256
+  `b938c45ad2b43bfa0ba28388e6a3fe08fc7176f74d824e74adb5faaeb01fa40e`,
+  2.1 MB and 211 entries.
+- Exact tarball inventory and extracted-cache assertions -> no `output/`,
+  `scripts/`, `data-raw/`, governance files, licensing-pending material,
+  snow-gum, Kristineberg, or compiled artefacts; pinned cache SHA/source,
+  dataset scope, and absolute-LT50 note all present.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` under R 4.6.0 on aarch64 macOS
+  -> `0 errors | 0 warnings | 1 note`. The only NOTE is `New submission`;
+  installation, compiled-code checks, examples, `--run-donttest`, tests,
+  vignette rebuilding, and PDF/HTML manuals passed.
+
+Interpretation:
+
+- This tarball SHA supersedes every earlier candidate recorded above. The local
+  technical gate is clean. The artifact is not upload-ready until the fresh
+  Sol Grace/Rose/Pat audit, GitHub platform matrix, win-builder, R-hub, and all
+  three written author-consent rows pass.
+
+## 2026-07-11 -- Sol round-3 remediation and exact candidate
+
+Goal:
+
+- Close every Grace, Rose, and Pat finding from the third independent Sol audit,
+  regenerate public artefacts, and replace the rejected candidate with one exact
+  locally checked tarball.
+
+Findings closed:
+
+- Grace: the privileged pkgdown `workflow_run` now requires a successful trusted
+  same-repository `push` to `main`; the package check workflow has explicit
+  `contents: read`; all GitHub/r-lib/JamesIves actions are pinned to verified
+  40-character upstream commit SHAs.
+- Rose: `dsuzukii` documents only `dead` as a freqTLS response; Li and Saruhashi
+  dataset citations are present; benchmark protocol/ledger match the freshly
+  rebuilt cache's `freqTLS_note` schema and pinned source; the capability matrix
+  describes the actual three-family, three-interval 0.1.0 surface and its
+  target-specific exceptions; `bounds = c(0, 1)` is explicit in installed help.
+- Pat: the profile article executes the default bootstrap recovery first and
+  then an explicit `fallback = FALSE` open-profile diagnostic; random-effects
+  routing and Confidence-Eye behavior are current; warnings 1--7 provide
+  concrete recovery actions through discoverable `check_tls()` help; milestone
+  prose was removed from task help.
+- Neighbor sweep: all current installed articles treat the benchmark cache as a
+  shipped integrity requirement and identify `data-raw` scripts as
+  repository-only. The cache's R-SHRIMP note now points to installed help rather
+  than excluded governance files.
+
+Checks run:
+
+- `Rscript --vanilla -e 'devtools::document()'` -> regenerated `dsuzukii`,
+  diagnostics, fit, and formula help without warnings.
+- `Rscript --vanilla -e 'devtools::build_readme()'` -> README rebuilt; the tool
+  reported only that local development copies of Rcpp and rlang were behind
+  newer available versions, not a package-check defect.
+- `Rscript --vanilla -e 'devtools::check_man()'` -> no documentation problems.
+- `utils::readCitationFile("inst/CITATION", ...)` -> five valid entries: freqTLS,
+  bayesTLS, Orsted, Li, and Saruhashi.
+- Full `Rscript --vanilla -e 'devtools::test(reporter = "summary")'` -> completed
+  with no failures, warnings, or skips. Focused Pat tests had 109 passing
+  expectations; the benchmark test has 20 provenance/fit expectations.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `Rscript --vanilla tools/build-site.R` -> complete build passed; 408 scalar
+  search paths, no internal governance URLs, function-map counts 69/27/0 for
+  `<text>`/`<rect>`/`<em>`, and the profile article rendered a bootstrap-status
+  default row followed by `open_both`/`NA` under `fallback = FALSE`.
+- `Rscript --vanilla -e 'urlchecker::url_check()'` -> 20 URLs passed and the same
+  seven publisher DOI resolvers returned automated HTTP 403; their registrations
+  were already verified through Crossref in the preceding release pass.
+- `Rscript --vanilla -e 'devtools::check()'` -> `0 errors | 0 warnings | 0
+  notes` in 4 minutes 10 seconds, including examples, tests, and vignette rebuild.
+- `R CMD build .` -> `freqTLS_0.1.0.tar.gz`, SHA-256
+  `bd93eac3786cabd648e7fb20306d63322190b26b28848c483fd935631ce09437`,
+  1,859,394 bytes (1.77 MiB), 211 entries.
+- Exact inventory/cache assertions -> no forbidden directories, governance,
+  permission-pending components, snow-gum, Kristineberg, or compiled artefacts;
+  pinned cache source, comparator threshold distinction, retained datasets, and
+  installed-help provenance all present.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` under R 4.6.0 on aarch64 macOS
+  -> `0 errors | 0 warnings | 1 note`; only `New submission`. Installation,
+  examples, `--run-donttest`, tests, vignette rebuild, PDF manual, and HTML manual
+  passed.
+
+Interpretation:
+
+- This SHA supersedes every candidate above and proves the local technical
+  artifact gate. A new Sol Grace/Rose/Pat verdict, GitHub platform matrix,
+  win-builder, R-hub, and written author consent remain required before upload.
+
+## 2026-07-11 -- Sol round-4 contract correction and final local candidate
+
+Goal:
+
+- Correct the two remaining public-contract discrepancies found by the fourth
+  independent Sol review, rebuild all affected artefacts, and check the exact
+  replacement source tarball under strict CRAN conditions.
+
+Corrections:
+
+- Formula, README, installed help, specification, capability, and limitation
+  prose now state that `CTmax` and `log_z` must use the same fixed-effect
+  model-matrix columns; their supported random-intercept groupings may differ,
+  and shape-coordinate fixed designs may differ.
+- Strict open profiles are shown as a hollow point with no lens. Public prose no
+  longer implies that an unclosed likelihood interval has a bounded lens.
+- Two stale `v0.2 relaxed` test labels were removed without changing test
+  behaviour.
+
+Checks run:
+
+- `Rscript --vanilla -e 'devtools::document()'` -> documentation regenerated
+  without warnings.
+- `Rscript --vanilla -e 'devtools::build_readme()'` -> README regenerated; only
+  local development-dependency update notices were printed.
+- `Rscript --vanilla -e 'devtools::test(filter = "formula|profile|doc-consistency")'`
+  -> completed with no failures, warnings, or skips.
+- `Rscript --vanilla tools/build-site.R` -> complete site build passed; 408
+  valid search entries, no internal governance URLs, and function-map counts of
+  69 `<text>`, 27 `<rect>`, and zero `<em>` nodes.
+- `R CMD build .` -> exact candidate `freqTLS_0.1.0.tar.gz`, SHA-256
+  `092585cfc81280d7ef06dfd12cc462f5e8c69d88069925980cd36bd0c086f61e`,
+  1,859,554 bytes and 211 entries.
+- Exact tarball inventory and extraction assertions -> no `output/`, `scripts/`,
+  `data-raw/`, governance files, licensing-pending material, snow-gum,
+  Kristineberg, or compiled artefacts; the benchmark cache is present and
+  readable.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` under R 4.6.0 on aarch64 macOS
+  -> `0 errors | 0 warnings | 1 note`. The only NOTE is `New submission`;
+  installation, compiled-code checks, examples, `--run-donttest`, tests,
+  vignette rebuilding, and PDF/HTML manuals passed.
+
+Interpretation:
+
+- This checksum supersedes every candidate recorded above and proves the final
+  local technical artifact gate. Sol round 5, the GitHub platform matrix,
+  win-builder, R-hub, and written author consent remain required before upload.
+
+## 2026-07-11 -- Sol round-5 remediation and replacement exact candidate
+
+Goal:
+
+- Address every package, documentation, pkgdown, and workflow defect found by
+  the fifth independent Sol Grace/Rose/Pat audit, then regenerate and strictly
+  check a replacement source tarball.
+
+Findings closed:
+
+- Prediction now rebuilds supported continuous `CTmax`/`log_z` fixed designs
+  from `newdata`. Random-effects prediction distinguishes explicit population
+  predictions (`re.form = "population"`) from known-group conditional
+  predictions (`re.form = "conditional"`); missing or unseen conditional groups
+  stop rather than silently receiving a zero BLUP. Focused prediction tests cover
+  both paths.
+- README, installed help, the random-effects vignette, design documents,
+  capability matrix, and known limitations explain the prediction boundary.
+  Specialised surface/derived/heat-injury helpers are identified as population-
+  level for random-effects fits.
+- SPEC and current design documents now agree on the 0.1.0 beta-family scope,
+  relative-threshold model comparison versus the absolute-LT50 classical
+  approximation, and hollow-point/no-lens behavior for open profiles.
+- Brown-shrimp and life-stage zebrafish help now gives source-specific bayesTLS
+  attribution, transformation notes, and CC BY 4.0 terms. Snow-gum remains
+  correctly labelled CC BY-NC 4.0 and excluded.
+- The invalid `make_4pl_formula()` random-effect example was replaced; the
+  shared fixed-column rule and unsupported `up` random effect are discoverable
+  in primary help. Direct negative and no-lens regression tests were added.
+- Bootstrap refits suppress low-level optimiser trial-step warnings after
+  classifying convergence explicitly; a regression test prevents leakage.
+- Pkgdown manual deployment was removed, trusted checkout credentials are not
+  persisted, and deployment can run only after a successful same-repository
+  main-branch check. DESCRIPTION expands critical thermal maximum (`CTmax`) at
+  first use; the dangling COPYRIGHTS `LICENSE` pointer was removed.
+- The aphid and oxygen-gradient zebrafish examples now use `\donttest{}` and
+  execute successfully under `--run-donttest`.
+
+Checks run:
+
+- Focused prediction/formula/profile/bootstrap/data/doc tests -> no failures,
+  warnings, or skips. The independent prediction slice reported 68 passing
+  expectations.
+- Full `devtools::test(reporter = "summary")` -> no failures, warnings, or
+  skips.
+- `devtools::check_man(); pkgdown::check_pkgdown()` -> no problems found.
+- `Rscript --vanilla tools/build-site.R` -> complete site build passed; 408
+  valid search entries, no internal governance URLs, current prediction/data
+  help, and function-map counts of 69 `<text>`, 27 `<rect>`, zero `<em>`.
+- `urlchecker::url_check()` -> 20 endpoints passed; the same seven publisher
+  DOI resolvers returned automated HTTP 403. Exact registrations and titles for
+  all seven were confirmed through the Crossref works API.
+- `devtools::check()` -> `0 errors | 0 warnings | 0 notes` in 6 minutes 9
+  seconds, including the newly runnable `\donttest{}` examples and vignette
+  rebuilds.
+- `R CMD build .` -> exact candidate `freqTLS_0.1.0.tar.gz`, SHA-256
+  `7c2594a27ea9da6e61689a417d510827c0ba21ecb3fcb3f819ad656a81a7e8c5`,
+  1,864,624 bytes and 211 entries.
+- Exact inventory and extraction assertions -> no build-only directories,
+  governance, permission-pending data, snow-gum, Kristineberg, or compiled
+  artefacts; benchmark cache present and readable.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` under R 4.6.0 on aarch64 macOS
+  -> `0 errors | 0 warnings | 1 note`; only `New submission`. Installation,
+  compiled code, examples, `--run-donttest` (116 seconds), tests, vignette
+  rebuild (122 seconds), and PDF/HTML manuals passed.
+
+Interpretation:
+
+- This checksum supersedes every earlier artifact. The local package, docs, and
+  pkgdown gates are clean. Commit/PR-specific CI, win-builder, R-hub, final
+  post-platform Grace/Rose/Pat approval, and written author consent remain open.

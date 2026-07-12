@@ -61,13 +61,16 @@ The package supports:
 The package does not currently support (non-goals):
 
 - time-to-event or multi-trait responses;
-- temperature effects on `low`, `up`, or `k` (the constant-shape invariant);
+- fitted heat-injury or repair-rate dynamics (deterministic prediction from a
+  fitted 4PL and user-supplied scenarios are supported);
 - a fit-time absolute-threshold option (the fit is on the relative threshold;
   absolute / p-survival quantities come from `extract_tdt()`) or non-default
   asymptote `bounds`;
 - correlated, crossed, or random-slope random effects, or a random effect /
   profile coordinate for the upper asymptote `up`;
-- CRAN hardening / submission.
+- correlated, random-slope, crossed, nested, or `up` random effects;
+- universal profile support for `up`, variance components, or continuous shape
+  slopes.
 
 ## Sibling boundary
 

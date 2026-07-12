@@ -4,6 +4,30 @@ Durable design decisions for freqTLS, append-only. Each entry records what was
 decided, why, the alternatives, and what future work must respect. The canonical
 specification is `SPEC.md`; these entries record the decisions that shaped it.
 
+## 2026-07-11: Treat 0.1.0 as one release candidate with the tested surface
+
+- Decision: the historical v0.1/v0.2/v0.3 headings are build milestones, not
+  published releases. The 0.1.0 candidate includes the implemented Beta family,
+  formula and shape-design paths, limited independent random intercepts,
+  parametric bootstrap, and deterministic heat-injury prediction.
+- Boundary: time-to-event/multivariate responses, fitted injury/repair dynamics,
+  correlated/random-slope/crossed/nested/`up` random effects, and universal
+  profile support remain unsupported. Benchmark equivalence claims apply only
+  to the matched relative-threshold, constant-shape configuration.
+- Release gate: local implementation and validation do not imply CRAN release.
+  Author consent, data redistribution authority, strict CRAN checks, and public
+  CRAN package/check pages are separate evidence tiers.
+
+## 2026-07-11: Correct snow-gum licensing; permission or exclusion
+
+- Decision: the underlying snow-gum PSII source is CC BY-NC 4.0. Earlier current
+  documentation that called it CC BY 4.0 was incorrect and is superseded.
+- Consequence: never silently relicense the data. Record written redistribution
+  permission if obtained; otherwise exclude the processed/raw data, derived
+  cache rows, installed vignette, and package claims from the CRAN candidate.
+- Historical task reports remain unchanged; this dated decision and the current
+  component ledger carry the correction.
+
 ## 2026-06-16: License is GPL (>= 3)
 
 - Decision: freqTLS is released under GPL (>= 3), overriding the MIT default

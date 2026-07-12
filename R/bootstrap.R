@@ -6,8 +6,8 @@
 ## A parametric bootstrap fills both gaps while staying prior-free: it regenerates
 ## survival counts at the OBSERVED design from the fitted 4PL, refits, and reads
 ## the sampling distribution of each estimator. It is the likelihood-path analogue
-## of the bayesTLS posterior -- both summarise estimator uncertainty without a
-## prior, so the two packages can always return an interval for the same quantity.
+## of the bayesTLS posterior -- both summarise estimator uncertainty, but an
+## unstable frequentist estimator can still leave an interval unavailable.
 ##
 ## The refit reuses the same machinery as the profile path: the clean TMB inputs
 ## retained in `fit$tmb_inputs`, warm-started at the fitted MLE for speed and
@@ -16,7 +16,7 @@
 ## construction scale (z/k/phi on log, low on logit, CTmax/up on identity) and
 ## back-transformed, so the bootstrap is exactly equivariant in the same way the
 ## profile is: the z interval equals exp() of the log_z interval.
-## See docs/design/04-profile-likelihood.md.
+## User-facing behaviour is documented in vignette("profile-likelihood").
 
 #' Parametric bootstrap replicates of the natural-scale parameters
 #'
@@ -35,7 +35,9 @@
 #'   `cores > 1` the replicates are refitted in parallel via process forking
 #'   (`parallel::mclapply`). The responses are pre-drawn sequentially under
 #'   `seed`, so results are identical for a given seed regardless of `cores`.
-#'   Forking is unavailable on Windows, where this falls back to sequential.
+#'   At most two cores are used, as required by CRAN. Requests above two emit a
+#'   warning and are capped. Forking is unavailable on Windows, where this
+#'   falls back to sequential.
 #' @param trace Logical; print inner-optimisation progress.
 #' @return A list with `replicates` (an `nboot`-by-parameter numeric matrix whose
 #'   columns match `fit$estimates$parameter`), a logical `converged` vector,
@@ -61,8 +63,13 @@ tls_bootstrap_replicates <- function(fit, nboot = 1000L, seed = NULL,
     cli::cli_abort("{.arg cores} must be a single positive integer.")
   }
   cores <- as.integer(cores)
-  max_cores <- tryCatch(parallel::detectCores(), error = function(e) NA_integer_)
-  if (is.finite(max_cores) && cores > max_cores) cores <- max_cores
+  if (cores > 2L) {
+    cli::cli_warn(c(
+      "!" = "Bootstrap parallelism is limited to 2 cores for CRAN safety.",
+      "i" = "Using {.code cores = 2} instead of the requested {cores}."
+    ))
+    cores <- 2L
+  }
 
   if (!is.null(seed)) {
     if (!is.numeric(seed) || length(seed) != 1L) {
@@ -172,14 +179,20 @@ tls_bootstrap_replicates <- function(fit, nboot = 1000L, seed = NULL,
       error = function(e) e
     )
     if (inherits(inner, "error")) return(NULL)
-    opt <- tryCatch(stats::nlminb(inner$par, inner$fn, inner$gr),
+    # Optimisers can emit low-level NA/NaN trial-step warnings before recovering
+    # or returning a non-zero convergence code. The code below classifies that
+    # replicate explicitly, so do not leak those implementation warnings into a
+    # user's bootstrap fallback.
+    opt <- tryCatch(suppressWarnings(stats::nlminb(inner$par, inner$fn, inner$gr)),
                     error = function(e) e)
     ok <- !inherits(opt, "error") && !is.null(opt$convergence) &&
       identical(as.integer(opt$convergence), 0L)
     if (!ok) {
       # Mirror the engine's BFGS fallback so a single optimiser stall does not
       # discard an otherwise informative replicate.
-      o <- tryCatch(stats::optim(inner$par, inner$fn, inner$gr, method = "BFGS"),
+      o <- tryCatch(suppressWarnings(
+                      stats::optim(inner$par, inner$fn, inner$gr, method = "BFGS")
+                    ),
                     error = function(e) e)
       if (inherits(o, "error") || !identical(as.integer(o$convergence), 0L)) {
         return(NULL)

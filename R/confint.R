@@ -20,16 +20,16 @@
 #'   intervals: survival counts are regenerated at the observed design from the
 #'   fitted 4PL, the model is refitted `nboot` times, and the interval is the
 #'   percentile range of the replicate estimates. This is the likelihood-path
-#'   analogue of the bayesTLS posterior interval, and returns a finite interval
-#'   whenever the estimator is stable.
+#'   analogue of the bayesTLS posterior interval. It returns a finite interval
+#'   only when enough stable, non-degenerate refits remain.
 #'
 #' When a profile does not close on one side, or the fitted Hessian is not
 #' positive definite (`pdHess = FALSE`), `confint()` falls back to the parametric
-#' bootstrap for the affected parameters (with a message) so an interval is still
-#' returned -- the parity with a Bayesian fit, which always yields one. Set
-#' `fallback = FALSE` to keep the strict profile behaviour, which returns `NA` on
+#' bootstrap for the affected parameters (with a message). The fallback can still
+#' return `NA` when too few valid refits remain. Set `fallback = FALSE` to keep
+#' the strict profile behaviour, which returns `NA` on
 #' the open side (never a fabricated bound) with a warning that the parameter is
-#' weakly identified (SPEC.md S10, R-PROFILE). The upper asymptote `up` has its own
+#' weakly identified (see `vignette("profile-likelihood")`). The upper asymptote `up` has its own
 #' coordinate `beta_up` under disjoint bounds but is not yet profiled, so it is
 #' reported with the delta-method Wald interval under the profile/Wald methods,
 #' with a message.
@@ -37,9 +37,11 @@
 #' For a fit with a random intercept (`CTmax ~ <fixed> + (1 | group)`),
 #' `method = "profile"` profiles the fixed-effect coordinates by re-running the
 #' Laplace approximation at each grid point, which is slower than a fixed-effects
-#' profile. `sigma_CTmax` keeps its log-scale Wald interval, the non-closing
-#' fallback uses Wald (the bootstrap does not yet carry the random block), and
-#' `method = "bootstrap"` returns the Wald intervals with a message.
+#' profile. Variance components keep their log-scale Wald intervals under the
+#' profile method, and a non-closing random-effects profile falls back to Wald.
+#' `method = "bootstrap"` instead redraws every active random-intercept block and
+#' refits with the Laplace approximation, returning percentile intervals when
+#' enough stable refits remain.
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param parm Character vector of target names (for example `"CTmax"`, `"z"`,
@@ -59,9 +61,10 @@
 #'   fallback (default `1000`).
 #' @param boot_seed Optional integer seed making the bootstrap reproducible
 #'   without disturbing the caller's random stream (default `NULL`).
-#' @param cores Number of CPU cores for the bootstrap refits (default `1`).
-#'   `cores > 1` refits replicates in parallel by forking (Unix; sequential on
-#'   Windows). Results are identical for a given `boot_seed` regardless of `cores`.
+#' @param cores Number of CPU cores for the bootstrap refits (default `1`, maximum
+#'   `2`). Requests above two warn and use two. `cores > 1` refits replicates in
+#'   parallel by forking (Unix; sequential on Windows). Results are identical for
+#'   a given `boot_seed` regardless of `cores`.
 #' @param ... Reserved; must be empty.
 #'
 #' @return A [tibble][tibble::tibble] with one row per target and columns
@@ -92,11 +95,10 @@ confint.profile_tls <- function(object, parm = NULL, level = 0.95,
   method <- match.arg(method)
   tls_validate_level(level)
 
-  # Random-effects fits: the parametric bootstrap does not yet carry the random
-  # block, so it falls back to Wald. Profile intervals ARE available for the
-  # fixed-effect coordinates -- each grid point re-runs the Laplace -- and are
-  # routed through tls_confint_profile_re() in the profile branch below, with
-  # `sigma_CTmax` kept on its log-scale Wald interval.
+  # Random-effects fits: profile intervals are available for fixed-effect
+  # coordinates (each grid point re-runs the Laplace), while variance components
+  # use log-scale Wald intervals under the profile method. The explicit bootstrap
+  # path redraws all active random blocks and refits them.
   if (tls_has_re(object) && identical(method, "bootstrap")) {
     cli::cli_inform(
       "Bootstrapping a random-effects fit redraws the group deviations and refits with the Laplace approximation per replicate (slow); consider a smaller {.arg nboot}."
@@ -179,8 +181,8 @@ confint.profile_tls <- function(object, parm = NULL, level = 0.95,
   out <- out[match(parm, out$parameter), , drop = FALSE]
 
   # Auto-fallback: a non-closing profile (or a non-positive-definite Hessian)
-  # leaves prior-free, Hessian-free uncertainty on the table. Fill it with the
-  # parametric bootstrap so an interval is still returned (parity with bayesTLS).
+  # leaves prior-free, Hessian-free uncertainty on the table. Attempt a
+  # parametric-bootstrap fallback; unstable refits remain explicitly unavailable.
   if (isTRUE(fallback)) {
     pdhess_bad <- !isTRUE(object$convergence$pdHess)
     open <- out$conf.status %in% c("open_lower", "open_upper", "open_both") |
@@ -222,10 +224,10 @@ tls_phi_rel_se <- function(estimates) {
 #' Profile confidence intervals for a random-effects fit (selective routing)
 #'
 #' Profiles the fixed-effect coordinates -- each grid point re-runs the Laplace
-#' approximation through `tls_profile_nll_fun()` -- and keeps `sigma_CTmax` on its
-#' log-scale Wald interval (the random-effect SD has no profile coordinate yet). A
-#' non-closing profile falls back to Wald rather than the parametric bootstrap,
-#' which does not yet carry the random block. Same 8-column tibble as the
+#' approximation through `tls_profile_nll_fun()` -- and keeps variance components
+#' on log-scale Wald intervals because they have no profile coordinates yet. A
+#' non-closing profile falls back to Wald; users can request the explicit
+#' random-effects-aware bootstrap method separately. Same 8-column tibble as the
 #' fixed-effects profile path, reordered to `parm`.
 #' @keywords internal
 #' @noRd
@@ -261,8 +263,8 @@ tls_confint_profile_re <- function(object, parm, level, npoints, trace, fallback
   }
 
   # Fallback for a non-closing profile (or a non-positive-definite Hessian): use
-  # Wald, since the bootstrap does not carry the random block. Only profiled rows
-  # can need it (sigma_CTmax is already Wald).
+  # Wald. Users can request the explicit RE-aware bootstrap separately. Only
+  # profiled rows can need this fallback (variance components are already Wald).
   if (isTRUE(fallback) && !is.null(out)) {
     pdhess_bad <- !isTRUE(object$convergence$pdHess)
     open <- out$conf.status %in% c("open_lower", "open_upper", "open_both") |

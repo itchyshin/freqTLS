@@ -45,9 +45,10 @@ uses “posterior” or “credible” language.
   confidence intervals** that respect asymmetry and carry no prior.
 - Surfaces **identifiability** honestly: when a profile does not close,
   it is flagged, never fabricated. By default `confint()` then falls
-  back to a prior-free **parametric bootstrap** so an interval is still
-  returned (set `fallback = FALSE` to keep the open profile, which the
-  Confidence Eye draws as an open lens).
+  back to a prior-free **parametric bootstrap**; unstable refits remain
+  unavailable rather than producing a fabricated bound. Set
+  `fallback = FALSE` to keep the open profile, which the Confidence Eye
+  marks with a hollow point and no lens.
 - Ships a tidy column interface (`fit_tls()`) and a
   `brms`/`drmTMB`-style **formula interface** (`tls_bf()`) with
   fixed-effect predictors on any sub-parameter (`CTmax`, `log_z`, `low`,
@@ -55,8 +56,9 @@ uses “posterior” or “credible” language.
   (survival curves, the survival surface, and the Confidence Eye).
 - Fits **random intercepts** on `CTmax`, `log_z`, `low`, and `log_k`
   (`<param> ~ <fixed> + (1 | group)`), with profile intervals for the
-  fixed effects; they combine freely, and sharing a grouping factor fits
-  *independent* variances (no correlation term) and warns.
+  fixed effects. At most one intercept term is supported per coordinate,
+  and multiple terms remain independent variance blocks; correlated,
+  crossed, nested, and random-slope structures are not implemented.
 - Derives critical temperatures — `derive_ctmax()` (absolute threshold)
   and `derive_tcrit()` (rate-multiplier) — and predicts **heat injury**
   under a temperature trace (`predict_heat_injury()`) with a prior-free
@@ -87,19 +89,26 @@ in how uncertainty is summarised.
 | Intervals | Credible intervals (prior-informed) | Confidence intervals (prior-free) |
 | Needs Stan / MCMC | Yes | No |
 | Speed | Sampling (seconds to minutes) | Optimisation (~ms to ~1 s; see the timing table in `vignette("comparing-to-bayesTLS")`) |
-| Always returns an interval | Yes (posterior) | Yes (profile; parametric-bootstrap fallback) |
+| Weak identification | Priors can still yield a finite posterior interval | Open profiles are flagged; bootstrap fallback can also be unstable |
 | Extras | Heat-injury and repair sub-models, priors | Explicit non-closing / identifiability flags |
 
 Use `freqTLS` when you want fast, prior-free, asymmetry-respecting
-intervals and an explicit identifiability check; when a profile does not
-close it falls back to a parametric bootstrap, so it returns an interval
-even on hard designs. Use `bayesTLS` when you want a full Bayesian
-workflow, prior information, or the heat-injury and repair sub-models.
-The two are complementary lenses on the same model, not competitors.
+intervals and an explicit identifiability check. When a profile does not
+close it can fall back to a parametric bootstrap; if too few stable
+refits remain, the result stays unavailable rather than reporting a
+fabricated bound. Use `bayesTLS` when you want a full Bayesian workflow,
+prior information, or the heat-injury and repair sub-models. The two are
+complementary lenses on the same model, not competitors.
 
 ## Installation
 
-Install the development version from
+After the package appears on CRAN, install the released version with:
+
+``` r
+install.packages("freqTLS")
+```
+
+Or install the development version from
 [GitHub](https://github.com/itchyshin/freqTLS):
 
 ``` r
@@ -109,17 +118,18 @@ pak::pak("itchyshin/freqTLS")
 
 ## Quick start
 
-The workflow mirrors `bayesTLS` — **standardize → fit → quantities →
-plot** — so most `bayesTLS` analyses run on `freqTLS` by changing little
-more than the package the data and functions come from. The engine is
-maximum likelihood (no Stan, no MCMC, no internet); uncertainty is a
-frequentist trio (Wald, profile, bootstrap) instead of a posterior. A few
-differences are deliberate and documented in
-`vignette("comparing-to-bayesTLS")`: the absolute (p-survival) threshold
-and non-default asymptote `bounds` are not yet wired through the ML
-backbone (fit on the relative midpoint, then convert with
-`extract_tdt()`); uncertainty comes as bootstrap replicates rather than
-posterior draws; and the temperature effect defaults to the
+The workflow follows the same **standardize → fit → quantities → plot**
+sequence as `bayesTLS`, but the packages are not drop-in replacements.
+`freqTLS` implements the tested fixed/grouped designs and limited
+random-intercept structures described below; more general Bayesian
+models remain in `bayesTLS`. The engine is maximum likelihood (no Stan,
+no MCMC, no internet); uncertainty is a frequentist trio (Wald, profile,
+bootstrap) instead of a posterior. The deliberate differences are
+documented in `vignette("comparing-to-bayesTLS")`: the absolute
+(p-survival) threshold and non-default asymptote `bounds` are not yet
+wired through the ML backbone (fit on the relative midpoint, then
+convert with `extract_tdt()`); uncertainty comes as bootstrap replicates
+rather than posterior draws; and the temperature effect defaults to the
 constant-shape configuration.
 
 ``` r
@@ -177,8 +187,11 @@ all.equal(coef(fit_f), coef(fit))
 #> [1] TRUE
 ```
 
-Add a sub-parameter formula for any predictor on `CTmax` or `log_z` (for
-example `CTmax ~ life_stage` for a grouped fit).
+Add a sub-parameter formula for predictors on `CTmax` and `log_z` (for
+example `CTmax ~ life_stage, log_z ~ life_stage` for a grouped fit).
+These two headline coordinates must use the same fixed-effect design
+columns; their supported random-intercept groupings may differ. The
+shape coordinates may use independent fixed designs.
 
 ## Random effects on CTmax and z
 
@@ -215,7 +228,27 @@ head(ranef(fit_re), 3)
 #> 1 g1    CTmax   -1.03      0.390
 #> 2 g10   CTmax   -0.651     0.390
 #> 3 g11   CTmax    2.05      0.390
+
+# Choose the prediction target explicitly for a random-intercept fit.
+colony_1 <- as.character(ranef(fit_re)$group[1])
+new_re <- data.frame(temp = 36, duration = 2, colony = colony_1)
+data.frame(
+  target = c("population", "colony"),
+  survival = c(
+    predict(fit_re, new_re, re.form = "population"),
+    predict(fit_re, new_re, re.form = "conditional")
+  )
+)
+#>       target   survival
+#> 1 population 0.22405366
+#> 2     colony 0.08768286
 ```
+
+Population predictions set every random intercept to zero. Conditional
+predictions add the fitted BLUP and therefore require each relevant
+grouping column in `newdata`; unseen groups stop with guidance to use
+the population prediction. Calling `predict()` without `re.form` on a
+random-effects fit warns and returns the population prediction.
 
 A random intercept on **thermal sensitivity** works the same way, with
 `log_z ~ 1 + (1 | group)`. Because `z` is modelled on the log scale, the
@@ -234,8 +267,8 @@ biased low with few groups.
 Two populations can differ not only in *where* the thermal-death curve
 sits (`CTmax`, `z`) but in its *shape* — how steeply survival collapses
 with exposure (`k`), or the background and maximum survival (`low`,
-`up`). The formula interface lets `low`, `up`, and `log_k`
-vary by a grouping factor, relaxing the shared-shape restriction. Here a
+`up`). The formula interface lets `low`, `up`, and `log_k` vary by a
+grouping factor, relaxing the shared-shape restriction. Here a
 heat-tolerant and a heat-sensitive population differ in both `CTmax` and
 the curve steepness `k`:
 
@@ -299,29 +332,27 @@ The thermal-load-sensitivity modelling framework implemented here was
 introduced by **Daniel W. A. Noble, Pieter A. Arnold, and Patrice
 Pottier** in the [`bayesTLS`](https://github.com/daniel1noble/bayesTLS)
 package. The model and the mapping from the 4PL midpoint slope to `z`
-and `CTmax` are theirs. `freqTLS` is an independent likelihood
-implementation of that framework; it is not affiliated with or endorsed
-by the `bayesTLS` authors. Please cite `bayesTLS` alongside `freqTLS`
-when you use this package. `freqTLS` contributes a TMB
-maximum-likelihood likelihood, the direct `CTmax`/`z` reparameterisation
-that makes both quantities directly profile-able, and profile-likelihood
-confidence intervals — a likelihood complement to the Bayesian path (no
-priors, no MCMC, no Stan).
+and `CTmax` are theirs. `freqTLS` is a likelihood implementation of that
+framework. Please cite `bayesTLS` alongside `freqTLS` when you use this
+package. `freqTLS` contributes a TMB maximum-likelihood likelihood, the
+direct `CTmax`/`z` reparameterisation that makes both quantities
+directly profile-able, and profile-likelihood confidence intervals — a
+likelihood complement to the Bayesian path (no priors, no MCMC, no
+Stan).
 
 ## Data credits
 
-The seven case-study datasets vendored with `freqTLS` (`shrimp_lethal`,
-`shrimp_sublethal`, `zebrafish_lethal`, `zebrafish_o2`, `snowgum_psii`,
-`dsuzukii`, and `aphid_tdt`) are the shared datasets of the
-[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) framework,
+The six case-study datasets vendored with `freqTLS` (`shrimp_lethal`,
+`shrimp_sublethal`, `zebrafish_lethal`, `zebrafish_o2`, `dsuzukii`, and
+`aphid_tdt`) are drawn from the thermal-load-sensitivity literature and
+the [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) framework,
 redistributed with attribution. They include the two new published case
 studies — `aphid_tdt` (cereal aphids across species and ages; Li et
 al. 2023) and `zebrafish_o2` (zebrafish across an oxygen gradient;
 Saruhashi et al. 2026) — alongside `dsuzukii` (*Drosophila suzukii* by
-sex; Ørsted et al. 2024, Zenodo 10.5281/zenodo.10602268) and
-`snowgum_psii` (retained PSII for the beta family). See `?aphid_tdt`,
-`?zebrafish_o2`, the other dataset help pages, and `inst/CITATION` for
-sources and licences. `freqTLS` code is released under GPL (\>= 3); the
-original data licences apply to the vendored data. Please cite
-`bayesTLS` and the original data sources (see `citation("freqTLS")`)
-when you use these datasets.
+sex; Ørsted et al. 2024, Zenodo 10.5281/zenodo.10602268). See
+`?aphid_tdt`, `?zebrafish_o2`, the other dataset help pages, and
+`inst/CITATION` for sources and licences. `freqTLS` code is released
+under GPL (\>= 3); the original data licences apply to the vendored
+data. Please cite `bayesTLS` and the original data sources (see
+`citation("freqTLS")`) when you use these datasets.

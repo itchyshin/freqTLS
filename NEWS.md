@@ -1,13 +1,13 @@
-# freqTLS 0.1.0 (development)
+# freqTLS 0.1.0 (release candidate)
 
 freqTLS is the frequentist counterpart to the Bayesian **bayesTLS** package: it
 fits the four-parameter logistic thermal-load-sensitivity (thermal death-time)
 model by maximum likelihood via TMB, parameterised directly in CTmax and thermal
-sensitivity (z). A bayesTLS analysis should run on freqTLS by changing only the
-package the data and functions come from; uncertainty is reported through a
-frequentist trio — Wald (delta), profile-likelihood, and bootstrap — instead of a
-posterior. Forked from **profileTLS** (commit `6f963a9`, v0.3.3), which it
-supersedes.
+sensitivity (z). Under the matched relative-threshold, constant-shape
+configuration, it targets the same fitted curve as `bayesTLS`; uncertainty is
+reported through a frequentist trio — Wald (delta), profile-likelihood, and
+bootstrap — instead of a posterior. Forked from **profileTLS** (commit
+`6f963a9`, v0.3.3), which it supersedes.
 
 ## bayesTLS-twin API
 
@@ -31,7 +31,7 @@ supersedes.
   intervals.
 * The plots (`plot_confidence_eye()`, `plot_survival_curves()`, `plot_tdt_curve()`,
   `plot_heat_injury()`) and extractors accept the `freq_tls` workflow object.
-* Seven shared case-study datasets, including `aphid_tdt` (Li et al. 2023) and
+* Six shared case-study datasets, including `aphid_tdt` (Li et al. 2023) and
   `zebrafish_o2` (Saruhashi et al. 2026).
 
 ## Inference and calibration
@@ -39,10 +39,12 @@ supersedes.
 * Small-sample **Bates–Watts profile-t / Wald-t calibration**: confidence
   intervals reference a t distribution with residual df = n − p, restoring
   nominal coverage at small n and reducing to the asymptotic interval as n grows.
-  The evidence is a coverage + width simulation (`data-raw/calibration-study.R`):
+  The evidence is a coverage + width simulation (repository-only
+  `data-raw/calibration-study.R`, not installed):
   at df ≈ 10 the asymptotic 95% interval covers ~0.93 and the t-correction
   restores ~0.96.
-* A three-way **benchmark** (`data-raw/benchmark-vs-bayes.R`): freqTLS reproduces
+* A three-way **benchmark** (repository-only
+  `data-raw/benchmark-vs-bayes.R`, not installed): freqTLS reproduces
   bayesTLS's CTmax to ~0.07 °C on the brown-shrimp data, beside the classical
   two-stage estimator.
 
@@ -51,7 +53,7 @@ supersedes.
 * `confint()`, `summary()`, `ranef()`, and `coef()`/`logLik()`/`vcov()`/`nobs()`,
   the heat-injury functions (`predict_heat_injury()` / `plot_heat_injury()` /
   `heat_injury_envelope()`), and `check_tls()` all accept the `freq_tls` workflow
-  object — the whole post-fit surface works on the `fit_4pl()` result.
+  object — this listed post-fit surface works on the `fit_4pl()` result.
 * `fit_4pl(by = "g")` now labels groups by the bare factor levels
   (`CTmax:young_embryos`), identical to the column interface, end to end.
 
@@ -62,14 +64,16 @@ supersedes.
   comparison.
 * Worked case studies mirroring the shared manuscript: brown shrimp; zebrafish
   under hypoxia / normoxia / hyperoxia (OCLTT); cereal aphids (Li 2023);
-  *D. suzukii* by sex; snow-gum leaf PSII (a continuous-proportion beta endpoint);
+  *D. suzukii* by sex;
   and a cross-taxon summary.
 
 ## Simulation
 
-* `scripts/simulations/` — a freqTLS (ML/TMB) twin of the bayesTLS two-stage-bias
-  simulation (shared data-generating process + scoring), with a comparison to the
-  bayesTLS results. Validated locally and on the DRAC cluster (`drac_sim.sh`).
+* The build-excluded repository directory `scripts/simulations/` contains a
+  freqTLS (ML/TMB) twin of the bayesTLS two-stage-bias simulation (shared
+  data-generating process + scoring), with a comparison to the bayesTLS results.
+  These maintainer scripts and their DRAC launcher are not installed with the
+  package.
 
 ## Engine
 
@@ -79,5 +83,4 @@ supersedes.
 
 ## Superseding profileTLS
 
-* freqTLS supersedes **profileTLS** (the engine donor); the profileTLS site and
-  repository are being retired.
+* freqTLS is the intended successor to **profileTLS**, its engine donor.

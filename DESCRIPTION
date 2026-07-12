@@ -3,7 +3,7 @@ Title: Frequentist Inference for Thermal Load Sensitivity Models
 Version: 0.1.0
 Authors@R: c(
     person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-7765-5182")),
     person("Pieter A.", "Arnold", role = "aut",
            comment = c(ORCID = "0000-0002-6158-7752",
@@ -19,13 +19,19 @@ Description: A maximum-likelihood implementation of the thermal-load-sensitivity
     Pottier in the 'bayesTLS' package, providing the frequentist counterpart to
     that Bayesian workflow. The modelling idea and the four-parameter logistic
     parameterisation are theirs; 'freqTLS' contributes a 'Template Model Builder'
-    ('TMB') likelihood with the midpoint reparameterised directly in CTmax and
+    ('TMB') likelihood with the midpoint reparameterised directly in critical
+    thermal maximum ('CTmax') and
     thermal sensitivity (z) so both headline quantities are estimable, and reports
     uncertainty through a unified trio of frequentist intervals -- Wald (delta),
     profile-likelihood, and bootstrap -- for binomial and beta-binomial survival
-    counts, benchmarked against 'bayesTLS' on shared datasets.
+    counts and beta-distributed proportions. Column and formula interfaces support
+    fixed and grouped designs plus limited independent random intercepts; prediction
+    includes survival curves and deterministic heat-injury scenarios. Equivalence
+    claims are restricted to the matched relative-threshold, constant-shape
+    'bayesTLS' configuration.
 License: GPL (>= 3)
-URL: https://github.com/itchyshin/freqTLS, https://itchyshin.github.io/freqTLS
+Copyright: See file inst/COPYRIGHTS.
+URL: https://github.com/itchyshin/freqTLS, https://itchyshin.github.io/freqTLS/
 BugReports: https://github.com/itchyshin/freqTLS/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -45,14 +51,10 @@ LinkingTo:
     RcppEigen,
     TMB
 Suggests:
-    bayesTLS,
-    covr,
     glmmTMB,
     knitr,
-    pkgdown,
     rmarkdown,
-    testthat (>= 3.0.0),
-    withr
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true

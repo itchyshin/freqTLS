@@ -1,12 +1,14 @@
 # Family Registry
 
-freqTLS models **count** survival data (binomial, beta-binomial) and, since
-v0.2, **continuous proportion** responses in `(0, 1)` (the beta family). The
-count response is the number of survivors `y` out of `n` trials; the beta
-response is a single proportion `y` with no trials. All families share the same
-4PL mean curve as a function of exposure temperature and duration. Adding a
-family requires the `add-simulation-test` discipline plus updates to this file
-and `docs/design/03-likelihoods.md` (AGENTS.md design rule 1).
+freqTLS 0.1.0 models **count** survival data (binomial, beta-binomial) and
+**continuous proportion** responses in `(0, 1)` (the beta family). The beta
+family was initially scheduled for v0.2, but its implementation and
+parameter-recovery tests were completed and folded into the 0.1.0 release
+candidate. The count response is the number of survivors `y` out of `n` trials;
+the beta response is a single proportion `y` with no trials. All families share
+the same 4PL mean curve as a function of exposure temperature and duration.
+Adding a family requires the `add-simulation-test` discipline plus updates to
+this file and `docs/design/03-likelihoods.md` (AGENTS.md design rule 1).
 
 ## Supported families
 
@@ -42,14 +44,15 @@ families.
 ## Temperature / group effect on the shapes
 
 By default the temperature effect runs through the midpoint only; `low`, `up`,
-and `k` are shared. This is the bayesTLS constant-shape configuration, keeps the
-model identifiable on typical thermal death-time data, and is the benchmark
-setting. Since v0.2, each of `low`, `up`, and `log_k` may carry its **own** design
+and `k` are shared. This is the matched, relative-threshold constant-shape
+configuration used for the freqTLS-versus-bayesTLS benchmark. The classical
+two-stage result is a separately labelled absolute-LT50 approximation, not an
+equivalent relative-threshold fit. Each of `low`, `up`, and `log_k` may carry its **own** design
 independently — a grouping factor (`low ~ group`), a general continuous covariate
 (`log_k ~ body_size`), or an intercept — no longer required to share one factor or
 match the `CTmax` / `log_z` grouping; `predict()` rebuilds each shape design from
-`newdata`, and the intercept-only default is byte-identical. Since v0.3, `low` and
-`log_k` may additionally carry a random intercept (`low ~ <fixed> + (1 | group)`).
+`newdata`, and the intercept-only default is byte-identical. `low` and `log_k`
+may additionally carry a random intercept (`low ~ <fixed> + (1 | group)`).
 See the 2026-06-17 entries in `docs/dev-log/decisions.md` and
 `docs/design/46-capability-matrix.md`.
 

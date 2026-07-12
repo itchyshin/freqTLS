@@ -93,8 +93,9 @@ recorded as \code{"proportion"}.
 }
 
 If the dataset spans multiple categories (life stages, species, populations,
-etc.), filter to one category before calling this function and fit a separate
-model per subset — the fitter does not estimate category-level effects.
+etc.), retain the grouping column. Use \code{fit_4pl(by = "group")} or grouped
+formulas in \code{\link[=tls_bf]{tls_bf()}} to estimate category-level effects, or filter first
+when separate models are scientifically preferable.
 }
 \examples{
 # Count data

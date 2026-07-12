@@ -21,21 +21,32 @@ leads; Rose audits claims; Pat and Fisher hold the Definition-of-Done gate.
    - `pkgdown::check_pkgdown()` and `pkgdown::build_site()`
 4. Check examples and vignettes for unsupported syntax, stale claims, or any
    "posterior"/"credible" language describing a freqTLS interval.
-5. Check dependency versions and platform risks; confirm CI is ubuntu-only,
-   `[pull_request, workflow_dispatch]`, and Stan-free.
+5. Check dependency versions and platform risks; confirm the normal-Suggests CI
+   matrix covers Ubuntu R release/devel, Windows R release, and macOS R release,
+   and remains Stan-free.
 6. Confirm the benchmark cache provenance is current and the article reads the
-   cache (no live Stan in CI).
-7. Confirm the four bayesTLS framework authors are credited (Authors@R,
-   Description, README) and the CC BY 4.0 data attribution is present
-   (`R/data.R`, `inst/CITATION`).
-8. Confirm the bayesTLS co-authors have agreed to being listed before any
-   public release.
-9. Record skipped checks and residual risks in the check log.
+   cache (no live Stan in CI). Restrict equivalence claims to the matched
+   relative-threshold, constant-shape model fits; identify the classical
+   two-stage comparator as an absolute-LT50 approximation.
+7. Audit every installed data/extdata component against
+   `docs/design/47-data-license-ledger.md`, `R/data.R`, `inst/COPYRIGHTS`, and
+   `inst/CITATION`. Confirm snow-gum remains labelled CC BY-NC 4.0 and that
+   snow-gum, Kristineberg, or any other permission-pending asset is absent from
+   the source tarball unless written redistribution authority is recorded.
+8. Confirm Pieter A. Arnold, Patrice Pottier, and Daniel W. A. Noble have
+   explicitly agreed to their `aut` roles before public release or CRAN upload.
+9. Build one exact source tarball, record its checksum and inventory, and run
+   `R CMD check --as-cran` on that file with normal Suggests. Require zero errors
+   and warnings and explain every NOTE.
+10. Before CRAN upload, require the candidate commit's GitHub platform matrix,
+    win-builder R-devel, R-hub Linux/clang, and independent Grace/Rose/Pat
+    completion verdicts. Record skipped checks and residual risks in the check
+    log without describing pending gates as passed.
 
 ## Release Questions
 
 - What is implemented, documented, and tested?
-- What is planned but not implemented (the v0.1 non-goals)?
+- What is planned but not implemented (the 0.1.0 non-goals)?
 - What should users avoid (weakly identified designs; extrapolated CTmax)?
 - What changed since the previous release?
 - What would make the release embarrassing if found tomorrow?

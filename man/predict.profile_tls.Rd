@@ -4,7 +4,13 @@
 \alias{predict.profile_tls}
 \title{Predict survival, link, or midpoint from a fitted freqTLS model}
 \usage{
-\method{predict}{profile_tls}(object, newdata, type = c("survival", "link", "midpoint"), ...)
+\method{predict}{profile_tls}(
+  object,
+  newdata,
+  type = c("survival", "link", "midpoint"),
+  re.form = c("population", "conditional"),
+  ...
+)
 }
 \arguments{
 \item{object}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
@@ -15,6 +21,11 @@
 omitted.}
 
 \item{type}{One of \code{"survival"} (default), \code{"link"}, or \code{"midpoint"}.}
+
+\item{re.form}{How to handle fitted random intercepts. \code{"population"}
+(default) sets them to zero; \code{"conditional"} adds the fitted BLUP for each
+random-effect grouping column in \code{newdata}. When omitted for a random-
+effects fit, \code{predict()} warns that it is returning a population prediction.}
 
 \item{...}{Reserved; must be empty.}
 }

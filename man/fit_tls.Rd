@@ -89,7 +89,7 @@ death-time model to survival-count data, parameterised \strong{directly in \code
 and \code{z}} (thermal sensitivity) so that both headline quantities can be
 profiled. Survival is modelled as a function of \code{log10(duration)}; the
 midpoint moves with temperature through \code{CTmax} and \code{z} (see
-\code{vignette("model-math")} and \code{docs/design/01-model-and-parameterisation.md}).
+\code{vignette("model-math")}).
 }
 \details{
 There are two equivalent interfaces. In the \strong{column interface}, columns are
@@ -100,6 +100,14 @@ response, the two axes, and the \code{CTmax} / \code{log_z} predictors. Both int
 feed the same likelihood engine, so a grouped formula fit and the matching
 \verb{group =} column fit are numerically identical.
 }
+\section{Before interpretation}{
+
+Run \code{\link[=check_tls]{check_tls()}} on the fitted object. Its help page maps every
+data-adequacy warning to a concrete design or analysis response.
+\code{vignette("profile-likelihood")} explains strict open profiles and the
+default bootstrap recovery attempt.
+}
+
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
@@ -112,4 +120,7 @@ fit2 <- fit_tls(
   data = d, family = "binomial", tref = 1
 )
 
+}
+\seealso{
+\code{\link[=check_tls]{check_tls()}}, \code{\link[=confint.profile_tls]{confint.profile_tls()}}
 }

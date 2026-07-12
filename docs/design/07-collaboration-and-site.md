@@ -38,10 +38,9 @@ Rules:
   the CI overlaps the null, `#1b7837` when the CI excludes the null, `#377eb8`
   for an estimate marker.
 
-Honest fallback (R-PROFILE): a non-closing profile renders a hollow point and an
-open/annotated lens, never a fabricated closed eye. This reuses the gllvmTMB
-behaviour where the eye refuses to draw a lens when no finite `(lower, upper)`
-exists.
+Honest fallback (R-PROFILE): a non-closing profile renders a hollow point with
+no lens, never a fabricated interval shape. This reuses the gllvmTMB behaviour
+where the eye refuses to draw a lens when no finite `(lower, upper)` exists.
 
 Reuse source: the geometry is adapted from gllvmTMB (GPL-3),
 `plot_loadings_confidence_eye()` and the lens helper `.eye_polygon_df(width_max =
@@ -75,9 +74,10 @@ does not collide with this `docs/` governance tree.
 
 ## CI
 
-`R-CMD-check.yaml` runs on `[pull_request, workflow_dispatch]`, ubuntu-only, with
+`R-CMD-check.yaml` runs on main pushes, pull requests, and manual dispatch across
+Ubuntu release/devel, Windows release, and macOS release, with
 a concurrency group and a 30-minute timeout, and no Stan / cmdstanr. `pkgdown.yaml`
-runs after a successful check (`workflow_run`) or on demand; the benchmark article
-builds from the cached summaries only. Local checks (`devtools::check()`,
+runs only after a successful trusted main-branch check (`workflow_run`); the
+benchmark article builds from the cached summaries only. Local checks (`devtools::check()`,
 `devtools::test()`, `pkgdown::build_site()`) come first; CI is the cross-PR and
 on-demand safety net, not the routine check.

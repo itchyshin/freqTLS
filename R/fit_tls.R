@@ -5,7 +5,7 @@
 #' and `z`** (thermal sensitivity) so that both headline quantities can be
 #' profiled. Survival is modelled as a function of `log10(duration)`; the
 #' midpoint moves with temperature through `CTmax` and `z` (see
-#' `vignette("model-math")` and `docs/design/01-model-and-parameterisation.md`).
+#' `vignette("model-math")`).
 #'
 #' There are two equivalent interfaces. In the **column interface**, columns are
 #' referenced with tidy evaluation: pass the bare column names of `data` (as in
@@ -63,6 +63,14 @@
 #'   the `logLik`, residual `df`, `AIC`, a `convergence` list
 #'   (`code`/`pdHess`/`message`), the `name_map`, and the underlying TMB `obj`,
 #'   optimiser `opt`, and `sdreport`.
+#'
+#' @section Before interpretation:
+#' Run [check_tls()] on the fitted object. Its help page maps every
+#' data-adequacy warning to a concrete design or analysis response.
+#' `vignette("profile-likelihood")` explains strict open profiles and the
+#' default bootstrap recovery attempt.
+#'
+#' @seealso [check_tls()], [confint.profile_tls()]
 #'
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
@@ -209,7 +217,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
     cli::cli_abort("Counts must satisfy {.code 0 <= y <= n} with {.code n > 0}.")
   }
 
-  # ---- data-adequacy diagnostics (SPEC.md S10, warnings 1-6) ----------------
+  # ---- data-adequacy diagnostics --------------------------------------------
   # Emitted before fitting; the post-fit checks (7-8) are surfaced by
   # check_tls(). Never silent.
   maybe_quiet(check_tls_data(y = y_v, n = n_v, time = time_v, temp = temp_v, group = group_v))

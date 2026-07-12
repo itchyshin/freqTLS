@@ -16,7 +16,9 @@ make_4pl_formula(
 }
 \arguments{
 \item{ctmax, z, up, low, k}{One-sided formulas (or \code{NULL}). \code{ctmax}/\code{z} set the
-CTmax / thermal-sensitivity structure; \code{up}/\code{low}/\code{k} the 4PL shape.}
+CTmax / thermal-sensitivity structure and must have the same fixed-effect
+model-matrix columns; \code{up}/\code{low}/\code{k} set the 4PL shape. Random intercepts
+are supported on \code{ctmax}, \code{z}, \code{low}, and \code{k}, but not \code{up}.}
 
 \item{by}{Optional single moderator column name; shorthand for
 \code{ctmax = z = ~ 0 + by} when those are not given explicitly.}
@@ -38,8 +40,15 @@ for grouping CTmax and z by a single moderator (\code{~ 0 + by}).
 Following the freqTLS constant-shape invariant, the asymptotes and steepness
 (\code{up}, \code{low}, \code{k}) default to \strong{shared} (\code{~ 1}) so the temperature effect runs
 through the midpoint (CTmax / z) only; pass an explicit formula to let a shape
-vary. Random effects go inside the \code{ctmax}/\code{z}/\code{up}/\code{low}/\code{k} formulas, e.g.
-\code{ctmax = ~ 0 + grp + (1 | batch)}.
+vary. \code{ctmax} and \code{z} must produce the same fixed-effect model-matrix columns.
+Supported random intercepts go inside the \code{ctmax}/\code{z}/\code{low}/\code{k} formulas;
+\code{up} random effects are not supported. For example,
+\code{ctmax = ~ 1 + (1 | batch)} keeps the same intercept-only fixed design as the
+default \code{z = ~ 1} while adding a \code{CTmax} random intercept.
+}
+\examples{
+make_4pl_formula()
+make_4pl_formula(by = "population", family = "binomial")
 }
 \seealso{
 \code{\link[=fit_4pl]{fit_4pl()}}, \code{\link[=tls_bf]{tls_bf()}}, \code{\link[=standardize_data]{standardize_data()}}

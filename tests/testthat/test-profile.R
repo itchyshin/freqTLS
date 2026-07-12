@@ -83,6 +83,21 @@ test_that("a sparse / degenerate design warns and returns NA without crashing", 
   # An open side is NA (never a fabricated bound) and the status records it.
   expect_true(is.na(ci$conf.low) || is.na(ci$conf.high))
   expect_match(ci$conf.status, "open")
+
+  eye <- suppressWarnings(
+    plot_confidence_eye(
+      fs, parm = "z", method = "profile", raw_data = FALSE,
+      fallback = FALSE
+    )
+  )
+  layer_classes <- vapply(
+    eye$layers,
+    function(layer) class(layer$geom)[1L],
+    character(1)
+  )
+  expect_false(any(layer_classes == "GeomRibbon"))
+  expect_true(any(layer_classes == "GeomPoint"))
+  expect_match(eye$labels$subtitle, "hollow points only|without a lens")
 })
 
 test_that("up uses the delta/Wald fallback with a message and no profile curve", {

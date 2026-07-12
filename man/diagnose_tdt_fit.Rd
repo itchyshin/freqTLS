@@ -18,6 +18,15 @@ Bayesian version reports Rhat / ESS / divergences, the freqTLS version reports
 optimiser convergence, a positive-definite Hessian, and the gradient norm at
 the optimum, with a single \code{all_pass} flag.
 }
+\examples{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+diagnose_tdt_fit(fit)
+}
 \seealso{
 \code{\link[=fit_4pl]{fit_4pl()}}, \code{\link[=check_tls]{check_tls()}}
 }
