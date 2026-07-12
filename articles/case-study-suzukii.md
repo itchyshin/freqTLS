@@ -220,7 +220,7 @@ rbind(
 #> # A tibble: 2 × 5
 #>   parameter  estimate conf.low conf.high method   
 #>   <chr>         <dbl>    <dbl>     <dbl> <chr>    
-#> 1 dCTmax:F-M   0.0244  -0.100      0.147 bootstrap
+#> 1 dCTmax:F-M   0.0244  -0.0981     0.148 bootstrap
 #> 2 dz:F-M       0.0538  -0.0162     0.133 bootstrap
 ```
 
@@ -360,16 +360,17 @@ sessionInfo()
 #> [1] freqTLS_0.1.0
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1    
-#>  [5] jquerylib_0.1.4    systemfonts_1.3.2  scales_1.4.0       textshaping_1.0.5 
-#>  [9] yaml_2.3.12        fastmap_1.2.0      lattice_0.22-9     ggplot2_4.0.3     
-#> [13] R6_2.6.1           labeling_0.4.3     knitr_1.51         tibble_3.3.1      
-#> [17] desc_1.4.3         bslib_0.11.0       pillar_1.11.1      RColorBrewer_1.1-3
-#> [21] TMB_1.9.21         rlang_1.3.0        utf8_1.2.6         cachem_1.1.0      
-#> [25] xfun_0.60          fs_2.1.0           sass_0.4.10        S7_0.2.2          
-#> [29] otel_0.2.0         viridisLite_0.4.3  cli_3.6.6          withr_3.0.3       
-#> [33] pkgdown_2.2.1      magrittr_2.0.5     digest_0.6.39      grid_4.6.1        
-#> [37] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1        
-#> [41] farver_2.1.2       ragg_1.5.2         rmarkdown_2.31     tools_4.6.1       
-#> [45] pkgconfig_2.0.3    htmltools_0.5.9
+#>  [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     dplyr_1.2.1       
+#>  [5] compiler_4.6.1     tidyselect_1.2.1   jquerylib_0.1.4    systemfonts_1.3.2 
+#>  [9] scales_1.4.0       textshaping_1.0.5  yaml_2.3.12        fastmap_1.2.0     
+#> [13] lattice_0.22-9     ggplot2_4.0.3      R6_2.6.1           labeling_0.4.3    
+#> [17] generics_0.1.4     knitr_1.51         tibble_3.3.1       desc_1.4.3        
+#> [21] bslib_0.11.0       pillar_1.11.1      RColorBrewer_1.1-3 TMB_1.9.21        
+#> [25] rlang_1.3.0        utf8_1.2.6         cachem_1.1.0       xfun_0.60         
+#> [29] fs_2.1.0           sass_0.4.10        S7_0.2.2           otel_0.2.0        
+#> [33] viridisLite_0.4.3  cli_3.6.6          withr_3.0.3        pkgdown_2.2.1     
+#> [37] magrittr_2.0.5     digest_0.6.39      grid_4.6.1         lifecycle_1.0.5   
+#> [41] vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1         farver_2.1.2      
+#> [45] ragg_1.5.2         rmarkdown_2.31     tools_4.6.1        pkgconfig_2.0.3   
+#> [49] htmltools_0.5.9
 ```

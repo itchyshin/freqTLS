@@ -3,8 +3,9 @@
 Fits a separate logistic dose-response curve at each assay temperature
 and reads off `log10(LT50)` (the duration at 50% survival). The binomial
 family uses [stats::glm](https://rdrr.io/r/stats/glm.html); the
-beta-binomial family uses glmmTMB::glmmTMB with a `betabinomial` family
-(overdispersion at Stage 1).
+beta-binomial family uses
+[glmmTMB::glmmTMB](https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html) with a
+`betabinomial` family (overdispersion at Stage 1).
 
 ## Usage
 
