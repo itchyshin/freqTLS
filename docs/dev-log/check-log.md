@@ -2246,3 +2246,57 @@ Interpretation:
   passes the four-platform matrix and R-hub, win-builder returns a real package
   result, and fresh Grace/Rose/Pat verdicts approve. Written collaborator consent
   remains a hard upload gate.
+
+## 2026-07-12 -- Replacement platform results and author confirmations
+
+Goal:
+
+- Close the external platform and collaborator-consent gates for the exact
+  freqTLS 0.1.0 release candidate before the final independent audit.
+
+Commands and outcomes:
+
+- `git rev-parse HEAD` ->
+  `3fe45a942f80e58c3233cb8ff8ffd354ce96842a`.
+- `shasum -a 256 freqTLS_0.1.0.tar.gz` ->
+  `1a8d1248a9517e2ba6df2cc595e181d3cc9846f52b868fdec61caac55326b331`.
+- `gh run view 29177778758 --json status,conclusion,headSha,jobs` -> success at
+  release commit `3fe45a9`; Ubuntu release, Ubuntu devel, Windows release, and
+  macOS release all passed.
+- `gh run view 29177783632 --json status,conclusion,headSha,jobs` -> success at
+  release commit `3fe45a9`; the independent R-hub Ubuntu/clang check passed.
+- `curl -fsSL https://win-builder.r-project.org/4xKTjl6D6WT4/00check.log` ->
+  R-devel r90235 completed with `Status: 1 NOTE`. The NOTE is `New submission`
+  and DESCRIPTION spell-check flags for the acronym `TLS` and valid British
+  spelling `reparameterised`. Package installation, compiled-code checks,
+  examples, tests (86 seconds), vignette rebuilding (367 seconds), and PDF/HTML
+  manuals all passed.
+- Maintainer confirmation on 2026-07-12 -> Pieter A. Arnold, Patrice Pottier,
+  and Daniel W. A. Noble all agreed to proceed with their freqTLS 0.1.0 `aut`
+  roles; confirmations were received through email and text correspondence.
+
+Interpretation:
+
+- The replacement exact artifact is green on the required GitHub, R-hub, and
+  win-builder platforms. The win-builder NOTE is expected and explained in
+  `cran-comments.md`; it is not a release blocker. All three author-consent rows
+  are closed. The fresh Grace/Rose/Pat completion adversary remains the final
+  pre-submission gate.
+
+Fresh completion-adversary outcomes:
+
+- Grace -> READY: exact checksum/inventory, local `--as-cran`, GitHub matrix,
+  R-hub, win-builder, CRAN comments, provenance, and submission mechanics pass.
+- Pat -> READY: clean install, README first fit, intervals, prediction,
+  diagnostics, examples, all installed vignettes, neutral-directory render,
+  and function-map structure pass using the exact tarball.
+- Rose -> substantively READY, with one process condition: commit and push the
+  gate-closing records and confirm a clean tree. No licensing, scope,
+  provenance, consent, or stale-release-claim blocker remains.
+
+Interpretation:
+
+- Two fresh reviewers returned READY and Rose's sole NOT-READY condition is the
+  landing of this evidence-only batch, not a candidate defect. Commit, push,
+  and clean-tree verification close the completion-adversary gate without
+  rebuilding the byte-identical, already verified tarball.

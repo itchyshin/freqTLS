@@ -2,9 +2,9 @@
 
 - local macOS Tahoe 26.5.2, R 4.6.0 (aarch64)
 - GitHub Actions: Ubuntu R release and devel, Windows R release, macOS R release
-  (the predecessor candidate passed all four; replacement-candidate rerun pending)
-- R-hub Ubuntu/clang (the predecessor candidate passed; replacement rerun pending)
-- win-builder R-devel (replacement candidate submitted; result pending)
+  (all passed at release commit `3fe45a9`)
+- R-hub Ubuntu/clang (passed at release commit `3fe45a9`)
+- win-builder R-devel, R Under development r90235 (1 NOTE)
 
 ## R CMD check results
 
@@ -16,12 +16,12 @@ produced:
 0 errors | 0 warnings | 1 note
 ```
 
-The NOTE is the expected incoming-check message: "New submission". There are no
-downstream dependencies. A first win-builder attempt stopped before package
-installation because its R-devel library lacked the CRAN package `cli`; the
-same log also lacked `curl` for incoming URL checks. The package was not built
-or tested in that attempt. The replacement tarball has been resubmitted and
-platform results will be finalized before submission.
+The local NOTE is the expected incoming-check message: "New submission". The
+win-builder NOTE contains the same message and flags `TLS` and the valid British
+spelling `reparameterised` as possibly misspelled words in DESCRIPTION. There
+are no downstream dependencies. The replacement win-builder run installed the
+package and passed compiled-code checks, examples, tests, vignette rebuilding,
+and both manuals.
 
 ## Additional notes
 

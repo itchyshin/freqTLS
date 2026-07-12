@@ -4,6 +4,19 @@ Durable design decisions for freqTLS, append-only. Each entry records what was
 decided, why, the alternatives, and what future work must respect. The canonical
 specification is `SPEC.md`; these entries record the decisions that shaped it.
 
+## 2026-07-12: Close the 0.1.0 author-consent gate
+
+- Decision: retain the `aut` roles for Pieter A. Arnold, Patrice Pottier, and
+  Daniel W. A. Noble. The maintainer confirmed on 2026-07-12 that all three had
+  agreed to proceed with the freqTLS 0.1.0 CRAN submission through email or text
+  correspondence.
+- Evidence boundary: this repository records the maintainer's dated
+  attestation, not copies of private correspondence. The attestation supersedes
+  earlier release-audit records that described replies as pending.
+- Consequence: collaborator consent no longer blocks upload. Exact-artifact
+  review, CRAN submission, and public package/check-page verification remain
+  separate gates.
+
 ## 2026-07-11: Treat 0.1.0 as one release candidate with the tested surface
 
 - Decision: the historical v0.1/v0.2/v0.3 headings are build milestones, not
