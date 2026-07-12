@@ -2455,3 +2455,42 @@ Interpretation:
   ready. External GitHub, R-hub, win-builder timing, and fresh completion
   verdicts must target this exact `e3b38ef...f62be` candidate; all earlier
   external results are predecessor evidence only.
+
+## 2026-07-12 -- Exact replacement external gate complete
+
+Goal:
+
+- Prove that the exact final replacement candidate closes Uwe Ligges's vignette
+  timing request and passes every external platform and completion gate before
+  CRAN resubmission.
+
+Evidence:
+
+- Exact tarball: `freqTLS_0.1.0.tar.gz`, SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`,
+  1,552,384 bytes and 212 entries.
+- `gh run view 29196192961` at source HEAD
+  `7097a1333fc15b31c65b2863ab74039faca23724` -> success on Ubuntu R release,
+  Ubuntu R devel, Windows R release, and macOS R release.
+- `gh run view 29196204879` at the same source HEAD -> R-hub Ubuntu/clang
+  success.
+- `curl -fsSL https://win-builder.r-project.org/z8E3gcN9PWek/00check.log` ->
+  package `freqTLS` version `0.1.0`; `Status: 1 NOTE`; the only NOTE is `New
+  submission`. Installation took 87 seconds and checking took 431 seconds;
+  tests took 89 seconds and vignette rebuilding 165 seconds. No spelling or
+  overall-checktime NOTE appears.
+- Uwe Ligges's rejection reply identified the original 375-second vignette
+  rebuild as the main problem and asked for toy data, fewer iterations, or
+  precomputed lengthy results. The versioned cross-case cache implements the
+  permitted precomputed-results route while live tests and individual case
+  studies retain executable coverage.
+- Fresh exact-artifact verdicts: Pat READY; Rose READY; Grace no local blocker
+  with all stated external conditions now satisfied.
+
+Interpretation:
+
+- Every technical, licensing, provenance, author-consent, installed-user, and
+  external-platform gate is closed for the exact replacement tarball. The next
+  actions are evidence-only merge, CRAN resubmission/confirmation, and public
+  package/check-page verification. Do not claim publication before those pages
+  exist.

@@ -407,3 +407,18 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
   gains `re_sd_low` / `re_sd_logk` (RNG-stream-preserving for existing calls).
 - Evidence: `src/profile_tls.cpp`, `R/formula.R`, `R/utils.R`, `R/simulate.R`,
   `tests/testthat/test-shape-random-effects.R`, `docs/design/08-random-effects.md`.
+
+## 2026-07-12 -- Exact CRAN replacement candidate is frozen
+
+- Decision: freeze `freqTLS_0.1.0.tar.gz` with SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`
+  as the CRAN resubmission artifact. Release-paperwork edits under build-excluded
+  paths may record external outcomes, but no installed byte may change without
+  rebuilding and repeating every exact-artifact gate.
+- Why: this artifact passed local strict checking, the four-platform GitHub
+  matrix, R-hub Ubuntu/clang, and win-builder R-devel in 431 seconds with only
+  the expected `New submission` NOTE. It also passed the fresh Grace/Rose/Pat
+  completion audit, and its author-consent and redistribution gates are closed.
+- Consequence: resubmit this exact file, then verify CRAN acceptance and public
+  package/check pages before changing release-candidate wording or claiming the
+  package is on CRAN.

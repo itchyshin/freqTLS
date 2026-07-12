@@ -18,6 +18,12 @@ produced:
 The NOTE is the expected incoming-check message: "New submission". There are no
 downstream dependencies.
 
+The same source state passed the GitHub Actions matrix on Ubuntu R release and
+devel, Windows R release, and macOS R release, plus R-hub Ubuntu/clang. The exact
+tarball passed win-builder R-devel with one `New submission` NOTE: installation
+took 87 seconds and checking took 431 seconds, including 89 seconds for tests
+and 165 seconds for vignette rebuilding.
+
 ## Resubmission
 
 This is a corrected resubmission after CRAN incoming pre-test
@@ -37,6 +43,9 @@ This is a corrected resubmission after CRAN incoming pre-test
 - On the replacement candidate, strict local `R CMD check --as-cran` rebuilt
   all vignettes in 77 seconds and returned zero errors, zero warnings, and only
   the expected `New submission` NOTE.
+- On win-builder R-devel, the corrected candidate rebuilt all vignettes in 165
+  seconds and completed the full check in 431 seconds, below the 10-minute
+  incoming threshold. The only NOTE was `New submission`.
 
 ## Additional notes
 

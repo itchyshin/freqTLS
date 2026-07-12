@@ -94,8 +94,8 @@ from 800 to 827 passing assertions.
 
 - `CRAN-SPELL`: fixed; strict incoming feasibility reports no misspellings.
 - `CRAN-TIME`: locally fixed; vignette rebuilding fell from the incoming
-  Windows 375 seconds to 68 seconds on local strict check. External Windows
-  confirmation remains required.
+  Windows 375 seconds to 77 seconds on local strict check and 165 seconds on
+  final win-builder; total win-builder checking took 431 seconds.
 - `CONTRAST-METHOD-CLAIM`: fixed; seven bootstrap-fallback rows are labelled
   bootstrap rather than profile.
 - No open GitHub issue overlapped this focused resubmission fix.
@@ -122,9 +122,9 @@ all-profile claim, which was corrected rather than hidden.
 
 ## 10. Known Residuals
 
-The replacement has not yet passed external Windows timing, final-head GitHub
-CI/R-hub, or the fresh Grace/Rose/Pat resubmission audit. It has not been
-resubmitted to CRAN. CRAN acceptance and public package/check pages remain open.
+The replacement has passed final-head GitHub CI, R-hub, win-builder timing, and
+fresh Grace/Rose/Pat resubmission audits. It has not yet been resubmitted to
+CRAN. CRAN acceptance and public package/check pages remain open.
 
 ## 11. Team Learning
 
@@ -146,5 +146,5 @@ requests and bootstrap fallback; installed cache provenance; package tests;
 vignettes; pkgdown; exact source inventory; clean installation; and local strict
 CRAN checking.
 
-This does NOT cover external Windows check time, final-head CI/R-hub, CRAN
-acceptance, mirror propagation, or public CRAN package/check pages.
+This does NOT cover CRAN acceptance, mirror propagation, or public CRAN
+package/check pages.
