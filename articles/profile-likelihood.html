@@ -265,9 +265,11 @@ and</li>
 <code>open_upper</code>, or <code>open_both</code>).</li>
 </ul>
 <p>Here is a deliberately sparse design — few temperatures and little
-mortality contrast — that does not identify <code>CTmax</code>. Start
-with the user-facing default: it tries bootstrap recovery after the
-profile remains open.</p>
+mortality contrast — that does not identify <code>CTmax</code>. We fit
+it live, then show the user-facing bootstrap recovery recipe separately.
+A 1,000-refit bootstrap is intentionally not executed during package
+checks; run that displayed chunk interactively when you need the
+fallback interval.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
 <span><span class="va">sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span></span>
@@ -280,9 +282,9 @@ profile remains open.</p>
 <span><span class="va">sparse_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">sparse</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
 <span>          family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ci_default</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ci_default</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">withCallingHandlers</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sparse_fit</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>,</span>
 <span>            fallback <span class="op">=</span> <span class="cn">TRUE</span>, nboot <span class="op">=</span> <span class="fl">1000</span>, boot_seed <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
@@ -293,29 +295,12 @@ profile remains open.</p>
 <span>  <span class="op">)</span>,</span>
 <span>  error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="va">e</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; caught warning: Inner re-optimisation did not converge at 1 grid point while profiling <span style="color: #0000BB;">"CTmax"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Those points are reported as <span style="color: #0000BB;">"NA"</span>; the interval is taken from the points that</span></span>
-<span><span class="co">#&gt;   did converge.</span></span>
-<span><span class="co">#&gt; caught warning: The profile deviance for <span style="color: #0000BB;">"CTmax"</span> is non-monotone (multiple local minima).</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The interval may not be a single connected region; inspect `plot(profile(fit,</span></span>
-<span><span class="co">#&gt;   "CTmax"))`.</span></span>
-<span><span class="co">#&gt; caught warning: The profile likelihood for <span style="color: #0000BB;">"CTmax"</span> did not close on the lower and upper sides:</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"CTmax"</span> is weakly identified.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter.</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
-<span><span class="co">#&gt;   non-closing side).</span></span>
 <span><span class="va">ci_default</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"estimate"</span>, <span class="st">"method"</span>,</span>
-<span>               <span class="st">"conf.status"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
-<span><span class="co">#&gt;   parameter conf.low conf.high estimate method    conf.status</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax         34.7      219.     37.8 bootstrap bootstrap</span></span></code></pre></div>
+<span>               <span class="st">"conf.status"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <p>Now disable fallback to inspect the strict profile. The open side
 remains <code>NA</code>, with an <code>open_*</code> status, rather than
 becoming a confident but unsupported bound.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ci_strict</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">withCallingHandlers</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sparse_fit</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>, fallback <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
@@ -347,7 +332,7 @@ becoming a confident but unsupported bound.</p>
 bootstrap lens. For the strict diagnostic below,
 <code>fallback = FALSE</code> preserves the open profile and draws a
 <strong>hollow point with no lens</strong>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># fallback = FALSE so the eye refuses to draw a lens when the profile does not</span></span>
 <span><span class="co"># close (a hollow point only), matching the honest non-closing contract above.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">sparse_fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>,</span>
@@ -362,7 +347,7 @@ repository-only coverage study simulates 200 datasets at a known
 <code>CTmax</code>/<code>z</code> under each family, fits every one by
 ML, builds 95% profile intervals, and records the empirical
 (frequentist) coverage. Its summary is shipped with the package:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cov_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"coverage_results.rds"</span>, package <span class="op">=</span> <span class="st">"freqTLS"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="va">cov_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">cov_path</span><span class="op">)</span></span>

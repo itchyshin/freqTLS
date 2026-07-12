@@ -2,6 +2,9 @@
 
 ## freqTLS 0.1.0 (release candidate)
 
+- Corrected grouped contrast direction so `dCTmax:A-B`, `dlog_z:A-B`,
+  and `dz:A-B` now follow their written meaning: group A minus group B.
+
 freqTLS is the frequentist counterpart to the Bayesian **bayesTLS**
 package: it fits the four-parameter logistic thermal-load-sensitivity
 (thermal death-time) model by maximum likelihood via TMB, parameterised

@@ -35,8 +35,9 @@ confint(
 
   Character vector of target names (for example `"CTmax"`, `"z"`,
   `"log_z"`, `"low"`, `"k"`, `"phi"`, grouped names such as `"CTmax:A"`,
-  or contrasts such as `"dCTmax:A-B"`). `NULL` (default) returns
-  intervals for the natural-scale parameters of the fit.
+  or contrasts such as `"dCTmax:A-B"`, which means group A minus group
+  B). `NULL` (default) returns intervals for the natural-scale
+  parameters of the fit.
 
 - level:
 

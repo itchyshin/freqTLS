@@ -257,8 +257,8 @@ the speed gap concrete:
 | Estimator           | Task                       | Wall-clock | Source |
 |:--------------------|:---------------------------|:-----------|:-------|
 | freqTLS             | fit (ML)                   | 29 ms      | live   |
-| freqTLS             | fit + Wald CTmax & z       | 35 ms      | live   |
-| freqTLS             | fit + profile CTmax & z    | 805 ms     | live   |
+| freqTLS             | fit + Wald CTmax & z       | 34 ms      | live   |
+| freqTLS             | fit + profile CTmax & z    | 832 ms     | live   |
 | classical two-stage | fit + delta CI             | 1.4 s      | cached |
 | bayesTLS            | fit (4 chains x 4000 MCMC) | 5.0 s      | cached |
 
@@ -394,15 +394,16 @@ data.frame(
   conf.high = c(strict$conf.high, boot$conf.high),
   method    = c(strict$method,    boot$method)
 )
-#>                             setting conf.low conf.high  method
-#> 1 strict profile (fallback = FALSE) 34.88526  36.70594 profile
-#> 2      default (bootstrap fallback) 34.88526  36.70594 profile
 ```
 
 When enough bootstrap refits remain stable and non-degenerate, `freqTLS`
 can provide a prior-free interval after an open profile. Sparse or
 boundary designs can still leave a bound unavailable; the status column
-reports that outcome.
+reports that outcome. This 1,000-refit recipe is displayed rather than
+executed during package checks; run it interactively for the full
+comparison. The live strict-profile example and fallback recipe are also
+explained in
+[`vignette("profile-likelihood")`](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md).
 
 ## The teaching device: posterior density versus Confidence Eye
 

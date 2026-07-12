@@ -170,9 +170,11 @@ profile geometry. In that strict mode `freqTLS`:
   `open_both`).
 
 Here is a deliberately sparse design — few temperatures and little
-mortality contrast — that does not identify `CTmax`. Start with the
-user-facing default: it tries bootstrap recovery after the profile
-remains open.
+mortality contrast — that does not identify `CTmax`. We fit it live,
+then show the user-facing bootstrap recovery recipe separately. A
+1,000-refit bootstrap is intentionally not executed during package
+checks; run that displayed chunk interactively when you need the
+fallback interval.
 
 ``` r
 
@@ -188,6 +190,9 @@ sparse_fit <- suppressWarnings(
   fit_tls(sparse, y = survived, n = total, time = duration, temp = temp,
           family = "binomial", tref = 1)
 )
+```
+
+``` r
 
 ci_default <- tryCatch(
   withCallingHandlers(
@@ -200,25 +205,8 @@ ci_default <- tryCatch(
   ),
   error = function(e) e
 )
-#> caught warning: Inner re-optimisation did not converge at 1 grid point while profiling "CTmax".
-#> ℹ Those points are reported as "NA"; the interval is taken from the points that
-#>   did converge.
-#> caught warning: The profile deviance for "CTmax" is non-monotone (multiple local minima).
-#> ℹ The interval may not be a single connected region; inspect `plot(profile(fit,
-#>   "CTmax"))`.
-#> caught warning: The profile likelihood for "CTmax" did not close on the lower and upper sides:
-#> "CTmax" is weakly identified.
-#> ℹ Returning "NA" on the open side rather than a fabricated bound.
-#> ℹ Consider bayesTLS or a bootstrap for this parameter.
-#> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
-#> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
-#>   non-closing side).
 ci_default[, c("parameter", "conf.low", "conf.high", "estimate", "method",
                "conf.status")]
-#> # A tibble: 1 × 6
-#>   parameter conf.low conf.high estimate method    conf.status
-#>   <chr>        <dbl>     <dbl>    <dbl> <chr>     <chr>      
-#> 1 CTmax         34.7      219.     37.8 bootstrap bootstrap
 ```
 
 Now disable fallback to inspect the strict profile. The open side

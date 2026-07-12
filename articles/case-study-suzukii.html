@@ -277,39 +277,38 @@ difference, female minus male) and <code>dz:F-M</code> (the sensitivity
 difference, taken on the log-<code>z</code> scale so the <code>z</code>
 ratio is its exponential).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"dCTmax:F-M"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"dz:F-M"</span>,     method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"method"</span><span class="op">)</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">sex_contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span></span>
+<span>  <span class="va">fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dCTmax:F-M"</span>, <span class="st">"dz:F-M"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span>,</span>
+<span>  fallback <span class="op">=</span> <span class="cn">TRUE</span>, nboot <span class="op">=</span> <span class="fl">1000L</span>, boot_seed <span class="op">=</span> <span class="fl">20260713L</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: The profile likelihood for <span style="color: #0000BB;">"dCTmax:F-M"</span> did not close on the lower and upper</span></span>
 <span><span class="co">#&gt; sides: <span style="color: #0000BB;">"dCTmax:F-M"</span> is weakly identified.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter.</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
-<span><span class="co">#&gt;   non-closing side).</span></span>
 <span><span class="co">#&gt; Warning: The profile likelihood for <span style="color: #0000BB;">"dz:F-M"</span> did not close on the lower and upper sides:</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"dz:F-M"</span> is weakly identified.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter.</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 2 parameters where the profile did not</span></span>
+<span><span class="co">#&gt;   close.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
 <span><span class="co">#&gt;   non-closing side).</span></span>
+<span><span class="va">sex_contrasts</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"method"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
 <span><span class="co">#&gt;   parameter  estimate conf.low conf.high method   </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> dCTmax:F-M   0.024<span style="text-decoration: underline;">4</span>  -<span style="color: #BB0000;">0.098</span><span style="color: #BB0000; text-decoration: underline;">1</span>     0.148 bootstrap</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> dz:F-M       0.053<span style="text-decoration: underline;">8</span>  -<span style="color: #BB0000;">0.016</span><span style="color: #BB0000; text-decoration: underline;">2</span>     0.133 bootstrap</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> dCTmax:F-M  -<span style="color: #BB0000;">0.024</span><span style="color: #BB0000; text-decoration: underline;">4</span>   -<span style="color: #BB0000;">0.152</span>    0.092<span style="text-decoration: underline;">0</span> bootstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> dz:F-M      -<span style="color: #BB0000;">0.053</span><span style="color: #BB0000; text-decoration: underline;">8</span>   -<span style="color: #BB0000;">0.133</span>    0.023<span style="text-decoration: underline;">6</span> bootstrap</span></span></code></pre></div>
 <p>Both intervals <strong>span zero</strong>:</p>
 <ul>
 <li>
-<code>dCTmax:F-M</code> = <strong>0.024 °C, 95% CI [-0.097,
-0.151]</strong> — the sexes’ four-hour <code>CTmax</code> values are
+<code>dCTmax:F-M</code> = <strong>-0.024 °C, 95% CI [-0.154,
+0.092]</strong> — the sexes’ four-hour <code>CTmax</code> values are
 indistinguishable.</li>
 <li>
-<code>dz:F-M</code> = <strong>0.054 [-0.021, 0.128]</strong> on the
+<code>dz:F-M</code> = <strong>-0.054 [-0.133, 0.026]</strong> on the
 log-<code>z</code> scale (a <code>z</code> ratio of
-<code>exp(0.054)</code> ≈ 1.06, a point estimate of about a 6%
+<code>exp(-0.054)</code> ≈ 0.95, a point estimate of about a 5%
 difference in <code>z</code> between the sexes), with a confidence
 interval that includes 0 (ratio 1).</li>
 </ul>
@@ -317,11 +316,9 @@ interval that includes 0 (ratio 1).</li>
 difference in <code>z</code> whose interval spans zero, i.e. <strong>no
 clear sex difference in thermal sensitivity or limit</strong>. The
 likelihood path reaches the same conclusion as the Bayesian path did, by
-a contrast that makes no posterior claim. (The same numbers come from a
-parametric bootstrap:
-<code>confint(fit, "dz:F-M", method = "bootstrap")</code> returns
-<code>0.054 [-0.021, 0.131]</code>, an asymmetry-respecting interval
-without a prior.)</p>
+a contrast that makes no posterior claim. The <code>method</code> column
+above records when the requested profile used the asymmetry-respecting
+parametric- bootstrap fallback without a prior.</p>
 </div>
 <div class="section level2">
 <h2 id="validation-does-ml-recover-the-published-values">Validation: does ML recover the published values?<a class="anchor" aria-label="anchor" href="#validation-does-ml-recover-the-published-values"></a>

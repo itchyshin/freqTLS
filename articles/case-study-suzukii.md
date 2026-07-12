@@ -199,37 +199,36 @@ taken on the log-`z` scale so the `z` ratio is its exponential).
 
 ``` r
 
-rbind(
-  confint(fit, "dCTmax:F-M", method = "profile"),
-  confint(fit, "dz:F-M",     method = "profile")
-)[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
+sex_contrasts <- confint(
+  fit, c("dCTmax:F-M", "dz:F-M"), method = "profile",
+  fallback = TRUE, nboot = 1000L, boot_seed = 20260713L
+)
 #> Warning: The profile likelihood for "dCTmax:F-M" did not close on the lower and upper
 #> sides: "dCTmax:F-M" is weakly identified.
 #> ℹ Returning "NA" on the open side rather than a fabricated bound.
 #> ℹ Consider bayesTLS or a bootstrap for this parameter.
-#> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
-#> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
-#>   non-closing side).
 #> Warning: The profile likelihood for "dz:F-M" did not close on the lower and upper sides:
 #> "dz:F-M" is weakly identified.
 #> ℹ Returning "NA" on the open side rather than a fabricated bound.
 #> ℹ Consider bayesTLS or a bootstrap for this parameter.
-#> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
+#> ! Using a parametric bootstrap for 2 parameters where the profile did not
+#>   close.
 #> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
 #>   non-closing side).
+sex_contrasts[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
 #> # A tibble: 2 × 5
 #>   parameter  estimate conf.low conf.high method   
 #>   <chr>         <dbl>    <dbl>     <dbl> <chr>    
-#> 1 dCTmax:F-M   0.0244  -0.0981     0.148 bootstrap
-#> 2 dz:F-M       0.0538  -0.0162     0.133 bootstrap
+#> 1 dCTmax:F-M  -0.0244   -0.152    0.0920 bootstrap
+#> 2 dz:F-M      -0.0538   -0.133    0.0236 bootstrap
 ```
 
 Both intervals **span zero**:
 
-- `dCTmax:F-M` = **0.024 °C, 95% CI \[-0.097, 0.151\]** — the sexes’
+- `dCTmax:F-M` = **-0.024 °C, 95% CI \[-0.154, 0.092\]** — the sexes’
   four-hour `CTmax` values are indistinguishable.
-- `dz:F-M` = **0.054 \[-0.021, 0.128\]** on the log-`z` scale (a `z`
-  ratio of `exp(0.054)` ≈ 1.06, a point estimate of about a 6%
+- `dz:F-M` = **-0.054 \[-0.133, 0.026\]** on the log-`z` scale (a `z`
+  ratio of `exp(-0.054)` ≈ 0.95, a point estimate of about a 5%
   difference in `z` between the sexes), with a confidence interval that
   includes 0 (ratio 1).
 
@@ -237,10 +236,9 @@ This agrees with the published finding: Ørsted reported a sex difference
 in `z` whose interval spans zero, i.e. **no clear sex difference in
 thermal sensitivity or limit**. The likelihood path reaches the same
 conclusion as the Bayesian path did, by a contrast that makes no
-posterior claim. (The same numbers come from a parametric bootstrap:
-`confint(fit, "dz:F-M", method = "bootstrap")` returns
-`0.054 [-0.021, 0.131]`, an asymmetry-respecting interval without a
-prior.)
+posterior claim. The `method` column above records when the requested
+profile used the asymmetry-respecting parametric- bootstrap fallback
+without a prior.
 
 ## Validation: does ML recover the published values?
 

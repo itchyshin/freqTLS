@@ -59,7 +59,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-release-candidate">freqTLS 0.1.0 (release candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-release-candidate"></a></h2>
-<p>freqTLS is the frequentist counterpart to the Bayesian <strong>bayesTLS</strong> package: it fits the four-parameter logistic thermal-load-sensitivity (thermal death-time) model by maximum likelihood via TMB, parameterised directly in CTmax and thermal sensitivity (z). Under the matched relative-threshold, constant-shape configuration, it targets the same fitted curve as <code>bayesTLS</code>; uncertainty is reported through a frequentist trio — Wald (delta), profile-likelihood, and bootstrap — instead of a posterior. Forked from <strong>profileTLS</strong> (commit <code>6f963a9</code>, v0.3.3), which it supersedes.</p>
+<ul><li>Corrected grouped contrast direction so <code>dCTmax:A-B</code>, <code>dlog_z:A-B</code>, and <code>dz:A-B</code> now follow their written meaning: group A minus group B.</li>
+</ul><p>freqTLS is the frequentist counterpart to the Bayesian <strong>bayesTLS</strong> package: it fits the four-parameter logistic thermal-load-sensitivity (thermal death-time) model by maximum likelihood via TMB, parameterised directly in CTmax and thermal sensitivity (z). Under the matched relative-threshold, constant-shape configuration, it targets the same fitted curve as <code>bayesTLS</code>; uncertainty is reported through a frequentist trio — Wald (delta), profile-likelihood, and bootstrap — instead of a posterior. Forked from <strong>profileTLS</strong> (commit <code>6f963a9</code>, v0.3.3), which it supersedes.</p>
 <div class="section level3">
 <h3 id="bayestls-twin-api-0-1-0">bayesTLS-twin API<a class="anchor" aria-label="anchor" href="#bayestls-twin-api-0-1-0"></a></h3>
 <ul><li>

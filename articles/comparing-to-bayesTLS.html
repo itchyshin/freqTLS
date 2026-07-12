@@ -476,13 +476,13 @@ compilation.</caption>
 <tr class="even">
 <td align="left">freqTLS</td>
 <td align="left">fit + Wald CTmax &amp; z</td>
-<td align="left">35 ms</td>
+<td align="left">34 ms</td>
 <td align="left">live</td>
 </tr>
 <tr class="odd">
 <td align="left">freqTLS</td>
 <td align="left">fit + profile CTmax &amp; z</td>
-<td align="left">805 ms</td>
+<td align="left">832 ms</td>
 <td align="left">live</td>
 </tr>
 <tr class="even">
@@ -792,14 +792,15 @@ retain the open profile explicitly.</p>
 <span>  conf.low  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">strict</span><span class="op">$</span><span class="va">conf.low</span>,  <span class="va">boot</span><span class="op">$</span><span class="va">conf.low</span><span class="op">)</span>,</span>
 <span>  conf.high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">strict</span><span class="op">$</span><span class="va">conf.high</span>, <span class="va">boot</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span>,</span>
 <span>  method    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">strict</span><span class="op">$</span><span class="va">method</span>,    <span class="va">boot</span><span class="op">$</span><span class="va">method</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;                             setting conf.low conf.high  method</span></span>
-<span><span class="co">#&gt; 1 strict profile (fallback = FALSE) 34.88526  36.70594 profile</span></span>
-<span><span class="co">#&gt; 2      default (bootstrap fallback) 34.88526  36.70594 profile</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>When enough bootstrap refits remain stable and non-degenerate,
 <code>freqTLS</code> can provide a prior-free interval after an open
 profile. Sparse or boundary designs can still leave a bound unavailable;
-the status column reports that outcome.</p>
+the status column reports that outcome. This 1,000-refit recipe is
+displayed rather than executed during package checks; run it
+interactively for the full comparison. The live strict-profile example
+and fallback recipe are also explained in
+<code><a href="../articles/profile-likelihood.html">vignette("profile-likelihood")</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="the-teaching-device-posterior-density-versus-confidence-eye">The teaching device: posterior density versus Confidence Eye<a class="anchor" aria-label="anchor" href="#the-teaching-device-posterior-density-versus-confidence-eye"></a>
