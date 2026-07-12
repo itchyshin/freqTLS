@@ -11,7 +11,13 @@ low)\\\mathrm{plogis}(-k(\log\_{10}(duration) - mid)).\$\$
 
 ``` r
 # S3 method for class 'profile_tls'
-predict(object, newdata, type = c("survival", "link", "midpoint"), ...)
+predict(
+  object,
+  newdata,
+  type = c("survival", "link", "midpoint"),
+  re.form = c("population", "conditional"),
+  ...
+)
 ```
 
 ## Arguments
@@ -31,6 +37,14 @@ predict(object, newdata, type = c("survival", "link", "midpoint"), ...)
 - type:
 
   One of `"survival"` (default), `"link"`, or `"midpoint"`.
+
+- re.form:
+
+  How to handle fitted random intercepts. `"population"` (default) sets
+  them to zero; `"conditional"` adds the fitted BLUP for each
+  random-effect grouping column in `newdata`. When omitted for a random-
+  effects fit, [`predict()`](https://rdrr.io/r/stats/predict.html) warns
+  that it is returning a population prediction.
 
 - ...:
 

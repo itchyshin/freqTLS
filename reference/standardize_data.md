@@ -119,9 +119,11 @@ Two response types are supported:
   `response_type` is recorded as `"proportion"`.
 
 If the dataset spans multiple categories (life stages, species,
-populations, etc.), filter to one category before calling this function
-and fit a separate model per subset — the fitter does not estimate
-category-level effects.
+populations, etc.), retain the grouping column. Use
+`fit_4pl(by = "group")` or grouped formulas in
+[`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md) to
+estimate category-level effects, or filter first when separate models
+are scientifically preferable.
 
 ## Examples
 

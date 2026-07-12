@@ -6,8 +6,7 @@ death-time model to survival-count data, parameterised **directly in
 can be profiled. Survival is modelled as a function of
 `log10(duration)`; the midpoint moves with temperature through `CTmax`
 and `z` (see
-[`vignette("model-math")`](https://itchyshin.github.io/freqTLS/articles/model-math.md)
-and `docs/design/01-model-and-parameterisation.md`).
+[`vignette("model-math")`](https://itchyshin.github.io/freqTLS/articles/model-math.md)).
 
 ## Usage
 
@@ -140,6 +139,21 @@ grammar names the response, the two axes, and the `CTmax` / `log_z`
 predictors. Both interfaces feed the same likelihood engine, so a
 grouped formula fit and the matching `group =` column fit are
 numerically identical.
+
+## Before interpretation
+
+Run
+[`check_tls()`](https://itchyshin.github.io/freqTLS/reference/check_tls.md)
+on the fitted object. Its help page maps every data-adequacy warning to
+a concrete design or analysis response.
+[`vignette("profile-likelihood")`](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md)
+explains strict open profiles and the default bootstrap recovery
+attempt.
+
+## See also
+
+[`check_tls()`](https://itchyshin.github.io/freqTLS/reference/check_tls.md),
+[`confint.profile_tls()`](https://itchyshin.github.io/freqTLS/reference/confint.profile_tls.md)
 
 ## Examples
 

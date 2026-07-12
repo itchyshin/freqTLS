@@ -103,3 +103,22 @@ the extractors return the quantities named in their titles.
 
 - `nobs(profile_tls)`: The number of observations (temperature-by-
   duration cells) used in the fit.
+
+## Examples
+
+``` r
+d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+fit <- fit_tls(
+  d, y = survived, n = total, time = duration, temp = temp,
+  family = "binomial", tref = 1, quiet = TRUE
+)
+coef(fit)
+#>         low          up           k       CTmax           z 
+#>  0.01990609  0.97732873  4.89170992 35.92586046  3.99803066 
+logLik(fit)
+#> 'log Lik.' -129.0538 (df=5)
+AIC(fit)
+#> [1] 268.1076
+nobs(fit)
+#> [1] 105
+```

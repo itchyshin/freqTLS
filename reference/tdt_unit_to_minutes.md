@@ -4,7 +4,7 @@ Maps a free-text duration/time unit (e.g. `"hours"`, `"min"`, `"s"`) to
 its length in minutes. Used to derive the model-to-output
 `time_multiplier` in
 [`extract_tdt()`](https://itchyshin.github.io/freqTLS/reference/extract_tdt.md)
-and `derive_tdt_curve()` from a workflow's `duration_unit`.
+from a workflow's `duration_unit`.
 
 ## Usage
 

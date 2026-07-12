@@ -7,7 +7,7 @@ durations and scored alive/dead after recovery. One row per assay group;
 branch flags the heat vs cold series. Subset to one branch (and
 typically one age) and fit CTmax and z as functions of
 species in one joint 4PL to compare species with profile-likelihood
-confidence intervals on every quantity."><meta property="og:description" content="Survival of three cereal-aphid species across a broad range of stressful high
+confidence intervals on those direct parameters."><meta property="og:description" content="Survival of three cereal-aphid species across a broad range of stressful high
 and low temperatures, the model-ready frame for the multi-species case study.
 Aphids of three ages (2, 6, 12 days old) were exposed to a heat branch
 (34–40 degrees C) or a cold branch (-11 to -3 degrees C) for a range of
@@ -15,7 +15,7 @@ durations and scored alive/dead after recovery. One row per assay group;
 branch flags the heat vs cold series. Subset to one branch (and
 typically one age) and fit CTmax and z as functions of
 species in one joint 4PL to compare species with profile-likelihood
-confidence intervals on every quantity."></head><body>
+confidence intervals on those direct parameters."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -55,8 +55,7 @@ confidence intervals on every quantity."></head><body>
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -84,7 +83,7 @@ durations and scored alive/dead after recovery. One row per assay group;
 <code>branch</code> flags the heat vs cold series. Subset to one <code>branch</code> (and
 typically one <code>age</code>) and fit <code>CTmax</code> and <code>z</code> as functions of
 <code>species</code> in one joint 4PL to compare species with profile-likelihood
-confidence intervals on every quantity.</p>
+confidence intervals on those direct parameters.</p>
     </div>
 
     <div class="section level2">
@@ -136,14 +135,27 @@ Raw file:
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">aphid_tdt</span>, <span class="va">branch</span> <span class="op">==</span> <span class="st">"heat"</span> <span class="op">&amp;</span> <span class="va">age</span> <span class="op">==</span> <span class="st">"6"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="standardize_data.html">standardize_data</a></span><span class="op">(</span><span class="va">a</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration_min"</span>,</span></span>
 <span class="r-in"><span>                        n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>,</span></span>
 <span class="r-in"><span>                        duration_unit <span class="op">=</span> <span class="st">"minutes"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">wf</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span>, ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">species</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">species</span>, t_ref <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="tls.html">tls</a></span><span class="op">(</span><span class="va">wf</span>, by <span class="op">=</span> <span class="st">"species"</span>, lethal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># z, CTmax, T_crit per species</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;tls&gt; relative threshold; quantities: z, CTmax, Tcrit (bootstrap intervals)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   species    quantity median lower upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> M_dirhodum z          4.55  4.35  4.81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> S_avenae   z          3.46  3.34  3.61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> R_padi     z          3.62  3.47  3.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> M_dirhodum CTmax     35.4  35.2  35.5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> S_avenae   CTmax     36.6  36.5  36.6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> R_padi     CTmax     37.2  37.1  37.3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> M_dirhodum Tcrit     24.0  21.6  26.2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> S_avenae   Tcrit     27.9  26.2  29.6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> R_padi     Tcrit     28.1  26.4  29.9 </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

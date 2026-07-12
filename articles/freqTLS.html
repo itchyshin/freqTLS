@@ -54,8 +54,7 @@
     <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
     <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: three taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -183,16 +182,17 @@ are already in reference units, so we pass <code>1</code>.</p>
 <div class="section level3">
 <h3 id="formula-interface">Formula interface<a class="anchor" aria-label="anchor" href="#formula-interface"></a>
 </h3>
-<p>For moderators, <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> takes the same <strong>direct
-interface</strong> as <code>bayesTLS</code> — <code>ctmax =</code>,
-<code>z =</code>, or the <code>by =</code> shorthand
-(e.g. <code>by = "life_stage"</code> for a grouped fit). Under the hood
-the engine also exposes a <code>brms</code>/<code>drmTMB</code>-style
-grammar via <code><a href="../reference/tls_bf.html">tls_bf()</a></code> — the left-hand side names the
-survival counts (<code>successes | trials(total)</code>), the right-hand
-side tags the two axes with the <code><a href="https://rdrr.io/r/stats/time.html" class="external-link">time()</a></code> and
-<code>temp()</code> markers — which feeds the same likelihood, so the
-two fits are numerically identical:</p>
+<p>For the supported moderators, <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> takes a
+<strong>similar direct interface</strong> to <code>bayesTLS</code> —
+<code>ctmax =</code>, <code>z =</code>, or the <code>by =</code>
+shorthand (e.g. <code>by = "life_stage"</code> for a grouped fit). Under
+the hood the engine also exposes a
+<code>brms</code>/<code>drmTMB</code>-style grammar via
+<code><a href="../reference/tls_bf.html">tls_bf()</a></code> — the left-hand side names the survival counts
+(<code>successes | trials(total)</code>), the right-hand side tags the
+two axes with the <code><a href="https://rdrr.io/r/stats/time.html" class="external-link">time()</a></code> and <code>temp()</code> markers —
+which feeds the same likelihood, so the two fits are numerically
+identical:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -328,8 +328,8 @@ above to grouped, covariate, and hierarchical models.</p>
 <p><strong>Other families.</strong> Besides
 <code>"beta_binomial"</code>, <code><a href="../reference/fit_tls.html">fit_tls()</a></code> accepts
 <code>"binomial"</code> (no overdispersion) and <code>"beta"</code> (a
-continuous proportion in (0, 1) with no trials column; see
-<code><a href="../articles/case-study-leaf-psii.html">vignette("case-study-leaf-psii")</a></code>).</p>
+continuous proportion in (0, 1) with no trials column; the runnable
+example below uses simulated beta data).</p>
 <p><strong>Grouped <code>CTmax</code> and <code>z</code>.</strong> Put a
 grouping factor on a sub-parameter to estimate a separate, directly
 profile-able <code>CTmax</code> and <code>z</code> per group, with one
@@ -466,6 +466,12 @@ diagnostics.</li>
 comparison (classical two-stage, Bayesian, profile likelihood) and the
 credit for the framework.</li>
 </ul>
+<p>Before interpreting any fitted model, run
+<code>check_tls(fit)</code>. The recovery guide in
+<code><a href="../reference/check_tls.html">?check_tls</a></code> maps each warning to the next design or analysis
+action; the profile article shows both the default bootstrap recovery
+attempt and the strict <code>fallback = FALSE</code> open-profile
+diagnostic.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

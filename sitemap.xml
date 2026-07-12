@@ -1,11 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://itchyshin.github.io/freqTLS/404.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/AGENTS.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/CLAUDE.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/LICENSE-text.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/ROADMAP.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/SPEC.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-leaf-psii.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-li-aphids.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-shrimp.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-summary.html</loc></url>
@@ -59,7 +55,6 @@
 <url><loc>https://itchyshin.github.io/freqTLS/reference/shrimp_lethal.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/shrimp_sublethal.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/simulate_tls.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/snowgum_psii.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/standardize_data.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tdt-accessors.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_check_columns.html</loc></url>

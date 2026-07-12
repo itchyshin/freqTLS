@@ -205,15 +205,15 @@ rbind(
 )[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
 #> Warning: The profile likelihood for "dCTmax:F-M" did not close on the lower and upper
 #> sides: "dCTmax:F-M" is weakly identified.
-#> ℹ Returning "NA" on the open side rather than a fabricated bound (R-PROFILE).
-#> ℹ Consider bayesTLS or a bootstrap for this parameter (SPEC.md S10, warning 9).
+#> ℹ Returning "NA" on the open side rather than a fabricated bound.
+#> ℹ Consider bayesTLS or a bootstrap for this parameter.
 #> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
 #> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
 #>   non-closing side).
 #> Warning: The profile likelihood for "dz:F-M" did not close on the lower and upper sides:
 #> "dz:F-M" is weakly identified.
-#> ℹ Returning "NA" on the open side rather than a fabricated bound (R-PROFILE).
-#> ℹ Consider bayesTLS or a bootstrap for this parameter (SPEC.md S10, warning 9).
+#> ℹ Returning "NA" on the open side rather than a fabricated bound.
+#> ℹ Consider bayesTLS or a bootstrap for this parameter.
 #> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
 #> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
 #>   non-closing side).
@@ -283,10 +283,10 @@ above, so the benchmark and the headline per-sex table agree.
 
 | Sex | Quantity | Two-stage (delta CI) | bayesTLS (95% CrI) | freqTLS (profile CI) |
 |:---|:---|:---|:---|:---|
-| Female | CTmax (°C) | 34.80 \[34.56, 35.04\] | 35.20 \[35.07, 35.30\] | 35.23 \[35.12, 35.32\] |
-| Female | z (°C / decade) | 2.99 \[2.60, 3.38\] | 3.02 \[2.88, 3.20\] | 3.01 \[2.86, 3.18\] |
+| Female | CTmax (°C) | 34.80 \[34.56, 35.04\] | 35.20 \[35.08, 35.30\] | 35.23 \[35.12, 35.32\] |
+| Female | z (°C / decade) | 2.99 \[2.60, 3.38\] | 3.02 \[2.88, 3.18\] | 3.01 \[2.86, 3.18\] |
 | Male | CTmax (°C) | 34.98 \[34.34, 35.62\] | 35.22 \[35.10, 35.32\] | 35.25 \[35.16, 35.34\] |
-| Male | z (°C / decade) | 3.40 \[2.15, 4.65\] | 3.17 \[2.99, 3.39\] | 3.18 \[3.01, 3.36\] |
+| Male | z (°C / decade) | 3.40 \[2.15, 4.65\] | 3.18 \[2.98, 3.39\] | 3.18 \[3.01, 3.36\] |
 
 D. suzukii CTmax and z per sex from three estimators (matched
 constant-shape configuration, tref = 240 min). {.table}
@@ -361,15 +361,15 @@ sessionInfo()
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1    
-#>  [5] parallel_4.6.1     jquerylib_0.1.4    systemfonts_1.3.2  scales_1.4.0      
-#>  [9] textshaping_1.0.5  yaml_2.3.12        fastmap_1.2.0      lattice_0.22-9    
-#> [13] ggplot2_4.0.3      R6_2.6.1           labeling_0.4.3     knitr_1.51        
-#> [17] tibble_3.3.1       desc_1.4.3         bslib_0.11.0       pillar_1.11.1     
-#> [21] RColorBrewer_1.1-3 TMB_1.9.21         rlang_1.3.0        utf8_1.2.6        
-#> [25] cachem_1.1.0       xfun_0.60          fs_2.1.0           sass_0.4.10       
-#> [29] S7_0.2.2           otel_0.2.0         viridisLite_0.4.3  cli_3.6.6         
-#> [33] withr_3.0.3        pkgdown_2.2.1      magrittr_2.0.5     digest_0.6.39     
-#> [37] grid_4.6.1         lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5    
-#> [41] glue_1.8.1         farver_2.1.2       ragg_1.5.2         rmarkdown_2.31    
-#> [45] tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9
+#>  [5] jquerylib_0.1.4    systemfonts_1.3.2  scales_1.4.0       textshaping_1.0.5 
+#>  [9] yaml_2.3.12        fastmap_1.2.0      lattice_0.22-9     ggplot2_4.0.3     
+#> [13] R6_2.6.1           labeling_0.4.3     knitr_1.51         tibble_3.3.1      
+#> [17] desc_1.4.3         bslib_0.11.0       pillar_1.11.1      RColorBrewer_1.1-3
+#> [21] TMB_1.9.21         rlang_1.3.0        utf8_1.2.6         cachem_1.1.0      
+#> [25] xfun_0.60          fs_2.1.0           sass_0.4.10        S7_0.2.2          
+#> [29] otel_0.2.0         viridisLite_0.4.3  cli_3.6.6          withr_3.0.3       
+#> [33] pkgdown_2.2.1      magrittr_2.0.5     digest_0.6.39      grid_4.6.1        
+#> [37] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1        
+#> [41] farver_2.1.2       ragg_1.5.2         rmarkdown_2.31     tools_4.6.1       
+#> [45] pkgconfig_2.0.3    htmltools_0.5.9
 ```
