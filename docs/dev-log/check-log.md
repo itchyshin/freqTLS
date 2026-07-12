@@ -2494,3 +2494,28 @@ Interpretation:
   actions are evidence-only merge, CRAN resubmission/confirmation, and public
   package/check-page verification. Do not claim publication before those pages
   exist.
+
+## 2026-07-12 -- CRAN remediation merged
+
+Goal:
+
+- Land the verified CRAN-remediation source and trigger trusted post-merge
+  package/site verification without changing the frozen source tarball.
+
+Evidence:
+
+- `gh pr view 4` -> PR #4 was squash-merged to `main` as
+  `adb5e0dc5ace287ff7304a43ba839dffdc5fb88a` at 2026-07-12 15:01 UTC.
+- `git pull --ff-only origin main` in the clean main worktree -> fast-forwarded
+  to the merge commit with no local changes.
+- The merge contains the final exact-artifact evidence batch. This follow-up
+  edits only `docs/dev-log/`, which is anchored out of the package build, so the
+  frozen CRAN tarball remains SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`.
+
+Interpretation:
+
+- The implementation is landed. This normal main-branch evidence push triggers
+  the post-merge R-CMD-check workflow; its successful push event in turn
+  authorizes the cleaned pkgdown deployment. CRAN resubmission still uses the
+  already frozen exact tarball.

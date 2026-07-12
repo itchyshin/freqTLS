@@ -12,6 +12,7 @@ cross-case vignette now reads versioned, provenance-checked precomputed results,
 while individual articles and all 827 tests retain live fitting and inference.
 Grouped contrast direction, interval-method labels, cache reproducibility,
 licensing records, public scope, and the generated pkgdown site were corrected.
+PR #4 was squash-merged to `main` as `adb5e0dc5ace287ff7304a43ba839dffdc5fb88a`.
 
 ## 3a. Decisions and Rejected Alternatives
 
@@ -48,6 +49,8 @@ the verified tarball is unchanged.
   pending data, compiled artifacts, or unlicensed assets.
 - Fresh audits -> Pat READY, Rose READY, Grace no local blocker with all stated
   external conditions now satisfied.
+- `gh pr view 4` -> merged to `main` at
+  `adb5e0dc5ace287ff7304a43ba839dffdc5fb88a`.
 
 ## 6. Tests of the Tests
 
@@ -104,7 +107,7 @@ test that would detect silent drift.
 
 Covers local and external checks, Windows timing, installed workflows, function
 map integrity, contrast semantics, cache provenance, licensing, author consent,
-public documentation, pkgdown, and exact tarball inventory.
+public documentation, pkgdown, exact tarball inventory, and merge to `main`.
 
 This does NOT cover CRAN reviewer acceptance, mirror propagation, or public
 package/check-page availability.
