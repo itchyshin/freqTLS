@@ -23,8 +23,9 @@
 
 \item{parm}{Character vector of target names (for example \code{"CTmax"}, \code{"z"},
 \code{"log_z"}, \code{"low"}, \code{"k"}, \code{"phi"}, grouped names such as \code{"CTmax:A"}, or
-contrasts such as \code{"dCTmax:A-B"}). \code{NULL} (default) returns intervals for the
-natural-scale parameters of the fit.}
+contrasts such as \code{"dCTmax:A-B"}, which means group A minus group B).
+\code{NULL} (default) returns intervals for the natural-scale parameters of the
+fit.}
 
 \item{level}{Confidence level (default \code{0.95}).}
 

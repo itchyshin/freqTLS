@@ -2322,7 +2322,8 @@ Incoming evidence:
   new-submission/DESCRIPTION spelling report.
 - Per-vignette/chunk timing -> `case-study-summary.Rmd` was the dominant local
   article; its contrast chunk repeatedly ran default bootstrap fallback after
-  open contrast profiles. Six of eight contrast rows were bootstrap fallbacks,
+  open contrast profiles. The deterministic replacement cache has seven
+  bootstrap-fallback contrast rows and one closed profile,
   although the article called all eight profile intervals.
 
 Remediation and current checks:

@@ -181,9 +181,9 @@ sex_contrasts[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
 
 Both intervals **span zero**:
 
-* `dCTmax:F-M` = **-0.024 °C, 95% CI [-0.093, 0.146]** — the sexes' four-hour
+* `dCTmax:F-M` = **-0.024 °C, 95% CI [-0.154, 0.092]** — the sexes' four-hour
   `CTmax` values are indistinguishable.
-* `dz:F-M` = **-0.054 [-0.016, 0.123]** on the log-`z` scale (a `z` ratio of
+* `dz:F-M` = **-0.054 [-0.133, 0.026]** on the log-`z` scale (a `z` ratio of
   `exp(-0.054)` ≈ 0.95, a point estimate of about a 5% difference in `z` between
   the sexes), with a confidence interval that includes 0 (ratio 1).
 

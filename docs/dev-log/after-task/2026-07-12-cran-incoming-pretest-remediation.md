@@ -13,7 +13,8 @@ meaning. Replaced redundant cross-study fit/profile recomputation with a
 versioned maintainer cache that records provenance and actual interval methods.
 Kept two 1,000-refit bootstrap recipes visible but display-only during package
 checks. Corrected the summary article's false claim that all eight contrast
-intervals were profiles: six used the documented bootstrap fallback.
+intervals were profiles: the deterministic cache shows seven use the documented
+bootstrap fallback.
 
 ## 3a. Decisions and Rejected Alternatives
 
@@ -81,7 +82,7 @@ from 800 to 819 passing assertions.
 - `CRAN-TIME`: locally fixed; vignette rebuilding fell from the incoming
   Windows 375 seconds to 76 seconds on local strict check. External Windows
   confirmation remains required.
-- `CONTRAST-METHOD-CLAIM`: fixed; six bootstrap-fallback rows are labelled
+- `CONTRAST-METHOD-CLAIM`: fixed; seven bootstrap-fallback rows are labelled
   bootstrap rather than profile.
 - No open GitHub issue overlapped this focused resubmission fix.
 
@@ -100,7 +101,7 @@ not claim that freqTLS is on CRAN.
 The first CRAN upload had passed ordinary win-builder with one explained NOTE,
 but the incoming wrapper treated the 11-minute Windows runtime as an additional
 issue and rejected it. Timing the whole article first obscured the real source;
-chunk timing showed that contrast requests triggered six 1,000-refit bootstrap
+chunk timing showed that contrast requests triggered repeated 1,000-refit bootstrap
 fallbacks. Two long cache builds were started while process output was delayed;
 only one remained active and completed. The deeper audit also exposed the stale
 all-profile claim, which was corrected rather than hidden.

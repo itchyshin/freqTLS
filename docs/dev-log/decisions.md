@@ -18,7 +18,7 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
   profiling, contrasts, bootstrap fallback, and failure paths. Two 1,000-refit
   bootstrap recipes remain visible but are not executed during package checks.
 - Accuracy correction: the cross-study article now records each contrast's
-  actual interval method. Six of eight profile requests used the documented
+  actual interval method. Seven of eight profile requests use the documented
   bootstrap fallback; calling all eight intervals profile-likelihood intervals
   was incorrect and is superseded.
 - Boundary: the first upload was confirmed but rejected before publication.
