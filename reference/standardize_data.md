@@ -73,7 +73,7 @@ standardize_data(
 
 - proportion_eps:
 
-  Half-open clamp applied to `proportion` so values sit strictly inside
+  Boundary clamp applied to `proportion` so values sit strictly inside
   `(0, 1)` (the Beta density is undefined at exactly 0 or 1). Default
   `0.001`.
 

@@ -95,10 +95,12 @@ $$p = low + (up - low)\,\mathrm{plogis}(-k(\log_{10}(duration) - mid)).$$</p>
 
 
 <dt id="arg-newdata">newdata<a class="anchor" aria-label="anchor" href="#arg-newdata"></a></dt>
-<dd><p>A data frame with numeric columns <code>temp</code> and <code>duration</code>
-(and <code>group</code> for a grouped fit). <code>duration</code> must be strictly positive
-(it is <code>log10</code>-transformed). For <code>type = "midpoint"</code>, <code>duration</code> may be
-omitted.</p></dd>
+<dd><p>A data frame with numeric columns <code>temp</code> and <code>duration</code>, plus
+every predictor used in the fitted <code>CTmax</code>, <code>log_z</code>, <code>low</code>, <code>up</code>, and
+<code>log_k</code> fixed designs. Include <code>group</code> for a grouped column-interface fit.
+Conditional random-effect predictions additionally require every fitted
+grouping column. <code>duration</code> must be strictly positive (it is
+<code>log10</code>-transformed). For <code>type = "midpoint"</code>, <code>duration</code> may be omitted.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
@@ -129,9 +131,15 @@ values lie in <code>(0, 1)</code>.</p>
 <li><p><code>"midpoint"</code> returns the temperature-dependent 4PL midpoint <code>mid</code> on the
 <code>log10(duration)</code> axis (constant within a temperature, so the <code>duration</code>
 column is ignored for this type but a <code>temp</code> column is still required).</p></li>
-</ul><p>For a grouped fit <code>newdata</code> must carry a <code>group</code> column whose values are a
-subset of the fit's <code>group_levels</code>; for an ungrouped fit any <code>group</code> column
-is ignored.</p>
+</ul><p><code>newdata</code> must also contain every predictor used by the fitted fixed-effect
+designs for <code>CTmax</code>, <code>log_z</code>, <code>low</code>, <code>up</code>, or <code>log_k</code>. For a grouped column-
+interface fit, supply <code>group</code> with values from the fitted <code>group_levels</code>.
+For a formula fit, a literal <code><a href="tls_bf.html">tls_bf()</a></code> call preserves the fixed-design
+formulas needed to rebuild transformed or interacted terms. If the model was
+instead passed through a formula-object variable, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> can rebuild
+direct numeric design columns but asks the user to refit with a literal
+<code><a href="tls_bf.html">tls_bf()</a></code> call when a transformed or interacted design cannot be recovered
+safely.</p>
     </div>
 
     <div class="section level2">
@@ -143,6 +151,33 @@ is ignored.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">nd</span>, type <span class="op">=</span> <span class="st">"survival"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.89445180 0.47691987 0.09003950 0.69738630 0.18571146 0.03695279 0.36162991</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [8] 0.06378846 0.02386996</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># A continuous predictor used by CTmax and log_z must also be in newdata.</span></span></span>
+<span class="r-in"><span><span class="va">d</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_tls.html">fit_tls</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="va">x</span>, <span class="va">log_z</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_x</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="fl">36</span>, duration <span class="op">=</span> <span class="fl">2</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2856389 0.3061422</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Choose population or fitted-group prediction explicitly for an RE fit.</span></span></span>
+<span class="r-in"><span><span class="va">dre</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>                    re_sd <span class="op">=</span> <span class="fl">1</span>, n_re_groups <span class="op">=</span> <span class="fl">8</span>, seed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_re</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_tls.html">fit_tls</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">dre</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">colony</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="ranef.html">ranef</a></span><span class="op">(</span><span class="va">fit_re</span><span class="op">)</span><span class="op">$</span><span class="va">group</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nd_re</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="fl">36</span>, duration <span class="op">=</span> <span class="fl">2</span>, colony <span class="op">=</span> <span class="va">colony</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_re</span>, <span class="va">nd_re</span>, re.form <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2124193</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_re</span>, <span class="va">nd_re</span>, re.form <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1003736</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

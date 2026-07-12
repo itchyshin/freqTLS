@@ -187,8 +187,26 @@
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt; 1 CTmax     36.0  35.7  36.3 </span></span>
 <span><span class="co">#&gt; 2 z          3.90  3.43  4.38</span></span></code></pre></div>
-<p>For per-group CTmax/z, pass formulas — <code>fit_4pl(dat, ctmax = ~ 0 + species, z = ~ 0 + species)</code> — exactly as in <code>bayesTLS</code>. <code><a href="reference/extract_tdt.html">extract_tdt()</a></code>, <code><a href="reference/predict_survival_curves.html">predict_survival_curves()</a></code>, and <code><a href="reference/diagnose_tdt_fit.html">diagnose_tdt_fit()</a></code> complete the twin surface; the column / formula engine interface (<code><a href="reference/fit_tls.html">fit_tls()</a></code>, <code><a href="reference/tls_bf.html">tls_bf()</a></code>) remains available underneath.</p>
+<p>For per-group <code>CTmax</code> and <code>z</code>, standardize a dataset that contains the grouping column, then pass matching formulas exactly as in <code>bayesTLS</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">grouped_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span></span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cool"</span>, <span class="st">"warm"</span><span class="op">)</span>, reps <span class="op">=</span> <span class="fl">4</span>, n <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>  CTmax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">38</span><span class="op">)</span>, z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>, seed <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">grouped_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">grouped_dat</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"total"</span>, n_surv <span class="op">=</span> <span class="st">"survived"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">grouped_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
+<span>  <span class="va">grouped_std</span>, ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">group</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">group</span>, t_ref <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Inspect the recovered group-specific CTmax and z estimates.</span></span>
+<span><span class="fu"><a href="reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">grouped_fit</span><span class="op">)</span><span class="op">[</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^(CTmax|z):"</span>, <span class="fu"><a href="reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">grouped_fit</span><span class="op">)</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span><span class="op">)</span></span>
+<span><span class="op">]</span></span></code></pre></div>
+<p><code><a href="reference/extract_tdt.html">extract_tdt()</a></code>, <code><a href="reference/predict_survival_curves.html">predict_survival_curves()</a></code>, and <code><a href="reference/diagnose_tdt_fit.html">diagnose_tdt_fit()</a></code> complete the twin surface; the column / formula engine interface (<code><a href="reference/fit_tls.html">fit_tls()</a></code>, <code><a href="reference/tls_bf.html">tls_bf()</a></code>) remains available underneath.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 4. Plot the fitted survival surface (the Confidence Eye is shown above)</span></span>
 <span><span class="fu"><a href="reference/plot_survival_curves.html">plot_survival_curves</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-readme-survival-1.png" alt="Fitted 4PL survival curves: survival probability declining with exposure duration, one curve per assay temperature, with observed proportions overlaid as points." width="100%"></p>
@@ -197,7 +215,7 @@
 <h2 id="formula-interface">Formula interface<a class="anchor" aria-label="anchor" href="#formula-interface"></a>
 </h2>
 <p>If you prefer a grammar, build the model with <code><a href="reference/tls_bf.html">tls_bf()</a></code> and pass it as the first argument with the data in <code>data =</code>. The left-hand side names the survival counts (<code>successes | trials(total)</code>); the right-hand side tags the two axes with the <code><a href="https://rdrr.io/r/stats/time.html" class="external-link">time()</a></code> and <code>temp()</code> markers. The formula path feeds the <strong>same</strong> likelihood engine, so the fits are numerically identical:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Column form and formula form fit the same model:</span></span>
 <span><span class="va">fit_f</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -213,7 +231,7 @@
 <h2 id="random-effects-on-ctmax-and-z">Random effects on CTmax and z<a class="anchor" aria-label="anchor" href="#random-effects-on-ctmax-and-z"></a>
 </h2>
 <p>When thermal tolerance varies across colonies, clutches, or populations, add a <strong>random intercept on <code>CTmax</code></strong> with <code>CTmax ~ 1 + (1 | group)</code>. freqTLS fits it by maximum likelihood through TMB’s Laplace approximation (matching the <code>bayesTLS</code> random-effects-on-the-midpoint configuration), reports the between-group standard deviation as <code>sigma_CTmax</code>, and returns the group BLUPs via <code><a href="reference/ranef.html">ranef()</a></code>. The no-random-effects path stays byte-identical to the fixed-effects model.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 15 colonies whose CTmax varies with SD = 1.5 C.</span></span>
 <span><span class="va">dre</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                    re_sd <span class="op">=</span> <span class="fl">1.5</span>, n_re_groups <span class="op">=</span> <span class="fl">15</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -259,7 +277,7 @@
 <h2 id="population-differences-in-curve-shape">Population differences in curve shape<a class="anchor" aria-label="anchor" href="#population-differences-in-curve-shape"></a>
 </h2>
 <p>Two populations can differ not only in <em>where</em> the thermal-death curve sits (<code>CTmax</code>, <code>z</code>) but in its <em>shape</em> — how steeply survival collapses with exposure (<code>k</code>), or the background and maximum survival (<code>low</code>, <code>up</code>). The formula interface lets <code>low</code>, <code>up</code>, and <code>log_k</code> vary by a grouping factor, relaxing the shared-shape restriction. Here a heat-tolerant and a heat-sensitive population differ in both <code>CTmax</code> and the curve steepness <code>k</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The tolerant population has a higher CTmax and a steeper survival collapse.</span></span>
 <span><span class="va">dpop</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tolerant"</span>, <span class="st">"sensitive"</span><span class="op">)</span>,</span>
 <span>                     CTmax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">38</span>, <span class="fl">35</span><span class="op">)</span>, z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.5</span>, <span class="fl">3.5</span><span class="op">)</span>,</span>
@@ -278,7 +296,7 @@
 <span><span class="co">#&gt; 1 k:tolerant      7.43     10.6      8.86  0.95 profile log   ok         </span></span>
 <span><span class="co">#&gt; 2 k:sensitive     2.40      3.48     2.90  0.95 profile log   ok</span></span></code></pre></div>
 <p>The two steepness estimates have non-overlapping confidence intervals, so the shape difference is identified by the data, not assumed. The fitted curves show it directly — survival collapses abruptly in the tolerant population and gradually in the sensitive one:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_survival_curves.html">plot_survival_curves</a></span><span class="op">(</span><span class="va">fit_pop</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-grouped-shape-curves-1.png" alt="Fitted 4PL survival curves faceted by population. In the tolerant panel survival drops steeply with exposure duration; in the sensitive panel it declines more gradually — a per-group difference in curve steepness (k), with observed proportions overlaid." width="100%"></p>
 </div>
