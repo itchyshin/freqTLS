@@ -53,10 +53,10 @@ asymmetry rather than symmetrising it.
   row of `tidy_parameters(method = "profile")` is honestly labelled `"wald"`.
 * **Contrasts are profiled by refitting on a treatment-coded design.** A
   `dCTmax:<a>-<b>` / `dlog_z:<a>-<b>` target rebuilds the objective with
-  `model.matrix(~ relevel(group, a))`, so the alternate group's coefficient is
-  exactly the contrast and can be profiled by the standard coordinate path. The
+  `model.matrix(~ relevel(group, b))`, so group `a`'s coefficient is exactly the
+  written `a - b` contrast and can be profiled by the standard coordinate path. The
   recoded objective has the same likelihood and MLE as the `~ 0 + group` fit
-  (verified: the recoded `dCTmax` estimate equals `CTmax_b - CTmax_a` from the
+  (verified: the recoded `dCTmax` estimate equals `CTmax_a - CTmax_b` from the
   original fit to ~1e-4), so this is the equivariant move that makes the contrast
   directly profile-able.
 

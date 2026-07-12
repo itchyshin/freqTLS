@@ -330,8 +330,9 @@ Two things stand out from the panel:
   Confidence Eyes make this visible at a glance: the zebrafish lenses separate on
   the `CTmax` axis, while the two fly lenses overlap almost completely.
 
-* **Every estimate carries an honest, prior-free interval.** All six profiles
-  close, so each row is a closed lens rather than a hollow point. Where a profile
+* **Every estimate carries an honest, prior-free interval.** All 12 headline
+  profiles close (six groups for each of two parameters), so each row is a closed
+  lens rather than a hollow point. Where a profile
   did **not** close (a weakly identified design or a boundary asymptote), the same
   display would show a hollow point with no lens -- never a fabricated closed eye.
 

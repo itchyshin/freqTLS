@@ -125,9 +125,10 @@ the gradients finite.
 
 With a grouping factor, the design matrices are `model.matrix(~ 0 + group)` for
 both `CTmax` and `log_z`, so each group `g` has its own direct `CTmax_g` and
-`z_g` (both profile-able), with shared `low`, `up`, `k`. Contrasts `dCTmax` and
-`dlog_z` are obtained by reference-plus-contrast recoding; the ratio of thermal
-sensitivities is `z_ratio = exp(dlog_z)`.
+`z_g` (both profile-able), with shared `low`, `up`, `k`. Contrasts
+`dCTmax:A-B` and `dlog_z:A-B` use the written direction, group A minus group B,
+and are obtained by reference-plus-contrast recoding; the thermal-sensitivity
+ratio is `z_A / z_B = exp(dlog_z:A-B)`.
 
 ## Time unit (R-UNITS)
 

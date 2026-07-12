@@ -700,10 +700,10 @@ tls_profile_endpoint <- function(dev_fun, theta_hat, direction, cutoff, se,
 
 #' Resolve and profile a group contrast (dCTmax / dlog_z / dz)
 #'
-#' Recodes the design so the contrast (group `b` minus reference group `a`) is
+#' Recodes the design so the named contrast (group `a` minus group `b`) is
 #' itself a coordinate, refits, and profiles that coordinate directly. This gives
-#' a genuine profile interval for `dCTmax = CTmax_b - CTmax_a` and
-#' `dlog_z = log z_b - log z_a` (so the z ratio is `exp(dlog_z)`).
+#' a genuine profile interval for `dCTmax = CTmax_a - CTmax_b` and
+#' `dlog_z = log z_a - log z_b` (so `exp(dlog_z) = z_a / z_b`).
 #'
 #' @param fit A `profile_tls` fit.
 #' @param parm A contrast name like `dCTmax:A-B` or `dlog_z:A-B` (also `dz:A-B`).
@@ -722,11 +722,12 @@ tls_resolve_contrast <- function(fit, parm) {
   if (length(m) != 4L) {
     cli::cli_abort(c(
       "Could not parse contrast {.val {parm}}.",
-      i = "Use {.val dCTmax:<a>-<b>}, {.val dlog_z:<a>-<b>}, or {.val dz:<a>-<b>} where {.val <a>} is the reference."
+      i = "Use {.val dCTmax:<a>-<b>}, {.val dlog_z:<a>-<b>}, or {.val dz:<a>-<b>}; the value is group a minus group b."
     ))
   }
   which_par <- m[2L]
-  a <- m[3L]; b <- m[4L]
+  lhs <- m[3L]; rhs <- m[4L]
+  a <- rhs; b <- lhs
   if (!(a %in% levels_g) || !(b %in% levels_g)) {
     cli::cli_abort(c(
       "Contrast groups {.val {a}} and {.val {b}} must both be levels of the fit.",

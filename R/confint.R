@@ -46,8 +46,9 @@
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param parm Character vector of target names (for example `"CTmax"`, `"z"`,
 #'   `"log_z"`, `"low"`, `"k"`, `"phi"`, grouped names such as `"CTmax:A"`, or
-#'   contrasts such as `"dCTmax:A-B"`). `NULL` (default) returns intervals for the
-#'   natural-scale parameters of the fit.
+#'   contrasts such as `"dCTmax:A-B"`, which means group A minus group B).
+#'   `NULL` (default) returns intervals for the natural-scale parameters of the
+#'   fit.
 #' @param level Confidence level (default `0.95`).
 #' @param method One of `"profile"` (default), `"wald"`, or `"bootstrap"`.
 #' @param npoints Number of grid points used per profile (default `30`); ignored

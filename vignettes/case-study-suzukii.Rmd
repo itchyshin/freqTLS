@@ -172,26 +172,27 @@ sensitivity difference, taken on the log-`z` scale so the `z` ratio is its
 exponential).
 
 ```{r contrast}
-rbind(
-  confint(fit, "dCTmax:F-M", method = "profile"),
-  confint(fit, "dz:F-M",     method = "profile")
-)[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
+sex_contrasts <- confint(
+  fit, c("dCTmax:F-M", "dz:F-M"), method = "profile",
+  fallback = TRUE, nboot = 1000L, boot_seed = 20260713L
+)
+sex_contrasts[, c("parameter", "estimate", "conf.low", "conf.high", "method")]
 ```
 
 Both intervals **span zero**:
 
-* `dCTmax:F-M` = **0.024 °C, 95% CI [-0.097, 0.151]** — the sexes' four-hour
+* `dCTmax:F-M` = **-0.024 °C, 95% CI [-0.093, 0.146]** — the sexes' four-hour
   `CTmax` values are indistinguishable.
-* `dz:F-M` = **0.054 [-0.021, 0.128]** on the log-`z` scale (a `z` ratio of
-  `exp(0.054)` ≈ 1.06, a point estimate of about a 6% difference in `z` between
+* `dz:F-M` = **-0.054 [-0.016, 0.123]** on the log-`z` scale (a `z` ratio of
+  `exp(-0.054)` ≈ 0.95, a point estimate of about a 5% difference in `z` between
   the sexes), with a confidence interval that includes 0 (ratio 1).
 
 This agrees with the published finding: Ørsted reported a sex difference in `z`
 whose interval spans zero, i.e. **no clear sex difference in thermal sensitivity
 or limit**. The likelihood path reaches the same conclusion as the Bayesian path
-did, by a contrast that makes no posterior claim. (The same numbers come from a
-parametric bootstrap: `confint(fit, "dz:F-M", method = "bootstrap")` returns
-`0.054 [-0.021, 0.131]`, an asymmetry-respecting interval without a prior.)
+did, by a contrast that makes no posterior claim. The `method` column above
+records when the requested profile used the asymmetry-respecting parametric-
+bootstrap fallback without a prior.
 
 ## Validation: does ML recover the published values?
 

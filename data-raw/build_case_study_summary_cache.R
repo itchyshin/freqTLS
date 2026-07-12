@@ -33,7 +33,7 @@ fly_fit <- suppressWarnings(fit_4pl(standardize_data(
 
 eye_rows <- function(fit, taxon, parms, labels) {
   ci <- suppressWarnings(suppressMessages(
-    confint(fit, parm = parms, method = "profile")
+    confint(fit, parm = parms, method = "profile", fallback = FALSE)
   ))
   data.frame(
     taxon = taxon,
@@ -84,10 +84,11 @@ zebra_contrasts <- suppressWarnings(suppressMessages(confint(
     "dz:larvae-young_embryos",
     "dz:larvae-old_embryos"
   ),
-  method = "profile"
+  method = "profile", fallback = TRUE, nboot = 1000L, boot_seed = 20260712L
 )))
 fly_contrasts <- suppressWarnings(suppressMessages(confint(
-  fly_fit, parm = c("dCTmax:M-F", "dz:M-F"), method = "profile"
+  fly_fit, parm = c("dCTmax:M-F", "dz:M-F"), method = "profile",
+  fallback = TRUE, nboot = 1000L, boot_seed = 20260713L
 )))
 
 keep <- c(
@@ -95,12 +96,15 @@ keep <- c(
 )
 contrasts <- rbind(zebra_contrasts[, keep], fly_contrasts[, keep])
 
+source_commit <- trimws(system("git rev-parse HEAD", intern = TRUE))
+stopifnot(length(source_commit) == 1L, grepl("^[0-9a-f]{40}$", source_commit))
+
 cache <- list(
   meta = list(
     schema_version = 1L,
     generated_on = "2026-07-12",
     freqTLS_version = as.character(utils::packageVersion("freqTLS")),
-    freqTLS_source_commit = "915d8a6e21d37c832b12da36bdcf3b9c9718a88e",
+    freqTLS_source_commit = source_commit,
     R_version = R.version.string,
     TMB_version = as.character(utils::packageVersion("TMB")),
     input_md5 = as.list(tools::md5sum(c(
@@ -113,7 +117,11 @@ cache <- list(
       shrimp = list(group = NULL, tref = 1, duration_unit = "hours"),
       zebrafish = list(group = "life_stage", tref = 1, duration_unit = "hours"),
       dsuzukii = list(group = "sex", tref = 240, duration_unit = "minutes"),
-      interval = "profile request with the documented default fallback"
+      headline_interval = list(method = "profile", fallback = FALSE),
+      contrast_interval = list(
+        method = "profile", fallback = TRUE, nboot = 1000L,
+        seeds = list(zebrafish = 20260712L, dsuzukii = 20260713L)
+      )
     )
   ),
   panel = panel,

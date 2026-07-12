@@ -51,9 +51,9 @@ test_that("the dCTmax contrast profile matches the per-group difference and clos
   est <- stats::setNames(fg$estimates$estimate, fg$estimates$parameter)
 
   cc <- suppressWarnings(confint(fg, "dCTmax:A-B", method = "profile"))
-  # The recoded-fit contrast estimate equals CTmax_B - CTmax_A from the
+  # The written A-B contrast equals CTmax_A - CTmax_B from the
   # ~ 0 + group fit (equivariance of the reparameterisation).
-  expect_equal(cc$estimate, unname(est[["CTmax:B"]] - est[["CTmax:A"]]),
+  expect_equal(cc$estimate, unname(est[["CTmax:A"]] - est[["CTmax:B"]]),
                tolerance = 1e-4)
   expect_true(is.finite(cc$conf.low) && is.finite(cc$conf.high))
   expect_lt(cc$conf.low, cc$estimate)
@@ -65,9 +65,28 @@ test_that("the dlog_z contrast profile matches the per-group log-z difference", 
   est <- stats::setNames(fg$estimates$estimate, fg$estimates$parameter)
 
   cl <- suppressWarnings(confint(fg, "dlog_z:A-B", method = "profile"))
-  expect_equal(cl$estimate, unname(log(est[["z:B"]]) - log(est[["z:A"]])),
+  expect_equal(cl$estimate, unname(log(est[["z:A"]]) - log(est[["z:B"]])),
                tolerance = 1e-4)
   expect_true(is.finite(cl$conf.low) && is.finite(cl$conf.high))
-  # The z ratio is exp(dlog_z); recovers z_B / z_A ~ 5/3 within tolerance.
-  expect_lt(abs(exp(cl$estimate) - 5 / 3), 0.5)
+  # The z ratio is exp(dlog_z); recovers z_A / z_B ~ 3/5 within tolerance.
+  expect_lt(abs(exp(cl$estimate) - 3 / 5), 0.25)
+})
+
+test_that("bootstrap contrasts follow the written A-minus-B direction", {
+  fit <- list(estimates = data.frame(
+    parameter = c("CTmax:A", "CTmax:B", "z:A", "z:B"),
+    estimate = c(36, 40, 3, 5)
+  ))
+  reps <- cbind(
+    `CTmax:A` = c(35, 36), `CTmax:B` = c(39, 41),
+    `z:A` = c(2.5, 3.5), `z:B` = c(4.5, 5.5)
+  )
+
+  ct <- tls_boot_target("dCTmax:A-B", fit, reps)
+  lz <- tls_boot_target("dlog_z:A-B", fit, reps)
+
+  expect_equal(ct$estimate, -4)
+  expect_equal(ct$values, c(-4, -5))
+  expect_equal(lz$estimate, log(3) - log(5))
+  expect_equal(lz$values, log(reps[, "z:A"]) - log(reps[, "z:B"]))
 })
