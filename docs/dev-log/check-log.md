@@ -2411,3 +2411,47 @@ Interpretation:
 - The audit findings are fixed in code, generated artifacts, tests, and public
   prose. All external gates and fresh verdicts must now target the `ad637914`
   artifact; predecessor replacement results are timing evidence only.
+
+## 2026-07-12 -- Final Rose cleanup and exact replacement candidate
+
+Goal:
+
+- Remove the last stale reader-facing profile count and contradictory internal
+  contrast comment, then reconcile the after-task record before resubmission.
+
+Changes and checks:
+
+- `vignettes/case-study-summary.Rmd` now states that all 12 headline profiles
+  close: six groups for each of two parameters. `R/profile.R` now describes the
+  internal reference/alternate recoding consistently with public `A-B` meaning
+  A minus B.
+- The remediation after-task report now lists the contrast implementation,
+  documentation, tests, NEWS, and generated Rd files and identifies the
+  contrast semantic change and its directed regression tests.
+- `Rscript --vanilla -e 'devtools::document()'` -> passed.
+- `Rscript --vanilla -e 'devtools::test(filter="group|case-study-summary-cache", stop_on_failure=TRUE)'`
+  -> 48 passes, zero failures/warnings/skips in 2.6 seconds.
+- Installed-package renders of `case-study-summary.Rmd` and
+  `case-study-suzukii.Rmd` -> passed.
+- `Rscript '/Users/z3437171/Dropbox/Github Local/Shinichi/tools/check-after-task.R' docs/dev-log/after-task/2026-07-12-cran-incoming-pretest-remediation.md`
+  -> structure check passed.
+- `Rscript tools/build-site.R` -> passed; privacy cleanup removed internal hub
+  pages. Generated source and HTML contain the corrected 12-profile wording.
+- `Rscript --vanilla -e 'devtools::test(stop_on_failure=TRUE)'` -> 827 passes,
+  zero failures/warnings/skips in 122.8 seconds.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> no problems.
+- `R CMD build .` -> `freqTLS_0.1.0.tar.gz`, SHA-256
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`,
+  about 1.5 MiB and 212 entries; excluded-path and compiled-artifact inventory
+  scan returned no hits.
+- `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> zero errors, zero warnings,
+  one expected `New submission` NOTE; `--run-donttest` 121 seconds elapsed /
+  126 seconds wall, tests 31/34 seconds, vignettes 67/77 seconds, and both
+  manuals passed.
+
+Interpretation:
+
+- Local source, rendered site, exact tarball inventory, and strict check are
+  ready. External GitHub, R-hub, win-builder timing, and fresh completion
+  verdicts must target this exact `e3b38ef...f62be` candidate; all earlier
+  external results are predecessor evidence only.

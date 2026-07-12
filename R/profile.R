@@ -748,9 +748,10 @@ tls_resolve_contrast <- function(fit, parm) {
 
 #' Refit a model with a group contrast as a direct coordinate
 #'
-#' Rebuilds the TMB objective on a treatment-coded design where the contrast
-#' parameter (`group b` minus reference `group a`, with all other groups also
-#' contrasted against the reference) is itself a coefficient. The contrast can
+#' Rebuilds the TMB objective on a treatment-coded design where the named
+#' left-minus-right contrast is itself a coefficient. Internally the right-hand
+#' group is the reference and the left-hand group is the alternate; all other
+#' groups are also contrasted against that reference. The contrast can
 #' then be profiled by the standard coordinate path. The recoded objective has
 #' the same likelihood and MLE as the original `~ 0 + group` fit; only the
 #' coordinates are reparameterised, which is exactly the equivariant move that

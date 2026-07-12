@@ -8,7 +8,7 @@
 ## R CMD check results
 
 The exact local replacement tarball (SHA-256
-`ad637914a1b59d93196a4193807ff5ece904705aec586c136ff62429f38ef994`)
+`e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`)
 produced:
 
 ```
@@ -35,7 +35,7 @@ This is a corrected resubmission after CRAN incoming pre-test
 - Two displayed 1,000-refit bootstrap recipes are intentionally not executed
   during package checks; their behavior remains covered by live tests.
 - On the replacement candidate, strict local `R CMD check --as-cran` rebuilt
-  all vignettes in 68 seconds and returned zero errors, zero warnings, and only
+  all vignettes in 77 seconds and returned zero errors, zero warnings, and only
   the expected `New submission` NOTE.
 
 ## Additional notes

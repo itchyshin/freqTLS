@@ -14,7 +14,9 @@ versioned maintainer cache that records provenance and actual interval methods.
 Kept two 1,000-refit bootstrap recipes visible but display-only during package
 checks. Corrected the summary article's false claim that all eight contrast
 intervals were profiles: the deterministic cache shows seven use the documented
-bootstrap fallback.
+bootstrap fallback. Corrected grouped contrast direction so a name such as
+`dCTmax:A-B` consistently means group A minus group B in profile and bootstrap
+paths, public documentation, tests, and cached case-study results.
 
 ## 3a. Decisions and Rejected Alternatives
 
@@ -28,8 +30,14 @@ live fits and intervals in individual articles and the 827-test suite.
 ## 4. Files Touched
 
 - `DESCRIPTION`
+- `NEWS.md`
+- `R/bootstrap.R`
+- `R/confint.R`
+- `R/profile.R`
 - `cran-comments.md`
 - `data-raw/build_case_study_summary_cache.R`
+- `docs/design/01-model-and-parameterisation.md`
+- `docs/design/04-profile-likelihood.md`
 - `docs/design/47-data-license-ledger.md`
 - `docs/dev-log/after-task/2026-07-12-cran-incoming-pretest-remediation.md`
 - `docs/dev-log/check-log.md`
@@ -37,8 +45,11 @@ live fits and intervals in individual articles and the 827-test suite.
 - `docs/dev-log/release-gates/2026-07-11-cran-0.1.0.md`
 - `inst/COPYRIGHTS`
 - `inst/extdata/case_study_summary_cache.rds`
+- `man/confint.profile_tls.Rd`
 - `tests/testthat/test-case-study-summary-cache.R`
+- `tests/testthat/test-group.R`
 - `vignettes/case-study-summary.Rmd`
+- `vignettes/case-study-suzukii.Rmd`
 - `vignettes/comparing-to-bayesTLS.Rmd`
 - `vignettes/profile-likelihood.Rmd`
 
@@ -59,11 +70,11 @@ live fits and intervals in individual articles and the 827-test suite.
   GNU TLS connection failure; these are external endpoint behavior, not broken
   package targets.
 - `R CMD build .` -> exact tarball SHA-256
-  `ad637914a1b59d93196a4193807ff5ece904705aec586c136ff62429f38ef994`,
-  212 entries, about 2.1 MiB.
+  `e3b38efb954e3292d814c897c2af8620b967ff2ffa72a753bf18c3ab886f62be`,
+  212 entries, about 1.5 MiB.
 - `R CMD check --as-cran freqTLS_0.1.0.tar.gz` -> 0 errors, 0 warnings,
-  1 NOTE (`New submission`); no spell flags; tests 31 seconds and vignettes
-  68 seconds wall.
+  1 NOTE (`New submission`); no spell flags; tests 34 seconds and vignettes
+  77 seconds wall.
 - Clean installation and neutral-directory rendering of the installed main and
   summary vignettes -> passed; cache row counts 12/8; SVG 69/27/0.
 
@@ -73,7 +84,9 @@ The new installed-cache test checks schema/version/source metadata, all three
 input checksums, exact 12/8 row counts, finite estimates and endpoints, headline
 profile status, both contrast methods, and valid method/status pairs. The test
 would fail for the earlier assumed `closed` status or if bootstrap fallback were
-silently relabelled as profile. Existing bootstrap, group, profile, random-
+silently relabelled as profile. Directed group tests independently compare both
+profile and bootstrap `A-B` estimates against fitted group A minus group B, so
+the pre-correction sign convention would fail. Existing bootstrap, group, profile, random-
 effect, and malformed-input tests remain enabled and account for the increase
 from 800 to 827 passing assertions.
 
@@ -121,8 +134,9 @@ shaped the work. The Rose sweep converted a timing issue into an accuracy fix by
 checking what the expensive contrast calls actually returned.
 
 Golden Set: not in scope; no cross-repository known-mistake class or model
-implementation changed. The new deterministic cache test is the local regression
-guard for this release-specific artifact.
+class changed. Grouped profile and bootstrap contrast semantics did change; the
+directed contrast tests are their regression guard. The deterministic cache test
+separately guards the release-specific artifact and its provenance.
 
 ## 12. Cross-Product Coverage
 

@@ -201,7 +201,8 @@ scales and, for `CTmax`, on different reference exposures.
 The geometry follows the `freqTLS` Confidence-Eye contract: the shallow,
 wide lens reads as a confidence *interval*, not a probability density, and a
 profile that did not close would render as a hollow point with **no** lens. All
-six profiles here close, so every row carries a lens.
+12 headline profiles here close (six groups for each of two parameters), so
+every row carries a lens.
 
 ```{r panel, fig.width = 9, fig.height = 6, fig.alt = "Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: six pale horizontal confidence-interval lenses with hollow point estimates, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale."}
 # Build the honest Confidence-Eye geometry by hand so all three fits share one
