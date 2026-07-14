@@ -26,6 +26,14 @@ knitr::opts_chunk$set(
 [![License: GPL (>= 3)](https://img.shields.io/badge/license-GPL%20(%3E%3D%203)-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- badges: end -->
 
+> **⚠️ Experimental software — use at your own risk.** `freqTLS` is under
+> active development, and its results may be incorrect or change without
+> notice. You are responsible for checking your data, model specification,
+> convergence, diagnostics, and interpretation. For important analyses, we
+> strongly encourage you to independently cross-check the results with
+> [`bayesTLS`](https://github.com/daniel1noble/bayesTLS), the Bayesian sister
+> package.
+
 `freqTLS` fits the single-stage four-parameter logistic (4PL) thermal
 death-time model by maximum likelihood via [TMB](https://github.com/kaskr/adcomp),
 parameterised **directly** in `CTmax` (critical thermal maximum) and `z` (thermal
