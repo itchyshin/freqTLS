@@ -83,6 +83,9 @@
 </blockquote>
 <!-- badges: start -->
 
+<blockquote>
+<p><strong>⚠️ Experimental software — use at your own risk.</strong> <code>freqTLS</code> is under active development, and its results may be incorrect or change without notice. You are responsible for checking your data, model specification, convergence, diagnostics, and interpretation. For important analyses, we strongly encourage you to independently cross-check the results with <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>, the Bayesian sister package.</p>
+</blockquote>
 <p><code>freqTLS</code> fits the single-stage four-parameter logistic (4PL) thermal death-time model by maximum likelihood via <a href="https://github.com/kaskr/adcomp" class="external-link">TMB</a>, parameterised <strong>directly</strong> in <code>CTmax</code> (critical thermal maximum) and <code>z</code> (thermal sensitivity). It then returns prior-free <strong>frequentist confidence intervals</strong> — Wald, profile-likelihood (asymmetry-respecting), and bootstrap — for binomial and beta-binomial survival counts, and for continuous <strong>proportion</strong> responses in <code>(0, 1)</code> via the beta family.</p>
 <p>Its signature display is the <strong>Confidence Eye</strong>: a pale horizontal lens spanning the likelihood interval, with a hollow point estimate. These are likelihood <em>confidence</em> intervals, not posteriors, so the visual deliberately avoids posterior-density iconography, and the prose never uses “posterior” or “credible” language.</p>
 <p><img src="reference/figures/README-readme-eye-1.png" alt="Hero figure: a horizontal Confidence Eye for CTmax and z. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%"></p>

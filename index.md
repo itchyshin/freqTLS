@@ -5,6 +5,15 @@
 > (thermal death-time) models; the maximum-likelihood complement to
 > `bayesTLS`.
 
+> **⚠️ Experimental software — use at your own risk.** `freqTLS` is
+> under active development, and its results may be incorrect or change
+> without notice. You are responsible for checking your data, model
+> specification, convergence, diagnostics, and interpretation. For
+> important analyses, we strongly encourage you to independently
+> cross-check the results with
+> [`bayesTLS`](https://github.com/daniel1noble/bayesTLS), the Bayesian
+> sister package.
+
 `freqTLS` fits the single-stage four-parameter logistic (4PL) thermal
 death-time model by maximum likelihood via
 [TMB](https://github.com/kaskr/adcomp), parameterised **directly** in
