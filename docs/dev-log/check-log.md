@@ -2519,3 +2519,40 @@ Interpretation:
   the post-merge R-CMD-check workflow; its successful push event in turn
   authorizes the cleaned pkgdown deployment. CRAN resubmission still uses the
   already frozen exact tarball.
+
+## 2026-07-14 -- Experimental-use warning
+
+Goal:
+
+- Make the package's experimental status and the user's responsibility explicit
+  on both the GitHub README and the pkgdown homepage, and recommend an
+  independent `bayesTLS` cross-check for important analyses.
+
+Changes:
+
+- Added a prominent warning immediately below the README badges. It states that
+  results may be incorrect or change without notice, names the checks that
+  remain the user's responsibility, and links to `bayesTLS` as the Bayesian
+  sister package.
+- Regenerated `README.md` from `README.Rmd`; the pkgdown homepage continues to
+  read this generated file, so GitHub and pkgdown carry the same wording.
+
+Checks run:
+
+- `Rscript --vanilla -e 'devtools::build_readme(quiet = TRUE)'` -> passed and
+  regenerated `README.md`; reported only that installed `Rcpp` and `rlang`
+  development dependencies have newer available versions.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `Rscript --vanilla tools/build-site.R` -> passed; built the full site, removed
+  internal files, and filled reference-page alt text as designed.
+- `rg -n -C 3 "Experimental software|use at your own risk|cross-check the results|Bayesian sister" pkgdown-site/index.html README.Rmd README.md`
+  -> found the warning in both README artifacts and in the rendered homepage
+  blockquote, including the live `bayesTLS` link.
+- `gh issue list --state open --limit 50 --json number,title,url` -> `[]`; there
+  was no overlapping issue to update.
+
+Interpretation:
+
+- The source and local rendered artifact now state the risk plainly. Public
+  visibility still depends on merging the focused branch and the normal
+  R-CMD-check -> pkgdown deployment chain succeeding.
