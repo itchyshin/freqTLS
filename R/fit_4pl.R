@@ -79,6 +79,16 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #' Returns a `freq_tls` workflow object; uncertainty (Wald / profile / bootstrap)
 #' is computed on demand by the quantity twins ([tls()], `confint()`).
 #'
+#' @section Experimental software:
+#' **Use freqTLS at your own risk.** Results and APIs may be incorrect or
+#' change. Users are responsible for checking their data, design, model
+#' specification, convergence, identifiability, diagnostics, and
+#' interpretation. Important analyses should be independently refitted and
+#' cross-checked with [bayesTLS](https://daniel1noble.github.io/bayesTLS/)
+#' ([source repository](https://github.com/daniel1noble/bayesTLS)). Agreement
+#' is a cross-check, not proof of correctness; shared data or model errors can
+#' make both packages agree.
+#'
 #' @param data Output of [standardize_data()].
 #' @param ctmax,z,up,low,k,by Direct-mode formula interface; see
 #'   [make_4pl_formula()]. Supplying `ctmax`/`z` (or `by`) fits per-group CTmax/z;

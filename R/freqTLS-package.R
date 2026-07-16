@@ -8,6 +8,17 @@
 #' returns prior-free, asymmetry-respecting profile-likelihood confidence
 #' intervals for binomial and beta-binomial survival-count data.
 #'
+#' @section Experimental software:
+#' **Use freqTLS at your own risk.** Results and APIs may be incorrect or
+#' change. Users are responsible for checking their data, design, model
+#' specification, convergence, identifiability, diagnostics, and
+#' interpretation. Important analyses should be independently refitted and
+#' cross-checked with the Bayesian sister package
+#' [bayesTLS](https://daniel1noble.github.io/bayesTLS/) ([source
+#' repository](https://github.com/daniel1noble/bayesTLS)). Agreement is a
+#' cross-check, not proof of correctness; shared data or model errors can make
+#' both packages agree.
+#'
 #' @section Credit and origins:
 #' The thermal-load-sensitivity modelling framework and the direct mapping from
 #' the 4PL midpoint slope to `z` and `CTmax` are due to Noble, Arnold and Pottier
