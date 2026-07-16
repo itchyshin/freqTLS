@@ -13,10 +13,14 @@ concurrency:
 
 jobs:
   R-CMD-check:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
 
-    name: ubuntu-latest (release)
+    name: ${{ matrix.os }} (release)
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
