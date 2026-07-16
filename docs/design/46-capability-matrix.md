@@ -118,10 +118,14 @@ Both interfaces map to the same engine and produce numerically identical fits:
   non-closing profile or a non-positive-definite Hessian (`fallback = TRUE`, the
   default). Rendered as a distinct lens in the Confidence Eye. See
   `docs/design/04-profile-likelihood.md`.
-- bayesTLS benchmark cache: **built** from the real `bayesTLS` 1.0.0 + classical
-  two-stage fits (`inst/extdata/bayesTLS_benchmark_cache.rds`), covering shrimp,
-  zebrafish per stage, and *D. suzukii* per sex in the matched relative-threshold,
-  constant-shape configuration. Snow-gum-derived rows were removed for licensing.
+- Canonical bayesTLS comparator cache: **built and independently published**
+  from pinned bayesTLS commit `76510412` on Totoro
+  (`inst/extdata/canonical_bayesTLS_cache.rds`; SHA-256
+  `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`).
+  It covers all six locked analysis units, records exact hashes/formulas/
+  thresholds/versions/seeds and passed sampler diagnostics, and is displayed
+  beside live freqTLS fits with actual point differences. The older shrimp and
+  life-stage-zebrafish cache remains internal legacy evidence only.
 - Multicore bootstrap (`cores`): **fitted** -- forked refits, reproducible
   regardless of cores.
 - `derive_ctmax()`: absolute-threshold critical temperature (closed-form inverse

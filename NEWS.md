@@ -18,6 +18,11 @@
   objective and maximum gradient.
 * Added row-specific parameter prediction for interacted formula designs via
   `predict(..., type = "parameters")`, including `freq_tls` S3 dispatch.
+* Added the reviewed canonical bayesTLS comparator cache built on Totoro from
+  pinned bayesTLS commit `76510412`, with exact analysis hashes, sampler
+  diagnostics, source versions, seeds, and a public table of actual
+  freqTLS-minus-bayesTLS differences. The historical shrimp/life-stage cache
+  remains internal legacy evidence only.
 
 # freqTLS 0.1.0 (unreleased historical candidate)
 

@@ -116,7 +116,11 @@ against `bayesTLS` -- the two packages are two valid lenses on the same model.
   profile or a non-positive-definite Hessian (`fallback = TRUE`). freqTLS now
   attempts a finite interval without a prior; unstable bootstrap fits return an
   explicit `NA` rather than fabricating bounds.
-* **Real `bayesTLS` benchmark cache -- done.** Built from `bayesTLS` 1.0.0.
+* **Canonical `bayesTLS` comparator cache -- done.** Built on Totoro from the
+  pinned bayesTLS commit `76510412`, independently published by exact SHA-256,
+  and checked for exact data/formulas/thresholds plus passing sampler
+  diagnostics. The comparison article reports actual point differences without
+  treating posterior medians and ML estimates as identical targets.
 * **Random intercept on `CTmax` -- done.** `CTmax ~ <fixed> + (1 | group)` via
   TMB Laplace; no-RE path byte-identical; `sigma_CTmax` reported (ML, biased low
   with few groups); `ranef()` BLUPs; and profile-likelihood intervals for the

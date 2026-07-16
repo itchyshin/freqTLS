@@ -111,6 +111,17 @@ except where a cache incorporates third-party data; the component ledger records
 those dependencies explicitly. freqTLS code remains GPL (>= 3); third-party
 data retain their stated licences.
 
+The active canonical comparator cache
+`inst/extdata/canonical_bayesTLS_cache.rds` contains curated bayesTLS posterior
+summaries and diagnostics for the six locked v0.2 analysis units. It was built
+from bayesTLS commit `76510412e06c594c96894a1baba1f0e1a34a5aea`; the published
+file SHA-256 is
+`3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`.
+Source-data licences remain attached to the summaries. In particular, the
+Snow-gum rows remain limited to the recorded non-commercial GitHub/pkgdown use;
+the cache is part of the same CRAN/commercial/adaptation block as the installed
+Snow-gum object.
+
 The cross-case-study cache `inst/extdata/case_study_summary_cache.rds` is built
 by `data-raw/build_case_study_summary_cache.R` from the shipped brown-shrimp,
 life-stage zebrafish, and Drosophila suzukii datasets. It stores freqTLS profile

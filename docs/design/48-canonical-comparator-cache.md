@@ -79,6 +79,14 @@ source commits, every case hash, complete case coverage, and all sampler
 diagnostics before copying the exact bytes to
 `inst/extdata/canonical_bayesTLS_cache.rds`.
 
+The published 2026-07-16 cache has SHA-256
+`3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`. It was
+built with bayesTLS 1.0.0 at the pinned commit, freqTLS 0.2.0.9000 at
+`b32c86001a7e88dd419f1a5a92e81c54b3b2b67c`, CmdStan 2.39.0, R 4.5.3, four
+bounded cores, and `OPENBLAS_NUM_THREADS=1`. All six cases passed the recorded
+diagnostic gates: maximum R-hat was 1.0019, there were zero divergences and zero
+tree-depth hits, and every ESS and BFMI check passed.
+
 Every fitted case records the source and analysis hashes, subset, endpoint,
 family, formulas, grouping, `t_ref`, fit and reported thresholds, quantities,
 seed, chains, iterations, warmup, controls, bayesTLS and freqTLS commits and
@@ -94,3 +102,6 @@ in point estimates and intervals. They do not average discrepant estimates,
 silently widen tolerances, or remove a difficult case. A discrepancy triggers
 an audit of data hashes, formulas, thresholds, centring, units, convergence,
 identifiability, and posterior diagnostics before any biological explanation.
+The rendered comparison article performs the current freqTLS refits, reports
+the actual point differences, and keeps confidence and credible intervals
+labelled separately.

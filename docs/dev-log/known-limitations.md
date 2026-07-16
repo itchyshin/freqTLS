@@ -162,8 +162,14 @@ Benchmark-cache limitations:
   were excluded from the rebuild on 2026-07-11 for licensing. The cache's
   `freqTLS_note` records the historical live-fit/comparator contract. The
   `test-benchmark-sanity` tripwire covers only those retained configurations.
-  The canonical five-endpoint comparator cache remains a separate PR4 gate and
-  must not be inferred from the legacy cache.
+  The canonical six-unit comparator cache is now published at
+  `inst/extdata/canonical_bayesTLS_cache.rds` and covers the five endpoints plus
+  the all-age aphid extension. It contains Bayesian summaries and diagnostics;
+  the comparison article refits freqTLS live and reports actual point
+  differences. Its Snow-gum rows use the locked shared-shape analogue, not the
+  richer shape terms displayed in the pinned supplement. Drosophila mortality
+  compares only the absolute 240-minute LT50 point because the direct freqTLS
+  `z` coordinate is a relative-threshold estimand.
 
 ## Out of scope for v0.1.0
 

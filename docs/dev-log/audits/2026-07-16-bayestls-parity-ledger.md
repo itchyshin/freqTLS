@@ -251,7 +251,8 @@ with confidence objects.
 
 | File | Class | Required disposition |
 |---|---|---|
-| `bayesTLS_benchmark_cache.rds` | `BL` now, `CM` replacement | Preserve old cache internally; build a new version-stamped canonical comparator cache with data hashes, formulas, thresholds, versions, bayesTLS SHA, CmdStan, seeds and diagnostics. |
+| `canonical_bayesTLS_cache.rds` | `CM` / `FA` | Built on Totoro from pinned bayesTLS commit `76510412`, independently published by reviewed SHA-256, and consumed by the active comparison. It records all six locked units, exact hashes/formulas/thresholds/versions/seeds and passing diagnostics. Snow-gum is the locked shared-shape analogue; mortality preserves the absolute-versus-relative estimand boundary. |
+| `bayesTLS_benchmark_cache.rds` | `BL` | Preserve internally for historical shrimp/life-stage regression tests; do not expose it as current parity evidence. |
 | `benchmark_vs_bayes.rds` | `BL` | Remove from active pages unless rebuilt from canonical permitted cases. |
 | `case_study_summary_cache.rds` | `RM` | Rebuild for the five canonical endpoints and retain endpoint/threshold/`t_ref` fields. |
 | `beta_binomial_phi_results.rds` | `FX` | Retain performance extension; do not treat as empirical parity evidence. |
@@ -279,8 +280,9 @@ with confidence objects.
    five primary fits and the all-age aphid extension now have deterministic
    subset/formula tests plus convergence, Hessian, and raw-gradient gates.
    Drosophila lower-asymptote uncertainty and the unstable absolute-LT50
-   bootstrap are displayed rather than hidden. Bayesian paired cache validation
-   remains the separate PR4 blocker.
+   bootstrap are displayed rather than hidden. The reviewed Bayesian comparator
+   cache now covers all six locked units; the public comparison reports actual
+   differences and does not subtract unlike Drosophila mortality estimands.
 3. **The Wuhan trace is not in the current freqTLS extdata inventory.** Its
    upstream source, licence, transformation and hash must pass the data licence
    ledger before the aphid field projection becomes active.

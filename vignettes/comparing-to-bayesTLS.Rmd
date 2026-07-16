@@ -7,14 +7,36 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7,
+                      fig.height = 4.5, dpi = 96)
+library(freqTLS)
+
+cache_path <- system.file(
+  "extdata", "canonical_bayesTLS_cache.rds", package = "freqTLS"
+)
+stopifnot(nzchar(cache_path), file.exists(cache_path))
+bayes_cache <- readRDS(cache_path)
+stopifnot(isTRUE(bayes_cache$meta$diagnostic_all_pass))
+```
+
 The packages teach the same canonical empirical examples but answer them with
 different inference engines. `bayesTLS` uses posterior sampling; `freqTLS` uses
 maximum likelihood with profile, Wald, or bootstrap confidence intervals.
 Neither package's uncertainty object is a drop-in replacement for the other.
 
+**Experimental-software warning:** this comparison does not validate freqTLS.
+Users remain responsible for checking the data, design, model specification,
+convergence, identifiability, diagnostics, and interpretation. Independently
+refit important analyses with
+[`bayesTLS`](https://daniel1noble.github.io/bayesTLS/). Agreement is a
+cross-check, not proof of correctness; shared mistakes can make both packages
+agree.
+
 ## Fair-comparison contract
 
-A paired result is meaningful only when all of the following are identical:
+A numerical difference is interpretable only when all of the following are
+identical:
 
 1. exact dataset bytes and filter;
 2. response endpoint and family;
@@ -25,41 +47,360 @@ A paired result is meaningful only when all of the following are identical:
 
 The pinned baseline is the
 [`bayesTLS` supplement](https://daniel1noble.github.io/bayesTLS/) rendered
-2026-07-14 from commit `76510412e06c594c96894a1baba1f0e1a34a5aea`.
+2026-07-14 from commit
+[`76510412`](https://github.com/daniel1noble/bayesTLS/tree/76510412e06c594c96894a1baba1f0e1a34a5aea).
 
-## Canonical paired cases
+## Pinned comparator evidence
 
-The active comparator set is oxygen-gradient zebrafish, cereal aphids,
-Snow-gum PSII, *D. suzukii* mortality, and *D. suzukii* awake/coma. See the five
-case articles for exact code. Brown shrimp and life-stage zebrafish are retained
-only as legacy benchmark fixtures and do not enter current comparisons.
+The curated cache was built on Totoro with four chains per fit, bounded
+parallelism, and `OPENBLAS_NUM_THREADS=1`. Raw posterior fits remain outside the
+repository. The cache records exact analysis hashes, formulas, filters,
+thresholds, reference times, seeds, package versions, both source commits, and
+sampler diagnostics.
+
+```{r provenance}
+data.frame(
+  item = c(
+    "bayesTLS", "freqTLS", "CmdStan", "R", "built (UTC)",
+    "OpenBLAS threads", "bounded cores"
+  ),
+  recorded_value = c(
+    paste0(bayes_cache$meta$bayesTLS_version, " @ ",
+           substr(bayes_cache$meta$bayesTLS_git_sha, 1, 12)),
+    paste0(bayes_cache$meta$freqTLS_version, " @ ",
+           substr(bayes_cache$meta$freqTLS_git_sha, 1, 12)),
+    bayes_cache$meta$cmdstan_version,
+    bayes_cache$meta$R_version,
+    bayes_cache$meta$date_built_utc,
+    bayes_cache$meta$openblas_num_threads,
+    bayes_cache$meta$bounded_cores
+  ),
+  check.names = FALSE
+)
+```
+
+Every Bayesian fit passed the recorded R-hat, effective-sample-size,
+divergence, tree-depth, and BFMI gates.
+
+```{r bayes-diagnostics}
+bayes_cache$diagnostics[c(
+  "case_id", "rhat_max", "ess_bulk_min", "ess_tail_min", "divergences",
+  "treedepth_hits", "bfmi_min", "all_pass"
+)]
+```
+
+## Refit the same frequentist specifications
+
+The code below refits the exact current freqTLS specifications from the
+installed datasets. It is hidden to keep this article readable; the five case
+articles show the same preparation and fitting code in full.
+
+```{r freq-fits, include=FALSE}
+data(zebrafish_o2)
+zf <- droplevels(subset(
+  zebrafish_o2,
+  ploidy == "diploid" & oxygen %in% c("normoxia", "hyperoxia")
+))
+zf_fit <- fit_4pl(
+  standardize_data(
+    zf, temp = "temp", duration = "duration_min",
+    n_total = "n_total", n_surv = "n_surv", duration_unit = "minutes"
+  ),
+  ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen, low = ~ 0 + oxygen,
+  up = ~ 1, k = ~ 1, family = "beta_binomial", t_ref = 60,
+  method = "wald", quiet = TRUE
+)
+
+data(aphid_tdt)
+aphid6 <- droplevels(subset(aphid_tdt, branch == "heat" & age == "6"))
+aphid6_fit <- fit_4pl(
+  standardize_data(
+    aphid6, temp = "temp", duration = "duration_min",
+    n_total = "n_total", n_surv = "n_surv", duration_unit = "minutes"
+  ),
+  ctmax = ~ 0 + species, z = ~ 0 + species, low = ~ 1, up = ~ 1,
+  k = ~ temp_c, family = "beta_binomial", t_ref = 60,
+  method = "wald", quiet = TRUE
+)
+
+aphid_all <- droplevels(subset(aphid_tdt, branch == "heat"))
+aphid_all_std <- standardize_data(
+  aphid_all, temp = "temp", duration = "duration_min",
+  n_total = "n_total", n_surv = "n_surv", duration_unit = "minutes"
+)
+aphid_all_fit <- fit_4pl(
+  aphid_all_std,
+  ctmax = ~ 1 + species * age, z = ~ 1 + species * age,
+  low = ~ 1, up = ~ 1, k = ~ temp_c, family = "beta_binomial",
+  t_ref = 60, method = "wald", quiet = TRUE
+)
+
+data(snowgum_psii)
+snowgum_fit <- fit_4pl(
+  standardize_data(
+    snowgum_psii, temp = "Temp", duration = "Time",
+    proportion = "fvfm_prop", duration_unit = "minutes"
+  ),
+  ctmax = ~ 0 + recovery + (1 | plant), z = ~ 0 + recovery,
+  low = ~ 1, up = ~ 1, k = ~ 1, family = "beta", t_ref = 60,
+  method = "wald", quiet = TRUE
+)
+
+data(dsuzukii)
+mort <- stats::aggregate(
+  cbind(
+    n_dead = as.integer(dsuzukii$dead),
+    n_total = rep.int(1L, nrow(dsuzukii))
+  ) ~ temp + time + sex,
+  data = dsuzukii,
+  FUN = sum
+)
+mort$n_surv <- mort$n_total - mort$n_dead
+mort_fit <- fit_4pl(
+  standardize_data(
+    mort, temp = "temp", duration = "time",
+    n_total = "n_total", n_surv = "n_surv", duration_unit = "minutes"
+  ),
+  ctmax = ~ 0 + sex, z = ~ 0 + sex,
+  low = ~ temp_c, up = ~ temp_c, k = ~ temp_c,
+  family = "beta_binomial", t_ref = 240, method = "wald", quiet = TRUE
+)
+
+coma_cell <- interaction(
+  dsuzukii$temp, dsuzukii$lvl, dsuzukii$sex, drop = TRUE
+)
+coma <- do.call(rbind, lapply(split(dsuzukii, coma_cell), function(d) {
+  data.frame(
+    temp = d$temp[1], lvl = d$lvl[1], sex = d$sex[1],
+    duration = d$time[1], n_total = nrow(d),
+    n_awake = sum(is.na(d$t_coma))
+  )
+}))
+coma <- droplevels(subset(coma, duration > 0))
+coma_fit <- fit_4pl(
+  standardize_data(
+    coma, temp = "temp", duration = "duration",
+    n_total = "n_total", n_surv = "n_awake", duration_unit = "minutes"
+  ),
+  ctmax = ~ sex, z = ~ sex,
+  low = ~ temp_c, up = ~ temp_c, k = ~ temp_c,
+  family = "beta_binomial", t_ref = 60, method = "wald", quiet = TRUE
+)
+```
+
+All displayed ML fits converged with a positive-definite Hessian and passed the
+package's raw-gradient gate. The interval method for the direct-coordinate rows
+below is Wald; the all-age aphid cell values and mortality absolute-LT50 values
+are point predictions and are labelled accordingly. Shape-identification
+warnings remain visible in the organism-specific articles.
+
+```{r freq-diagnostics}
+fit_list <- list(
+  zebrafish_oxygen = zf_fit,
+  aphid_age6 = aphid6_fit,
+  aphid_all_age = aphid_all_fit,
+  snowgum_psii = snowgum_fit,
+  drosophila_mortality = mort_fit,
+  drosophila_awake = coma_fit
+)
+freq_diagnostics <- do.call(rbind, lapply(names(fit_list), function(case_id) {
+  ans <- diagnose_tdt_fit(fit_list[[case_id]])
+  data.frame(
+    case_id = case_id,
+    converged = ans$converged,
+    pd_hessian = ans$pd_hessian,
+    max_abs_gradient = ans$max_abs_gradient,
+    gradient_pass = ans$gradient_pass,
+    interval_method = if (case_id == "aphid_all_age") {
+      "ML point prediction"
+    } else if (case_id == "drosophila_mortality") {
+      "Wald direct coordinates; absolute LT50 point only"
+    } else {
+      "Wald 95% confidence interval"
+    }
+  )
+}))
+rownames(freq_diagnostics) <- NULL
+freq_diagnostics
+```
+
+## Actual paired differences
+
+The primary table compares the frequentist point estimate with the Bayesian
+posterior median. Positive values mean the freqTLS estimate is larger. The
+interval columns are shown side by side without pretending that a confidence
+interval and a credible interval have the same interpretation.
+
+```{r paired-table}
+as_freq_rows <- function(fit, case_id, by, endpoint, t_ref) {
+  out <- tls(fit, by = by, lethal = FALSE, method = "wald")$summary
+  data.frame(
+    case_id = case_id,
+    endpoint = endpoint,
+    threshold = "relative",
+    t_ref = t_ref,
+    group = as.character(out[[by]]),
+    parameter = out$quantity,
+    freq_estimate = out$median,
+    freq_lower = out$lower,
+    freq_upper = out$upper,
+    freq_interval = "Wald 95% confidence interval"
+  )
+}
+
+freq_rows <- rbind(
+  as_freq_rows(
+    zf_fit, "zebrafish_oxygen", "oxygen", "survival counts", 60
+  ),
+  as_freq_rows(
+    aphid6_fit, "aphid_age6", "species", "survival counts", 60
+  ),
+  as_freq_rows(
+    snowgum_fit, "snowgum_psii", "recovery",
+    "retained PSII function proportion", 60
+  ),
+  as_freq_rows(
+    coma_fit, "drosophila_awake", "sex",
+    "awake counts (missing t_coma)", 60
+  )
+)
+
+bayes_rows <- bayes_cache$summaries
+bayes_rows$group <- ifelse(
+  !is.na(bayes_rows$oxygen), as.character(bayes_rows$oxygen),
+  ifelse(
+    !is.na(bayes_rows$recovery), as.character(bayes_rows$recovery),
+    ifelse(
+      !is.na(bayes_rows$sex), as.character(bayes_rows$sex),
+      as.character(bayes_rows$species)
+    )
+  )
+)
+
+paired <- merge(
+  freq_rows,
+  bayes_rows[c(
+    "case_id", "endpoint", "threshold", "t_ref", "group", "parameter",
+    "median", "lower", "upper", "interval_method"
+  )],
+  by = c("case_id", "endpoint", "threshold", "t_ref", "group", "parameter"),
+  all = FALSE,
+  sort = FALSE
+)
+names(paired)[names(paired) == "median"] <- "bayes_median"
+names(paired)[names(paired) == "lower"] <- "bayes_lower"
+names(paired)[names(paired) == "upper"] <- "bayes_upper"
+names(paired)[names(paired) == "interval_method"] <- "bayes_interval"
+paired$difference_freq_minus_bayes <- paired$freq_estimate - paired$bayes_median
+
+paired[c(
+  "case_id", "endpoint", "threshold", "t_ref", "group", "parameter",
+  "freq_estimate", "freq_lower", "freq_upper", "bayes_median",
+  "bayes_lower", "bayes_upper", "difference_freq_minus_bayes"
+)]
+```
+
+The age-six aphid row is also one cell of the all-age extension, but the two
+fits are intentionally distinct. For all nine species-by-age cells, the largest
+absolute freqTLS-minus-bayesTLS point difference is reported separately rather
+than printing another 18-row table.
+
+```{r aphid-all-age-differences}
+aphid_cells <- expand.grid(
+  species = levels(aphid_all$species),
+  age = levels(aphid_all$age),
+  temp = mean(aphid_all_std$temp),
+  KEEP.OUT.ATTRS = FALSE
+)
+aphid_pred <- predict(aphid_all_fit, aphid_cells, type = "parameters")
+aphid_freq <- rbind(
+  data.frame(
+    species = aphid_cells$species, age = aphid_cells$age,
+    parameter = "CTmax", freq_estimate = aphid_pred$CTmax
+  ),
+  data.frame(
+    species = aphid_cells$species, age = aphid_cells$age,
+    parameter = "z", freq_estimate = aphid_pred$z
+  )
+)
+aphid_bayes <- subset(bayes_rows, case_id == "aphid_all_age")
+aphid_join <- merge(
+  aphid_freq,
+  aphid_bayes[c("species", "age", "parameter", "median")],
+  by = c("species", "age", "parameter")
+)
+aphid_join$difference_freq_minus_bayes <-
+  aphid_join$freq_estimate - aphid_join$median
+aggregate(
+  abs(difference_freq_minus_bayes) ~ parameter,
+  data = aphid_join,
+  FUN = max
+)
+```
+
+Snow-gum is a paired refit of the locked shared-shape analogue. It is not a
+claim that freqTLS reproduces the richer recovery-by-temperature shape model
+displayed in the pinned supplement.
+
+### Drosophila mortality: do not mix estimands
+
+The pinned mortality summary uses the absolute 50% threshold. The direct
+freqTLS `CTmax` and `z` coordinates are relative-midpoint quantities, so they
+must not be subtracted from the Bayesian absolute values. Only the absolute
+240-minute LT50 point is comparable without silently changing the estimand.
+
+```{r mortality-absolute}
+mort_lt50 <- data.frame(
+  group = mort_fit$fit$group_levels,
+  freq_estimate = vapply(mort_fit$fit$group_levels, function(sex_level) {
+    objective <- function(temp) {
+      predict(
+        mort_fit,
+        data.frame(temp = temp, duration = 240, group = sex_level),
+        type = "survival"
+      ) - 0.5
+    }
+    uniroot(objective, range(mort$temp), tol = 1e-10)$root
+  }, numeric(1))
+)
+mort_bayes <- subset(
+  bayes_rows,
+  case_id == "drosophila_mortality" & parameter == "CTmax"
+)
+mort_compare <- merge(
+  mort_lt50,
+  mort_bayes[c("group", "median", "lower", "upper")],
+  by = "group"
+)
+names(mort_compare)[names(mort_compare) == "median"] <- "bayes_median"
+mort_compare$difference_freq_minus_bayes <-
+  mort_compare$freq_estimate - mort_compare$bayes_median
+mort_compare$freq_interval <- "none: exact-model bootstrap unstable"
+mort_compare
+```
+
+The Bayesian cache also contains absolute-threshold `z`. freqTLS does not print
+an allegedly equivalent absolute `z` from this temperature-varying shape model;
+its direct `z` remains the relative coordinate. The mortality case article
+shows that relative result explicitly.
 
 ## What agreement means
 
 Maximum-likelihood estimates and posterior medians need not be numerically
 identical. Priors, finite-sample skew, boundary behaviour, random effects, and
-weak identification can produce legitimate differences. The audit therefore
-first confirms the data and model specification, then reports the actual
-difference and diagnostics. It never averages estimates or hides a discrepancy.
+weak identification can produce legitimate differences. The audit confirms
+the data and model specification first, reports the actual difference, and
+never averages estimates or hides a discrepancy.
 
-Agreement is a cross-check, not proof of correctness. Shared data, filter,
-formula, unit, or endpoint errors can make both packages agree.
-
-## Frequentist extensions
+## Frequentist extensions and unsupported analyses
 
 Confidence Eyes, open-profile status, likelihood contrasts, bootstrap failure
 provenance, and explicit convergence/Hessian/gradient diagnostics are freqTLS
 distinctions. Simulations, profile theory, survival surfaces, limited random
 intercepts, and deterministic heat-injury scenarios remain separate extension
-pages with synthetic examples. Censored-time, hurdle-productivity, posterior
-inference, and fitted repair dynamics remain bayesTLS-only.
+pages with synthetic examples.
 
-## Comparator-cache status
-
-The legacy cache is still installed for internal regression testing, but it is
-not evidence for the canonical v0.2 comparison. A replacement cache must record
-data hashes, exact formulas, thresholds, package versions, the pinned bayesTLS
-SHA, CmdStan version, seeds, build date, and diagnostics. Bayesian construction
-runs on Totoro with bounded parallelism and `OPENBLAS_NUM_THREADS=1`, never on
-GitHub Actions. Raw MCMC outputs remain local; only a small curated summary may
-be committed.
+Censored-time, hurdle-productivity, posterior inference, and fitted repair
+dynamics remain bayesTLS-only. Brown shrimp and life-stage zebrafish remain
+unpublished benchmark-only compatibility fixtures and do not enter this
+comparison, site navigation, search results, sitemap, or current summaries.
