@@ -1792,3 +1792,43 @@ Interpretation:
   directories, missing submission metadata, and contradictory authoritative
   scope claims across `AGENTS.md`, `SPEC.md`, README/NEWS, the capability
   matrix, and known limitations.
+
+## 2026-07-16 -- CRAN preflight: roxygen warning repair
+
+Goal:
+
+- Remove the two roxygen warnings identified in the 2026-07-11 CRAN-readiness
+  audit without changing the model or public API.
+
+Changes:
+
+- `R/tdt-utils.R`: retain `extract_tdt()` as an internal cross-reference, but
+  describe the comparator function as literal `bayesTLS::derive_tdt_curve()`.
+  That function is not an installed, documented dependency in this package, so
+  an Rd link was neither resolvable nor appropriate.
+- `R/utils.R`: move the `tls_backtransform()` roxygen block to its function and
+  retain `@noRd` on the completed `tls_ci_df()` block. The former layout left a
+  tag between two helper blocks, which roxygen parsed as a multi-line
+  `@keywords` field.
+- Regenerated `man/tdt_unit_to_minutes.Rd`; retained the earlier generated
+  punctuation correction in `man/profile.profile_tls.Rd`.
+
+Checks run:
+
+- `Rscript -e 'devtools::document()'` -> completed with no roxygen warnings.
+- `Rscript -e 'devtools::test()'` -> completed successfully.
+- `Rscript -e 'testthat::test_local(reporter = "summary")'` -> completed with
+  one expected skip in `test-benchmark-sanity.R`, whose message records the
+  intentionally deferred cache-format follow-up.
+- `Rscript -e 'devtools::check_man()'` -> completed with no documentation
+  warnings.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- The unresolved Rd link and malformed `@noRd` blocker are closed. The next
+  release decision is still the authoritative public scope: `SPEC.md` and
+  `AGENTS.md` retain the original narrow v0.1 boundary while the package and
+  reader-facing materials ship a broader surface. Do not describe freqTLS as
+  CRAN-ready until that decision, dependency policy, tarball exclusions,
+  submission metadata, URL/licensing review, and platform evidence are closed.

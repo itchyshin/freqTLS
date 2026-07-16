@@ -73,7 +73,7 @@ TMB's \code{map} mechanism and the rest re-optimised, mirroring the bracket-then
 
 Under the disjoint-bounds parameterisation \code{up = up_min + up_w * plogis(beta_up)}
 has its own coordinate \code{beta_up}, but freqTLS does not yet profile it (the profile
-path is wired for \code{low} but not \code{up} -- symmetric work, simply not implemented).
+path is wired for \code{low} but not \code{up} — symmetric work, simply not implemented).
 freqTLS falls back to the delta-method Wald interval for \code{up}
 and says so (SPEC.md S10). Group contrasts (\code{dCTmax}, \code{dlog_z}) are profiled
 directly by recoding the design so the contrast is itself a coordinate.

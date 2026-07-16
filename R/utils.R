@@ -13,13 +13,6 @@
 # ---- link / back-transform helpers -----------------------------------------
 # Internal parameters are unconstrained; these map to / from the natural scale.
 
-#' Back-transform an internal coordinate to its natural scale
-#'
-#' @param x Numeric value(s) on the internal (unconstrained) scale.
-#' @param link One of "log", "logit", or "identity".
-#' @return Numeric value(s) on the natural scale.
-#' @keywords internal
-#' @noRd
 #' Residual degrees of freedom for the t-based interval calibration
 #'
 #' Bates-Watts profile-t / Wald-t intervals compare the (signed-root) statistic
@@ -36,6 +29,13 @@ tls_ci_df <- function(fit) {
   max(n_obs - p, 1L)
 }
 
+#' Back-transform an internal coordinate to its natural scale
+#'
+#' @param x Numeric value(s) on the internal (unconstrained) scale.
+#' @param link One of "log", "logit", or "identity".
+#' @return Numeric value(s) on the natural scale.
+#' @keywords internal
+#' @noRd
 tls_backtransform <- function(x, link) {
   switch(link,
     log = exp(x),
