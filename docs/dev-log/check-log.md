@@ -2556,3 +2556,51 @@ Interpretation:
 - The source and local rendered artifact now state the risk plainly. Public
   visibility still depends on merging the focused branch and the normal
   R-CMD-check -> pkgdown deployment chain succeeding.
+
+## 2026-07-16 -- Experimental v0.2 bayesTLS teaching parity
+
+Goal:
+
+- Rebase active freqTLS teaching, data, formulas, thresholds, estimands,
+  documentation, and comparison evidence on bayesTLS commit `76510412`, while
+  retaining explicitly experimental frequentist extensions and removing
+  unpublished compatibility fixtures from public discovery.
+
+Checks and evidence:
+
+- `Rscript -e 'devtools::document()'` -> regenerated source-synchronized Rd.
+- `Rscript -e 'devtools::test(stop_on_failure = TRUE)'` -> 1,033 pass, 0 fail,
+  0 warn, 0 skip.
+- `Rscript -e 'devtools::check(document = FALSE, manual = FALSE, error_on =
+  "error")'` -> 0 errors, 0 warnings, 0 notes; examples, donttest examples,
+  installed tests, and vignette rebuild passed.
+- `Rscript tools/build-site.R` -> 103 HTML pages from an exact temporary
+  installation; internal pages removed; post-build assertions passed.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- Rendered warning scan -> 103 pages, exactly one
+  `freqtls-experimental-warning` element per page; all seven canonical article
+  routes present.
+- `rg -n -i "shrimp|life-stage|zebrafish_lethal"
+  pkgdown-site/dev/search.json` -> no matches; legacy URLs absent from sitemap,
+  LLM discovery, and article index.
+- `devtools::test(filter = "canonical-comparator-cache", stop_on_failure =
+  TRUE)` -> 120 pass, 0 fail/warn/skip after installed-package hardening.
+- Canonical cache -> 40 summary rows, six cases, maximum R-hat 1.0019, zero
+  divergences, zero tree-depth hits, all ESS/BFMI gates passed; published
+  SHA-256 `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`.
+- Fisher final audit -> READY. Pat final applied-user audit -> READY. Rose found
+  no remaining source blocker after the installed-test, governance, package-
+  help, rendered-site, and whitespace repairs.
+- `gh pr checks 7` at implementation HEAD `d6b1acd` -> all four matrix jobs
+  passed (Ubuntu R release/devel, Windows R release, macOS R release), run
+  `29514936172`.
+- `gh issue list --state open --limit 100 --json number,title,url` -> `[]`.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- The local package, rendered site, canonical comparator, and governance now
+  tell one v0.2 story. The release remains experimental. Snow-gum is authorized
+  only for the current non-commercial GitHub/pkgdown use and remains a CRAN/
+  commercial/adaptation blocker. Important analyses still require independent
+  bayesTLS refitting and user scrutiny; agreement is not proof of correctness.
