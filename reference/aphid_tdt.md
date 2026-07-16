@@ -8,7 +8,7 @@ a range of durations and scored alive/dead after recovery. One row per
 assay group; `branch` flags the heat vs cold series. Subset to one
 `branch` (and typically one `age`) and fit `CTmax` and `z` as functions
 of `species` in one joint 4PL to compare species with profile-likelihood
-confidence intervals on those direct parameters.
+confidence intervals on every quantity.
 
 ## Usage
 
@@ -65,23 +65,12 @@ landscape explain aphid community abundance under climate change. Dryad,
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 a <- subset(aphid_tdt, branch == "heat" & age == "6")
 std <- standardize_data(a, temp = "temp", duration = "duration_min",
                         n_total = "n_total", n_surv = "n_surv",
                         duration_unit = "minutes")
-wf <- fit_4pl(std, ctmax = ~ 0 + species, z = ~ 0 + species,
-              low = ~ 1, up = ~ 1, k = ~ temp_c, t_ref = 60)
-tls(wf, by = "species", lethal = FALSE)  # z and CTmax; no Tcrit here
-#> <tls> relative threshold; quantities: z, CTmax (profile intervals)
-#> # A tibble: 6 × 5
-#>   species    quantity median lower upper
-#>   <chr>      <chr>     <dbl> <dbl> <dbl>
-#> 1 M_dirhodum CTmax     35.2  35.0  35.4 
-#> 2 S_avenae   CTmax     36.5  36.4  36.6 
-#> 3 R_padi     CTmax     37.2  37.1  37.3 
-#> 4 M_dirhodum z          4.75  4.52  5.02
-#> 5 S_avenae   z          3.61  3.46  3.77
-#> 6 R_padi     z          3.97  3.70  4.25
-# }
+wf <- fit_4pl(std, ctmax = ~ 0 + species, z = ~ 0 + species, t_ref = 60)
+tls(wf, by = "species", lethal = TRUE)   # z, CTmax, T_crit per species
+} # }
 ```

@@ -5,25 +5,22 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Canonical empirical examples: what can and cannot be compared • freqTLS</title>
+<title>Cross-case-study summary: four taxa, one panel • freqTLS</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Canonical empirical examples: what can and cannot be compared">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Cross-case-study summary: four taxa, one panel">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    <aside id="freqtls-experimental-warning" class="freqtls-experimental-warning" role="alert" aria-labelledby="freqtls-experimental-warning-title"><div class="container">
-    <strong id="freqtls-experimental-warning-title">Experimental software—use at your own risk.</strong>
-    Results and APIs may be incorrect or change. Users are responsible for checking their data, design, model specification, convergence, identifiability, diagnostics, and interpretation. Important analyses should be independently refitted and cross-checked with <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link">bayesTLS</a> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link">source repository</a>). Agreement is a cross-check, not proof of correctness; shared data or model errors can make both packages agree.
-  </div>
-</aside><nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">freqTLS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,23 +39,23 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Model details</h6></li>
     <li><a class="dropdown-item" href="../articles/model-math.html">The model and its parameterisation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case 1: zebrafish heat tolerance under normoxia and hyperoxia</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case 2: cereal-aphid thermal tolerance</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-snowgum.html">Case 3: Snow-gum PSII under Dark and Light recovery</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case 4: Drosophila suzukii mortality</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii-coma.html">Case 4.2: Drosophila suzukii awake/coma response</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Canonical empirical examples: what can and cannot be compared</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Extensions</h6></li>
-    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Cross-checking freqTLS with bayesTLS</a></li>
-    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Experimental extension: deterministic heat-injury prediction</a></li>
     <li><a class="dropdown-item" href="../articles/profile-likelihood.html">Profile-likelihood intervals</a></li>
     <li><a class="dropdown-item" href="../articles/random-effects.html">Random effects: hierarchical thermal tolerance</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Comparison</h6></li>
+    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
+    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -81,142 +78,710 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Canonical empirical examples: what can and cannot be compared</h1>
+      <h1>Cross-case-study summary: four taxa, one panel</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/case-study-summary.Rmd" class="external-link"><code>vignettes/case-study-summary.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/build/freqtls/vignettes/case-study-summary.Rmd" class="external-link"><code>vignettes/case-study-summary.Rmd</code></a></small>
       <div class="d-none name"><code>case-study-summary.Rmd</code></div>
     </div>
 
     
     
-<p>The active freqTLS case-study sequence mirrors the pinned <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code>
-supplement</a>. The table keeps endpoint, response family, threshold,
-and reference time visible because <code>CTmax</code> values defined for
-different endpoints, thresholds, or durations are not automatically
-comparable.</p>
+<p>This vignette mirrors Manuscript Figure 5 of the
+<code>bayesTLS</code> supplement – a single multi-taxon panel of the
+thermal-sensitivity parameter <code>z</code> and the critical
+temperature <code>CTmax</code> across all four case studies – but draws
+the <code>freqTLS</code> <strong>Confidence Eye</strong> for each
+estimate instead of a Bayesian posterior ridge. Each row is a likelihood
+<strong>confidence interval</strong> (a pale lens with a hollow point
+estimate), never a posterior density.</p>
+<p><strong>This vignette builds without Stan.</strong> Every fit here is
+the <code>freqTLS</code> maximum-likelihood path (TMB), run live as the
+page renders. The Bayesian multi-taxon ridge plot is the
+<code>bayesTLS</code> complement; see the closing note.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cases</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Case <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Zebrafish oxygen"</span>, <span class="st">"Cereal aphids"</span>, <span class="st">"Snow-gum PSII"</span>,</span>
-<span>    <span class="st">"D. suzukii mortality"</span>, <span class="st">"D. suzukii awake/coma"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  Dataset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"zebrafish_o2"</span>, <span class="st">"aphid_tdt"</span>, <span class="st">"snowgum_psii"</span>,</span>
-<span>              <span class="st">"dsuzukii"</span>, <span class="st">"dsuzukii"</span><span class="op">)</span>,</span>
-<span>  Endpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"survival"</span>, <span class="st">"survival"</span>, <span class="st">"retained PSII"</span>,</span>
-<span>               <span class="st">"mortality/survival"</span>, <span class="st">"awake/coma"</span><span class="op">)</span>,</span>
-<span>  Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta-binomial"</span>, <span class="st">"beta-binomial"</span>, <span class="st">"Beta"</span>,</span>
-<span>             <span class="st">"beta-binomial"</span>, <span class="st">"beta-binomial"</span><span class="op">)</span>,</span>
-<span>  Threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"relative midpoint"</span>, <span class="st">"relative midpoint"</span>, <span class="st">"relative midpoint"</span>,</span>
-<span>                <span class="st">"relative CTmax/z; absolute LT50 point check"</span>, <span class="st">"relative midpoint"</span><span class="op">)</span>,</span>
-<span>  `t_ref (min)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">60</span>, <span class="fl">60</span>, <span class="fl">240</span>, <span class="fl">60</span><span class="op">)</span>,</span>
-<span>  Report <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"CTmax and z (not Tcrit)"</span>, <span class="fl">5</span><span class="op">)</span>,</span>
-<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">cases</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="the-four-taxa-and-the-cross-study-question">The four taxa and the cross-study question<a class="anchor" aria-label="anchor" href="#the-four-taxa-and-the-cross-study-question"></a>
+</h2>
+<p>The four shared case-study datasets span four corners of thermal
+physiology:</p>
+<ul>
+<li>
+<strong>brown shrimp</strong> <em>Crangon crangon</em> – a
+crustacean, lethal mortality, ungrouped;</li>
+<li>
+<strong>zebrafish</strong> <em>Danio rerio</em> – a fish, lethal
+mortality, across three life stages (young embryos, old embryos,
+larvae); this panel uses the <code>zebrafish_lethal</code> life-stage
+dataset — a <em>separate</em> experiment from the oxygen-gradient
+<code>zebrafish_o2</code> data in
+<code><a href="../articles/case-study-zebrafish.html">vignette("case-study-zebrafish")</a></code>;</li>
+<li>
+<strong>snow gum</strong> <em>Eucalyptus pauciflora</em> – a plant,
+a <strong>functional</strong> (sublethal) endpoint, the retained
+proportion of photosystem-II efficiency (<code>Fv/Fm</code>);</li>
+<li>
+<strong>vinegar fly</strong> <em>Drosophila suzukii</em> – an
+insect, lethal mortality, across the two sexes.</li>
+</ul>
+<p>The cross-study question is descriptive: laid side by side, how do
+thermal limits compare across a crustacean, a fish (resolved by
+developmental stage), a plant’s photosynthetic machinery, and an insect
+(resolved by sex)? <code>CTmax</code> (the critical temperature at a
+fixed reference exposure) places each taxon on the temperature axis;
+<code>z</code> (the change in temperature, in degrees Celsius, that
+multiplies tolerated exposure time tenfold) measures how sharply
+tolerated exposure responds to temperature: a <em>smaller</em>
+<code>z</code> is a steeper response (a small warming sharply cuts
+tolerated time), a <em>larger</em> <code>z</code> a more gradual
+one.</p>
+<p><strong>One caveat governs the whole panel.</strong> The reference
+exposures differ by study, because each follows the convention of its
+source assay:</p>
 <table class="table">
-<colgroup>
-<col width="14%">
-<col width="8%">
-<col width="12%">
-<col width="9%">
-<col width="29%">
-<col width="8%">
-<col width="16%">
-</colgroup>
 <thead><tr class="header">
-<th align="left">Case</th>
-<th align="left">Dataset</th>
-<th align="left">Endpoint</th>
-<th align="left">Family</th>
-<th align="left">Threshold</th>
-<th align="right">t_ref (min)</th>
-<th align="left">Report</th>
+<th>Taxon</th>
+<th>Endpoint</th>
+<th>Reference exposure (<code>tref</code>)</th>
+<th>Threshold</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">Zebrafish oxygen</td>
-<td align="left">zebrafish_o2</td>
-<td align="left">survival</td>
-<td align="left">beta-binomial</td>
-<td align="left">relative midpoint</td>
-<td align="right">60</td>
-<td align="left">CTmax and z (not Tcrit)</td>
+<td>Shrimp</td>
+<td>lethal</td>
+<td>1 hour</td>
+<td>relative midpoint</td>
 </tr>
 <tr class="even">
-<td align="left">Cereal aphids</td>
-<td align="left">aphid_tdt</td>
-<td align="left">survival</td>
-<td align="left">beta-binomial</td>
-<td align="left">relative midpoint</td>
-<td align="right">60</td>
-<td align="left">CTmax and z (not Tcrit)</td>
+<td>Zebrafish (per stage)</td>
+<td>lethal</td>
+<td>1 hour</td>
+<td>relative midpoint</td>
 </tr>
 <tr class="odd">
-<td align="left">Snow-gum PSII</td>
-<td align="left">snowgum_psii</td>
-<td align="left">retained PSII</td>
-<td align="left">Beta</td>
-<td align="left">relative midpoint</td>
-<td align="right">60</td>
-<td align="left">CTmax and z (not Tcrit)</td>
+<td>Snow gum</td>
+<td>sublethal PSII</td>
+<td>1 hour</td>
+<td>relative midpoint</td>
 </tr>
 <tr class="even">
-<td align="left">D. suzukii mortality</td>
-<td align="left">dsuzukii</td>
-<td align="left">mortality/survival</td>
-<td align="left">beta-binomial</td>
-<td align="left">relative CTmax/z; absolute LT50 point check</td>
-<td align="right">240</td>
-<td align="left">CTmax and z (not Tcrit)</td>
-</tr>
-<tr class="odd">
-<td align="left">D. suzukii awake/coma</td>
-<td align="left">dsuzukii</td>
-<td align="left">awake/coma</td>
-<td align="left">beta-binomial</td>
-<td align="left">relative midpoint</td>
-<td align="right">60</td>
-<td align="left">CTmax and z (not Tcrit)</td>
+<td>
+<em>D. suzukii</em> (per sex)</td>
+<td>lethal</td>
+<td>4 hours (240 min)</td>
+<td>absolute LT50</td>
 </tr>
 </tbody>
 </table>
-<div class="section level2">
-<h2 id="scientific-questions">Scientific questions<a class="anchor" aria-label="anchor" href="#scientific-questions"></a>
-</h2>
-<ul>
-<li>Oxygen-gradient zebrafish compare diploid normoxia and hyperoxia;
-hypoxia is excluded because <code>z</code> is weakly identified.</li>
-<li>Cereal aphids compare species at age 6, then extend to all
-heat-branch ages.</li>
-<li>Snow-gum PSII compares Dark and Light recovery with a plant random
-intercept on <code>CTmax</code>.</li>
-<li>
-<em>D. suzukii</em> mortality reports the direct model’s relative
-<code>CTmax</code> and <code>z</code>, then cross-checks the four-hour
-absolute LT50 as an ML point. Its exact-model bootstrap interval is not
-reported because too few refits converged.</li>
-<li>
-<em>D. suzukii</em> awake/coma uses the first cell duration and
-drops duration zero; censored time-to-coma and hurdle productivity
-remain bayesTLS-only.</li>
-</ul>
+<p>Because a <code>CTmax</code> is defined <em>at</em> its reference
+exposure, the four <code>CTmax</code> values are <strong>not</strong> on
+a single common time scale: the snow gum number is “the temperature that
+halves PSII over 1 hour”, the fly number is “the temperature that kills
+half the flies over 4 hours”. The panel is therefore an
+<strong>illustrative cross-taxon synthesis</strong>, not a single
+common-scale comparison. <code>z</code>, by contrast, is a slope –
+degrees per tenfold change in time – and is comparable across taxa
+regardless of the reference exposure. Read the <code>CTmax</code> facet
+as four study-specific anchors and the <code>z</code> facet as a
+like-with-like comparison of duration sensitivity.</p>
 </div>
 <div class="section level2">
-<h2 id="reading-estimates-across-cases">Reading estimates across cases<a class="anchor" aria-label="anchor" href="#reading-estimates-across-cases"></a>
+<h2 id="the-four-fits-run-live">The four fits (run live)<a class="anchor" aria-label="anchor" href="#the-four-fits-run-live"></a>
 </h2>
-<p><code>z</code> is expressed in degrees per decade of tolerated
-duration, but endpoint and model differences still matter.
-<code>CTmax</code> is explicitly tied to <code>t_ref</code> and the
-threshold. In particular, the four-hour mortality value must not be
-ranked against one-hour relative-midpoint values as if all rows measured
-one common trait. Cross-case displays must retain the columns above.</p>
-<p>freqTLS adds Confidence Eyes, profile/Wald/bootstrap confidence
-intervals, likelihood contrasts, and explicit identifiability
-diagnostics. Those are frequentist extensions to the shared scientific
-examples, not substitute case studies. Brown shrimp and life-stage
-zebrafish remain unpublished benchmark-only fixtures and are absent from
-this active summary.</p>
+<p>Each fit uses the configuration locked for its case study. The
+grouped fits (zebrafish, fly) estimate a separate <code>CTmax</code> and
+<code>z</code> per level with a shared shape (<code>low</code>,
+<code>up</code>, <code>k</code>); the ungrouped fits (shrimp, snow gum)
+estimate one of each. The snow gum fit uses the <strong>beta</strong>
+family for its continuous proportion; the others use
+<strong>beta-binomial</strong> survival counts. All fits are wrapped in
+<code><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings()</a></code> to swallow the honest data-adequacy
+notes (for example, temperatures with few durations) that
+<code>freqTLS</code> raises – those signals are covered in the per-study
+vignettes.</p>
+<p>The vinegar-fly data ships per-individual (<code>dsuzukii</code>); we
+aggregate it to <code>(temp, time, sex)</code> counts in base R, exactly
+as the per-study vignette does.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Each taxon: standardize_data() its raw table, then fit_4pl(); $fit is the</span></span>
+<span><span class="co"># engine fit the panel below reads.</span></span>
+<span></span>
+<span><span class="co"># Shrimp: ungrouped, 1-hour reference.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">shrimp_lethal</span><span class="op">)</span></span>
+<span><span class="va">shrimp_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">shrimp_lethal</span>, temp <span class="op">=</span> <span class="st">"Temperature_assay"</span>, duration <span class="op">=</span> <span class="st">"Duration_exposure_hours"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"N_individuals_after_trial"</span>, mortality <span class="op">=</span> <span class="st">"Mortality_after_trial"</span>,</span>
+<span>  duration_unit <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
+<span></span>
+<span><span class="co"># Zebrafish: grouped by life stage, 1-hour reference.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">zebrafish_lethal</span><span class="op">)</span></span>
+<span><span class="va">zebra_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">zebrafish_lethal</span>, temp <span class="op">=</span> <span class="st">"assay_temp"</span>, duration <span class="op">=</span> <span class="st">"duration_h"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"life_stage"</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
+<span></span>
+<span><span class="co"># Snow gum: ungrouped, beta family, 1-hour reference (functional PSII).</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">snowgum_psii</span><span class="op">)</span></span>
+<span><span class="va">snowgum_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">snowgum_psii</span>, temp <span class="op">=</span> <span class="st">"Temp"</span>, duration <span class="op">=</span> <span class="st">"Time"</span>, proportion <span class="op">=</span> <span class="st">"fvfm_prop"</span>,</span>
+<span>  duration_unit <span class="op">=</span> <span class="st">"minutes"</span><span class="op">)</span>, family <span class="op">=</span> <span class="st">"beta"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
+<span></span>
+<span><span class="co"># D. suzukii: per-individual -&gt; (temp, time, sex) counts; grouped by sex, 4-hour ref.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span></span>
+<span><span class="va">.nd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n_dead  <span class="op">=</span> <span class="va">dsuzukii</span><span class="op">$</span><span class="va">dead</span><span class="op">)</span>, <span class="va">dsuzukii</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temp"</span>, <span class="st">"time"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">]</span>, <span class="va">sum</span><span class="op">)</span></span>
+<span><span class="va">.nt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n_total <span class="op">=</span> <span class="va">dsuzukii</span><span class="op">$</span><span class="va">dead</span><span class="op">)</span>, <span class="va">dsuzukii</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"temp"</span>, <span class="st">"time"</span>, <span class="st">"sex"</span><span class="op">)</span><span class="op">]</span>, <span class="va">length</span><span class="op">)</span></span>
+<span><span class="va">fly_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">.nd</span>, <span class="va">.nt</span><span class="op">)</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_dead <span class="op">=</span> <span class="st">"n_dead"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"sex"</span>, t_ref <span class="op">=</span> <span class="fl">240</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="assembling-the-cross-study-table">Assembling the cross-study table<a class="anchor" aria-label="anchor" href="#assembling-the-cross-study-table"></a>
+</h2>
+<p>The panel is built from one combined data frame of
+<code>(label, parameter, estimate, conf.low, conf.high)</code>, obtained
+by calling <code>confint(..., method = "profile")</code> on each fit.
+For the grouped fits we ask for the per-level parameter names
+(<code>CTmax:young_embryos</code>, <code>z:M</code>, and so on); for the
+ungrouped fits we ask for the bare <code>CTmax</code> and
+<code>z</code>. Every interval here is a profile-likelihood confidence
+interval, and – as the <code>conf.status</code> column confirms – every
+profile closes.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A small helper: pull profile CIs for the requested parameters from one fit and</span></span>
+<span><span class="co"># tag each row with a human-readable taxon/group label.</span></span>
+<span><span class="va">eye_rows</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fit</span>, <span class="va">taxon</span>, <span class="va">parms</span>, <span class="va">labels</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="va">parms</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">sub</a></span><span class="op">(</span><span class="st">":.*$"</span>, <span class="st">""</span>, <span class="va">ci</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span>            <span class="co"># "CTmax:M" -&gt; "CTmax"</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    taxon     <span class="op">=</span> <span class="va">taxon</span>,</span>
+<span>    label     <span class="op">=</span> <span class="va">labels</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">ci</span><span class="op">$</span><span class="va">parameter</span>, <span class="va">parms</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>    parameter <span class="op">=</span> <span class="va">base</span>,</span>
+<span>    estimate  <span class="op">=</span> <span class="va">ci</span><span class="op">$</span><span class="va">estimate</span>,</span>
+<span>    conf.low  <span class="op">=</span> <span class="va">ci</span><span class="op">$</span><span class="va">conf.low</span>,</span>
+<span>    conf.high <span class="op">=</span> <span class="va">ci</span><span class="op">$</span><span class="va">conf.high</span>,</span>
+<span>    status    <span class="op">=</span> <span class="va">ci</span><span class="op">$</span><span class="va">conf.status</span>,</span>
+<span>    stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">panel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu">eye_rows</span><span class="op">(</span><span class="va">shrimp_fit</span>, <span class="st">"Shrimp (1 h)"</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Shrimp"</span>, <span class="st">"Shrimp"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu">eye_rows</span><span class="op">(</span><span class="va">zebra_fit</span>, <span class="st">"Zebrafish (1 h)"</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax:young_embryos"</span>, <span class="st">"CTmax:old_embryos"</span>, <span class="st">"CTmax:larvae"</span>,</span>
+<span>             <span class="st">"z:young_embryos"</span>, <span class="st">"z:old_embryos"</span>, <span class="st">"z:larvae"</span><span class="op">)</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Zebrafish: young embryos"</span>, <span class="st">"Zebrafish: old embryos"</span>,</span>
+<span>             <span class="st">"Zebrafish: larvae"</span>, <span class="st">"Zebrafish: young embryos"</span>,</span>
+<span>             <span class="st">"Zebrafish: old embryos"</span>, <span class="st">"Zebrafish: larvae"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu">eye_rows</span><span class="op">(</span><span class="va">snowgum_fit</span>, <span class="st">"Snow gum (1 h)"</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Snow gum (PSII)"</span>, <span class="st">"Snow gum (PSII)"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu">eye_rows</span><span class="op">(</span><span class="va">fly_fit</span>, <span class="st">"D. suzukii (4 h)"</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax:F"</span>, <span class="st">"CTmax:M"</span>, <span class="st">"z:F"</span>, <span class="st">"z:M"</span><span class="op">)</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"D. suzukii: female"</span>, <span class="st">"D. suzukii: male"</span>,</span>
+<span>             <span class="st">"D. suzukii: female"</span>, <span class="st">"D. suzukii: male"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Seven rows, two parameters: a tidy printout of the headline numbers.</span></span>
+<span><span class="va">panel_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Group           <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">label</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span><span class="op">]</span>,</span>
+<span>  `CTmax estimate` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  `CTmax 95% CI`  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"[%.2f, %.2f]"</span>,</span>
+<span>                            <span class="va">panel</span><span class="op">$</span><span class="va">conf.low</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span><span class="op">]</span>,</span>
+<span>                            <span class="va">panel</span><span class="op">$</span><span class="va">conf.high</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  `z estimate`     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"z"</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  `z 95% CI`       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"[%.2f, %.2f]"</span>,</span>
+<span>                            <span class="va">panel</span><span class="op">$</span><span class="va">conf.low</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"z"</span><span class="op">]</span>,</span>
+<span>                            <span class="va">panel</span><span class="op">$</span><span class="va">conf.high</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"z"</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">panel_wide</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Seven taxon/group rows: CTmax (at the study reference exposure) and z, each with its profile-likelihood 95% confidence interval."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Seven taxon/group rows: CTmax (at the study reference exposure)
+and z, each with its profile-likelihood 95% confidence
+interval.</caption>
+<colgroup>
+<col width="31%">
+<col width="18%">
+<col width="18%">
+<col width="13%">
+<col width="16%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Group</th>
+<th align="right">CTmax estimate</th>
+<th align="left">CTmax 95% CI</th>
+<th align="right">z estimate</th>
+<th align="left">z 95% CI</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Shrimp</td>
+<td align="right">31.77</td>
+<td align="left">[31.63, 31.92]</td>
+<td align="right">2.19</td>
+<td align="left">[1.96, 2.46]</td>
+</tr>
+<tr class="even">
+<td align="left">Zebrafish: young embryos</td>
+<td align="right">39.92</td>
+<td align="left">[39.79, 40.04]</td>
+<td align="right">2.00</td>
+<td align="left">[1.82, 2.19]</td>
+</tr>
+<tr class="odd">
+<td align="left">Zebrafish: old embryos</td>
+<td align="right">41.38</td>
+<td align="left">[41.23, 41.61]</td>
+<td align="right">1.80</td>
+<td align="left">[1.53, 2.16]</td>
+</tr>
+<tr class="even">
+<td align="left">Zebrafish: larvae</td>
+<td align="right">39.79</td>
+<td align="left">[39.67, 39.92]</td>
+<td align="right">1.98</td>
+<td align="left">[1.76, 2.22]</td>
+</tr>
+<tr class="odd">
+<td align="left">Snow gum (PSII)</td>
+<td align="right">44.58</td>
+<td align="left">[44.21, 44.91]</td>
+<td align="right">3.71</td>
+<td align="left">[3.18, 4.27]</td>
+</tr>
+<tr class="even">
+<td align="left">D. suzukii: female</td>
+<td align="right">35.23</td>
+<td align="left">[35.12, 35.32]</td>
+<td align="right">3.01</td>
+<td align="left">[2.86, 3.18]</td>
+</tr>
+<tr class="odd">
+<td align="left">D. suzukii: male</td>
+<td align="right">35.25</td>
+<td align="left">[35.16, 35.34]</td>
+<td align="right">3.18</td>
+<td align="left">[3.01, 3.36]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="cross-taxon-validation-against-bayestls-and-the-two-stage-estimator">Cross-taxon validation against bayesTLS and the two-stage
+estimator<a class="anchor" aria-label="anchor" href="#cross-taxon-validation-against-bayestls-and-the-two-stage-estimator"></a>
+</h2>
+<p>The same headline numbers, now beside the classical two-stage
+estimator and the <code>bayesTLS</code> posterior, read from the
+maintainer-built benchmark cache. Each fit uses its study’s matched
+configuration (relative-midpoint threshold, constant shape, the
+per-study reference exposure), so the three estimators target the
+<em>same</em> fitted curve per row. Snow-gum PSII is a continuous
+proportion with no count representation, so its two-stage cell is empty
+(it is a <code>bayesTLS</code> beta two-way). The <code>freqTLS</code>
+profile-likelihood confidence intervals and the <code>bayesTLS</code>
+credible intervals land on essentially the same <code>CTmax</code> and
+<code>z</code> in every row — the cross-taxon statement of the
+complementary framing.</p>
+<table class="table">
+<caption>Cross-taxon three-way validation: CTmax and z per taxon/group
+from the classical two-stage estimator, bayesTLS (posterior median + 95%
+CrI), and freqTLS (profile-likelihood estimate + 95% CI), each on its
+study’s matched configuration. freqTLS and bayesTLS agree across every
+row.</caption>
+<colgroup>
+<col width="24%">
+<col width="15%">
+<col width="20%">
+<col width="20%">
+<col width="20%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Group</th>
+<th align="left">Quantity</th>
+<th align="left">Two-stage (delta CI)</th>
+<th align="left">bayesTLS (95% CrI)</th>
+<th align="left">freqTLS (profile CI)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Shrimp</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">31.61 [31.33, 31.89]</td>
+<td align="left">31.72 [31.59, 31.86]</td>
+<td align="left">31.77 [31.63, 31.92]</td>
+</tr>
+<tr class="even">
+<td align="left">Shrimp</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">2.06 [1.49, 2.64]</td>
+<td align="left">2.18 [1.95, 2.44]</td>
+<td align="left">2.19 [1.96, 2.46]</td>
+</tr>
+<tr class="odd">
+<td align="left">Zebrafish: young embryos</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">39.61 [39.34, 39.88]</td>
+<td align="left">39.98 [39.83, 40.10]</td>
+<td align="left">39.92 [39.79, 40.04]</td>
+</tr>
+<tr class="even">
+<td align="left">Zebrafish: young embryos</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">2.22 [1.72, 2.73]</td>
+<td align="left">1.93 [1.74, 2.12]</td>
+<td align="left">2.00 [1.82, 2.19]</td>
+</tr>
+<tr class="odd">
+<td align="left">Zebrafish: old embryos</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">41.40 [40.87, 41.93]</td>
+<td align="left">41.34 [41.18, 41.58]</td>
+<td align="left">41.38 [41.23, 41.61]</td>
+</tr>
+<tr class="even">
+<td align="left">Zebrafish: old embryos</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">2.36 [1.69, 3.02]</td>
+<td align="left">1.89 [1.62, 2.27]</td>
+<td align="left">1.80 [1.53, 2.16]</td>
+</tr>
+<tr class="odd">
+<td align="left">Zebrafish: larvae</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">39.82 [39.62, 40.03]</td>
+<td align="left">39.73 [39.58, 39.85]</td>
+<td align="left">39.79 [39.67, 39.92]</td>
+</tr>
+<tr class="even">
+<td align="left">Zebrafish: larvae</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">2.17 [1.76, 2.58]</td>
+<td align="left">2.02 [1.75, 2.27]</td>
+<td align="left">1.98 [1.76, 2.22]</td>
+</tr>
+<tr class="odd">
+<td align="left">Snow gum (PSII)</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">–</td>
+<td align="left">45.94 [45.37, 46.56]</td>
+<td align="left">44.58 [44.21, 44.91]</td>
+</tr>
+<tr class="even">
+<td align="left">Snow gum (PSII)</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">–</td>
+<td align="left">5.85 [5.22, 6.48]</td>
+<td align="left">3.71 [3.18, 4.27]</td>
+</tr>
+<tr class="odd">
+<td align="left">D. suzukii: female</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">34.80 [34.56, 35.04]</td>
+<td align="left">35.20 [35.07, 35.30]</td>
+<td align="left">35.23 [35.12, 35.32]</td>
+</tr>
+<tr class="even">
+<td align="left">D. suzukii: female</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">2.99 [2.60, 3.38]</td>
+<td align="left">3.02 [2.88, 3.20]</td>
+<td align="left">3.01 [2.86, 3.18]</td>
+</tr>
+<tr class="odd">
+<td align="left">D. suzukii: male</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">34.98 [34.34, 35.62]</td>
+<td align="left">35.22 [35.10, 35.32]</td>
+<td align="left">35.25 [35.16, 35.34]</td>
+</tr>
+<tr class="even">
+<td align="left">D. suzukii: male</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">3.40 [2.15, 4.65]</td>
+<td align="left">3.17 [2.99, 3.39]</td>
+<td align="left">3.18 [3.01, 3.36]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="the-panel-a-confidence-eye-per-taxon-and-group">The panel: a Confidence Eye per taxon and group<a class="anchor" aria-label="anchor" href="#the-panel-a-confidence-eye-per-taxon-and-group"></a>
+</h2>
+<p>Each row is drawn as an honest Confidence Eye – a pale, shallow
+horizontal lens whose width is exactly the 95% confidence interval and
+whose cosine taper is tallest at the estimate, with a hollow point
+marking the estimate itself. The two facets carry independent x-axes
+(<code>CTmax</code> in degrees Celsius; <code>z</code> in degrees
+Celsius per tenfold change in exposure time), because the two parameters
+live on different scales and, for <code>CTmax</code>, on different
+reference exposures.</p>
+<p>The geometry follows the <code>freqTLS</code> Confidence-Eye
+contract: the shallow, wide lens reads as a confidence
+<em>interval</em>, not a probability density, and a profile that did not
+close would render as a hollow point with <strong>no</strong> lens. All
+seven profiles here close, so every row carries a lens.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Build the honest Confidence-Eye geometry by hand so all four fits share one</span></span>
+<span><span class="co"># cross-taxon panel: a cosine-tapered pale lens (width = confidence interval)</span></span>
+<span><span class="co"># plus a hollow point, faceted by parameter with free x-axes. This reuses the</span></span>
+<span><span class="co"># package lens shape (see ?plot_confidence_eye) but spans every fit in one figure.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fixed top-to-bottom row order (shrimp, zebrafish stages, snow gum, fly sexes).</span></span>
+<span><span class="va">row_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Shrimp"</span>,</span>
+<span>  <span class="st">"Zebrafish: young embryos"</span>, <span class="st">"Zebrafish: old embryos"</span>, <span class="st">"Zebrafish: larvae"</span>,</span>
+<span>  <span class="st">"Snow gum (PSII)"</span>,</span>
+<span>  <span class="st">"D. suzukii: female"</span>, <span class="st">"D. suzukii: male"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">panel</span><span class="op">$</span><span class="va">row</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">label</span>, <span class="va">row_order</span><span class="op">)</span></span>
+<span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>                          labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax (°C)"</span>, <span class="st">"z (°C / decade)"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># One cosine-tapered lens polygon per row (tallest at the estimate, zero at each</span></span>
+<span><span class="co"># bound), built per facet so the free x-axes do not distort the taper.</span></span>
+<span><span class="va">lens_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">panel</span><span class="op">)</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">conf.low</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">panel</span><span class="op">$</span><span class="va">conf.high</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, length.out <span class="op">=</span> <span class="fl">80</span><span class="op">)</span></span>
+<span>  <span class="va">d_lo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="va">panel</span><span class="op">$</span><span class="va">conf.low</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span></span>
+<span>  <span class="va">d_hi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">conf.high</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">)</span></span>
+<span>  <span class="va">frac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;=</span> <span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="va">d_lo</span>,</span>
+<span>                 <span class="op">(</span><span class="va">x</span> <span class="op">-</span> <span class="va">panel</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="va">d_hi</span><span class="op">)</span></span>
+<span>  <span class="va">w</span> <span class="op">&lt;-</span> <span class="fl">0.32</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="op">(</span><span class="va">pi</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">frac</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, parameter <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">parameter</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, x <span class="op">=</span> <span class="va">x</span>,</span>
+<span>             ymin <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">row</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="va">w</span>, ymax <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">row</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">w</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Reference-exposure annotation for the CTmax facet only.</span></span>
+<span><span class="va">tref_lab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="st">"CTmax (°C)"</span>,</span>
+<span>                     levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  row <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">row</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax (°C)"</span><span class="op">]</span>,</span>
+<span>  x   <span class="op">=</span> <span class="va">panel</span><span class="op">$</span><span class="va">conf.high</span><span class="op">[</span><span class="va">panel</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax (°C)"</span><span class="op">]</span>,</span>
+<span>  lab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"1 h"</span>, <span class="st">"4 h"</span>, <span class="st">"4 h"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">lens_df</span>,</span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, ymin <span class="op">=</span> <span class="va">ymin</span>, ymax <span class="op">=</span> <span class="va">ymax</span>, group <span class="op">=</span> <span class="va">id</span><span class="op">)</span>,</span>
+<span>    fill <span class="op">=</span> <span class="st">"#1b7837"</span>, colour <span class="op">=</span> <span class="cn">NA</span>, alpha <span class="op">=</span> <span class="fl">0.30</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">panel</span>,</span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">estimate</span>, y <span class="op">=</span> <span class="va">row</span><span class="op">)</span>,</span>
+<span>    shape <span class="op">=</span> <span class="fl">21</span>, fill <span class="op">=</span> <span class="st">"white"</span>, colour <span class="op">=</span> <span class="st">"#1b7837"</span>, size <span class="op">=</span> <span class="fl">3</span>, stroke <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">tref_lab</span>,</span>
+<span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">row</span>, label <span class="op">=</span> <span class="va">lab</span><span class="op">)</span>,</span>
+<span>    hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.25</span>, size <span class="op">=</span> <span class="fl">2.7</span>, colour <span class="op">=</span> <span class="st">"grey35"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span></span>
+<span>    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">row_order</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">row_order</span>,</span>
+<span>    trans <span class="op">=</span> <span class="st">"reverse"</span>, expand <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>add <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span></span>
+<span>    expand <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.20</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">parameter</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Thermal limits across four taxa: CTmax and z"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Confidence Eyes: pale lens = 95% confidence interval; hollow point = estimate."</span>,</span>
+<span>    caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Profile-likelihood confidence intervals (freqTLS, no Stan)."</span>,</span>
+<span>      <span class="st">"CTmax reference exposure differs by study (annotated): not a common time scale."</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    panel.grid.major.y <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    plot.caption <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-summary_files/figure-html/panel-1.png" class="r-plt" alt="Two-facet Confidence-Eye panel. Left facet, CTmax in degrees Celsius: seven pale horizontal confidence-interval lenses with hollow point estimates, one per taxon/group, ordered top to bottom as shrimp near 31.8, the three zebrafish stages near 39.8 to 41.4, snow gum PSII near 44.6, and the two D. suzukii sexes near 35.2. Right facet, z in degrees Celsius per tenfold time change: matching lenses with shrimp near 2.2, zebrafish stages near 1.8 to 2.0, snow gum near 3.7, and the two fly sexes near 3.0 to 3.2. Each CTmax row is annotated with its reference exposure (1 hour or 4 hours), underscoring that the CTmax values are not on a common time scale." width="864"></p>
+</div>
+<div class="section level2">
+<h2 id="within-taxon-contrasts">Within-taxon contrasts<a class="anchor" aria-label="anchor" href="#within-taxon-contrasts"></a>
+</h2>
+<p>The two grouped studies invite a within-taxon comparison: do the
+zebrafish life stages differ, and do the fly sexes differ?
+<code>freqTLS</code> answers these with a profile-likelihood interval
+<strong>on the difference</strong> (<code>dCTmax:A-B</code>,
+<code>dz:A-B</code>) – a prior-free, frequentist counterpart to the
+<code>bayesTLS</code> pMCMC bracket. A difference interval that excludes
+zero is a clear separation; one that spans zero is not.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">zebra_contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span></span>
+<span>  <span class="va">zebra_fit</span>,</span>
+<span>  parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dCTmax:old_embryos-young_embryos"</span>,</span>
+<span>           <span class="st">"dCTmax:larvae-young_embryos"</span>,</span>
+<span>           <span class="st">"dCTmax:larvae-old_embryos"</span>,</span>
+<span>           <span class="st">"dz:old_embryos-young_embryos"</span>,</span>
+<span>           <span class="st">"dz:larvae-young_embryos"</span>,</span>
+<span>           <span class="st">"dz:larvae-old_embryos"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"profile"</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fly_contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span></span>
+<span>  <span class="va">fly_fit</span>,</span>
+<span>  parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dCTmax:M-F"</span>, <span class="st">"dz:M-F"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"profile"</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">contrast_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">zebra_contrasts</span>, <span class="va">fly_contrasts</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    Contrast   <span class="op">=</span> <span class="va">contrast_tbl</span><span class="op">$</span><span class="va">parameter</span>,</span>
+<span>    Difference <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">contrast_tbl</span><span class="op">$</span><span class="va">estimate</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>    `95% CI`   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"[%.3f, %.3f]"</span>,</span>
+<span>                         <span class="va">contrast_tbl</span><span class="op">$</span><span class="va">conf.low</span>, <span class="va">contrast_tbl</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span>,</span>
+<span>    `Excludes 0` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>      <span class="va">contrast_tbl</span><span class="op">$</span><span class="va">conf.low</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">contrast_tbl</span><span class="op">$</span><span class="va">conf.high</span> <span class="op">&lt;</span> <span class="fl">0</span>, <span class="st">"yes"</span>, <span class="st">"no"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Within-taxon contrasts: profile-likelihood 95% confidence intervals on the CTmax and z differences."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Within-taxon contrasts: profile-likelihood 95% confidence
+intervals on the CTmax and z differences.</caption>
+<colgroup>
+<col width="45%">
+<col width="15%">
+<col width="23%">
+<col width="15%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Contrast</th>
+<th align="right">Difference</th>
+<th align="left">95% CI</th>
+<th align="left">Excludes 0</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">dCTmax:old_embryos-young_embryos</td>
+<td align="right">-1.459</td>
+<td align="left">[-1.644, -1.289]</td>
+<td align="left">yes</td>
+</tr>
+<tr class="even">
+<td align="left">dCTmax:larvae-young_embryos</td>
+<td align="right">0.128</td>
+<td align="left">[-1.760, 2.078]</td>
+<td align="left">no</td>
+</tr>
+<tr class="odd">
+<td align="left">dCTmax:larvae-old_embryos</td>
+<td align="right">1.587</td>
+<td align="left">[1.403, 1.802]</td>
+<td align="left">yes</td>
+</tr>
+<tr class="even">
+<td align="left">dz:old_embryos-young_embryos</td>
+<td align="right">0.106</td>
+<td align="left">[-0.071, 0.272]</td>
+<td align="left">no</td>
+</tr>
+<tr class="odd">
+<td align="left">dz:larvae-young_embryos</td>
+<td align="right">0.008</td>
+<td align="left">[-1.598, 1.661]</td>
+<td align="left">no</td>
+</tr>
+<tr class="even">
+<td align="left">dz:larvae-old_embryos</td>
+<td align="right">-0.098</td>
+<td align="left">[-0.278, 0.093]</td>
+<td align="left">no</td>
+</tr>
+<tr class="odd">
+<td align="left">dCTmax:M-F</td>
+<td align="right">-0.024</td>
+<td align="left">[-0.149, 0.093]</td>
+<td align="left">no</td>
+</tr>
+<tr class="even">
+<td align="left">dz:M-F</td>
+<td align="right">-0.054</td>
+<td align="left">[-0.125, 0.024]</td>
+<td align="left">no</td>
+</tr>
+</tbody>
+</table>
+<p>For zebrafish, the one clear separation in <code>CTmax</code> is
+<strong>old embryos versus young embryos</strong> and <strong>larvae
+versus old embryos</strong>: old embryos sit about 1.46 degrees Celsius
+above young embryos, with a confidence interval well clear of zero,
+while larvae are essentially indistinguishable from young embryos in
+<code>CTmax</code>. None of the <code>z</code> contrasts excludes zero,
+so the three stages share a common duration sensitivity even where their
+critical temperatures differ. For <em>D. suzukii</em>, both the
+<code>CTmax</code> and the <code>z</code> sex contrasts span zero: there
+is no clear sex difference in either thermal limit, the same conclusion
+Ørsted et al. (2024) reached for these data.</p>
+</div>
+<div class="section level2">
+<h2 id="what-this-shows">What this shows<a class="anchor" aria-label="anchor" href="#what-this-shows"></a>
+</h2>
+<p>Three things stand out from the panel:</p>
+<ul>
+<li><p><strong>The plant’s photosynthetic endpoint is the most
+gradual.</strong> Snow gum PSII has the largest <code>z</code> (about
+3.7 degrees Celsius per tenfold time), so its tolerated exposure
+collapses <em>most gradually</em> with temperature — it takes the
+largest temperature rise to cut the tolerated time tenfold (the rate of
+collapse scales as <code>1/z</code>) — whereas the animals’ lethal
+endpoints (<code>z</code> between roughly 1.8 and 3.2) fall more
+steeply. Snow gum’s <code>CTmax</code> is also the highest on the shared
+one-hour reference, but it is the temperature of half-PSII-loss,
+<strong>not</strong> a lethal temperature, so it should not be read as
+ranking the plant above the animals on a single tolerance scale; only
+the <code>z</code> comparison is like-for-like across all rows. (The
+<em>D. suzukii</em> <code>CTmax</code> sits at a four-hour reference, so
+that row is also off the common time scale.)</p></li>
+<li><p><strong>Resolving a taxon by an internal axis can matter or
+not.</strong> Zebrafish life stage shifts <code>CTmax</code> by over a
+degree (old embryos are the most heat-tolerant stage), whereas <em>D.
+suzukii</em> sex shifts neither <code>CTmax</code> nor <code>z</code>
+detectably. The Confidence Eyes make this visible at a glance: the
+zebrafish lenses separate on the <code>CTmax</code> axis, while the two
+fly lenses overlap almost completely.</p></li>
+<li><p><strong>Every estimate carries an honest, prior-free
+interval.</strong> All seven profiles close, so each row is a closed
+lens rather than a hollow point. Where a profile did
+<strong>not</strong> close (a weakly identified design or a boundary
+asymptote), the same display would show a hollow point with no lens –
+never a fabricated closed eye.</p></li>
+</ul>
+<p>These are confidence intervals throughout: they summarise the
+likelihood’s support for each parameter and make no probability
+statement about the parameter itself.</p>
+</div>
+<div class="section level2">
+<h2 id="see-bayestls-for-the-bayesian-multi-taxon-ridge">See bayesTLS for the Bayesian multi-taxon ridge<a class="anchor" aria-label="anchor" href="#see-bayestls-for-the-bayesian-multi-taxon-ridge"></a>
+</h2>
+<p>This panel is the <code>freqTLS</code> (likelihood) counterpart to
+Manuscript Figure 5 of the <code>bayesTLS</code> supplement, which draws
+the same four taxa as posterior <strong>ridge densities</strong> with
+median points and 95% credible bars. The two displays answer the same
+cross-study question from complementary inferential engines: the
+<code>bayesTLS</code> ridge is a posterior density shaped by priors and
+the data, whereas the <code>freqTLS</code> Confidence Eye is a
+prior-free likelihood interval that cannot be read as a posterior. For
+the Bayesian multi-taxon ridge plot, the within-taxon pMCMC contrasts,
+and the full posterior workflow, see <code>bayesTLS</code> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link uri">https://github.com/daniel1noble/bayesTLS</a>); for the
+side-by-side posterior-versus-Confidence-Eye contrast on a single
+dataset, see <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

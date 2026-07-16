@@ -5,25 +5,22 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Cross-checking freqTLS with bayesTLS • freqTLS</title>
+<title>Comparing freqTLS to bayesTLS • freqTLS</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Cross-checking freqTLS with bayesTLS">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Comparing freqTLS to bayesTLS">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    <aside id="freqtls-experimental-warning" class="freqtls-experimental-warning" role="alert" aria-labelledby="freqtls-experimental-warning-title"><div class="container">
-    <strong id="freqtls-experimental-warning-title">Experimental software—use at your own risk.</strong>
-    Results and APIs may be incorrect or change. Users are responsible for checking their data, design, model specification, convergence, identifiability, diagnostics, and interpretation. Important analyses should be independently refitted and cross-checked with <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link">bayesTLS</a> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link">source repository</a>). Agreement is a cross-check, not proof of correctness; shared data or model errors can make both packages agree.
-  </div>
-</aside><nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">freqTLS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,23 +39,23 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Model details</h6></li>
     <li><a class="dropdown-item" href="../articles/model-math.html">The model and its parameterisation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case 1: zebrafish heat tolerance under normoxia and hyperoxia</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case 2: cereal-aphid thermal tolerance</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-snowgum.html">Case 3: Snow-gum PSII under Dark and Light recovery</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case 4: Drosophila suzukii mortality</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii-coma.html">Case 4.2: Drosophila suzukii awake/coma response</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Canonical empirical examples: what can and cannot be compared</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Extensions</h6></li>
-    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Cross-checking freqTLS with bayesTLS</a></li>
-    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Experimental extension: deterministic heat-injury prediction</a></li>
     <li><a class="dropdown-item" href="../articles/profile-likelihood.html">Profile-likelihood intervals</a></li>
     <li><a class="dropdown-item" href="../articles/random-effects.html">Random effects: hierarchical thermal tolerance</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Comparison</h6></li>
+    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
+    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -81,512 +78,773 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Cross-checking freqTLS with bayesTLS</h1>
+      <h1>Comparing freqTLS to bayesTLS</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/comparing-to-bayesTLS.Rmd" class="external-link"><code>vignettes/comparing-to-bayesTLS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/build/freqtls/vignettes/comparing-to-bayesTLS.Rmd" class="external-link"><code>vignettes/comparing-to-bayesTLS.Rmd</code></a></small>
       <div class="d-none name"><code>comparing-to-bayesTLS.Rmd</code></div>
     </div>
 
     
     
-<p>The packages teach the same canonical empirical examples but answer
-them with different inference engines. <code>bayesTLS</code> uses
-posterior sampling; <code>freqTLS</code> uses maximum likelihood with
-profile, Wald, or bootstrap confidence intervals. Neither package’s
-uncertainty object is a drop-in replacement for the other.</p>
-<p><strong>Experimental-software warning:</strong> this comparison does
-not validate freqTLS. Users remain responsible for checking the data,
-design, model specification, convergence, identifiability, diagnostics,
-and interpretation. Independently refit important analyses with <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code></a>.
-Agreement is a cross-check, not proof of correctness; shared mistakes
-can make both packages agree.</p>
-<div class="section level2">
-<h2 id="fair-comparison-contract">Fair-comparison contract<a class="anchor" aria-label="anchor" href="#fair-comparison-contract"></a>
-</h2>
-<p>A numerical difference is interpretable only when all of the
-following are identical:</p>
-<ol style="list-style-type: decimal">
-<li>exact dataset bytes and filter;</li>
-<li>response endpoint and family;</li>
-<li>every <code>ctmax</code>, <code>z</code>, <code>low</code>,
-<code>up</code>, and <code>k</code> formula;</li>
-<li>grouping and random-effect structure;</li>
-<li>resolved reference-time unit;</li>
-<li>relative or absolute threshold and reported estimand.</li>
-</ol>
-<p>The pinned baseline is the <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code>
-supplement</a> rendered 2026-07-14 from commit <a href="https://github.com/daniel1noble/bayesTLS/tree/76510412e06c594c96894a1baba1f0e1a34a5aea" class="external-link"><code>76510412</code></a>.</p>
-</div>
-<div class="section level2">
-<h2 id="pinned-comparator-evidence">Pinned comparator evidence<a class="anchor" aria-label="anchor" href="#pinned-comparator-evidence"></a>
-</h2>
-<p>The curated cache was built on Totoro with four chains per fit,
-bounded parallelism, and <code>OPENBLAS_NUM_THREADS=1</code>. Raw
-posterior fits remain outside the repository. The cache records exact
-analysis hashes, formulas, filters, thresholds, reference times, seeds,
-package versions, both source commits, and sampler diagnostics.</p>
+<p><code>freqTLS</code> is the maximum-likelihood / profile-likelihood
+complement to <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>.
+This vignette lays out the relationship, the credit, and a reproducible
+three-way comparison on the shared benchmark datasets.</p>
+<p><strong>This vignette builds without Stan.</strong> The live
+<code>bayesTLS</code> (Stan) calls are shown for reproducibility but are
+<strong>not evaluated</strong> here; the Bayesian and classical
+two-stage numbers are read from a maintainer-built cache <strong>if it
+is present</strong>. The <code>freqTLS</code> fits run live. When the
+cache is absent (as in a fresh checkout, and in continuous integration),
+the vignette shows the recipe and the <code>freqTLS</code> side, and
+explains how to populate the cache.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"bayesTLS"</span>, <span class="st">"freqTLS"</span>, <span class="st">"CmdStan"</span>, <span class="st">"R"</span>, <span class="st">"built (UTC)"</span>,</span>
-<span>    <span class="st">"OpenBLAS threads"</span>, <span class="st">"bounded cores"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  recorded_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">bayesTLS_version</span>, <span class="st">" @ "</span>,</span>
-<span>           <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">bayesTLS_git_sha</span>, <span class="fl">1</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">freqTLS_version</span>, <span class="st">" @ "</span>,</span>
-<span>           <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">freqTLS_git_sha</span>, <span class="fl">1</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">cmdstan_version</span>,</span>
-<span>    <span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">R_version</span>,</span>
-<span>    <span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">date_built_utc</span>,</span>
-<span>    <span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">openblas_num_threads</span>,</span>
-<span>    <span class="va">bayes_cache</span><span class="op">$</span><span class="va">meta</span><span class="op">$</span><span class="va">bounded_cores</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;               item            recorded_value</span></span>
-<span><span class="co">#&gt; 1         bayesTLS      1.0.0 @ 76510412e06c</span></span>
-<span><span class="co">#&gt; 2          freqTLS 0.2.0.9000 @ b32c86001a7e</span></span>
-<span><span class="co">#&gt; 3          CmdStan                    2.39.0</span></span>
-<span><span class="co">#&gt; 4                R                     4.5.3</span></span>
-<span><span class="co">#&gt; 5      built (UTC)   2026-07-16 15:48:18 UTC</span></span>
-<span><span class="co">#&gt; 6 OpenBLAS threads                         1</span></span>
-<span><span class="co">#&gt; 7    bounded cores                         4</span></span></code></pre></div>
-<p>Every Bayesian fit passed the recorded R-hat, effective-sample-size,
-divergence, tree-depth, and BFMI gates.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="credit-and-origins">Credit and origins<a class="anchor" aria-label="anchor" href="#credit-and-origins"></a>
+</h2>
+<p>The thermal-load-sensitivity (TLS) modelling framework implemented
+here was introduced by <strong>Daniel W. A. Noble, Pieter A. Arnold, and
+Patrice Pottier</strong> in the <code>bayesTLS</code> package
+(manuscript in preparation). The 4PL thermal death-time model and the
+mapping from the midpoint slope to <code>z</code> and <code>CTmax</code>
+are theirs. <code>freqTLS</code> is an independent likelihood
+implementation of that framework; please cite <code>bayesTLS</code> when
+you use it. The bundled benchmark datasets retain their own
+source-specific rights. See the relevant data help page,
+<code>inst/COPYRIGHTS</code>, and the component rights ledger; do not
+infer a redistribution licence merely from the <code>bayesTLS</code>
+comparison.</p>
+<p><code>freqTLS</code> contributes a TMB maximum-likelihood likelihood,
+the direct <code>CTmax</code>/<code>z</code> reparameterisation that
+makes both quantities profile-able, and profile-likelihood confidence
+intervals.</p>
+</div>
+<div class="section level2">
+<h2 id="the-three-way-design">The three-way design<a class="anchor" aria-label="anchor" href="#the-three-way-design"></a>
+</h2>
+<p>The benchmark compares three estimators of the same constant-shape
+4PL, all locked to the <strong>relative</strong> mortality threshold and
+a matched time unit / reference time so the comparison is fair
+(<code>docs/design/06-benchmark-protocol.md</code>):</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Estimator</th>
+<th>Path</th>
+<th>Uncertainty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Classical two-stage</td>
+<td><code>bayesTLS::ts_stage1 -&gt; ts_stage2 -&gt; ts_ci</code></td>
+<td>delta-method CI</td>
+</tr>
+<tr class="even">
+<td>Bayesian</td>
+<td><code>bayesTLS::fit_4pl(temp_effects = "mid") -&gt; extract_tdt(target_surv = "relative")</code></td>
+<td>posterior credible interval</td>
+</tr>
+<tr class="odd">
+<td><code>freqTLS</code></td>
+<td><code>fit_4pl() -&gt; tls(method = "profile")</code></td>
+<td>profile-likelihood confidence interval</td>
+</tr>
+</tbody>
+</table>
+<p>Under this matched configuration the Bayesian and profile-likelihood
+fits target the <strong>same likelihood and the same fitted
+curve</strong> (see <code><a href="../articles/model-math.html">vignette("model-math")</a></code>); they differ in
+how they summarise uncertainty — a posterior (with priors) versus a
+prior-free likelihood interval.</p>
+</div>
+<div class="section level2">
+<h2 id="the-reproducible-recipe-not-run-here">The reproducible recipe (not run here)<a class="anchor" aria-label="anchor" href="#the-reproducible-recipe-not-run-here"></a>
+</h2>
+<p>These chunks are the exact <code>bayesTLS</code> calls used to build
+the cache on a machine with Stan installed. They are shown with
+<code>eval = FALSE</code> so this vignette never needs Stan.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bayes_cache</span><span class="op">$</span><span class="va">diagnostics</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="st">"case_id"</span>, <span class="st">"rhat_max"</span>, <span class="st">"ess_bulk_min"</span>, <span class="st">"ess_tail_min"</span>, <span class="st">"divergences"</span>,</span>
-<span>  <span class="st">"treedepth_hits"</span>, <span class="st">"bfmi_min"</span>, <span class="st">"all_pass"</span></span>
-<span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;                case_id rhat_max ess_bulk_min ess_tail_min divergences</span></span>
-<span><span class="co">#&gt; 1     zebrafish_oxygen   1.0017         2507         1750           0</span></span>
-<span><span class="co">#&gt; 2           aphid_age6   1.0016         3546         4500           0</span></span>
-<span><span class="co">#&gt; 3        aphid_all_age   1.0019         2205         3027           0</span></span>
-<span><span class="co">#&gt; 4         snowgum_psii   1.0009         3432         4687           0</span></span>
-<span><span class="co">#&gt; 5 drosophila_mortality   1.0014         2822         4680           0</span></span>
-<span><span class="co">#&gt; 6     drosophila_awake   1.0013         2964         4053           0</span></span>
-<span><span class="co">#&gt;   treedepth_hits bfmi_min all_pass</span></span>
-<span><span class="co">#&gt; 1              0   0.8577     TRUE</span></span>
-<span><span class="co">#&gt; 2              0   0.9824     TRUE</span></span>
-<span><span class="co">#&gt; 3              0   0.9556     TRUE</span></span>
-<span><span class="co">#&gt; 4              0   0.8033     TRUE</span></span>
-<span><span class="co">#&gt; 5              0   0.8929     TRUE</span></span>
-<span><span class="co">#&gt; 6              0   0.9163     TRUE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">bayesTLS</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">shrimp_lethal</span>, package <span class="op">=</span> <span class="st">"freqTLS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 1. Standardise: name the temperature / duration / count columns and the time</span></span>
+<span><span class="co">#    unit. fit_4pl() and the two-stage path both consume the standardised frame.</span></span>
+<span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">standardize_data</span><span class="op">(</span></span>
+<span>  data          <span class="op">=</span> <span class="va">shrimp_lethal</span>,</span>
+<span>  temp          <span class="op">=</span> <span class="st">"Temperature_assay"</span>,</span>
+<span>  duration      <span class="op">=</span> <span class="st">"Duration_exposure_hours"</span>,</span>
+<span>  n_total       <span class="op">=</span> <span class="st">"N_individuals_after_trial"</span>,</span>
+<span>  mortality     <span class="op">=</span> <span class="st">"Mortality_after_trial"</span>,</span>
+<span>  duration_unit <span class="op">=</span> <span class="st">"hours"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 2. Bayesian fit, matched: constant shape via temp_effects = "mid", beta-binomial.</span></span>
+<span><span class="va">bfit</span> <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">fit_4pl</span><span class="op">(</span></span>
+<span>  data         <span class="op">=</span> <span class="va">std</span>,</span>
+<span>  temp_effects <span class="op">=</span> <span class="st">"mid"</span>,</span>
+<span>  family       <span class="op">=</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu">brmsfamily</span><span class="op">(</span><span class="st">"beta_binomial"</span>, link <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span>,</span>
+<span>  chains       <span class="op">=</span> <span class="fl">4</span>, iter <span class="op">=</span> <span class="fl">4000</span>, seed <span class="op">=</span> <span class="fl">123</span>, backend <span class="op">=</span> <span class="st">"cmdstanr"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 3. Relative-threshold CTmax + z at tref = 1 hour. NOTE: t_ref / time_multiplier</span></span>
+<span><span class="co">#    live on extract_tdt() (and ts_stage2 / ts_ci), NOT on fit_4pl().</span></span>
+<span><span class="va">btdt</span>  <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">extract_tdt</span><span class="op">(</span></span>
+<span>  <span class="va">bfit</span>, target_surv <span class="op">=</span> <span class="st">"relative"</span>,</span>
+<span>  t_ref <span class="op">=</span> <span class="fl">1</span>, time_multiplier <span class="op">=</span> <span class="fl">1</span>, output_time_unit <span class="op">=</span> <span class="st">"hours"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">ctmax</span> <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">get_ctmax_summary</span><span class="op">(</span><span class="va">btdt</span><span class="op">)</span>  <span class="co"># temp_lower / temp_median / temp_upper</span></span>
+<span><span class="va">zsumm</span> <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">get_z_summary</span><span class="op">(</span><span class="va">btdt</span><span class="op">)</span>      <span class="co"># z_median / z_lower / z_upper</span></span>
+<span></span>
+<span><span class="co"># 4. Classical two-stage, same standardised data and reference time.</span></span>
+<span><span class="va">s1</span>  <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">ts_stage1</span><span class="op">(</span><span class="va">std</span>, family <span class="op">=</span> <span class="st">"betabinomial"</span><span class="op">)</span></span>
+<span><span class="va">s2</span>  <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">ts_stage2</span><span class="op">(</span><span class="va">s1</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, time_multiplier <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">tci</span> <span class="op">&lt;-</span> <span class="fu">bayesTLS</span><span class="fu">::</span><span class="fu">ts_ci</span><span class="op">(</span><span class="va">s2</span>, method <span class="op">=</span> <span class="st">"delta"</span>, level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>                       t_ref <span class="op">=</span> <span class="fl">1</span>, time_multiplier <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="co"># $CTmax_1hr and $z blocks</span></span></code></pre></div>
+<p>To populate the cache, a maintainer runs
+<code>data-raw/build_benchmark_cache.R</code> on a Stan machine; it
+writes <code>inst/extdata/bayesTLS_benchmark_cache.rds</code> (the
+Bayesian and two-stage summaries plus a <code>meta</code> provenance
+block: <code>bayesTLS_version</code>, <code>git_sha</code>,
+<code>cmdstan_version</code>, <code>date_built</code>,
+<code>seed</code>, the configuration, and the data-reconstruction
+note).</p>
 </div>
 <div class="section level2">
-<h2 id="refit-the-same-frequentist-specifications">Refit the same frequentist specifications<a class="anchor" aria-label="anchor" href="#refit-the-same-frequentist-specifications"></a>
+<h2 id="the-freqtls-side-live">The freqTLS side (live)<a class="anchor" aria-label="anchor" href="#the-freqtls-side-live"></a>
 </h2>
-<p>The code below refits the exact current freqTLS specifications from
-the installed datasets. The fitting output is suppressed because the
-diagnostic table follows, but the code remains visible and copyable. The
-five case articles explain each preparation and fit in smaller
-steps.</p>
+<p>The <code>freqTLS</code> fits run live and need nothing beyond this
+package. We use the <code>shrimp_lethal</code> data (ungrouped) and
+<code>zebrafish_lethal</code> (grouped by life stage). The shrimp
+survival counts are reconstructed from the source CSV proportions (see
+<code><a href="../reference/shrimp_lethal.html">?shrimp_lethal</a></code>); because all three estimators share the
+vendored data, they inherit the same reconstructed counts.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">zebrafish_o2</span><span class="op">)</span></span>
-<span><span class="va">zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
-<span>  <span class="va">zebrafish_o2</span>,</span>
-<span>  <span class="va">ploidy</span> <span class="op">==</span> <span class="st">"diploid"</span> <span class="op">&amp;</span> <span class="va">oxygen</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normoxia"</span>, <span class="st">"hyperoxia"</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">zf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>    <span class="va">zf</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration_min"</span>,</span>
-<span>    n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>, low <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>,</span>
-<span>  up <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">shrimp_lethal</span><span class="op">)</span></span>
+<span><span class="va">shrimp_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">shrimp_lethal</span>,</span>
+<span>  temp <span class="op">=</span> <span class="st">"Temperature_assay"</span>, duration <span class="op">=</span> <span class="st">"Duration_exposure_hours"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"N_individuals_after_trial"</span>, mortality <span class="op">=</span> <span class="st">"Mortality_after_trial"</span>,</span>
+<span>  duration_unit <span class="op">=</span> <span class="st">"hours"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">aphid_tdt</span><span class="op">)</span></span>
-<span><span class="va">aphid6</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">aphid_tdt</span>, <span class="va">branch</span> <span class="op">==</span> <span class="st">"heat"</span> <span class="op">&amp;</span> <span class="va">age</span> <span class="op">==</span> <span class="st">"6"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">aphid6_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>    <span class="va">aphid6</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration_min"</span>,</span>
-<span>    n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">species</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">species</span>, low <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, up <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  k <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">aphid_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">aphid_tdt</span>, <span class="va">branch</span> <span class="op">==</span> <span class="st">"heat"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">aphid_all_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>  <span class="va">aphid_all</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration_min"</span>,</span>
-<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">aphid_all_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="va">aphid_all_std</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">species</span> <span class="op">*</span> <span class="va">age</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">species</span> <span class="op">*</span> <span class="va">age</span>,</span>
-<span>  low <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, up <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>,</span>
-<span>  t_ref <span class="op">=</span> <span class="fl">60</span>, method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">snowgum_psii</span><span class="op">)</span></span>
-<span><span class="va">snowgum_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>    <span class="va">snowgum_psii</span>, temp <span class="op">=</span> <span class="st">"Temp"</span>, duration <span class="op">=</span> <span class="st">"Time"</span>,</span>
-<span>    proportion <span class="op">=</span> <span class="st">"fvfm_prop"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">recovery</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">plant</span><span class="op">)</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">recovery</span>,</span>
-<span>  low <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, up <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, k <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span></span>
-<span><span class="va">mort</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span>
-<span>    n_dead <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">$</span><span class="va">dead</span><span class="op">)</span>,</span>
-<span>    n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep.int</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">sex</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dsuzukii</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">sum</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">mort</span><span class="op">$</span><span class="va">n_surv</span> <span class="op">&lt;-</span> <span class="va">mort</span><span class="op">$</span><span class="va">n_total</span> <span class="op">-</span> <span class="va">mort</span><span class="op">$</span><span class="va">n_dead</span></span>
-<span><span class="va">mort_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>    <span class="va">mort</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>    n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">sex</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">sex</span>,</span>
-<span>  low <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, up <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, k <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>,</span>
-<span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>, t_ref <span class="op">=</span> <span class="fl">240</span>, method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">coma_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span></span>
-<span>  <span class="va">dsuzukii</span><span class="op">$</span><span class="va">temp</span>, <span class="va">dsuzukii</span><span class="op">$</span><span class="va">lvl</span>, <span class="va">dsuzukii</span><span class="op">$</span><span class="va">sex</span>, drop <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">coma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">dsuzukii</span>, <span class="va">coma_cell</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    temp <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">temp</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, lvl <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">lvl</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, sex <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">sex</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>    duration <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">time</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>,</span>
-<span>    n_awake <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">t_coma</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">coma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">coma</span>, <span class="va">duration</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">coma_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>    <span class="va">coma</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration"</span>,</span>
-<span>    n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_awake"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>, z <span class="op">=</span> <span class="op">~</span> <span class="va">sex</span>,</span>
-<span>  low <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, up <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, k <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>,</span>
-<span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>, method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>All displayed ML fits converged with a positive-definite Hessian and
-passed the package’s raw-gradient gate. The interval method for the
-direct-coordinate rows below is Wald; the all-age aphid cell values and
-mortality absolute-LT50 values are point predictions and are labelled
-accordingly. Shape-identification warnings remain visible in the
-organism-specific articles.</p>
+<span><span class="va">shrimp_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">shrimp_std</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">shrimp_fit</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
+<span><span class="co">#&gt;   quantity median lower upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax     31.8  31.6  31.9 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> z          2.19  1.96  2.46</span></span></code></pre></div>
+<p><code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> returns a <code>freq_tls</code>
+<strong>workflow object</strong> (the twin of bayesTLS’s
+<code>bayes_tls</code>): it bundles the engine fit, the standardised
+data, and the formula. Its S3 methods — <code><a href="../reference/tls.html">tls()</a></code>,
+<code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>,
+<code><a href="../reference/plot_confidence_eye.html">plot_confidence_eye()</a></code> — delegate to the engine fit, so you
+call them on the workflow object directly. The underlying engine fit is
+also available as <code>shrimp_fit$fit</code> if you want to reach
+it.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  zebrafish_oxygen <span class="op">=</span> <span class="va">zf_fit</span>,</span>
-<span>  aphid_age6 <span class="op">=</span> <span class="va">aphid6_fit</span>,</span>
-<span>  aphid_all_age <span class="op">=</span> <span class="va">aphid_all_fit</span>,</span>
-<span>  snowgum_psii <span class="op">=</span> <span class="va">snowgum_fit</span>,</span>
-<span>  drosophila_mortality <span class="op">=</span> <span class="va">mort_fit</span>,</span>
-<span>  drosophila_awake <span class="op">=</span> <span class="va">coma_fit</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">zebrafish_lethal</span><span class="op">)</span></span>
+<span><span class="va">zebra_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">zebrafish_lethal</span>,</span>
+<span>  temp <span class="op">=</span> <span class="st">"assay_temp"</span>, duration <span class="op">=</span> <span class="st">"duration_h"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"hours"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">freq_diagnostics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fit_list</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">case_id</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/diagnose_tdt_fit.html">diagnose_tdt_fit</a></span><span class="op">(</span><span class="va">fit_list</span><span class="op">[[</span><span class="va">case_id</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    case_id <span class="op">=</span> <span class="va">case_id</span>,</span>
-<span>    converged <span class="op">=</span> <span class="va">ans</span><span class="op">$</span><span class="va">converged</span>,</span>
-<span>    pd_hessian <span class="op">=</span> <span class="va">ans</span><span class="op">$</span><span class="va">pd_hessian</span>,</span>
-<span>    max_abs_gradient <span class="op">=</span> <span class="va">ans</span><span class="op">$</span><span class="va">max_abs_gradient</span>,</span>
-<span>    gradient_pass <span class="op">=</span> <span class="va">ans</span><span class="op">$</span><span class="va">gradient_pass</span>,</span>
-<span>    interval_method <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">case_id</span> <span class="op">==</span> <span class="st">"aphid_all_age"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="st">"ML point prediction"</span></span>
-<span>    <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">case_id</span> <span class="op">==</span> <span class="st">"drosophila_mortality"</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="st">"Wald direct coordinates; absolute LT50 point only"</span></span>
-<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>      <span class="st">"Wald 95% confidence interval"</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">freq_diagnostics</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="va">freq_diagnostics</span></span>
-<span><span class="co">#&gt;                case_id converged pd_hessian max_abs_gradient gradient_pass</span></span>
-<span><span class="co">#&gt; 1     zebrafish_oxygen      TRUE       TRUE     1.948692e-04          TRUE</span></span>
-<span><span class="co">#&gt; 2           aphid_age6      TRUE       TRUE     2.091929e-06          TRUE</span></span>
-<span><span class="co">#&gt; 3        aphid_all_age      TRUE       TRUE     9.832409e-06          TRUE</span></span>
-<span><span class="co">#&gt; 4         snowgum_psii      TRUE       TRUE     2.898515e-04          TRUE</span></span>
-<span><span class="co">#&gt; 5 drosophila_mortality      TRUE       TRUE     7.996796e-05          TRUE</span></span>
-<span><span class="co">#&gt; 6     drosophila_awake      TRUE       TRUE     1.204766e-05          TRUE</span></span>
-<span><span class="co">#&gt;                                     interval_method</span></span>
-<span><span class="co">#&gt; 1                      Wald 95% confidence interval</span></span>
-<span><span class="co">#&gt; 2                      Wald 95% confidence interval</span></span>
-<span><span class="co">#&gt; 3                               ML point prediction</span></span>
-<span><span class="co">#&gt; 4                      Wald 95% confidence interval</span></span>
-<span><span class="co">#&gt; 5 Wald direct coordinates; absolute LT50 point only</span></span>
-<span><span class="co">#&gt; 6                      Wald 95% confidence interval</span></span></code></pre></div>
+<span><span class="va">zebra_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">zebra_std</span>, by <span class="op">=</span> <span class="st">"life_stage"</span>,</span>
+<span>                                      t_ref <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># per-stage CTmax and z with profile intervals</span></span>
+<span><span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">zebra_fit</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
+<span><span class="co">#&gt;   life_stage    quantity median lower upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> young_embryos CTmax     39.9  39.8  40.0 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> old_embryos   CTmax     41.4  41.2  41.6 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> larvae        CTmax     39.8  39.7  39.9 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> young_embryos z          2.00  1.82  2.19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> old_embryos   z          1.80  1.53  2.16</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> larvae        z          1.98  1.76  2.22</span></span></code></pre></div>
+<p>(The zebrafish fit emits a data-adequacy warning about temperatures
+with fewer than three durations; this is the kind of identifiability
+signal <code>freqTLS</code> surfaces explicitly. It is suppressed here
+only to keep the vignette output tidy.)</p>
 </div>
 <div class="section level2">
-<h2 id="actual-paired-differences">Actual paired differences<a class="anchor" aria-label="anchor" href="#actual-paired-differences"></a>
+<h2 id="the-three-way-comparison-with-real-numbers">The three-way comparison, with real numbers<a class="anchor" aria-label="anchor" href="#the-three-way-comparison-with-real-numbers"></a>
 </h2>
-<p>The primary table compares the frequentist point estimate with the
-Bayesian posterior median. Positive values mean the freqTLS estimate is
-larger. The interval columns are shown side by side without pretending
-that a confidence interval and a credible interval have the same
-interpretation.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">as_freq_rows</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fit</span>, <span class="va">case_id</span>, <span class="va">by</span>, <span class="va">endpoint</span>, <span class="va">t_ref</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">fit</span>, by <span class="op">=</span> <span class="va">by</span>, lethal <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    case_id <span class="op">=</span> <span class="va">case_id</span>,</span>
-<span>    endpoint <span class="op">=</span> <span class="va">endpoint</span>,</span>
-<span>    threshold <span class="op">=</span> <span class="st">"relative"</span>,</span>
-<span>    t_ref <span class="op">=</span> <span class="va">t_ref</span>,</span>
-<span>    group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">out</span><span class="op">[[</span><span class="va">by</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>    parameter <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">quantity</span>,</span>
-<span>    freq_estimate <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">median</span>,</span>
-<span>    freq_lower <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">lower</span>,</span>
-<span>    freq_upper <span class="op">=</span> <span class="va">out</span><span class="op">$</span><span class="va">upper</span>,</span>
-<span>    freq_interval <span class="op">=</span> <span class="st">"Wald 95% confidence interval"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">freq_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>  <span class="fu">as_freq_rows</span><span class="op">(</span></span>
-<span>    <span class="va">zf_fit</span>, <span class="st">"zebrafish_oxygen"</span>, <span class="st">"oxygen"</span>, <span class="st">"survival counts"</span>, <span class="fl">60</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="fu">as_freq_rows</span><span class="op">(</span></span>
-<span>    <span class="va">aphid6_fit</span>, <span class="st">"aphid_age6"</span>, <span class="st">"species"</span>, <span class="st">"survival counts"</span>, <span class="fl">60</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="fu">as_freq_rows</span><span class="op">(</span></span>
-<span>    <span class="va">snowgum_fit</span>, <span class="st">"snowgum_psii"</span>, <span class="st">"recovery"</span>,</span>
-<span>    <span class="st">"retained PSII function proportion"</span>, <span class="fl">60</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="fu">as_freq_rows</span><span class="op">(</span></span>
-<span>    <span class="va">coma_fit</span>, <span class="st">"drosophila_awake"</span>, <span class="st">"sex"</span>,</span>
-<span>    <span class="st">"awake counts (missing t_coma)"</span>, <span class="fl">60</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">bayes_rows</span> <span class="op">&lt;-</span> <span class="va">bayes_cache</span><span class="op">$</span><span class="va">summaries</span></span>
-<span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
-<span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">oxygen</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">oxygen</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
-<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">recovery</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">recovery</span><span class="op">)</span>,</span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
-<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">paired</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
-<span>  <span class="va">freq_rows</span>,</span>
-<span>  <span class="va">bayes_rows</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"case_id"</span>, <span class="st">"endpoint"</span>, <span class="st">"threshold"</span>, <span class="st">"t_ref"</span>, <span class="st">"group"</span>, <span class="st">"parameter"</span>,</span>
-<span>    <span class="st">"median"</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"interval_method"</span></span>
-<span>  <span class="op">)</span><span class="op">]</span>,</span>
-<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"case_id"</span>, <span class="st">"endpoint"</span>, <span class="st">"threshold"</span>, <span class="st">"t_ref"</span>, <span class="st">"group"</span>, <span class="st">"parameter"</span><span class="op">)</span>,</span>
-<span>  all <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  sort <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="st">"median"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_median"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="st">"lower"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_lower"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="st">"upper"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_upper"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="st">"interval_method"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_interval"</span></span>
-<span><span class="va">paired</span><span class="op">$</span><span class="va">difference_freq_minus_bayes</span> <span class="op">&lt;-</span> <span class="va">paired</span><span class="op">$</span><span class="va">freq_estimate</span> <span class="op">-</span> <span class="va">paired</span><span class="op">$</span><span class="va">bayes_median</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="fl">18L</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">paired</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="st">"case_id"</span>, <span class="st">"endpoint"</span>, <span class="st">"threshold"</span>, <span class="st">"t_ref"</span>, <span class="st">"group"</span>, <span class="st">"parameter"</span>,</span>
-<span>  <span class="st">"freq_estimate"</span>, <span class="st">"freq_lower"</span>, <span class="st">"freq_upper"</span>, <span class="st">"bayes_median"</span>,</span>
-<span>  <span class="st">"bayes_lower"</span>, <span class="st">"bayes_upper"</span>, <span class="st">"difference_freq_minus_bayes"</span></span>
-<span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;             case_id                          endpoint threshold t_ref</span></span>
-<span><span class="co">#&gt; 1  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 2  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 3  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 4  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 5        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 6        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 7        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 8        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 9        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 10       aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 11     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 12     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 13     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 14     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 15 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt; 16 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt; 17 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt; 18 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt;         group parameter freq_estimate freq_lower freq_upper bayes_median</span></span>
-<span><span class="co">#&gt; 1    normoxia     CTmax     38.739774  38.431850  39.047698    38.889462</span></span>
-<span><span class="co">#&gt; 2   hyperoxia     CTmax     39.301410  39.059733  39.543086    39.348350</span></span>
-<span><span class="co">#&gt; 3    normoxia         z      6.005753   4.371361   8.251220     5.586819</span></span>
-<span><span class="co">#&gt; 4   hyperoxia         z      2.500556   2.139219   2.922927     2.488053</span></span>
-<span><span class="co">#&gt; 5  M_dirhodum     CTmax     35.215425  35.025354  35.405496    35.172826</span></span>
-<span><span class="co">#&gt; 6    S_avenae     CTmax     36.527458  36.431472  36.623444    36.508723</span></span>
-<span><span class="co">#&gt; 7      R_padi     CTmax     37.169857  37.063139  37.276575    37.145179</span></span>
-<span><span class="co">#&gt; 8  M_dirhodum         z      4.747335   4.505357   5.002309     4.775438</span></span>
-<span><span class="co">#&gt; 9    S_avenae         z      3.609898   3.460681   3.765549     3.623531</span></span>
-<span><span class="co">#&gt; 10     R_padi         z      3.965377   3.698215   4.251839     3.958519</span></span>
-<span><span class="co">#&gt; 11       Dark     CTmax     45.720851  45.178128  46.263574    45.694884</span></span>
-<span><span class="co">#&gt; 12      Light     CTmax     44.075183  43.557764  44.592603    44.053744</span></span>
-<span><span class="co">#&gt; 13       Dark         z      4.707002   4.289897   5.164663     4.673517</span></span>
-<span><span class="co">#&gt; 14      Light         z      3.640602   3.201761   4.139591     3.624133</span></span>
-<span><span class="co">#&gt; 15          F     CTmax     36.497021  36.392973  36.601068    36.480047</span></span>
-<span><span class="co">#&gt; 16          M     CTmax     36.295991  36.203030  36.388953    36.269671</span></span>
-<span><span class="co">#&gt; 17          F         z      2.432835   2.288082   2.586746     2.413440</span></span>
-<span><span class="co">#&gt; 18          M         z      2.393259   2.261891   2.532257     2.404374</span></span>
-<span><span class="co">#&gt;    bayes_lower bayes_upper difference_freq_minus_bayes</span></span>
-<span><span class="co">#&gt; 1    38.557733   39.374728                 -0.14968745</span></span>
-<span><span class="co">#&gt; 2    39.169796   39.499437                 -0.04694048</span></span>
-<span><span class="co">#&gt; 3     4.055890    7.754303                  0.41893351</span></span>
-<span><span class="co">#&gt; 4     2.048057    2.932714                  0.01250305</span></span>
-<span><span class="co">#&gt; 5    34.971922   35.352795                  0.04259915</span></span>
-<span><span class="co">#&gt; 6    36.410246   36.599680                  0.01873529</span></span>
-<span><span class="co">#&gt; 7    37.043699   37.250706                  0.02467830</span></span>
-<span><span class="co">#&gt; 8     4.529840    5.043446                 -0.02810253</span></span>
-<span><span class="co">#&gt; 9     3.470673    3.780992                 -0.01363301</span></span>
-<span><span class="co">#&gt; 10    3.685519    4.247040                  0.00685783</span></span>
-<span><span class="co">#&gt; 11   45.045874   46.290603                  0.02596675</span></span>
-<span><span class="co">#&gt; 12   43.433298   44.697975                  0.02143955</span></span>
-<span><span class="co">#&gt; 13    4.229605    5.122288                  0.03348486</span></span>
-<span><span class="co">#&gt; 14    3.178338    4.105518                  0.01646914</span></span>
-<span><span class="co">#&gt; 15   36.362822   36.586969                  0.01697342</span></span>
-<span><span class="co">#&gt; 16   36.158873   36.372444                  0.02632053</span></span>
-<span><span class="co">#&gt; 17    2.253667    2.581269                  0.01939477</span></span>
-<span><span class="co">#&gt; 18    2.259329    2.568861                 -0.01111458</span></span></code></pre></div>
-<p>The age-six aphid row is also one cell of the all-age extension, but
-the two fits are intentionally distinct. For all nine species-by-age
-cells, the largest absolute freqTLS-minus-bayesTLS point difference is
-reported separately rather than printing another 18-row table.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">aphid_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
-<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">aphid_all</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>,</span>
-<span>  age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">aphid_all</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>,</span>
-<span>  temp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">aphid_all_std</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span>,</span>
-<span>  KEEP.OUT.ATTRS <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">aphid_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">aphid_all_fit</span>, <span class="va">aphid_cells</span>, type <span class="op">=</span> <span class="st">"parameters"</span><span class="op">)</span></span>
-<span><span class="va">aphid_freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    species <span class="op">=</span> <span class="va">aphid_cells</span><span class="op">$</span><span class="va">species</span>, age <span class="op">=</span> <span class="va">aphid_cells</span><span class="op">$</span><span class="va">age</span>,</span>
-<span>    parameter <span class="op">=</span> <span class="st">"CTmax"</span>, freq_estimate <span class="op">=</span> <span class="va">aphid_pred</span><span class="op">$</span><span class="va">CTmax</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    species <span class="op">=</span> <span class="va">aphid_cells</span><span class="op">$</span><span class="va">species</span>, age <span class="op">=</span> <span class="va">aphid_cells</span><span class="op">$</span><span class="va">age</span>,</span>
-<span>    parameter <span class="op">=</span> <span class="st">"z"</span>, freq_estimate <span class="op">=</span> <span class="va">aphid_pred</span><span class="op">$</span><span class="va">z</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">aphid_bayes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">bayes_rows</span>, <span class="va">case_id</span> <span class="op">==</span> <span class="st">"aphid_all_age"</span><span class="op">)</span></span>
-<span><span class="va">aphid_join</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
-<span>  <span class="va">aphid_freq</span>,</span>
-<span>  <span class="va">aphid_bayes</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"age"</span>, <span class="st">"parameter"</span>, <span class="st">"median"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"age"</span>, <span class="st">"parameter"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">aphid_join</span><span class="op">$</span><span class="va">difference_freq_minus_bayes</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">aphid_join</span><span class="op">$</span><span class="va">freq_estimate</span> <span class="op">-</span> <span class="va">aphid_join</span><span class="op">$</span><span class="va">median</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">aphid_join</span><span class="op">)</span> <span class="op">==</span> <span class="fl">18L</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">difference_freq_minus_bayes</span><span class="op">)</span> <span class="op">~</span> <span class="va">parameter</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">aphid_join</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">max</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;   parameter abs(difference_freq_minus_bayes)</span></span>
-<span><span class="co">#&gt; 1     CTmax                       0.02725888</span></span>
-<span><span class="co">#&gt; 2         z                       0.02246847</span></span></code></pre></div>
-<p>Snow-gum is a paired refit of the locked shared-shape analogue. It is
-not a claim that freqTLS reproduces the richer recovery-by-temperature
-shape model displayed in the pinned supplement.</p>
+<p>The cache holds the maintainer-built <code>bayesTLS</code>
+(posterior) and classical two-stage summaries; the <code>freqTLS</code>
+column is computed live as this page renders. All three use the matched
+configuration (beta-binomial, relative threshold, constant shape,
+<code>tref = 1</code> hour), so they target the <em>same</em> fitted
+curve.</p>
+<table style="width:100%;" class="table">
+<caption>Shrimp: the same CTmax and z from three estimators.</caption>
+<colgroup>
+<col width="20%">
+<col width="26%">
+<col width="26%">
+<col width="26%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Quantity</th>
+<th align="left">Two-stage (delta CI)</th>
+<th align="left">bayesTLS (95% CrI)</th>
+<th align="left">freqTLS (profile CI)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">CTmax (°C)</td>
+<td align="left">31.61 [31.33, 31.89]</td>
+<td align="left">31.72 [31.59, 31.86]</td>
+<td align="left">31.77 [31.63, 31.92]</td>
+</tr>
+<tr class="even">
+<td align="left">z (°C / decade)</td>
+<td align="left">2.06 [1.49, 2.64]</td>
+<td align="left">2.18 [1.95, 2.44]</td>
+<td align="left">2.19 [1.96, 2.46]</td>
+</tr>
+</tbody>
+</table>
+<p>For the shrimp data the three estimators land on essentially the same
+<code>CTmax</code> and <code>z</code>, with comparable interval widths:
+the profile-likelihood confidence interval and the Bayesian credible
+interval nearly coincide. That is the point of the complementary framing
+— under the matched configuration the likelihood and the posterior
+summarise the <em>same</em> fitted curve, one with a prior and MCMC, the
+other prior-free and by optimisation.</p>
+</div>
+<div class="section level2">
+<h2 id="how-fast-accurate-and-calibrated">How fast, accurate, and calibrated<a class="anchor" aria-label="anchor" href="#how-fast-accurate-and-calibrated"></a>
+</h2>
+<p>Accuracy and calibration below are descriptive characteristics of the
+likelihood path, measured by simulation
+(<code>data-raw/performance-study.R</code>) — they ask whether freqTLS’s
+own intervals are trustworthy, not whether they beat
+<code>bayesTLS</code> (which buys priors, full posteriors, and the
+heat-injury sub-models). <strong>Speed</strong>, though, is one place a
+head-to-head is both fair and stark.</p>
+<p><strong>How fast</strong> — a full fit, and one <code>CTmax</code>
+profile interval, by design size:</p>
+<table class="table">
+<caption>Median wall-clock (ms): one fit, and one CTmax profile
+CI.</caption>
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">design</th>
+<th align="right">n_obs</th>
+<th align="right">median_fit_ms</th>
+<th align="right">median_profile_ms</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">binomial</td>
+<td align="left">tiny</td>
+<td align="right">24</td>
+<td align="right">6</td>
+<td align="right">85</td>
+</tr>
+<tr class="even">
+<td align="left">binomial</td>
+<td align="left">small</td>
+<td align="right">105</td>
+<td align="right">10</td>
+<td align="right">206</td>
+</tr>
+<tr class="odd">
+<td align="left">binomial</td>
+<td align="left">medium</td>
+<td align="right">252</td>
+<td align="right">15</td>
+<td align="right">331</td>
+</tr>
+<tr class="even">
+<td align="left">binomial</td>
+<td align="left">large</td>
+<td align="right">440</td>
+<td align="right">28</td>
+<td align="right">604</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_binomial</td>
+<td align="left">tiny</td>
+<td align="right">24</td>
+<td align="right">15</td>
+<td align="right">339</td>
+</tr>
+<tr class="even">
+<td align="left">beta_binomial</td>
+<td align="left">small</td>
+<td align="right">105</td>
+<td align="right">28</td>
+<td align="right">391</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_binomial</td>
+<td align="left">medium</td>
+<td align="right">252</td>
+<td align="right">45</td>
+<td align="right">1032</td>
+</tr>
+<tr class="even">
+<td align="left">beta_binomial</td>
+<td align="left">large</td>
+<td align="right">440</td>
+<td align="right">87</td>
+<td align="right">1898</td>
+</tr>
+</tbody>
+</table>
+<p>Fits are milliseconds and a profile interval is well under a second.
+Putting the three estimators side by side on the shrimp benchmark makes
+the speed gap concrete:</p>
+<table class="table">
+<caption>Wall-clock on the shrimp benchmark. freqTLS is timed live as
+this page renders; the two-stage and bayesTLS times are cached from
+data-raw/timing-study.R (the bayesTLS time is post-compile sampling +
+overhead, and a first fit also pays a one-time Stan
+compilation).</caption>
+<thead><tr class="header">
+<th align="left">Estimator</th>
+<th align="left">Task</th>
+<th align="left">Wall-clock</th>
+<th align="left">Source</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">freqTLS</td>
+<td align="left">fit (ML)</td>
+<td align="left">28 ms</td>
+<td align="left">live</td>
+</tr>
+<tr class="even">
+<td align="left">freqTLS</td>
+<td align="left">fit + Wald CTmax &amp; z</td>
+<td align="left">33 ms</td>
+<td align="left">live</td>
+</tr>
+<tr class="odd">
+<td align="left">freqTLS</td>
+<td align="left">fit + profile CTmax &amp; z</td>
+<td align="left">820 ms</td>
+<td align="left">live</td>
+</tr>
+<tr class="even">
+<td align="left">classical two-stage</td>
+<td align="left">fit + delta CI</td>
+<td align="left">1.4 s</td>
+<td align="left">cached</td>
+</tr>
+<tr class="odd">
+<td align="left">bayesTLS</td>
+<td align="left">fit (4 chains x 4000 MCMC)</td>
+<td align="left">5.0 s</td>
+<td align="left">cached</td>
+</tr>
+</tbody>
+</table>
+<p>freqTLS’s <strong>profile</strong> path runs in about a second —
+comparable to the classical two-stage and roughly an order of magnitude
+faster than the Bayesian MCMC fit — while its <strong>Wald</strong> path
+is near-instant. That speed is the likelihood path’s concrete advantage,
+and it is why freqTLS keeps profile the default while offering Wald as a
+fast opt-in for well-identified fits. The whole three-way table above is
+itself computed live as this page renders, with no Stan.</p>
+<p><strong>How accurate</strong> — bias and RMSE for <code>CTmax</code>
+and <code>z</code>:</p>
+<table class="table">
+<caption>Near-unbiased recovery (nsim = 300).</caption>
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">truth_setting</th>
+<th align="left">parameter</th>
+<th align="right">bias</th>
+<th align="right">rmse</th>
+<th align="right">n_converged</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">binomial</td>
+<td align="left">easy</td>
+<td align="left">CTmax</td>
+<td align="right">0.0021</td>
+<td align="right">0.1003</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="left">binomial</td>
+<td align="left">easy</td>
+<td align="left">z</td>
+<td align="right">0.0103</td>
+<td align="right">0.1838</td>
+<td align="right">300</td>
+</tr>
+<tr class="odd">
+<td align="left">binomial</td>
+<td align="left">harder</td>
+<td align="left">CTmax</td>
+<td align="right">0.0068</td>
+<td align="right">0.0899</td>
+<td align="right">300</td>
+</tr>
+<tr class="even">
+<td align="left">binomial</td>
+<td align="left">harder</td>
+<td align="left">z</td>
+<td align="right">-0.0019</td>
+<td align="right">0.1571</td>
+<td align="right">300</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_binomial</td>
+<td align="left">easy</td>
+<td align="left">CTmax</td>
+<td align="right">-0.0015</td>
+<td align="right">0.1296</td>
+<td align="right">298</td>
+</tr>
+<tr class="even">
+<td align="left">beta_binomial</td>
+<td align="left">easy</td>
+<td align="left">z</td>
+<td align="right">0.0017</td>
+<td align="right">0.2284</td>
+<td align="right">298</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_binomial</td>
+<td align="left">harder</td>
+<td align="left">CTmax</td>
+<td align="right">0.0026</td>
+<td align="right">0.1026</td>
+<td align="right">283</td>
+</tr>
+<tr class="even">
+<td align="left">beta_binomial</td>
+<td align="left">harder</td>
+<td align="left">z</td>
+<td align="right">0.0027</td>
+<td align="right">0.1994</td>
+<td align="right">283</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How calibrated</strong> — empirical coverage of the 95%
+intervals:</p>
+<table class="table">
+<caption>Profile and Wald 95% interval coverage (nsim = 300).</caption>
+<thead><tr class="header">
+<th align="left">family</th>
+<th align="left">method</th>
+<th align="left">parameter</th>
+<th align="right">coverage</th>
+<th align="right">median_width</th>
+<th align="right">nominal</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">binomial</td>
+<td align="left">profile</td>
+<td align="left">CTmax</td>
+<td align="right">0.947</td>
+<td align="right">0.405</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="even">
+<td align="left">binomial</td>
+<td align="left">profile</td>
+<td align="left">z</td>
+<td align="right">0.953</td>
+<td align="right">0.734</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="odd">
+<td align="left">binomial</td>
+<td align="left">wald</td>
+<td align="left">CTmax</td>
+<td align="right">0.947</td>
+<td align="right">0.405</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="even">
+<td align="left">binomial</td>
+<td align="left">wald</td>
+<td align="left">z</td>
+<td align="right">0.957</td>
+<td align="right">0.734</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_binomial</td>
+<td align="left">profile</td>
+<td align="left">CTmax</td>
+<td align="right">0.883</td>
+<td align="right">0.470</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="even">
+<td align="left">beta_binomial</td>
+<td align="left">profile</td>
+<td align="left">z</td>
+<td align="right">0.887</td>
+<td align="right">0.851</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="odd">
+<td align="left">beta_binomial</td>
+<td align="left">wald</td>
+<td align="left">CTmax</td>
+<td align="right">0.927</td>
+<td align="right">0.458</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="even">
+<td align="left">beta_binomial</td>
+<td align="left">wald</td>
+<td align="left">z</td>
+<td align="right">0.920</td>
+<td align="right">0.837</td>
+<td align="right">0.95</td>
+</tr>
+</tbody>
+</table>
+<p>Profile coverage tracks the nominal 95% closely; where it dips (small
+samples, beta-binomial <code>z</code>), <code>freqTLS</code> reports it
+honestly rather than hiding it.</p>
 <div class="section level3">
-<h3 id="drosophila-mortality-do-not-mix-estimands">Drosophila mortality: do not mix estimands<a class="anchor" aria-label="anchor" href="#drosophila-mortality-do-not-mix-estimands"></a>
+<h3 id="why-the-beta-binomial-profile-can-dip-and-what-to-use-instead">Why the beta-binomial profile can dip — and what to use instead<a class="anchor" aria-label="anchor" href="#why-the-beta-binomial-profile-can-dip-and-what-to-use-instead"></a>
 </h3>
-<p>The pinned mortality summary uses the absolute 50% threshold. The
-direct freqTLS <code>CTmax</code> and <code>z</code> coordinates are
-relative-midpoint quantities, so they must not be subtracted from the
-Bayesian absolute values. Only the absolute 240-minute LT50 point is
-comparable without silently changing the estimand.</p>
+<p>The dip has a specific, diagnosable cause: the dispersion parameter
+<code>phi</code>. When overdispersion is mild — <code>phi</code> large,
+the data approaching the binomial limit — <code>phi</code> becomes
+<strong>weakly identified</strong>, and its estimate runs away (its
+relative standard error blows up). The profile interval for
+<code>CTmax</code> / <code>z</code> profiles that runaway
+<code>phi</code> out at each grid point, snaps to the binomial limit,
+and goes too narrow. The Wald interval propagates the
+flat-<code>phi</code> uncertainty through the joint Hessian and stays
+calibrated; the parametric bootstrap is a middle ground. (This is
+<em>not</em> a clamping artefact — the likelihood’s numerical floors
+never activate in this regime; see
+<code>data-raw/beta-binomial-phi-study.R</code>.)</p>
+<table class="table">
+<caption>Empirical 95% coverage of z by method as overdispersion weakens
+(phi up = nearer binomial, phi weakly identified; 120 sims/cell). The
+profile collapses; Wald holds; bootstrap is intermediate.</caption>
+<thead><tr class="header">
+<th align="left">phi (overdispersion)</th>
+<th align="right">profile</th>
+<th align="right">Wald</th>
+<th align="right">bootstrap</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">5 (strong)</td>
+<td align="right">0.925</td>
+<td align="right">0.925</td>
+<td align="right">0.925</td>
+</tr>
+<tr class="even">
+<td align="left">50 (mild)</td>
+<td align="right">0.924</td>
+<td align="right">0.941</td>
+<td align="right">0.941</td>
+</tr>
+<tr class="odd">
+<td align="left">200 (very mild)</td>
+<td align="right">0.685</td>
+<td align="right">0.935</td>
+<td align="right">0.907</td>
+</tr>
+</tbody>
+</table>
+<p>Accordingly, <code><a href="../reference/fit_tls.html">fit_tls()</a></code> emits an advisory when
+<code>phi</code>’s relative SE is large, and <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code>
+(with the <code>fallback = TRUE</code> default) <strong>routes those
+coordinates to Wald automatically</strong> — so the default path stays
+calibrated without you having to intervene. More broadly, Wald (built on
+the internal link scale and back-transformed) is fast and, in these
+simulations, as well-calibrated as the profile for fixed effects — a
+perfectly good choice for routine work. The profile remains the default
+because it respects asymmetry without a normal approximation and now
+degrades to Wald or the bootstrap exactly where it would be
+unreliable.</p>
+<p>You can see when the automatic routing fires: the <code>method</code>
+column of <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> reads <code>wald</code> for the
+rerouted coordinate even if you asked for <code>profile</code>, and an
+informational message is emitted. To get an asymmetry-respecting
+interval for that coordinate specifically, request the bootstrap — for
+example <code>confint(fit, "phi", method = "bootstrap")</code>.</p>
+<p><strong>When to use each method:</strong></p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Method</th>
+<th>Use when</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>profile</code> (default)</td>
+<td>the headline choice — respects asymmetry, no normal approximation,
+and degrades honestly when a coordinate is weakly identified.</td>
+</tr>
+<tr class="even">
+<td><code>wald</code></td>
+<td>fast routine work; as well-calibrated as the profile for fixed
+effects in these simulations; symmetric on the link scale.</td>
+</tr>
+<tr class="odd">
+<td><code>bootstrap</code></td>
+<td>a prior-free interval that is always finite (the non-closing
+fallback), and the asymmetry-respecting option for <code>up</code>, a
+weak <code>phi</code>, or any weakly identified coordinate.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="always-an-interval-the-bootstrap-fallback">Always an interval: the bootstrap fallback<a class="anchor" aria-label="anchor" href="#always-an-interval-the-bootstrap-fallback"></a>
+</h2>
+<p>A Bayesian fit always returns an interval. So does
+<code>freqTLS</code>: when a profile does not close — a weakly
+identified design, a boundary asymptote — <code><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint()</a></code> falls
+back to a prior-free <strong>parametric bootstrap</strong> (the
+default), so you still get an asymmetry-respecting interval instead of
+<code>NA</code>. It is the likelihood-path analogue of the posterior:
+both summarise estimator uncertainty without a prior.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A deliberately sparse design where the CTmax profile does not close.</span></span>
+<span><span class="va">sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, temps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">36</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                       reps <span class="op">=</span> <span class="fl">2</span>, n <span class="op">=</span> <span class="fl">10</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span>
+<span><span class="va">sfit_sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">sparse</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>,</span>
+<span>                                        time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
+<span>                                        family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Strict profile: NA on an open side. Default: a parametric bootstrap interval.</span></span>
+<span><span class="va">strict</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sfit_sparse</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>, fallback <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">sfit_sparse</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span>, nboot <span class="op">=</span> <span class="fl">1000</span>, boot_seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  setting   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"strict profile (fallback = FALSE)"</span>, <span class="st">"default (bootstrap fallback)"</span><span class="op">)</span>,</span>
+<span>  conf.low  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">strict</span><span class="op">$</span><span class="va">conf.low</span>,  <span class="va">boot</span><span class="op">$</span><span class="va">conf.low</span><span class="op">)</span>,</span>
+<span>  conf.high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">strict</span><span class="op">$</span><span class="va">conf.high</span>, <span class="va">boot</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span>,</span>
+<span>  method    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">strict</span><span class="op">$</span><span class="va">method</span>,    <span class="va">boot</span><span class="op">$</span><span class="va">method</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;                             setting conf.low conf.high  method</span></span>
+<span><span class="co">#&gt; 1 strict profile (fallback = FALSE) 34.88526  36.70594 profile</span></span>
+<span><span class="co">#&gt; 2      default (bootstrap fallback) 34.88526  36.70594 profile</span></span></code></pre></div>
+<p>The <code>freqTLS</code> interval is now available in exactly the
+cases where a Bayesian fit would also give one — without a prior, and in
+milliseconds.</p>
+</div>
+<div class="section level2">
+<h2 id="the-teaching-device-posterior-density-versus-confidence-eye">The teaching device: posterior density versus Confidence Eye<a class="anchor" aria-label="anchor" href="#the-teaching-device-posterior-density-versus-confidence-eye"></a>
+</h2>
+<p>The clearest way to <em>see</em> the Bayesian-versus-likelihood
+distinction is to draw, for the same <code>CTmax</code> (or
+<code>z</code>):</p>
+<ul>
+<li>the <strong><code>bayesTLS</code> posterior density</strong> — a
+probability distribution over the parameter, shaped by the prior and the
+data; and</li>
+<li>the <strong><code>freqTLS</code> Confidence Eye</strong> — a
+confidence lens with a hollow point estimate, carrying no prior and
+making no probability statement about the parameter.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">shrimp_fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="comparing-to-bayesTLS_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for the shrimp CTmax and z: pale confidence lenses with hollow point estimates, the freqTLS uncertainty display." width="576"></p>
+<p>The Confidence Eye above is the <code>freqTLS</code> half of that
+contrast. When the cache (and <code>bayesTLS</code>) are available, the
+posterior density for the same quantity can be drawn beside it; the
+side-by-side makes explicit that one is a posterior and the other is a
+likelihood confidence interval. <code>freqTLS</code> deliberately never
+renders a posterior-style density for its own intervals, and its prose
+uses “confidence” language, never “posterior” or “credible”.</p>
+</div>
+<div class="section level2">
+<h2 id="beyond-the-matched-shape-stage-specific-curves">Beyond the matched shape: stage-specific curves<a class="anchor" aria-label="anchor" href="#beyond-the-matched-shape-stage-specific-curves"></a>
+</h2>
+<p>The three-way comparison holds the shape constant (<code>low</code>,
+<code>up</code>, <code>k</code> shared across temperatures and groups)
+so all three estimators target the <em>same</em> curve — that is what
+makes the benchmark fair. <code>freqTLS</code> can also relax that
+restriction: the shape parameters <code>low</code>, <code>up</code>, and
+<code>log_k</code> may vary by a grouping factor. Re-fitting
+<code>zebrafish_lethal</code> with stage-specific shapes and comparing
+by AIC asks whether the life stages differ in more than thermal
+<em>location</em> (<code>CTmax</code>, <code>z</code>):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mort_lt50</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  group <span class="op">=</span> <span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">group_levels</span>,</span>
-<span>  freq_estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">group_levels</span>, <span class="kw">function</span><span class="op">(</span><span class="va">sex_level</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">temp_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">mort</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">mort</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">1001</span><span class="op">)</span></span>
-<span>    <span class="va">grid_difference</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span></span>
-<span>      <span class="va">mort_fit</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="va">temp_grid</span>, duration <span class="op">=</span> <span class="fl">240</span>, group <span class="op">=</span> <span class="va">sex_level</span><span class="op">)</span>,</span>
-<span>      type <span class="op">=</span> <span class="st">"survival"</span></span>
-<span>    <span class="op">)</span> <span class="op">-</span> <span class="fl">0.5</span></span>
-<span>    <span class="va">crossing</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span></span>
-<span>      <span class="va">grid_difference</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">grid_difference</span><span class="op">)</span><span class="op">]</span> <span class="op">*</span></span>
-<span>        <span class="va">grid_difference</span><span class="op">[</span><span class="op">-</span><span class="fl">1L</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="fl">0</span></span>
-<span>    <span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">crossing</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1L</span><span class="op">)</span></span>
-<span>    <span class="va">objective</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span></span>
-<span>        <span class="va">mort_fit</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="va">temp</span>, duration <span class="op">=</span> <span class="fl">240</span>, group <span class="op">=</span> <span class="va">sex_level</span><span class="op">)</span>,</span>
-<span>        type <span class="op">=</span> <span class="st">"survival"</span></span>
-<span>      <span class="op">)</span> <span class="op">-</span> <span class="fl">0.5</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot</a></span><span class="op">(</span></span>
-<span>      <span class="va">objective</span>,</span>
-<span>      <span class="va">temp_grid</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">crossing</span>, <span class="va">crossing</span> <span class="op">+</span> <span class="fl">1L</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>      tol <span class="op">=</span> <span class="fl">1e-10</span></span>
-<span>    <span class="op">)</span><span class="op">$</span><span class="va">root</span></span>
-<span>  <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">stage_shape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
+<span>  <span class="va">zebra_std</span>, by <span class="op">=</span> <span class="st">"life_stage"</span>,</span>
+<span>  low <span class="op">=</span> <span class="op">~</span> <span class="va">life_stage</span>, up <span class="op">=</span> <span class="op">~</span> <span class="va">life_stage</span>, k <span class="op">=</span> <span class="op">~</span> <span class="va">life_stage</span>,</span>
+<span>  t_ref <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># zebra_fit (above) is the shared-shape fit; stage_shape lets low / up / k vary.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>shared_shape_AIC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">zebra_fit</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  stage_shape_AIC  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">stage_shape</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; shared_shape_AIC  stage_shape_AIC </span></span>
+<span><span class="co">#&gt;           1222.5           1187.9</span></span></code></pre></div>
+<p>The stage-specific model has the substantially lower AIC, so the data
+support per-stage shapes. The difference is concentrated in the upper
+asymptote <code>up</code> (the maximum survival at benign exposures),
+not the steepness <code>k</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">stage_est</span> <span class="op">&lt;-</span> <span class="va">stage_shape</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">estimates</span></span>
+<span><span class="va">stage_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^up:"</span>, <span class="va">stage_est</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"std.error"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;          parameter  estimate  std.error</span></span>
+<span><span class="co">#&gt; 4 up:young_embryos 0.7177178 0.03159488</span></span>
+<span><span class="co">#&gt; 5   up:old_embryos 0.9180763 0.01502271</span></span>
+<span><span class="co">#&gt; 6        up:larvae 0.9393117 0.02523538</span></span></code></pre></div>
+<p>Young embryos have a markedly lower survival ceiling (<code>up</code>
+near 0.7) than older embryos and larvae (near 0.9) — a real biological
+difference that the matched constant-shape configuration, used by the
+classical two-stage workflow and the <code>bayesTLS</code> benchmark
+here, cannot express.</p>
+<p><code>freqTLS</code> also reads absolute critical temperatures and
+predicts heat injury off the same fitted curve. For the (ungrouped)
+shrimp fit, the absolute critical temperature for 50% survival at one
+hour, and the survival predicted under a four-hour exposure at 32
+°C:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  CTmax_50pct_1h <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/derive_ctmax.html">derive_ctmax</a></span><span class="op">(</span><span class="va">shrimp_fit</span><span class="op">$</span><span class="va">fit</span>, surv <span class="op">=</span> <span class="fl">0.5</span>, duration <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  surv_32C_4h    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="fu"><a href="../reference/predict_heat_injury.html">predict_heat_injury</a></span><span class="op">(</span><span class="va">shrimp_fit</span><span class="op">$</span><span class="va">fit</span>,</span>
+<span>                     <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>, temp <span class="op">=</span> <span class="fl">32</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">survival</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">mort_bayes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
-<span>  <span class="va">bayes_rows</span>,</span>
-<span>  <span class="va">case_id</span> <span class="op">==</span> <span class="st">"drosophila_mortality"</span> <span class="op">&amp;</span> <span class="va">parameter</span> <span class="op">==</span> <span class="st">"CTmax"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">mort_compare</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span></span>
-<span>  <span class="va">mort_lt50</span>,</span>
-<span>  <span class="va">mort_bayes</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"median"</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"group"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mort_compare</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mort_compare</span><span class="op">)</span> <span class="op">==</span> <span class="st">"median"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_median"</span></span>
-<span><span class="va">mort_compare</span><span class="op">$</span><span class="va">difference_freq_minus_bayes</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">mort_compare</span><span class="op">$</span><span class="va">freq_estimate</span> <span class="op">-</span> <span class="va">mort_compare</span><span class="op">$</span><span class="va">bayes_median</span></span>
-<span><span class="va">mort_compare</span><span class="op">$</span><span class="va">freq_interval</span> <span class="op">&lt;-</span> <span class="st">"none: exact-model bootstrap unstable"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mort_compare</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2L</span><span class="op">)</span></span>
-<span><span class="va">mort_compare</span></span>
-<span><span class="co">#&gt;   group freq_estimate bayes_median    lower    upper</span></span>
-<span><span class="co">#&gt; 1     F      35.15584     35.13553 35.01181 35.24284</span></span>
-<span><span class="co">#&gt; 2     M      35.17396     35.16390 35.04825 35.26617</span></span>
-<span><span class="co">#&gt;   difference_freq_minus_bayes                        freq_interval</span></span>
-<span><span class="co">#&gt; 1                  0.02031098 none: exact-model bootstrap unstable</span></span>
-<span><span class="co">#&gt; 2                  0.01005650 none: exact-model bootstrap unstable</span></span></code></pre></div>
-<p>The Bayesian cache also contains absolute-threshold <code>z</code>.
-freqTLS does not print an allegedly equivalent absolute <code>z</code>
-from this temperature-varying shape model; its direct <code>z</code>
-remains the relative coordinate. The mortality case article shows that
-relative result explicitly.</p>
-</div>
+<span><span class="co">#&gt; CTmax_50pct_1h    surv_32C_4h </span></span>
+<span><span class="co">#&gt;         31.730          0.018</span></span></code></pre></div>
+<p>(<code><a href="../reference/derive_tcrit.html">derive_tcrit()</a></code> similarly returns a rate-multiplier
+<code>T_crit</code>, with an explicit lethal-endpoint caveat.) These are
+deterministic transforms of the fitted <code>CTmax</code> /
+<code>z</code>, not new fits.</p>
 </div>
 <div class="section level2">
-<h2 id="what-agreement-means">What agreement means<a class="anchor" aria-label="anchor" href="#what-agreement-means"></a>
+<h2 id="when-to-prefer-which">When to prefer which<a class="anchor" aria-label="anchor" href="#when-to-prefer-which"></a>
 </h2>
-<p>Maximum-likelihood estimates and posterior medians need not be
-numerically identical. Priors, finite-sample skew, boundary behaviour,
-random effects, and weak identification can produce legitimate
-differences. The audit confirms the data and model specification first,
-reports the actual difference, and never averages estimates or hides a
-discrepancy.</p>
-</div>
-<div class="section level2">
-<h2 id="frequentist-extensions-and-unsupported-analyses">Frequentist extensions and unsupported analyses<a class="anchor" aria-label="anchor" href="#frequentist-extensions-and-unsupported-analyses"></a>
-</h2>
-<p>Confidence Eyes, open-profile status, likelihood contrasts, bootstrap
-failure provenance, and explicit convergence/Hessian/gradient
-diagnostics are freqTLS distinctions. Simulations, profile theory,
-survival surfaces, limited random intercepts, and deterministic
-heat-injury scenarios remain separate extension pages with synthetic
-examples.</p>
-<p>Censored-time, hurdle-productivity, posterior inference, and fitted
-repair dynamics remain bayesTLS-only. Brown shrimp and life-stage
-zebrafish remain unpublished benchmark-only compatibility fixtures and
-do not enter this comparison, site navigation, search results, sitemap,
-or current summaries.</p>
+<ul>
+<li>Use <code>freqTLS</code> when you want fast, prior-free,
+asymmetry-respecting intervals and an explicit identifiability check.
+When the profile does not close it falls back to a parametric bootstrap,
+so it returns an interval even on sparse or boundary designs.</li>
+<li>Use <code>bayesTLS</code> when you want a full Bayesian workflow,
+prior information, or the heat-injury and repair sub-models.</li>
+</ul>
+<p>The two are complementary lenses on the same model.
+<code>freqTLS</code> flags weak identifiability explicitly and never
+claims the profile is universally superior; see
+<code><a href="../articles/profile-likelihood.html">vignette("profile-likelihood")</a></code> for the non-closing
+behaviour and the bootstrap fallback.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

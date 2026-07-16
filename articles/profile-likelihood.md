@@ -5,11 +5,9 @@ default. This vignette explains what the profile is, why its intervals
 can be asymmetric, how it differs from the Wald interval, and —
 importantly — how `freqTLS` behaves honestly when a profile does not
 close. These are likelihood intervals, not posteriors; the language
-throughout is “confidence”, never “posterior” or “credible”. See
-[`vignette("model-math")`](https://itchyshin.github.io/freqTLS/articles/model-math.md)
-for the 4PL parameterisation that the profile follows. Before
-interpreting an interval, run `check_tls(fit)`; its help page maps each
-data-adequacy warning to a concrete design or analysis response.
+throughout is “confidence”, never “posterior” or “credible”. (The full
+algorithm is specified in the package source, in
+`docs/design/04-profile-likelihood.md`.)
 
 ``` r
 
@@ -125,8 +123,8 @@ switches between the two for the whole parameter table:
 
 tidy_parameters(fit, method = "profile")[, c("parameter", "estimate", "conf.low", "conf.high", "interval_type")]
 #> "up" is profiled with the delta-method Wald interval.
-#> ℹ The profile path is not yet wired for the disjoint-bounds "up" coordinate
-#>   `beta_up`; use the reported Wald interval or request a bootstrap interval.
+#> ℹ The disjoint-bounds "up" coordinate `beta_up` is outside the experimental
+#>   0.1.0 profile boundary (SPEC.md S10).
 #> # A tibble: 6 × 5
 #>   parameter estimate conf.low conf.high interval_type
 #>   <chr>        <dbl>    <dbl>     <dbl> <chr>        
@@ -150,18 +148,13 @@ silently substituting a different quantity. If you need a prior-free,
 asymmetry-respecting interval for `up`, request the bootstrap:
 `confint(fit, "up", method = "bootstrap")`.
 
-## Recovery when a profile does not close
+## The honest non-closing fallback
 
 The headline value-add over the Bayesian path is that `freqTLS` tells
 you when the data do not identify a parameter, instead of letting a
 prior quietly fill the gap. When a profile does not rise above the
 cutoff on one side — because the data are too sparse to pin the
-parameter down — the default `fallback = TRUE` first attempts a
-parametric bootstrap. A successful bootstrap returns a prior-free
-percentile interval and labels its `method` as `"bootstrap"`; too few
-stable or non-degenerate refits still leave an unavailable interval. Set
-`fallback = FALSE` when you specifically need to inspect the unmodified
-profile geometry. In that strict mode `freqTLS`:
+parameter down — `freqTLS`:
 
 - emits a warning that the parameter is **weakly identified** (“consider
   `bayesTLS` or a bootstrap”),
@@ -169,12 +162,10 @@ profile geometry. In that strict mode `freqTLS`:
 - sets a `conf.status` marker (`open_lower`, `open_upper`, or
   `open_both`).
 
-Here is a deliberately sparse design — few temperatures and little
-mortality contrast — that does not identify `CTmax`. We fit it live,
-then show the user-facing bootstrap recovery recipe separately. A
-1,000-refit bootstrap is intentionally not executed during package
-checks; run that displayed chunk interactively when you need the
-fallback interval.
+Here is a deliberately sparse design — few temperatures, almost no
+mortality contrast — that does not identify `CTmax`. We catch the
+warning so the vignette builds, but show the status and the `NA`
+endpoint:
 
 ``` r
 
@@ -190,34 +181,10 @@ sparse_fit <- suppressWarnings(
   fit_tls(sparse, y = survived, n = total, time = duration, temp = temp,
           family = "binomial", tref = 1)
 )
-```
 
-``` r
-
-ci_default <- tryCatch(
+ci <- tryCatch(
   withCallingHandlers(
-    confint(sparse_fit, "CTmax", method = "profile",
-            fallback = TRUE, nboot = 1000, boot_seed = 7),
-    warning = function(w) {
-      message("caught warning: ", conditionMessage(w))
-      invokeRestart("muffleWarning")
-    }
-  ),
-  error = function(e) e
-)
-ci_default[, c("parameter", "conf.low", "conf.high", "estimate", "method",
-               "conf.status")]
-```
-
-Now disable fallback to inspect the strict profile. The open side
-remains `NA`, with an `open_*` status, rather than becoming a confident
-but unsupported bound.
-
-``` r
-
-ci_strict <- tryCatch(
-  withCallingHandlers(
-    confint(sparse_fit, "CTmax", method = "profile", fallback = FALSE),
+    confint(sparse_fit, "CTmax", method = "profile"),
     warning = function(w) {
       message("caught warning: ", conditionMessage(w))
       invokeRestart("muffleWarning")
@@ -227,26 +194,29 @@ ci_strict <- tryCatch(
 )
 #> caught warning: Inner re-optimisation did not converge at 1 grid point while profiling "CTmax".
 #> ℹ Those points are reported as "NA"; the interval is taken from the points that
-#>   did converge.
+#>   did converge (SPEC.md S10, warning 12).
 #> caught warning: The profile deviance for "CTmax" is non-monotone (multiple local minima).
 #> ℹ The interval may not be a single connected region; inspect `plot(profile(fit,
-#>   "CTmax"))`.
+#>   "CTmax"))` (SPEC.md S10, warning 11).
 #> caught warning: The profile likelihood for "CTmax" did not close on the lower and upper sides:
 #> "CTmax" is weakly identified.
-#> ℹ Returning "NA" on the open side rather than a fabricated bound.
-#> ℹ Consider bayesTLS or a bootstrap for this parameter.
-ci_strict[, c("parameter", "conf.low", "conf.high", "estimate", "method",
-              "conf.status")]
-#> # A tibble: 1 × 6
-#>   parameter conf.low conf.high estimate method  conf.status
-#>   <chr>        <dbl>     <dbl>    <dbl> <chr>   <chr>      
-#> 1 CTmax           NA        NA     37.8 profile open_both
+#> ℹ Returning "NA" on the open side rather than a fabricated bound (R-PROFILE).
+#> ℹ Consider bayesTLS or a bootstrap for this parameter (SPEC.md S10, warning 9).
+#> ! Using a parametric bootstrap for 1 parameter where the profile did not close.
+#> ℹ Set `fallback = FALSE` to keep the profile-only behaviour ("NA" on a
+#>   non-closing side).
+#> caught warning: NA/NaN function evaluation
+ci[, c("parameter", "conf.low", "conf.high", "estimate", "conf.status")]
+#> # A tibble: 1 × 5
+#>   parameter conf.low conf.high estimate conf.status
+#>   <chr>        <dbl>     <dbl>    <dbl> <chr>      
+#> 1 CTmax         34.7      219.     37.8 bootstrap
 ```
 
-The Confidence Eye follows the same contract. With its default
-`fallback = TRUE`, a successful bootstrap recovery draws a bootstrap
-lens. For the strict diagnostic below, `fallback = FALSE` preserves the
-open profile and draws a **hollow point with no lens**.
+The interval is open (an `NA` endpoint and an `open_*` status) rather
+than a confident but unsupported bound. The Confidence Eye honours this
+too: a non-closing profile draws a **hollow point with no lens**, never
+a fabricated closed eye.
 
 ``` r
 
@@ -262,10 +232,10 @@ close.](profile-likelihood_files/figure-html/non-closing-eye-1.png)
 
 ## Calibration: how well do the intervals cover?
 
-A confidence interval is only as good as its coverage. The
-repository-only coverage study simulates 200 datasets at a known
+A confidence interval is only as good as its coverage.
+`data-raw/coverage-study.R` simulates 200 datasets at a known
 `CTmax`/`z` under each family, fits every one by ML, builds 95% profile
-intervals, and records the empirical (frequentist) coverage. Its summary
+intervals, and records the empirical (frequentist) coverage. The summary
 is shipped with the package:
 
 ``` r
@@ -297,22 +267,18 @@ overdispersion parameter makes the likelihood-ratio interval optimistic,
 and a small fraction of profiles do not close. The honest reading is to
 treat beta-binomial profile intervals as approximate and, when coverage
 matters, calibrate them with a parametric bootstrap or use `bayesTLS`.
-This is exactly the regime the ship stance below warns about. Repository
-maintainers can reproduce the study from a source checkout with the
-repository-only `data-raw/coverage-study.R` script; that script is not
-installed with the package.
+This is exactly the regime the ship stance below warns about. Re-run
+`data-raw/coverage-study.R` to reproduce (and to regenerate the
+per-simulation raw data).
 
 ## Ship stance
 
 The profile gives fast, prior-free, asymmetry-respecting confidence
 intervals **when the MLE is interior and the data identify the target**.
 For boundary asymptotes, very sparse designs, overdispersion
-concentrated at zero, or weak variance components, use the interval
-route appropriate to the fitted model. Fixed-effect coordinates in a
-random-intercept fit can be profiled under the Laplace approximation;
-variance components use log-scale Wald intervals unless you request the
-random-effects-aware parametric bootstrap. `freqTLS` warns you when the
-requested route is weak or unavailable. It never claims the profile is
-universally superior to the Bayesian path. See
+concentrated at zero, or (future) random effects, prefer `bayesTLS` or a
+bootstrap — and `freqTLS` warns you when you are in that regime. It
+never claims the profile is universally superior to the Bayesian path.
+See
 [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)
 for the side-by-side comparison.

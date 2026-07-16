@@ -3,8 +3,7 @@
 Replicate lethal-TDT trials for brown shrimp (*Crangon crangon*). Each
 row is one tank of individuals exposed to a fixed assay temperature for
 a fixed duration; the response is the proportion that died. The
-model-ready fixture retained for compatibility benchmarking. It is
-unpublished and is not an active teaching example.
+model-ready frame for Case Study 1 (lethal endpoint).
 
 ## Usage
 
@@ -44,8 +43,16 @@ A data frame with 148 rows and 6 variables:
 
 ## Source
 
-Brown shrimp lethal-TDT assay (Case Study 1), obtained from the bayesTLS
-package distribution by Noble, Arnold, and Pottier (2026), licensed CC
-BY 4.0. freqTLS retains the mortality proportion and documents its count
-reconstruction above. Raw file:
+Brown shrimp lethal-TDT assay (Case Study 1). Raw file:
 `system.file("extdata", "data_lethal_TDT_brown_shrimp.csv", package = "freqTLS")`.
+
+## Examples
+
+``` r
+std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
+                        duration = "Duration_exposure_hours",
+                        n_total = "N_individuals_after_trial",
+                        mortality = "Mortality_after_trial",
+                        random_effects = c("Date", "Tank"),
+                        duration_unit = "hours")
+```

@@ -27,10 +27,9 @@ costs one variance parameter instead of one coefficient per group, and
 the group estimates borrow strength from each other. The deviations
 `b_g ~ N(0, sigma_CTmax^2)` are integrated out by `TMB`’s Laplace
 approximation; `sigma_CTmax` is estimated by marginal maximum
-likelihood. A formula without `(1 | group)` uses the ordinary
-fixed-effects objective. Adding `(1 | group)` is not a no-op: it adds
-and integrates a group-level Gaussian block, even when its fitted
-variance is near zero.
+likelihood. The no-random-effects path is byte-identical to the
+fixed-effects model, so adding `(1 | group)` changes nothing when there
+is nothing to pool.
 
 ## A random intercept on CTmax
 
@@ -62,12 +61,11 @@ est[est$parameter %in% c("CTmax", "z", "sigma_CTmax"),
 It is a maximum-likelihood variance component, so it is biased **low**
 when there are few groups: it is essentially unbiased by ~14 groups but
 increasingly shrunk toward zero below that. A focused recovery study
-makes the bias concrete and shows the fixed-effect `CTmax` interval
-losing coverage in step — the empirical basis for the advisory
+(`data-raw/re-recovery-study.R`) makes the bias concrete, and shows the
+fixed-effect `CTmax` interval losing coverage in step — the empirical
+basis for the advisory
 [`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
-emits below ~8 groups. Repository maintainers can regenerate it with the
-source-only `data-raw/re-recovery-study.R` script, which is not
-installed:
+emits below ~8 groups:
 
 | n groups | mean sigma_CTmax | rel. bias | CTmax 95% coverage |
 |---------:|-----------------:|----------:|-------------------:|
@@ -83,10 +81,9 @@ interval under-covers with few groups; both settle by ~14 groups.
 {.table}
 
 So with only a handful of groups the reported `sigma_CTmax` understates
-the true spread and the `CTmax` interval is optimistic. Prefer
+the true spread and the `CTmax` interval is optimistic; prefer
 `confint(method = "bootstrap")` (or `bayesTLS`) for the fixed effects,
-and describe the variance component as likely downward-biased rather
-than treating it as a precise estimate or a literal confidence bound.
+and read the variance component as a lower bound.
 
 The conditional modes (BLUPs) — each colony’s shrunken deviation from
 the population `CTmax` — come from
@@ -104,40 +101,11 @@ head(ranef(fit), 4)
 #> 4 g12   CTmax    0.603     0.396
 ```
 
-Prediction distinguishes the population curve from an observed colony’s
-conditional curve. Population predictions set the random intercept to
-zero; conditional predictions add the fitted BLUP and require the
-grouping column in `newdata`:
-
-``` r
-
-colony_1 <- as.character(ranef(fit)$group[1])
-new_colony <- data.frame(temp = 36, duration = 2, colony = colony_1)
-data.frame(
-  target = c("population", "colony"),
-  survival = c(
-    predict(fit, new_colony, re.form = "population"),
-    predict(fit, new_colony, re.form = "conditional")
-  )
-)
-#>       target   survival
-#> 1 population 0.19888224
-#> 2     colony 0.08525094
-```
-
-Calling [`predict()`](https://rdrr.io/r/stats/predict.html) without
-`re.form` on a random-effects fit warns and returns the population
-prediction. An unseen group cannot receive an estimated BLUP, so
-conditional prediction stops and points to `re.form = "population"`.
-
-[`confint()`](https://rdrr.io/r/stats/confint.html) routes uncertainty
-by target. It gives a positive, log-scale Wald interval for
-`sigma_CTmax`. It profiles the population `CTmax` under the random
-effect, re-running the Laplace approximation at each grid point, so this
-is slower than a fixed-effects profile. If that fixed-effect profile
-does not close, the default fallback is Wald; request
-`method = "bootstrap"` to redraw the random effects and refit the full
-model instead.
+[`confint()`](https://rdrr.io/r/stats/confint.html) gives a positive
+(log-scale) Wald interval for `sigma_CTmax`, and a genuine
+profile-likelihood interval for the population `CTmax` under the random
+effect (each grid point re-runs the Laplace approximation, so it is
+slower than a fixed-effects profile):
 
 ``` r
 
@@ -155,12 +123,9 @@ suppressMessages(confint(fit, "CTmax", method = "profile", npoints = 8))[
 #> 1 CTmax         35.2      36.8 profile
 ```
 
-The Confidence Eye always uses Wald intervals for a random-effects fit,
-even when `method = "profile"` is requested, because a profile eye would
-re-run the Laplace approximation at every grid point for every row. Use
-`confint(fit, method = "profile")` for fixed-effect profiles or
-`confint(fit, method = "bootstrap")` for random-effects-aware bootstrap
-intervals. The eye remains a confidence-interval display, never a
+The Confidence Eye stays on Wald intervals for a random-effects fit (a
+profile eye would re-run the Laplace at every grid point for every row),
+which is fast and honest — it is still a confidence interval, never a
 posterior.
 
 ``` r
@@ -242,16 +207,13 @@ independent random intercepts on `CTmax` / `log_z` / `low` / `log_k`.
 
 ## The likelihood view of shrinkage
 
-A Gaussian random effect is a distributional model for the latent group
-deviations, not a prior placed on the reported population parameters.
-Its conditional modes (BLUPs) have an empirical-Bayes interpretation and
-shrink toward zero. The fixed effects and variance components are
-estimated by marginal maximum likelihood, and their intervals are
-profile-likelihood intervals for fixed-effect coordinates, log-scale
-Wald intervals for variance components, or parametric-bootstrap
-intervals when explicitly requested; they are not credible intervals.
-That is the same complementary stance the rest of `freqTLS` takes toward
-`bayesTLS` (see
+A Gaussian random effect *is* a prior on the group deviations, and the
+BLUPs are shrunk toward zero exactly as a posterior mean would be — the
+empirical-Bayes view of mixed models. What stays prior-free is
+everything else: the fixed effects and the variance components are
+maximum-likelihood estimates, and their intervals are profile-likelihood
+or Wald confidence intervals, not credible intervals. That is the same
+complementary stance the rest of `freqTLS` takes toward `bayesTLS` (see
 [`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)):
 the random effect buys you partial pooling without committing to priors
-on the parameters you report.
+on the parameters you report. \`\`\`

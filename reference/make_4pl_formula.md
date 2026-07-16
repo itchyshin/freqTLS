@@ -26,10 +26,7 @@ make_4pl_formula(
 - ctmax, z, up, low, k:
 
   One-sided formulas (or `NULL`). `ctmax`/`z` set the CTmax /
-  thermal-sensitivity structure and must have the same fixed-effect
-  model-matrix columns; `up`/`low`/`k` set the 4PL shape. Random
-  intercepts are supported on `ctmax`, `z`, `low`, and `k`, but not
-  `up`.
+  thermal-sensitivity structure; `up`/`low`/`k` the 4PL shape.
 
 - by:
 
@@ -52,36 +49,12 @@ A `tls_formula` object (as built by
 Following the freqTLS constant-shape invariant, the asymptotes and
 steepness (`up`, `low`, `k`) default to **shared** (`~ 1`) so the
 temperature effect runs through the midpoint (CTmax / z) only; pass an
-explicit formula to let a shape vary. `ctmax` and `z` must produce the
-same fixed-effect model-matrix columns. Supported random intercepts go
-inside the `ctmax`/`z`/`low`/`k` formulas; `up` random effects are not
-supported. For example, `ctmax = ~ 1 + (1 | batch)` keeps the same
-intercept-only fixed design as the default `z = ~ 1` while adding a
-`CTmax` random intercept.
+explicit formula to let a shape vary. Random effects go inside the
+`ctmax`/`z`/`up`/`low`/`k` formulas, e.g.
+`ctmax = ~ 0 + grp + (1 | batch)`.
 
 ## See also
 
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md),
 [`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md),
 [`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md)
-
-## Examples
-
-``` r
-make_4pl_formula()
-#> <tls_formula>
-#> n_surv | trials(n_total) ~ time(duration) + temp(temp)
-#> low ~ 1
-#> up ~ 1
-#> log_k ~ 1
-#> CTmax ~ 1
-#> log_z ~ 1
-make_4pl_formula(by = "population", family = "binomial")
-#> <tls_formula>
-#> n_surv | trials(n_total) ~ time(duration) + temp(temp)
-#> low ~ 1
-#> up ~ 1
-#> log_k ~ 1
-#> CTmax ~ 0 + population
-#> log_z ~ 0 + population
-```

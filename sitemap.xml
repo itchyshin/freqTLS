@@ -2,10 +2,10 @@
 <url><loc>https://itchyshin.github.io/freqTLS/404.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/LICENSE-text.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/ROADMAP.html</loc></url>
+<url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-leaf-psii.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-li-aphids.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-snowgum.html</loc></url>
+<url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-shrimp.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-summary.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-suzukii-coma.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-suzukii.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/case-study-zebrafish.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.html</loc></url>
@@ -22,7 +22,6 @@
 <url><loc>https://itchyshin.github.io/freqTLS/reference/aphid_tdt.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/check_tls.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/clock_to_minutes.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/compute_4pl_bounds.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/confint.profile_tls.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/derive_ctmax.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/derive_lt.html</loc></url>
@@ -53,19 +52,15 @@
 <url><loc>https://itchyshin.github.io/freqTLS/reference/profile.profile_tls.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/profile_tls-methods.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/ranef.html</loc></url>
+<url><loc>https://itchyshin.github.io/freqTLS/reference/shrimp_lethal.html</loc></url>
+<url><loc>https://itchyshin.github.io/freqTLS/reference/shrimp_sublethal.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/simulate_tls.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/snowgum_psii.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/standardize_data.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tdt-accessors.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_check_columns.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_format_random_effects.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_parameter_table.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_quantile.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_random_effect_variables.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_resolve_time_multiplier.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/tdt_unit_to_minutes.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tidy_parameters.html</loc></url>
-<url><loc>https://itchyshin.github.io/freqTLS/reference/tls-diagnostics.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tls.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tls_bf.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/tls_family.html</loc></url>
@@ -73,6 +68,7 @@
 <url><loc>https://itchyshin.github.io/freqTLS/reference/ts_curve.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/ts_stage1.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/ts_stage2.html</loc></url>
+<url><loc>https://itchyshin.github.io/freqTLS/reference/zebrafish_lethal.html</loc></url>
 <url><loc>https://itchyshin.github.io/freqTLS/reference/zebrafish_o2.html</loc></url>
 </urlset>
 

@@ -9,33 +9,35 @@
 
 - [The model and its
   parameterisation](https://itchyshin.github.io/freqTLS/articles/model-math.md):
-
-### Canonical empirical examples
-
-- [Case 1: zebrafish heat tolerance under normoxia and
-  hyperoxia](https://itchyshin.github.io/freqTLS/articles/case-study-zebrafish.md):
-- [Case 2: cereal-aphid thermal
-  tolerance](https://itchyshin.github.io/freqTLS/articles/case-study-li-aphids.md):
-- [Case 3: Snow-gum PSII under Dark and Light
-  recovery](https://itchyshin.github.io/freqTLS/articles/case-study-snowgum.md):
-- [Case 4: Drosophila suzukii
-  mortality](https://itchyshin.github.io/freqTLS/articles/case-study-suzukii.md):
-- [Case 4.2: Drosophila suzukii awake/coma
-  response](https://itchyshin.github.io/freqTLS/articles/case-study-suzukii-coma.md):
-- [Canonical empirical examples: what can and cannot be
-  compared](https://itchyshin.github.io/freqTLS/articles/case-study-summary.md):
-
-### Frequentist extensions
-
-- [Cross-checking freqTLS with
-  bayesTLS](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md):
-- [Frequentist and Bayesian thermal-load sensitivity: strengths,
-  weaknesses, and the blurry
-  line](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md):
-- [Experimental extension: deterministic heat-injury
-  prediction](https://itchyshin.github.io/freqTLS/articles/heat-injury.md):
 - [Profile-likelihood
   intervals](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md):
 - [Random effects: hierarchical thermal
   tolerance](https://itchyshin.github.io/freqTLS/articles/random-effects.md):
 
+### Comparison
+
+- [Comparing freqTLS to
+  bayesTLS](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md):
+- [Frequentist and Bayesian thermal-load sensitivity: strengths,
+  weaknesses, and the blurry
+  line](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md):
+
+### Applications
+
+- [Heat injury under a temperature
+  trace](https://itchyshin.github.io/freqTLS/articles/heat-injury.md):
+
+### Case studies
+
+- [Case study: brown-shrimp lethal
+  TDT](https://itchyshin.github.io/freqTLS/articles/case-study-shrimp.md):
+- [Case study: zebrafish thermal tolerance under hypoxia, normoxia, and
+  hyperoxia](https://itchyshin.github.io/freqTLS/articles/case-study-zebrafish.md):
+- [Case study: heat tolerance of three cereal aphid species (Li
+  2023)](https://itchyshin.github.io/freqTLS/articles/case-study-li-aphids.md):
+- [Case study: Drosophila suzukii lethal thermal death time across
+  sexes](https://itchyshin.github.io/freqTLS/articles/case-study-suzukii.md):
+- [Case study: snow-gum leaf PSII — a continuous-proportion sublethal
+  endpoint](https://itchyshin.github.io/freqTLS/articles/case-study-leaf-psii.md):
+- [Cross-case-study summary: four taxa, one
+  panel](https://itchyshin.github.io/freqTLS/articles/case-study-summary.md):

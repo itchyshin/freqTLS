@@ -2,11 +2,10 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
+  case-study-leaf-psii: case-study-leaf-psii.html
   case-study-li-aphids: case-study-li-aphids.html
   case-study-shrimp: case-study-shrimp.html
-  case-study-snowgum: case-study-snowgum.html
   case-study-summary: case-study-summary.html
-  case-study-suzukii-coma: case-study-suzukii-coma.html
   case-study-suzukii: case-study-suzukii.html
   case-study-zebrafish: case-study-zebrafish.html
   comparing-to-bayesTLS: comparing-to-bayesTLS.html
@@ -16,7 +15,7 @@ articles:
   model-math: model-math.html
   profile-likelihood: profile-likelihood.html
   random-effects: random-effects.html
-last_built: 2026-07-16T18:23Z
+last_built: 2026-07-16T23:34Z
 urls:
   reference: https://itchyshin.github.io/freqTLS/reference
   article: https://itchyshin.github.io/freqTLS/articles

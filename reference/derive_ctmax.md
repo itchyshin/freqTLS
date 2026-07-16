@@ -48,9 +48,7 @@ Solving `surv = low + (up - low) * plogis(-k (log10(duration) - mid))`
 with `mid = log10(tref) - (temp - CTmax) / z` for the temperature gives
 \$\$temp = CTmax - z\Big(\log\_{10} duration - \log\_{10} t\_{ref} +
 \mathrm{qlogis}\\\big(\tfrac{surv - low}{up - low}\big) / k\Big).\$\$
-The target `surv` must lie strictly between `low` and `up`. For a
-random-effects fit this is a population-level derived quantity; it does
-not add a group BLUP.
+The target `surv` must lie strictly between `low` and `up`.
 
 ## Examples
 

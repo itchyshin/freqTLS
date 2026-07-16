@@ -10,20 +10,17 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="The model and its parameterisation">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="The model and its parameterisation">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    <aside id="freqtls-experimental-warning" class="freqtls-experimental-warning" role="alert" aria-labelledby="freqtls-experimental-warning-title"><div class="container">
-    <strong id="freqtls-experimental-warning-title">Experimental software—use at your own risk.</strong>
-    Results and APIs may be incorrect or change. Users are responsible for checking their data, design, model specification, convergence, identifiability, diagnostics, and interpretation. Important analyses should be independently refitted and cross-checked with <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link">bayesTLS</a> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link">source repository</a>). Agreement is a cross-check, not proof of correctness; shared data or model errors can make both packages agree.
-  </div>
-</aside><nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">freqTLS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,23 +39,23 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Model details</h6></li>
     <li><a class="dropdown-item" href="../articles/model-math.html">The model and its parameterisation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case 1: zebrafish heat tolerance under normoxia and hyperoxia</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case 2: cereal-aphid thermal tolerance</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-snowgum.html">Case 3: Snow-gum PSII under Dark and Light recovery</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case 4: Drosophila suzukii mortality</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii-coma.html">Case 4.2: Drosophila suzukii awake/coma response</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Canonical empirical examples: what can and cannot be compared</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Extensions</h6></li>
-    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Cross-checking freqTLS with bayesTLS</a></li>
-    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Experimental extension: deterministic heat-injury prediction</a></li>
     <li><a class="dropdown-item" href="../articles/profile-likelihood.html">Profile-likelihood intervals</a></li>
     <li><a class="dropdown-item" href="../articles/random-effects.html">Random effects: hierarchical thermal tolerance</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Comparison</h6></li>
+    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
+    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -84,7 +81,7 @@
       <h1>The model and its parameterisation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/model-math.Rmd" class="external-link"><code>vignettes/model-math.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/build/freqtls/vignettes/model-math.Rmd" class="external-link"><code>vignettes/model-math.Rmd</code></a></small>
       <div class="d-none name"><code>model-math.Rmd</code></div>
     </div>
 
@@ -95,11 +92,12 @@ the four-parameter logistic (4PL) thermal death-time curve, the direct
 <code>CTmax</code>/<code>z</code> parameterisation, the disjoint-bounds
 asymptote transform, the relative-versus-absolute survival threshold,
 and the exact algebraic bridge to <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>.
-The package’s implementation contract is tested against these equations;
-this vignette mirrors it and checks the bridge identities numerically
-(no Stan required). If you already trust that freqTLS and bayesTLS
-target the same fitted curve, you can skip straight to the worked
-examples in <code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></code> and
+The authoritative source is
+<code>docs/design/01-model-and-parameterisation.md</code>; this vignette
+mirrors it and checks the bridge identities numerically (no Stan
+required). If you already trust that freqTLS and bayesTLS target the
+same fitted curve, you can skip straight to the worked examples in
+<code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></code> and
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
@@ -188,7 +186,7 @@ the two properties on a fitted model:</p>
 <div class="section level2">
 <h2 id="disjoint-bounds-asymptotes">Disjoint-bounds asymptotes<a class="anchor" aria-label="anchor" href="#disjoint-bounds-asymptotes"></a>
 </h2>
-<p>The asymptotes use the bayesTLS <code><a href="../reference/compute_4pl_bounds.html">compute_4pl_bounds()</a></code>
+<p>The asymptotes use the bayesTLS <code>compute_4pl_bounds()</code>
 parameterisation: the feasible band
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mi>ℓ</mi><mo>,</mo><mi>u</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[\ell, u]</annotation></semantics></math>
 (default
@@ -216,12 +214,12 @@ packages share the asymptote contract.</p>
 <p>Under this parameterisation <code>up</code> has its own coordinate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><annotation encoding="application/x-tex">\beta_\mathrm{up}</annotation></semantics></math>,
 just like <code>low</code>. <code>freqTLS</code> nonetheless reports
-<code>up</code> with the delta-method Wald interval: its profile path is
-not yet wired for
+<code>up</code> with the delta-method Wald interval: its profile path
+deliberately excludes
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><annotation encoding="application/x-tex">\beta_\mathrm{up}</annotation></semantics></math>
-(the work is symmetric with <code>low</code>, simply not yet
-implemented), and it says so. Every other parameter is profiled on its
-single coordinate. The full table of coordinates and links:</p>
+in experimental 0.1.0; this is a release boundary, not an implicit
+estimate of its uncertainty. Every other supported parameter is profiled
+on its single coordinate. The full table of coordinates and links:</p>
 <table class="table">
 <thead><tr class="header">
 <th>Natural parameter</th>

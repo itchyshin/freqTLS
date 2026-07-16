@@ -8,7 +8,7 @@ minutes under hypoxia, normoxia or hyperoxia, and scored alive/dead. One
 row per assay group; `oxygen` is the categorical moderator. Fit `CTmax`
 and `z` as functions of `oxygen` (optionally `ploidy`) in one joint 4PL
 to compare thermal tolerance across the gradient with profile-likelihood
-confidence intervals on those direct parameters.
+confidence intervals on every quantity.
 
 ## Usage
 
@@ -76,22 +76,11 @@ Experimental Biology* 229(10): jeb251548,
 ## Examples
 
 ``` r
-# \donttest{
-zf <- droplevels(subset(zebrafish_o2,
-  ploidy == "diploid" & oxygen %in% c("normoxia", "hyperoxia")))
-std <- standardize_data(zf, temp = "temp", duration = "duration_min",
+if (FALSE) { # \dontrun{
+std <- standardize_data(zebrafish_o2, temp = "temp", duration = "duration_min",
                         n_total = "n_total", n_surv = "n_surv",
                         duration_unit = "minutes")
-wf <- fit_4pl(std, ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen,
-              low = ~ 0 + oxygen, up = ~ 1, k = ~ 1, t_ref = 60)
-tls(wf, by = "oxygen", lethal = FALSE)  # z and CTmax; no Tcrit
-#> <tls> relative threshold; quantities: z, CTmax (profile intervals)
-#> # A tibble: 4 × 5
-#>   oxygen    quantity median lower upper
-#>   <chr>     <chr>     <dbl> <dbl> <dbl>
-#> 1 normoxia  CTmax     38.7  38.4  39.0 
-#> 2 hyperoxia CTmax     39.3  39.0  39.5 
-#> 3 normoxia  z          6.01  4.29  8.41
-#> 4 hyperoxia z          2.50  2.11  3.57
-# }
+wf <- fit_4pl(std, ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen, t_ref = 60)
+tls(wf, by = "oxygen", lethal = TRUE)   # z, CTmax, T_crit per oxygen treatment
+} # }
 ```

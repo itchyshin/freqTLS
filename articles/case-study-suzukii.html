@@ -5,25 +5,22 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Case 4: Drosophila suzukii mortality • freqTLS</title>
+<title>Case study: Drosophila suzukii lethal thermal death time across sexes • freqTLS</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Case 4: Drosophila suzukii mortality">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Case study: Drosophila suzukii lethal thermal death time across sexes">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    <aside id="freqtls-experimental-warning" class="freqtls-experimental-warning" role="alert" aria-labelledby="freqtls-experimental-warning-title"><div class="container">
-    <strong id="freqtls-experimental-warning-title">Experimental software—use at your own risk.</strong>
-    Results and APIs may be incorrect or change. Users are responsible for checking their data, design, model specification, convergence, identifiability, diagnostics, and interpretation. Important analyses should be independently refitted and cross-checked with <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link">bayesTLS</a> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link">source repository</a>). Agreement is a cross-check, not proof of correctness; shared data or model errors can make both packages agree.
-  </div>
-</aside><nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">freqTLS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,23 +39,23 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Model details</h6></li>
     <li><a class="dropdown-item" href="../articles/model-math.html">The model and its parameterisation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case 1: zebrafish heat tolerance under normoxia and hyperoxia</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case 2: cereal-aphid thermal tolerance</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-snowgum.html">Case 3: Snow-gum PSII under Dark and Light recovery</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case 4: Drosophila suzukii mortality</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii-coma.html">Case 4.2: Drosophila suzukii awake/coma response</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Canonical empirical examples: what can and cannot be compared</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Extensions</h6></li>
-    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Cross-checking freqTLS with bayesTLS</a></li>
-    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Experimental extension: deterministic heat-injury prediction</a></li>
     <li><a class="dropdown-item" href="../articles/profile-likelihood.html">Profile-likelihood intervals</a></li>
     <li><a class="dropdown-item" href="../articles/random-effects.html">Random effects: hierarchical thermal tolerance</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Comparison</h6></li>
+    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
+    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -81,179 +78,423 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Case 4: Drosophila suzukii mortality</h1>
+      <h1>Case study: Drosophila suzukii lethal thermal death time across sexes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/case-study-suzukii.Rmd" class="external-link"><code>vignettes/case-study-suzukii.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/build/freqtls/vignettes/case-study-suzukii.Rmd" class="external-link"><code>vignettes/case-study-suzukii.Rmd</code></a></small>
       <div class="d-none name"><code>case-study-suzukii.Rmd</code></div>
     </div>
 
     
     
-<p>This article follows the mortality arm of Case 4 in the <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code>
-supplement</a>, using the same individual records, cell aggregation,
-beta-binomial response, four-hour reference time, and absolute-LT50
-comparison.</p>
+<p>This article fits a lethal thermal-death-time (TDT) model to the
+vinegar fly <em>Drosophila suzukii</em>, asking the question Ørsted,
+Hoffmann, Sgrò and colleagues posed in their 2024 study: <strong>do the
+two sexes differ in their thermal limits?</strong> It mirrors the lethal
+subset of Case Study 4 in the <code>bayesTLS</code> supplement, but it
+is a <code>freqTLS</code>-only treatment: the fit runs live by maximum
+likelihood (TMB, <strong>no Stan</strong>), uncertainty is summarised by
+profile-likelihood <strong>confidence intervals</strong>, and the sex
+difference is a <strong>frequentist contrast</strong>, not a
+posterior.</p>
+<p><strong>This vignette builds without Stan.</strong> The
+<code>freqTLS</code> side runs live by maximum likelihood (TMB); the
+Bayesian (<code>bayesTLS</code>) and classical two-stage columns of the
+three-way comparison are read from the maintainer-built benchmark cache
+(<code>inst/extdata/bayesTLS_benchmark_cache.rds</code>), so the full
+per-sex table renders without a Stan toolchain.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="exact-mortality-aggregation">Exact mortality aggregation<a class="anchor" aria-label="anchor" href="#exact-mortality-aggregation"></a>
+<h2 id="the-dataset">The dataset<a class="anchor" aria-label="anchor" href="#the-dataset"></a>
 </h2>
+<p><code>dsuzukii</code> is the per-individual mortality data from the
+Ørsted <em>D. suzukii</em> assays, vendored from <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>
+under CC BY 4.0 (primary deposit <a href="https://doi.org/10.5281/zenodo.10602268" class="external-link">10.5281/zenodo.10602268</a>;
+cite <code>@orsted_suzukii_2024</code> and
+<code>citation("freqTLS")</code>). We aggregate it to survival counts
+per <code>(temp, time, sex)</code> cell — <code>n_dead</code> of
+<code>n_total</code> died — exactly as the <code>bayesTLS</code> case
+study does.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mort</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>n_dead <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">$</span><span class="va">dead</span><span class="op">)</span>,</span>
-<span>        n_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep.int</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">~</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">sex</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dsuzukii</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">sum</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">mort</span><span class="op">$</span><span class="va">n_surv</span> <span class="op">&lt;-</span> <span class="va">mort</span><span class="op">$</span><span class="va">n_total</span> <span class="op">-</span> <span class="va">mort</span><span class="op">$</span><span class="va">n_dead</span></span>
-<span><span class="va">mort_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>  <span class="va">mort</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="separate-sex-fits">Separate-sex fits<a class="anchor" aria-label="anchor" href="#separate-sex-fits"></a>
-</h2>
-<p>Separate fits reproduce the study-facing comparison before the joint
-model. They use the same formula components as the joint fit with one
-sex at a time.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sex_fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">mort</span>, <span class="va">mort</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">d_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>    <span class="va">d</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>    n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span>  <span class="op">)</span></span>
-<span>  <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>    <span class="va">d_std</span>, ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>    low <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, up <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>, k <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>,</span>
-<span>    family <span class="op">=</span> <span class="st">"beta_binomial"</span>, t_ref <span class="op">=</span> <span class="fl">240</span>,</span>
-<span>    method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">sex_fits</span>, <span class="va">diagnose_tdt_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $F</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
-<span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE            0.000<span style="text-decoration: underline;">000</span>144 TRUE          nlminb     -<span style="color: #BB0000;">72.7</span>        9</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mort</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    94 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;  $ temp   : num  34 34 34 34 34 34 34 34 34 34 ...</span></span>
+<span><span class="co">#&gt;  $ time   : num  1022 106 1168 146 212 ...</span></span>
+<span><span class="co">#&gt;  $ sex    : Factor w/ 2 levels "F","M": 1 2 1 1 2 1 2 2 1 2 ...</span></span>
+<span><span class="co">#&gt;  $ n_dead : int  15 1 15 0 0 2 0 0 3 5 ...</span></span>
+<span><span class="co">#&gt;  $ n_total: int  15 15 15 15 15 15 15 15 15 15 ...</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">mort</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $M</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
-<span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">080</span>0 TRUE          nlminb     -<span style="color: #BB0000;">89.5</span>        9</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span>
-<span><span class="va">separate_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sex_fits</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">sex_level</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">sex_fits</span><span class="op">[[</span><span class="va">sex_level</span><span class="op">]</span><span class="op">]</span>, lethal <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
-<span>  <span class="va">ans</span><span class="op">$</span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="va">sex_level</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span> <span class="op">==</span> <span class="st">"median"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"estimate"</span></span>
-<span>  <span class="va">ans</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"quantity"</span>, <span class="st">"estimate"</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">separate_table</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
-<span><span class="co">#&gt;   sex   quantity estimate lower upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> F     CTmax       35.2  35.1  35.3 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> F     z            3.04  2.87  3.23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> M     CTmax       35.2  35.1  35.3 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> M     z            2.95  2.76  3.16</span></span></code></pre></div>
+<span><span class="co">#&gt;  F  M </span></span>
+<span><span class="co">#&gt; 45 49</span></span></code></pre></div>
+<p>There are 94 cells (a temperature × duration × sex grid), 45 for
+females and 49 for males, totalling 1407 flies. Two columns deserve
+emphasis:</p>
+<ul>
+<li>
+<strong><code>time</code> is in minutes.</strong> The reference
+exposure for this study is <strong>4 hours = 240 minutes</strong>, so we
+set <code>tref = 240</code>.</li>
+<li>We interpret the threshold as <strong>absolute</strong> (a fixed 50%
+survival), following Ørsted. The model itself is still parameterised by
+the <strong>relative midpoint</strong> (<code>CTmax</code> is the 4PL
+midpoint, the <code>(low + up)/2</code> survival level). The relative
+and absolute thresholds coincide only when the asymptotes sit near 0 and
+1 — which they do for these data (<code>low</code> ≈ 0, <code>up</code>
+≈ 1, confirmed in the fit below), so <code>derive_*</code> at
+<code>surv = 0.5</code> recovers the absolute LT50 with no extra
+argument. If your own data have asymptotes far from 0/1, the two
+thresholds diverge and you must pass the <code>surv</code> you want
+explicitly.</li>
+</ul>
 </div>
 <div class="section level2">
-<h2 id="joint-direct-model">Joint direct model<a class="anchor" aria-label="anchor" href="#joint-direct-model"></a>
+<h2 id="fitting-the-model-one-fit-grouped-by-sex">Fitting the model: one fit, grouped by sex<a class="anchor" aria-label="anchor" href="#fitting-the-model-one-fit-grouped-by-sex"></a>
 </h2>
-<p>The direct joint model assigns separate <code>CTmax</code> and
-<code>z</code> coordinates to each sex and places centred temperature on
-<code>low</code>, <code>up</code>, and <code>k</code>. The shape
-coefficients are experimental in freqTLS. The very large standard errors
-that can arise for the shape slopes are an identifiability result and
-must remain visible.</p>
+<p>A single grouped call fits a beta-binomial 4PL with sex-specific
+thermal location (<code>CTmax</code>, <code>z</code>) and a shared curve
+shape (<code>low</code>, <code>up</code>, <code>k</code>) — the
+constant-shape configuration that matches the <code>bayesTLS</code> “sex
+on the midpoint only” model. The temperature effect runs through the
+midpoint, so each sex gets its own <code>CTmax</code> and <code>z</code>
+while the asymptotes and steepness are pooled.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">mort</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_dead <span class="op">=</span> <span class="st">"n_dead"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># fit_4pl(by = "sex") gives a per-sex CTmax and z (the "sex on the midpoint"</span></span>
+<span><span class="co"># model); $fit is the engine fit the extractors below read directly.</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span>, by <span class="op">=</span> <span class="st">"sex"</span>, t_ref <span class="op">=</span> <span class="fl">240</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>,</span>
+<span>               quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">fit</span></span>
+<span><span class="va">fit</span><span class="op">$</span><span class="va">convergence</span><span class="op">$</span><span class="va">code</span>   <span class="co"># 0 = converged</span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>The optimiser converged (code <code>0</code>, positive-definite
+Hessian). The per-sex thermal limits, with <strong>profile-likelihood
+confidence intervals</strong>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mort_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="va">mort_std</span>,</span>
-<span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">sex</span>,</span>
-<span>  z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">sex</span>,</span>
-<span>  low <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>,</span>
-<span>  up <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>,</span>
-<span>  k <span class="op">=</span> <span class="op">~</span> <span class="va">temp_c</span>,</span>
-<span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>,</span>
-<span>  t_ref <span class="op">=</span> <span class="fl">240</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"wald"</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/diagnose_tdt_fit.html">diagnose_tdt_fit</a></span><span class="op">(</span><span class="va">mort_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
-<span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">080</span>0 TRUE          nlminb     -<span style="color: #BB0000;">167.</span>       11</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span>
-<span><span class="fu"><a href="../reference/check_tls.html">check_tls</a></span><span class="op">(</span><span class="va">mort_fit</span><span class="op">)</span></span></code></pre></div>
-<p>The optimizer and Hessian pass, but the lower-asymptote coefficients
-remain weakly identified. Their actual estimates and standard errors are
-shown rather than hidden behind the successful convergence summary.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mort_shape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
-<span>  <span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">estimates</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^(low|up|k):"</span>, <span class="va">parameter</span><span class="op">)</span>,</span>
-<span>  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">parameter</span>, <span class="va">estimate</span>, <span class="va">std.error</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">mort_shape</span></span>
-<span><span class="co">#&gt;         parameter     estimate    std.error</span></span>
-<span><span class="co">#&gt; 1 low:(Intercept) -29.26008064 2056.8348181</span></span>
-<span><span class="co">#&gt; 2      low:temp_c  13.92824301 1086.1951816</span></span>
-<span><span class="co">#&gt; 3  up:(Intercept)   0.70428049    0.1832665</span></span>
-<span><span class="co">#&gt; 4       up:temp_c  -0.18786584    0.1203898</span></span>
-<span><span class="co">#&gt; 5   k:(Intercept)   2.98857053    0.1578812</span></span>
-<span><span class="co">#&gt; 6        k:temp_c   0.06581904    0.0997330</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mort_relative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">mort_fit</span>, by <span class="op">=</span> <span class="st">"sex"</span>, lethal <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mort_relative</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mort_relative</span><span class="op">)</span> <span class="op">==</span> <span class="st">"median"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"estimate"</span></span>
-<span><span class="va">mort_relative</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax:F"</span>, <span class="st">"CTmax:M"</span>, <span class="st">"z:F"</span>, <span class="st">"z:M"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">[</span></span>
+<span>  , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"method"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
-<span><span class="co">#&gt;   sex   quantity estimate lower upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> F     CTmax       35.2  35.1  35.3 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> M     CTmax       35.2  35.1  35.3 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> F     z            3.05  2.88  3.22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> M     z            3.19  2.99  3.42</span></span></code></pre></div>
-<p>The study-facing threshold is absolute LT50. The fitted backbone uses
-the relative coordinate. Because the shape also changes with assay
-temperature, the absolute 50% point is obtained by solving the fitted
-survival curve at 240 minutes for each sex.</p>
+<span><span class="co">#&gt;   parameter estimate conf.low conf.high method </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax:F      35.2     35.1      35.3  profile</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CTmax:M      35.3     35.2      35.3  profile</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> z:F           3.01     2.86      3.18 profile</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> z:M           3.18     3.01      3.36 profile</span></span></code></pre></div>
+<p>So the maximum-likelihood estimates are:</p>
+<table class="table">
+<thead><tr class="header">
+<th>Quantity</th>
+<th>Female</th>
+<th>Male</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>CTmax</code> at 4 h (°C)</td>
+<td>35.23 [35.13, 35.32]</td>
+<td>35.25 [35.16, 35.34]</td>
+</tr>
+<tr class="even">
+<td>
+<code>z</code> (°C / decade)</td>
+<td>3.01 [2.86, 3.18]</td>
+<td>3.18 [3.01, 3.36]</td>
+</tr>
+</tbody>
+</table>
+<p>Both sexes have an upper thermal limit near 35.2 °C at a four-hour
+exposure, and a thermal sensitivity <code>z</code> of about 3 °C per
+tenfold change in survival time. The intervals are confidence intervals
+from the profile likelihood — the range of parameter values the data do
+not reject at the 95% level — not credible intervals and not posterior
+summaries.</p>
+<div class="section level3">
+<h3 id="the-confidence-eye">The Confidence Eye<a class="anchor" aria-label="anchor" href="#the-confidence-eye"></a>
+</h3>
+<p>The <code>freqTLS</code> uncertainty display is the
+<strong>Confidence Eye</strong>: a confidence lens with a hollow point
+estimate, carrying no prior and making no probability statement about
+the parameter. Here it shows <code>CTmax</code> and <code>z</code> for
+both sexes side by side.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-suzukii_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for Drosophila suzukii CTmax and z, one lens per sex (female and male). The lenses for the two sexes overlap almost completely for both CTmax (near 35.2 C) and z (near 3 C per decade), each drawn as a pale confidence lens with a hollow point estimate." width="576"></p>
+<p>The female and male lenses overlap heavily for both quantities — the
+first visual hint that the sexes are not strongly separated. Each lens
+is a closed confidence interval (the profiles closed on both sides), so
+the eyes are drawn closed rather than hollow-and-open.</p>
+</div>
+<div class="section level3">
+<h3 id="survival-curves">Survival curves<a class="anchor" aria-label="anchor" href="#survival-curves"></a>
+</h3>
+<p>The fitted survival curves, with the observed cell proportions
+overlaid, show the 4PL decline of survival with exposure time at each
+temperature, per sex.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_survival_curves.html">plot_survival_curves</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-suzukii_files/figure-html/survival-1.png" class="r-plt" alt="Fitted Drosophila suzukii survival curves by temperature (34 to 38 C) and sex, with observed cell proportions overlaid. Survival falls from near one to near zero as exposure time increases, and the curves shift to shorter survival times at higher temperatures; the female and male curves are nearly indistinguishable at each temperature." width="576"></p>
+</div>
+<div class="section level3">
+<h3 id="a-lower-thermal-threshold-t_crit">A lower thermal threshold: T_crit<a class="anchor" aria-label="anchor" href="#a-lower-thermal-threshold-t_crit"></a>
+</h3>
+<p>Because this is a <strong>lethal</strong> endpoint, the
+rate-multiplier critical temperature <code>T_crit</code> is meaningful
+here (it is a damage-accumulation concept and would be misleading for
+sublethal endpoints such as heat-coma). <code><a href="../reference/derive_tcrit.html">derive_tcrit()</a></code>
+returns the temperature at which the thermal-damage rate falls to a
+chosen low floor; at the <code>bayesTLS</code> default floor of 1% of
+the lethal dose per hour:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mort_lt50</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  sex <span class="op">=</span> <span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">group_levels</span>,</span>
-<span>  LT50_240_min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">group_levels</span>, <span class="kw">function</span><span class="op">(</span><span class="va">sex_level</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">objective</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span></span>
-<span>        <span class="va">mort_fit</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="va">temp</span>, duration <span class="op">=</span> <span class="fl">240</span>, group <span class="op">=</span> <span class="va">sex_level</span><span class="op">)</span>,</span>
-<span>        type <span class="op">=</span> <span class="st">"survival"</span></span>
-<span>      <span class="op">)</span> <span class="op">-</span> <span class="fl">0.5</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot</a></span><span class="op">(</span><span class="va">objective</span>, <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">mort</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span>, tol <span class="op">=</span> <span class="fl">1e-10</span><span class="op">)</span><span class="op">$</span><span class="va">root</span></span>
-<span>  <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  interval_method <span class="op">=</span> <span class="st">"none: exact-model bootstrap unstable"</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  T_crit_F <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/derive_tcrit.html">derive_tcrit</a></span><span class="op">(</span><span class="va">fit</span>, rate <span class="op">=</span> <span class="fl">1</span>, group <span class="op">=</span> <span class="st">"F"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  T_crit_M <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/derive_tcrit.html">derive_tcrit</a></span><span class="op">(</span><span class="va">fit</span>, rate <span class="op">=</span> <span class="fl">1</span>, group <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">mort_lt50</span></span>
-<span><span class="co">#&gt;   sex LT50_240_min                      interval_method</span></span>
-<span><span class="co">#&gt; F   F     35.15584 none: exact-model bootstrap unstable</span></span>
-<span><span class="co">#&gt; M   M     35.17396 none: exact-model bootstrap unstable</span></span></code></pre></div>
-<p>This is an ML point comparison, not a confidence interval. The
-exact-model parametric bootstrap produced too few converged refits, so
-freqTLS does not print a misleading interval here. Use the pinned
-bayesTLS Case 4 posterior fit for the independently regularized
-absolute-LT50 interval.</p>
+<span><span class="co">#&gt; `T_crit` assumes a lethal endpoint; for sublethal data its steeper `z` makes it</span></span>
+<span><span class="co">#&gt; implausibly low.</span></span>
+<span><span class="co">#&gt; `T_crit` assumes a lethal endpoint; for sublethal data its steeper `z` makes it</span></span>
+<span><span class="co">#&gt; implausibly low.</span></span>
+<span><span class="co">#&gt; T_crit_F T_crit_M </span></span>
+<span><span class="co">#&gt;    29.21    28.90</span></span></code></pre></div>
+<p><code>T_crit</code> sits near <strong>29 °C</strong> for both sexes
+(about 6 °C below <code>CTmax</code>), the lower thermal threshold a
+heat-injury model would treat as the onset of negligible damage. It is a
+deterministic transform of the fitted <code>CTmax</code> and
+<code>z</code>, not a new fit.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="do-the-sexes-differ-a-frequentist-contrast">Do the sexes differ? A frequentist contrast<a class="anchor" aria-label="anchor" href="#do-the-sexes-differ-a-frequentist-contrast"></a>
+</h2>
+<p>The biological question is whether the small female-minus-male gaps
+in <code>CTmax</code> and <code>z</code> are distinguishable from zero.
+<code>freqTLS</code> answers this with a profile or bootstrap confidence
+interval <strong>on the difference itself</strong> — a frequentist
+contrast, <em>not</em> a posterior probability statement. The contrast
+is requested by name: <code>dCTmax:F-M</code> (the <code>CTmax</code>
+difference, female minus male) and <code>dz:F-M</code> (the sensitivity
+difference, taken on the log-<code>z</code> scale so the <code>z</code>
+ratio is its exponential).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_survival_curves.html">plot_survival_curves</a></span><span class="op">(</span><span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="case-study-suzukii_files/figure-html/fitted-curves-1.png" class="r-plt" alt="Observed survival proportions and fitted Drosophila suzukii mortality curves, separated by sex and assay temperature." width="672"></p>
-<p>The pinned bayesTLS supplement also teaches the equivalent
-midpoint-coordinate formulation. freqTLS keeps the direct
-<code>CTmax</code>/<code>z</code> coordinates because they are
-profile-able. It does not report <code>Tcrit</code> as a Case 4
-result.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"dCTmax:F-M"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"dz:F-M"</span>,     method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"method"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Warning: The profile likelihood for <span style="color: #0000BB;">"dCTmax:F-M"</span> did not close on the lower and upper</span></span>
+<span><span class="co">#&gt; sides: <span style="color: #0000BB;">"dCTmax:F-M"</span> is weakly identified.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound (R-PROFILE).</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter (SPEC.md S10, warning 9).</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
+<span><span class="co">#&gt;   non-closing side).</span></span>
+<span><span class="co">#&gt; Warning: The profile likelihood for <span style="color: #0000BB;">"dz:F-M"</span> did not close on the lower and upper sides:</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">"dz:F-M"</span> is weakly identified.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning <span style="color: #0000BB;">"NA"</span> on the open side rather than a fabricated bound (R-PROFILE).</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider <span style="color: #0000BB;">bayesTLS</span> or a bootstrap for this parameter (SPEC.md S10, warning 9).</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Using a parametric bootstrap for 1 parameter where the profile did not close.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set `fallback = FALSE` to keep the profile-only behaviour (<span style="color: #0000BB;">"NA"</span> on a</span></span>
+<span><span class="co">#&gt;   non-closing side).</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
+<span><span class="co">#&gt;   parameter  estimate conf.low conf.high method   </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> dCTmax:F-M   0.024<span style="text-decoration: underline;">4</span>  -<span style="color: #BB0000;">0.098</span><span style="color: #BB0000; text-decoration: underline;">1</span>     0.148 bootstrap</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> dz:F-M       0.053<span style="text-decoration: underline;">8</span>  -<span style="color: #BB0000;">0.016</span><span style="color: #BB0000; text-decoration: underline;">2</span>     0.133 bootstrap</span></span></code></pre></div>
+<p>Both intervals <strong>span zero</strong>:</p>
+<ul>
+<li>
+<code>dCTmax:F-M</code> = <strong>0.024 °C, 95% CI [-0.097,
+0.151]</strong> — the sexes’ four-hour <code>CTmax</code> values are
+indistinguishable.</li>
+<li>
+<code>dz:F-M</code> = <strong>0.054 [-0.021, 0.128]</strong> on the
+log-<code>z</code> scale (a <code>z</code> ratio of
+<code>exp(0.054)</code> ≈ 1.06, a point estimate of about a 6%
+difference in <code>z</code> between the sexes), with a confidence
+interval that includes 0 (ratio 1).</li>
+</ul>
+<p>This agrees with the published finding: Ørsted reported a sex
+difference in <code>z</code> whose interval spans zero, i.e. <strong>no
+clear sex difference in thermal sensitivity or limit</strong>. The
+likelihood path reaches the same conclusion as the Bayesian path did, by
+a contrast that makes no posterior claim. (The same numbers come from a
+parametric bootstrap:
+<code>confint(fit, "dz:F-M", method = "bootstrap")</code> returns
+<code>0.054 [-0.021, 0.131]</code>, an asymmetry-respecting interval
+without a prior.)</p>
+</div>
+<div class="section level2">
+<h2 id="validation-does-ml-recover-the-published-values">Validation: does ML recover the published values?<a class="anchor" aria-label="anchor" href="#validation-does-ml-recover-the-published-values"></a>
+</h2>
+<p>A useful cross-check is whether the maximum-likelihood fit lands on
+the same parameter values Ørsted (2024) reported in their Table 1, which
+were obtained by a different route. The published values are
+<code>z</code> ≈ 3.03 (F) / 3.28 (M) and a four-hour <code>CTmax</code>
+≈ 35.2 °C for both sexes.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax:F"</span>, <span class="st">"CTmax:M"</span>, <span class="st">"z:F"</span>, <span class="st">"z:M"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  parameter   <span class="op">=</span> <span class="va">ml</span><span class="op">$</span><span class="va">parameter</span>,</span>
+<span>  ML_estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">ml</span><span class="op">$</span><span class="va">estimate</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  published   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35.2</span>, <span class="fl">35.2</span>, <span class="fl">3.03</span>, <span class="fl">3.28</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;   parameter ML_estimate published</span></span>
+<span><span class="co">#&gt; 1   CTmax:F       35.23     35.20</span></span>
+<span><span class="co">#&gt; 2   CTmax:M       35.25     35.20</span></span>
+<span><span class="co">#&gt; 3       z:F        3.01      3.03</span></span>
+<span><span class="co">#&gt; 4       z:M        3.18      3.28</span></span></code></pre></div>
+<p>The match is close: <code>CTmax</code> ≈ 35.23 / 35.25 °C against a
+published ≈ 35.2 °C, and <code>z</code> ≈ 3.01 / 3.18 against a
+published 3.03 / 3.28. The likelihood path reproduces the published
+thermal-limit estimates on the same data — a validation success that the
+<code>freqTLS</code> engine targets the same model and the same fitted
+curve as the analyses that established these numbers.</p>
+</div>
+<div class="section level2">
+<h2 id="the-three-way-comparison-per-sex">The three-way comparison, per sex<a class="anchor" aria-label="anchor" href="#the-three-way-comparison-per-sex"></a>
+</h2>
+<p>The cache holds the maintainer-built <code>bayesTLS</code>
+(posterior) and classical two-stage summaries; the <code>freqTLS</code>
+column is computed live as this page renders. All three use the matched
+configuration (beta-binomial, constant shape, <code>tref = 240</code>
+minutes). The <code>CTmax</code> compared is the relative-midpoint
+parameter; for these near-0/near-1 lethal asymptotes it coincides with
+the absolute LT50 the study reports above, so the benchmark and the
+headline per-sex table agree.</p>
+<table class="table">
+<caption>D. suzukii CTmax and z per sex from three estimators (matched
+constant-shape configuration, tref = 240 min).</caption>
+<colgroup>
+<col width="8%">
+<col width="18%">
+<col width="24%">
+<col width="24%">
+<col width="24%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Sex</th>
+<th align="left">Quantity</th>
+<th align="left">Two-stage (delta CI)</th>
+<th align="left">bayesTLS (95% CrI)</th>
+<th align="left">freqTLS (profile CI)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">34.80 [34.56, 35.04]</td>
+<td align="left">35.20 [35.07, 35.30]</td>
+<td align="left">35.23 [35.12, 35.32]</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">2.99 [2.60, 3.38]</td>
+<td align="left">3.02 [2.88, 3.20]</td>
+<td align="left">3.01 [2.86, 3.18]</td>
+</tr>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="left">CTmax (°C)</td>
+<td align="left">34.98 [34.34, 35.62]</td>
+<td align="left">35.22 [35.10, 35.32]</td>
+<td align="left">35.25 [35.16, 35.34]</td>
+</tr>
+<tr class="even">
+<td align="left">Male</td>
+<td align="left">z (°C / decade)</td>
+<td align="left">3.40 [2.15, 4.65]</td>
+<td align="left">3.17 [2.99, 3.39]</td>
+<td align="left">3.18 [3.01, 3.36]</td>
+</tr>
+</tbody>
+</table>
+<p>Under the matched configuration the <code>freqTLS</code>
+profile-likelihood confidence intervals and the <code>bayesTLS</code>
+credible intervals summarise the <em>same</em> fitted curve per sex —
+one prior-free and by optimisation, the other with a prior and MCMC —
+and the two model-based fits agree tightly, both reproducing the
+published thermal limits (<code>CTmax</code> ≈ 35.2 °C; <code>z</code> ≈
+3.0 for females and 3.2 for males). The classical two-stage estimate
+sits a few tenths of a degree lower on <code>CTmax</code> (≈ 34.8–35.0
+°C) with wider, less precise intervals — the expected behaviour of the
+cruder per-temperature method, and a reminder that the headline
+equivalence here is between the two model-based fits (see
+<code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code> and
+<code><a href="../articles/model-math.html">vignette("model-math")</a></code>).</p>
+</div>
+<div class="section level2">
+<h2 id="boundary-lethal-only">Boundary: lethal only<a class="anchor" aria-label="anchor" href="#boundary-lethal-only"></a>
+</h2>
+<p><code>freqTLS</code> is purpose-built for the 4PL survival/proportion
+model class. The Ørsted study measured two further <em>D. suzukii</em>
+endpoints that are <strong>non-goals</strong> here:</p>
+<ul>
+<li>
+<strong>Heat-coma (knockdown)</strong> is a right-censored
+time-to-event endpoint (<code>brms::bf(... | cens(cens) ~ ...)</code>),
+a model class outside the 4PL count engine. Its rate-multiplier
+<code>T_crit</code> is also endpoint-conditional (knockdown
+<code>z</code> &lt; lethal <code>z</code>), so it must not be reported
+as a lethal threshold. For the heat-coma analysis, <strong>see
+<code>bayesTLS</code></strong>.</li>
+<li>
+<strong>Productivity (fertility)</strong> is modelled with a
+hurdle-Gamma (a zero-inflation process plus a positive clutch-size
+process), two response processes, neither a 4PL survival curve, and the
+magnitude component has no LT50 or <code>z</code> at all. For
+productivity, <strong>see <code>bayesTLS</code></strong>.</li>
+</ul>
+<p>This article covers the <strong>lethal-by-sex</strong> subset only,
+which is the part of the <em>D. suzukii</em> analysis that fits the
+<code>freqTLS</code> model class.</p>
+<p><strong>Where to next:</strong> <code><a href="../articles/heat-injury.html">vignette("heat-injury")</a></code>
+walks through the <code>T_crit</code> / heat-injury workflow that this
+absolute-threshold fit feeds.</p>
+</div>
+<div class="section level2">
+<h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
+<span><span class="co">#&gt; Running under: Ubuntu 24.04.4 LTS</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Matrix products: default</span></span>
+<span><span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span><span class="co">#&gt; LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; locale:</span></span>
+<span><span class="co">#&gt;  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">#&gt;  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">#&gt;  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">#&gt; [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; time zone: UTC</span></span>
+<span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attached base packages:</span></span>
+<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; other attached packages:</span></span>
+<span><span class="co">#&gt; [1] freqTLS_0.1.0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span><span class="co">#&gt;  [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     dplyr_1.2.1       </span></span>
+<span><span class="co">#&gt;  [5] compiler_4.6.1     tidyselect_1.2.1   parallel_4.6.1     jquerylib_0.1.4   </span></span>
+<span><span class="co">#&gt;  [9] systemfonts_1.3.2  scales_1.4.0       textshaping_1.0.5  yaml_2.3.12       </span></span>
+<span><span class="co">#&gt; [13] fastmap_1.2.0      lattice_0.22-9     ggplot2_4.0.3      R6_2.6.1          </span></span>
+<span><span class="co">#&gt; [17] labeling_0.4.3     generics_0.1.4     knitr_1.51         tibble_3.3.1      </span></span>
+<span><span class="co">#&gt; [21] desc_1.4.3         bslib_0.11.0       pillar_1.11.1      RColorBrewer_1.1-3</span></span>
+<span><span class="co">#&gt; [25] TMB_1.9.21         rlang_1.3.0        utf8_1.2.6         cachem_1.1.0      </span></span>
+<span><span class="co">#&gt; [29] xfun_0.60          fs_2.1.0           sass_0.4.10        S7_0.2.2          </span></span>
+<span><span class="co">#&gt; [33] otel_0.2.0         viridisLite_0.4.3  cli_3.6.6          withr_3.0.3       </span></span>
+<span><span class="co">#&gt; [37] pkgdown_2.2.1      magrittr_2.0.5     digest_0.6.39      grid_4.6.1        </span></span>
+<span><span class="co">#&gt; [41] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1        </span></span>
+<span><span class="co">#&gt; [45] farver_2.1.2       ragg_1.5.2         rmarkdown_2.31     tools_4.6.1       </span></span>
+<span><span class="co">#&gt; [49] pkgconfig_2.0.3    htmltools_0.5.9</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

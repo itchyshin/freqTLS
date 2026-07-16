@@ -5,25 +5,22 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Case 1: zebrafish heat tolerance under normoxia and hyperoxia • freqTLS</title>
+<title>Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia • freqTLS</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Case 1: zebrafish heat tolerance under normoxia and hyperoxia">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    <aside id="freqtls-experimental-warning" class="freqtls-experimental-warning" role="alert" aria-labelledby="freqtls-experimental-warning-title"><div class="container">
-    <strong id="freqtls-experimental-warning-title">Experimental software—use at your own risk.</strong>
-    Results and APIs may be incorrect or change. Users are responsible for checking their data, design, model specification, convergence, identifiability, diagnostics, and interpretation. Important analyses should be independently refitted and cross-checked with <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link">bayesTLS</a> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link">source repository</a>). Agreement is a cross-check, not proof of correctness; shared data or model errors can make both packages agree.
-  </div>
-</aside><nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">freqTLS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,23 +39,23 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Model details</h6></li>
     <li><a class="dropdown-item" href="../articles/model-math.html">The model and its parameterisation</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Examples</h6></li>
-    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case 1: zebrafish heat tolerance under normoxia and hyperoxia</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case 2: cereal-aphid thermal tolerance</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-snowgum.html">Case 3: Snow-gum PSII under Dark and Light recovery</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case 4: Drosophila suzukii mortality</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-suzukii-coma.html">Case 4.2: Drosophila suzukii awake/coma response</a></li>
-    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Canonical empirical examples: what can and cannot be compared</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><h6 class="dropdown-header" data-toc-skip>Extensions</h6></li>
-    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Cross-checking freqTLS with bayesTLS</a></li>
-    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
-    <li><a class="dropdown-item" href="../articles/heat-injury.html">Experimental extension: deterministic heat-injury prediction</a></li>
     <li><a class="dropdown-item" href="../articles/profile-likelihood.html">Profile-likelihood intervals</a></li>
     <li><a class="dropdown-item" href="../articles/random-effects.html">Random effects: hierarchical thermal tolerance</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Comparison</h6></li>
+    <li><a class="dropdown-item" href="../articles/comparing-to-bayesTLS.html">Comparing freqTLS to bayesTLS</a></li>
+    <li><a class="dropdown-item" href="../articles/frequentist-and-bayesian.html">Frequentist and Bayesian thermal-load sensitivity: strengths, weaknesses, and the blurry line</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Applications</h6></li>
+    <li><a class="dropdown-item" href="../articles/heat-injury.html">Heat injury under a temperature trace</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Case studies</h6></li>
+    <li><a class="dropdown-item" href="../articles/case-study-shrimp.html">Case study: brown-shrimp lethal TDT</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-zebrafish.html">Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-li-aphids.html">Case study: heat tolerance of three cereal aphid species (Li 2023)</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-suzukii.html">Case study: Drosophila suzukii lethal thermal death time across sexes</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-leaf-psii.html">Case study: snow-gum leaf PSII — a continuous-proportion sublethal endpoint</a></li>
+    <li><a class="dropdown-item" href="../articles/case-study-summary.html">Cross-case-study summary: four taxa, one panel</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -81,106 +78,172 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Case 1: zebrafish heat tolerance under normoxia and hyperoxia</h1>
+      <h1>Case study: zebrafish thermal tolerance under hypoxia, normoxia, and hyperoxia</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/case-study-zebrafish.Rmd" class="external-link"><code>vignettes/case-study-zebrafish.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/build/freqtls/vignettes/case-study-zebrafish.Rmd" class="external-link"><code>vignettes/case-study-zebrafish.Rmd</code></a></small>
       <div class="d-none name"><code>case-study-zebrafish.Rmd</code></div>
     </div>
 
     
     
-<p>This is the frequentist analogue of Case 1 in the <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code>
-supplement</a>. It uses the same organism, data, filter, response,
-formulas, one-hour reference time, relative threshold, and estimands.
-Only the inference engine and uncertainty language differ.</p>
+<p>This article fits a lethal thermal-death-time (TDT) model to
+zebrafish (<em>Danio rerio</em>) larvae assayed under three oxygen
+treatments — <strong>hypoxia, normoxia, and hyperoxia</strong> — and
+asks a question motivated by the <strong>oxygen- and capacity-limited
+thermal tolerance</strong> (OCLTT) hypothesis (Pörtner 2001): does
+oxygen availability shift the upper thermal limit? OCLTT is actively
+debated rather than settled (see, e.g., Jutfelt et al. 2018), so the
+framing here is hypothesis-testing, not mechanism confirmation: if
+oxygen matters, the critical temperature <code>CTmax</code> and the
+thermal-sensitivity slope <code>z</code> should shift with the oxygen
+treatment. It mirrors the zebrafish case study in <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>,
+fit here by maximum likelihood instead of MCMC.</p>
+<p>The fit runs live (TMB, <strong>no Stan</strong>) and the treatment
+effect is the direct CTmax/z parameterisation — one <code>CTmax</code>
+and one <code>z</code> per oxygen level. Uncertainty is summarised by
+<strong>confidence intervals</strong>; for this well-identified
+three-group fit we use the fast Wald intervals, while the
+profile-likelihood intervals that are the <code>freqTLS</code> default
+are showcased on the single-fit studies (e.g.
+<code><a href="../articles/case-study-shrimp.html">vignette("case-study-shrimp")</a></code>).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="exact-data-subset">Exact data subset<a class="anchor" aria-label="anchor" href="#exact-data-subset"></a>
+<h2 id="the-dataset-and-the-question">The dataset and the question<a class="anchor" aria-label="anchor" href="#the-dataset-and-the-question"></a>
 </h2>
-<p>We retain diploid larvae under normoxia and hyperoxia, including the
-26 °C normoxia controls. Hypoxia is deliberately excluded: its duration
-design does not identify <code>z</code> well enough for the canonical
-comparison.</p>
+<p><code>zebrafish_o2</code> is vendored from <code>bayesTLS</code>
+(Saruhashi et al. 2026) under CC BY 4.0; cite the source and
+<code>citation("freqTLS")</code> when you use it (see
+<code><a href="../reference/zebrafish_o2.html">?zebrafish_o2</a></code>). It records survival counts in a temperature
+× duration grid for diploid and triploid larvae across the three oxygen
+treatments. We take the <strong>diploid</strong> larvae — the focal
+group; triploids are a separate extension — and let <code>CTmax</code>
+and <code>z</code> depend on the oxygen treatment.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">zebrafish_o2</span><span class="op">)</span></span>
-<span><span class="va">zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
-<span>  <span class="va">zebrafish_o2</span>,</span>
-<span>  <span class="va">ploidy</span> <span class="op">==</span> <span class="st">"diploid"</span> <span class="op">&amp;</span> <span class="va">oxygen</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"normoxia"</span>, <span class="st">"hyperoxia"</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">zf</span><span class="op">$</span><span class="va">oxygen</span>, <span class="va">zf</span><span class="op">$</span><span class="va">temp</span><span class="op">)</span></span>
-<span><span class="co">#&gt;            </span></span>
-<span><span class="co">#&gt;              26  38  39  40</span></span>
-<span><span class="co">#&gt;   normoxia  119 149  23  23</span></span>
-<span><span class="co">#&gt;   hyperoxia   0  24  23  19</span></span></code></pre></div>
+<span><span class="va">zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">zebrafish_o2</span>, <span class="va">ploidy</span> <span class="op">==</span> <span class="st">"diploid"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">zf</span><span class="op">$</span><span class="va">oxygen</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   hypoxia  normoxia hyperoxia </span></span>
+<span><span class="co">#&gt;       321       314        66</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">zf_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
-<span>  <span class="va">zf</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration_min"</span>,</span>
-<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>, duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">zf_std</span>, <span class="st">"tdt_meta"</span><span class="op">)</span><span class="op">$</span><span class="va">duration_unit</span> <span class="op">==</span> <span class="st">"minutes"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">zf</span>,</span>
+<span>  temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration_min"</span>,</span>
+<span>  n_total <span class="op">=</span> <span class="st">"n_total"</span>, n_surv <span class="op">=</span> <span class="st">"n_surv"</span>,</span>
+<span>  duration_unit <span class="op">=</span> <span class="st">"minutes"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The design spans assay temperatures from 26 to 40 °C and exposures up
+to 240 minutes, replicated across the three oxygen treatments — 701 rows
+in total. <code>oxygen</code> is the covariate of interest.</p>
 </div>
 <div class="section level2">
-<h2 id="locked-model">Locked model<a class="anchor" aria-label="anchor" href="#locked-model"></a>
+<h2 id="the-grouped-fit-live">The grouped fit (live)<a class="anchor" aria-label="anchor" href="#the-grouped-fit-live"></a>
 </h2>
-<p>The response is beta-binomial. <code>CTmax</code>, <code>z</code>,
-and <code>low</code> vary by oxygen; <code>up</code> and <code>k</code>
-are shared. Because <code>t_ref = 60</code> is expressed in the
-standardized minute unit, <code>CTmax</code> is the relative-midpoint
-critical temperature at one hour.</p>
+<p>A single <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> call fits all three oxygen treatments
+at once, each with its own <code>CTmax</code> and <code>z</code> but a
+shared constant 4PL shape (the temperature effect runs through the
+midpoint). <code>CTmax</code> is reported at a one-hour reference
+exposure (<code>t_ref = 60</code> minutes).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">zf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="va">zf_std</span>,</span>
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
+<span>  <span class="va">std</span>,</span>
 <span>  ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>,</span>
-<span>  z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>,</span>
-<span>  low <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>,</span>
-<span>  up <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  k <span class="op">=</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>,</span>
+<span>  z     <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">oxygen</span>,</span>
 <span>  t_ref <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"wald"</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/diagnose_tdt_fit.html">diagnose_tdt_fit</a></span><span class="op">(</span><span class="va">zf_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
-<span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE               0.000<span style="text-decoration: underline;">195</span> TRUE          nlminb     -<span style="color: #BB0000;">280.</span>        9</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span></code></pre></div>
-<p>Always inspect the convergence code, Hessian, gradient, and
-<code><a href="../reference/check_tls.html">check_tls()</a></code> messages before interpretation. This page uses
-Wald confidence intervals and names that method explicitly; profile and
-bootstrap intervals remain available for sensitivity checks.</p>
+<span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fit</span></span>
+<span><span class="co">#&gt; &lt;freq_tls&gt;</span></span>
+<span><span class="co">#&gt;   Data:    701 rows; 4 temperatures; 33 durations</span></span>
+<span><span class="co">#&gt;   T_bar:   34.22</span></span>
+<span><span class="co">#&gt;   Family:  beta_binomial (relative threshold, t_ref = 60 minutes)</span></span>
+<span><span class="co">#&gt;   By:      oxygen</span></span>
+<span><span class="co">#&gt;   Fit:     converged (pdHess = TRUE); default CI method = profile</span></span></code></pre></div>
+<p>Per-treatment <code>CTmax</code> and <code>z</code> with confidence
+intervals:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">zf_tls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">zf_fit</span>, by <span class="op">=</span> <span class="st">"oxygen"</span>, lethal <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span>
-<span><span class="va">zf_table</span> <span class="op">&lt;-</span> <span class="va">zf_tls</span><span class="op">$</span><span class="va">summary</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">zf_table</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">zf_table</span><span class="op">)</span> <span class="op">==</span> <span class="st">"median"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"estimate"</span></span>
-<span><span class="va">zf_table</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
-<span><span class="co">#&gt;   oxygen    quantity estimate lower upper</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> normoxia  CTmax       38.7  38.4  39.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hyperoxia CTmax       39.3  39.1  39.5 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> normoxia  z            6.01  4.37  8.25</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hyperoxia z            2.50  2.14  2.92</span></span></code></pre></div>
-<p>The reported quantities are <code>CTmax</code> and <code>z</code>.
-<code>Tcrit</code> is not reported: the hyperoxia design lacks a
-benign-temperature control, and the supplement marks this case
-<code>lethal = FALSE</code> for extraction.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">zf_fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="case-study-zebrafish_files/figure-html/eye-1.png" class="r-plt" alt="Wald Confidence Eyes for zebrafish CTmax and z under normoxia and hyperoxia." width="672"></p>
+<code class="sourceCode R"><span><span class="va">ox</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">fit</span>, by <span class="op">=</span> <span class="st">"oxygen"</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span>
+<span><span class="va">ox</span><span class="op">$</span><span class="va">summary</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
+<span><span class="co">#&gt;   oxygen    quantity median lower upper</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hypoxia   CTmax     31.9  29.3  34.4 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> normoxia  CTmax     39.0  38.8  39.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hyperoxia CTmax     39.1  39.0  39.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hypoxia   z          9.38  6.67 13.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> normoxia  z          6.80  5.31  8.70</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> hyperoxia z          3.25  2.91  3.64</span></span></code></pre></div>
+<p>Evaluate the OCLTT prediction with <code>CTmax</code> (the one-hour
+critical temperature): the treatments order from lowest to highest as
+<strong>hypoxia (31.9 °C) &lt; normoxia (39.0 °C) &lt; hyperoxia (39.1
+°C)</strong>. Under the OCLTT hypothesis, restricting oxygen should
+<em>lower</em> the thermal limit, so hypoxia is expected at the cold end
+and hyperoxia at the warm end; the fitted ordering and the overlap (or
+separation) of the intervals are what the data say about that
+prediction.</p>
 </div>
 <div class="section level2">
-<h2 id="interpretation-and-boundary">Interpretation and boundary<a class="anchor" aria-label="anchor" href="#interpretation-and-boundary"></a>
+<h2 id="a-confidence-eye-per-treatment">A Confidence Eye per treatment<a class="anchor" aria-label="anchor" href="#a-confidence-eye-per-treatment"></a>
 </h2>
-<p><code>CTmax</code> asks whether hyperoxia shifts the one-hour thermal
-limit. <code>z</code> asks whether oxygen changes the rate at which
-tolerated duration falls with warming. Agreement with bayesTLS is a
-useful cross-check, not proof of correctness: shared data, filter, or
-model errors can make both packages agree. Triploid and hypoxia analyses
-are not silently substituted here.</p>
+<p>The default <code>freqTLS</code> uncertainty visual is the
+<strong>Confidence Eye</strong> — a confidence lens with a hollow point
+estimate, carrying no prior and making no probability statement about
+the parameter. One lens per oxygen treatment makes the
+<code>CTmax</code> comparison legible; the parameter names are read off
+the fit so they always match the fitted labels.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="fu"><a href="../reference/get_ctmax.html">get_ctmax</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">parameter</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-zebrafish_files/figure-html/eye-ctmax-1.png" class="r-plt" alt="Confidence Eyes for zebrafish CTmax by oxygen treatment: three pale confidence lenses with hollow point estimates, one per treatment, the freqTLS uncertainty display rather than a posterior density." width="576"></p>
+<p>The same display for the thermal-sensitivity slope
+<code>z</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="fu"><a href="../reference/get_z.html">get_z</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">parameter</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-zebrafish_files/figure-html/eye-z-1.png" class="r-plt" alt="Confidence Eyes for zebrafish z (thermal sensitivity) by oxygen treatment: three pale confidence lenses with hollow point estimates." width="576"></p>
+</div>
+<div class="section level2">
+<h2 id="do-the-treatments-differ-reading-the-intervals">Do the treatments differ? Reading the intervals<a class="anchor" aria-label="anchor" href="#do-the-treatments-differ-reading-the-intervals"></a>
+</h2>
+<p>The OCLTT prediction is a statement about <em>differences</em>
+between treatments. The honest frequentist reading is the overlap of the
+per-treatment confidence intervals above: where two treatments’
+<code>CTmax</code> intervals are disjoint, the data reject equality at
+the 95% level; where they overlap, the data are consistent with no
+difference. <code>freqTLS</code> also supports an explicit contrast (the
+difference in <code>CTmax</code> or <code>z</code> between two
+treatments, with its own confidence interval and a likelihood-ratio
+test) — see <code><a href="../articles/frequentist-and-bayesian.html">vignette("frequentist-and-bayesian")</a></code> and
+<code><a href="../reference/confint.profile_tls.html">?confint.profile_tls</a></code> for the contrast interface. Because
+the relative threshold is the curve midpoint, these comparisons are
+prior-free and respect the asymmetry of the likelihood.</p>
+</div>
+<div class="section level2">
+<h2 id="seeing-the-fit">Seeing the fit<a class="anchor" aria-label="anchor" href="#seeing-the-fit"></a>
+</h2>
+<p>The fitted survival surface, one curve per oxygen treatment and assay
+temperature, with the observed proportions overlaid:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_survival_curves.html">plot_survival_curves</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="case-study-zebrafish_files/figure-html/survival-1.png" class="r-plt" alt="Fitted zebrafish survival curves under three oxygen treatments: survival probability declining with exposure duration, observed proportions overlaid." width="576"></p>
+</div>
+<div class="section level2">
+<h2 id="boundary-what-this-case-study-does-not-cover">Boundary: what this case study does not cover<a class="anchor" aria-label="anchor" href="#boundary-what-this-case-study-does-not-cover"></a>
+</h2>
+<p>We fit only the <strong>diploid</strong> larvae; the triploid larvae
+are a separate ploidy contrast left as an extension. The fit holds the
+4PL <strong>shape</strong> constant across treatments (the temperature
+effect runs through the midpoint), matching the <code>bayesTLS</code>
+configuration; relaxing that to a per-group shape (letting
+<code>low</code>, <code>up</code>, <code>k</code> vary) is the
+shape-covariate feature demonstrated in
+<code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>. As a lethal endpoint,
+the survival-count 4PL applies directly; the sublethal
+loss-of-equilibrium endpoint is out of scope for
+<code>freqTLS</code>.</p>
+<p><strong>Where to next:</strong> the aphid case study adds formal
+species contrasts; <code><a href="../articles/random-effects.html">vignette("random-effects")</a></code> covers
+hierarchical (many-group) designs.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

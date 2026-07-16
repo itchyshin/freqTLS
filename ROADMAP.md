@@ -10,19 +10,11 @@ fitted/planned/unsupported boundary is
 `docs/design/46-capability-matrix.md`; the live phase board is
 `docs/dev-log/dashboard/`.
 
-**Version status:** 0.2.0.9000 (experimental development; not submitted
-to CRAN).
+**Version status:** 0.1.0 (experimental lifecycle).
 
-The active phase rebases the reader-facing examples on the pinned
-`bayesTLS` supplement: the same canonical empirical data, subsets,
-endpoints, formulas, thresholds, reference times, and estimands, with a
-different inference engine and uncertainty language. Brown shrimp and
-life-stage zebrafish remain benchmark-only legacy fixtures and leave
-active teaching surfaces.
-
-Status legend: `initial` (scaffold only, not yet implemented),
-`implemented` (landed with tests, docs, examples, check-log, and an
-after-task report), and `planned`.
+Status legend: `initial` (scaffold only), `implemented` (landed with
+tests, docs, examples, check-log, and an after-task report), and
+`planned`.
 
 ## Phases
 
@@ -75,9 +67,9 @@ Florence’s figure-audit passes.
 
 ### Phase 5 – bayesTLS benchmark harness (implemented)
 
-Owners: Curie + Jason + Rose (parallel with Phase 4). The installed raw
-shrimp proportions and `standardize_data(mortality = ...)` reconstruct
-counts at fit time; `R/data.R`, `inst/CITATION`,
+Owners: Curie + Jason + Rose (parallel with Phase 4).
+`data-raw/make_benchmark_data.R` (reconstructs shrimp counts from
+proportions), `R/data.R`, `inst/CITATION`,
 `data-raw/build_benchmark_cache.R`, the cache, `test-benchmark-sanity`.
 **Gate:** the vendored shrimp counts are sane; the sanity test is green;
 no Stan in CI.
@@ -88,7 +80,7 @@ Owners: documentation-writer + pkgdown-editor + Pat + Darwin +
 literature-curator + Grace. README, the vignette suite (`freqTLS`,
 `model-math`, `profile-likelihood`, `random-effects`,
 `comparing-to-bayesTLS`, `frequentist-and-bayesian`, `heat-injury`, and
-five case-study articles), NEWS, the final `_pkgdown.yml`. **Gate:**
+the six case studies), NEWS, the final `_pkgdown.yml`. **Gate:**
 `devtools::document()`, `devtools::test()`, `devtools::check()`, and
 [`pkgdown::build_site()`](https://pkgdown.r-lib.org/reference/build_site.html)
 are clean locally.
@@ -100,11 +92,12 @@ known-limitations / ROADMAP / README / capability-matrix sync
 -\> P2 -\> P3 (shared engine contract), then parallel P4 and P5, then
 P6.
 
-## Experimental v0.2 boundary
+## v0.1 release boundary
 
-The older `v0.1`/`v0.2`/`v0.3` headings below are historical build
-milestones. They record how the engine grew; they are not evidence that
-a version was published to CRAN.
+**The `v0.1`/`v0.2`/`v0.3` headings below are build milestones, all
+released in the single `0.1.0` version** (the fresh fork from
+profileTLS). They are kept in build order to record how the surface
+grew; nothing here is unreleased.
 
 The v0.1 milestone (core) is count data (binomial and beta-binomial),
 shared shape, grouped `CTmax`/`z`, profile CIs (and Wald), a
@@ -112,15 +105,14 @@ brms/drmTMB-style formula interface
 ([`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md)),
 and the cached three-way benchmark. The v0.2 and v0.3 milestones (below)
 then added the Beta family, random effects, bootstrap CIs, heat-injury,
-and shape predictors — **all retained experimentally in 0.2.0.9000**.
-Genuinely still out of scope: time-to-event, multi-trait responses, a
-fit-time absolute-threshold option and non-default `bounds`, a profile
-interval or random effect for the upper asymptote `up`. CRAN hardening
-and submission are deferred from the experimental v0.2 development
-release. See `docs/design/46-capability-matrix.md`. Censored-time,
-hurdle-productivity, and fitted repair dynamics remain bayesTLS-only.
+and shape predictors — **all of which ship in 0.1.0**. Genuinely still
+out of scope: time-to-event, multi-trait responses, a fit-time
+absolute-threshold option and non-default `bounds`, a profile interval
+or random effect for the upper asymptote `up`. CRAN upload remains
+deferred until the separate remediation ledger has evidence for the
+exact candidate. See `docs/design/46-capability-matrix.md`.
 
-## Historical v0.2 build milestone (retained in experimental 0.2.0.9000)
+## v0.2 milestone (released in 0.1.0)
 
 Building beyond the v0.1 core, with complementary (not competitive)
 framing against `bayesTLS` – the two packages are two valid lenses on
@@ -129,16 +121,11 @@ the same model.
 - **Parametric bootstrap CIs – done.** Prior-free percentile intervals
   via `confint(method = "bootstrap")`, and the automatic fallback for a
   non-closing profile or a non-positive-definite Hessian
-  (`fallback = TRUE`). freqTLS now attempts a finite interval without a
-  prior; unstable bootstrap fits return an explicit `NA` rather than
-  fabricating bounds.
+  (`fallback = TRUE`). freqTLS now always returns an interval, the same
+  behaviour as the Bayesian path, without a prior.
 
-- **Canonical `bayesTLS` comparator cache – done.** Built on Totoro from
-  the pinned bayesTLS commit `76510412`, independently published by
-  exact SHA-256, and checked for exact data/formulas/thresholds plus
-  passing sampler diagnostics. The comparison article reports actual
-  point differences without treating posterior medians and ML estimates
-  as identical targets.
+- **Real `bayesTLS` benchmark cache – done.** Built from `bayesTLS`
+  1.0.0.
 
 - **Random intercept on `CTmax` – done.**
   `CTmax ~ <fixed> + (1 | group)` via TMB Laplace; no-RE path
@@ -192,8 +179,7 @@ the same model.
   (byte-identical default), link-scale coefficient estimates
   (`k:body_size` is a log-scale slope) with Wald intervals, and
   [`predict()`](https://rdrr.io/r/stats/predict.html) rebuilds each
-  shape design from `newdata`. \## Historical v0.3 build milestone
-  (retained in experimental 0.2.0.9000)
+  shape design from `newdata`. \## v0.3 milestone (released in 0.1.0)
 
 - **Random intercept on `log_z` (item 5) — done.**
   `log_z ~ <fixed> + (1 | group)` adds a random intercept on thermal
@@ -225,9 +211,7 @@ the same model.
   [`heat_injury_envelope()`](https://itchyshin.github.io/freqTLS/reference/heat_injury_envelope.md)
   returns a prior-free parametric-bootstrap confidence band around the
   [`predict_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/predict_heat_injury.md)
-  survival trajectory (the likelihood-path analogue of the `bayesTLS`
-  posterior survival band), reusing the same dose-accumulation
-  integrator;
+  survival trajectory, reusing the same dose-accumulation integrator;
   [`plot_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/plot_heat_injury.md)
   draws it.
 
