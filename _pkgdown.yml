@@ -134,7 +134,7 @@ reference:
       - format_interval
       - tdt_quantile
   - title: Data
-    desc: Vendored benchmark datasets (credit bayesTLS, CC BY 4.0).
+    desc: Vendored example datasets; see each data help page and inst/COPYRIGHTS for source-specific licence and attribution terms.
     contents:
       - shrimp_lethal
       - shrimp_sublethal

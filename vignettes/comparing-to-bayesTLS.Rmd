@@ -40,9 +40,9 @@ by **Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier** in the `bayesTL
 package (manuscript in preparation). The 4PL thermal death-time model and the mapping
 from the midpoint slope to `z` and `CTmax` are theirs. `freqTLS` is an independent
 likelihood implementation of that framework; please cite `bayesTLS` when you use it.
-The bundled `shrimp_lethal` and `zebrafish_lethal` datasets are vendored
-from `bayesTLS` under CC BY 4.0 (see `?shrimp_lethal`, `?zebrafish_lethal`, and
-`citation("freqTLS")`).
+The bundled benchmark datasets retain their own source-specific rights. See the
+relevant data help page, `inst/COPYRIGHTS`, and the component rights ledger;
+do not infer a redistribution licence merely from the `bayesTLS` comparison.
 
 `freqTLS` contributes a TMB maximum-likelihood likelihood, the direct `CTmax`/`z`
 reparameterisation that makes both quantities profile-able, and profile-likelihood

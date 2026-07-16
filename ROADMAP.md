@@ -11,7 +11,7 @@ the live phase board is `docs/dev-log/dashboard/`.
 
 **Version status:** 0.1.0 (experimental lifecycle).
 
-Status legend: `initial` (scaffold only, not yet implemented), `implemented`
+Status legend: `initial` (scaffold only), `implemented`
 (landed with tests, docs, examples, check-log, and an after-task report), and
 `planned`.
 
@@ -94,7 +94,8 @@ milestones (below) then added the Beta family, random effects, bootstrap CIs,
 heat-injury, and shape predictors — **all of which ship in 0.1.0**. Genuinely
 still out of scope: time-to-event, multi-trait responses, a fit-time
 absolute-threshold option and non-default `bounds`, a profile interval or random
-effect for the upper asymptote `up`, and CRAN hardening. See
+effect for the upper asymptote `up`. CRAN upload remains deferred until the
+separate remediation ledger has evidence for the exact candidate. See
 `docs/design/46-capability-matrix.md`.
 
 ## v0.2 milestone (released in 0.1.0)
@@ -161,8 +162,7 @@ against `bayesTLS` -- the two packages are two valid lenses on the same model.
   coordinates. A dedicated `vignette("random-effects")` walks through the lot.
 * **Heat-injury bootstrap envelope — done.** `heat_injury_envelope()` returns a
   prior-free parametric-bootstrap confidence band around the
-  `predict_heat_injury()` survival trajectory (the likelihood-path analogue of the
-  `bayesTLS` posterior survival band), reusing the same dose-accumulation
+  `predict_heat_injury()` survival trajectory, reusing the same dose-accumulation
   integrator; `plot_heat_injury()` draws it.
 * **Planned:** random effects further still — a second / crossed / nested grouping
   factor on one sub-parameter, random slopes, and correlated multivariate random

@@ -69,26 +69,24 @@ weakly identified — see the Inference caveats section below.
 (`fit_tls(data, y, n, time, temp, group)`) or a brms/drmTMB-style formula built
 with `tls_bf()` (`fit_tls(tls_bf(...), data = ...)`). The formula path resolves
 the response (`successes | trials(total)` or `cbind(successes, failures)`), the
-`time()` / `temp()` axes, and the `CTmax` / `log_z` fixed-effect designs, then
-feeds the same engine, so a grouped formula fit equals the matching `group =`
-column fit to optimiser tolerance. v0.1 restrictions: fixed predictors on `low` / `up` / `log_k`
-are rejected with a helpful error (shape coordinates are shared scalars), and
-`CTmax` and `log_z` must share the same fixed right-hand side. Random-effect bars
-(`(1 | block)`), deferred at v0.1, are supported from v0.2 as independent random
-*intercepts* on `CTmax` / `log_z` / `low` / `log_k`; random slopes, correlated
-random effects, and crossed/nested grouping remain out of scope (use `bayesTLS`). The grouped-by-
+`time()` / `temp()` axes, and independent fixed-effect designs for every direct
+coordinate, then feeds the same engine. Independent random-intercept bars are
+supported on `CTmax`, `log_z`, `low`, and `log_k`; `up` has neither a profile
+coordinate nor a random effect. Random slopes, correlated random effects, and
+crossed/nested grouping remain out of scope (use `bayesTLS`). The grouped-by-
 factor case (`CTmax ~ group`) is emitted as `~ 0 + group` so its design, labels,
 and fit are byte-identical to the column `group =` call. Single-factor formula
 grouping (`CTmax ~ group`) reconstructs the per-row grouping vector, so the
 group-aware data-adequacy warnings, `diag_data`, and `plot_survival_curves()`
-match the column interface. (A general multi-predictor `CTmax` design has no
-single grouping label, so it carries none; general continuous predictors are not
-yet supported.)
+match the column interface. A general multi-predictor design has no single
+grouping label, so it carries none, but continuous predictors are supported.
 
-## Planned for v0.1 (fitted on completion of Phases 1-6)
+## Core 0.1.0 capabilities
 
-The v0.1 surface is the full cross-product of two families, two designs, and two
-CI methods, all eight cells fitted:
+The original core is the full cross-product of two count families, two designs,
+and two CI methods, all eight cells fitted. The expanded 0.1.0 release also
+ships the beta family, bootstrap, formula extensions, limited random intercepts,
+and deterministic heat-injury prediction.
 
 - families: `binomial` and `beta_binomial` (overdispersion `phi`), count data
   only;
@@ -96,7 +94,7 @@ CI methods, all eight cells fitted:
   (per-group `CTmax_g`, `z_g`, shared `low`, `up`, `k`);
 - CI methods: Wald and profile likelihood.
 
-Additional planned v0.1 capability:
+Core capability:
 
 - the temperature effect through the midpoint only (constant shape), matching the
   bayesTLS benchmark configuration;
@@ -162,18 +160,15 @@ Not yet available (limitations):
   covers shrimp and zebrafish; extending it to the *D. suzukii* (tref 240 min,
   grouped by sex) and snow-gum (beta, tref 5 min) configurations is a follow-up.
 
-## Out of scope for v0.1 (non-goals; not to be described as implemented)
+## Remaining non-goals for experimental 0.1.0
 
-- Beta / continuous responses: not in v0.1; **fitted in v0.2** (`family =
-  "beta"`, see "Beta family" below).
 - Time-to-event responses; multi-trait responses.
 - **Fitting** heat-injury / repair sub-models (belongs to `bayesTLS`);
-  deterministic heat-injury **prediction** from the fitted curve is fitted in
-  v0.2 (see "Heat-injury prediction" below).
-- An absolute-threshold default (the default is the relative threshold).
-- Random effects; a formula DSL.
-- Bootstrap confidence intervals (planned later, not v0.1).
-- CRAN hardening.
+  deterministic heat-injury **prediction** from the fitted curve is supported.
+- A fit-time absolute-threshold mode or a non-relative default.
+- A profile interval or random effect for `up`; random slopes; crossed or nested
+  grouping; and correlated multivariate random effects.
+- CRAN submission remains a release gate, not an implemented package capability.
 
 General distributional regression belongs to `drmTMB`. The full Bayesian
 workflow, heat-injury models, and posterior inference belong to `bayesTLS`.

@@ -29,7 +29,8 @@ pkgdown::build_site(pkg_path, preview = FALSE, devel = FALSE,
 # Resolve the build destination from the pkgdown config (defaults to docs/).
 dst <- pkgdown::as_pkgdown(pkg_path)$dst_path
 
-internal_pages <- c("AGENTS.html", "CLAUDE.html", "SPEC.html")
+internal_stems <- c("AGENTS", "CLAUDE", "SPEC")
+internal_pages <- as.vector(outer(internal_stems, c(".html", ".md"), paste0))
 to_remove <- file.path(dst, internal_pages)
 existing <- to_remove[file.exists(to_remove)]
 
@@ -39,6 +40,36 @@ if (length(existing)) {
           paste(basename(existing), collapse = ", "))
 } else {
   message("No internal pages found in ", dst, " (nothing to remove).")
+}
+
+# The files are also indexed before their HTML copies are removed. Remove their
+# search records and sitemap URLs so an internal page cannot remain discoverable
+# through the public site's search box or crawler metadata.
+search_path <- file.path(dst, "search.json")
+if (file.exists(search_path)) {
+  search_index <- jsonlite::fromJSON(search_path, simplifyVector = FALSE)
+  keep <- !vapply(search_index, function(entry) {
+    path <- entry$path
+    # Some pkgdown records (for example generated section headings) have no
+    # path field.  `vapply()` needs one logical result for those records too.
+    if (is.null(path) || length(path) != 1L || is.na(path)) path <- ""
+    any(vapply(internal_stems, function(stem) {
+      grepl(paste0("/", stem, ".html$"), path)
+    }, logical(1)))
+  }, logical(1))
+  jsonlite::write_json(search_index[keep], search_path, auto_unbox = TRUE,
+                       pretty = FALSE)
+}
+
+sitemap_path <- file.path(dst, "sitemap.xml")
+if (file.exists(sitemap_path)) {
+  sitemap <- readLines(sitemap_path, warn = FALSE, encoding = "UTF-8")
+  keep <- !vapply(sitemap, function(line) {
+    any(vapply(internal_stems, function(stem) {
+      grepl(paste0("/", stem, ".html"), line, fixed = TRUE)
+    }, logical(1)))
+  }, logical(1))
+  writeLines(sitemap[keep], sitemap_path, useBytes = TRUE)
 }
 
 # ---- accessibility: alt text for the reference example figures ------------
@@ -102,9 +133,29 @@ message("Filled alt text on example figures in ", n_alt, " reference page(s).")
 # Fail loudly if any internal page survived, so the privacy invariant is checked
 # on every build rather than trusted.
 still_there <- internal_pages[file.exists(file.path(dst, internal_pages))]
-if (length(still_there)) {
-  stop("Internal pages still present after cleanup: ",
-       paste(still_there, collapse = ", "))
+index_files <- file.path(dst, c("search.json", "sitemap.xml"))
+leaked_index <- c(search.json = FALSE, sitemap.xml = FALSE)
+if (file.exists(search_path)) {
+  search_index <- jsonlite::fromJSON(search_path, simplifyVector = FALSE)
+  search_paths <- vapply(search_index, function(entry) {
+    path <- entry$path
+    if (is.null(path) || length(path) != 1L || is.na(path)) "" else path
+  }, character(1))
+  leaked_index[["search.json"]] <- any(vapply(internal_stems, function(stem) {
+    any(grepl(paste0("/", stem, ".html$"), search_paths))
+  }, logical(1)))
+}
+if (file.exists(sitemap_path)) {
+  sitemap <- paste(readLines(sitemap_path, warn = FALSE, encoding = "UTF-8"),
+                   collapse = "\n")
+  leaked_index[["sitemap.xml"]] <- any(vapply(internal_stems, function(stem) {
+    any(grepl(paste0("/", stem, ".html"), sitemap, fixed = TRUE))
+  }, logical(1)))
+}
+if (length(still_there) || any(leaked_index)) {
+  details <- c(still_there, basename(index_files)[leaked_index])
+  stop("Internal artifacts survived the public-site cleanup: ",
+       paste(details, collapse = ", "))
 }
 
 # Fail if Pandoc has interpreted wildcard function names inside the inline SVG

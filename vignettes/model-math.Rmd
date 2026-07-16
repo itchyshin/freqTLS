@@ -108,8 +108,9 @@ so the two packages share the asymptote contract.
 
 Under this parameterisation `up` has its own coordinate $\beta_\mathrm{up}$, just like
 `low`. `freqTLS` nonetheless reports `up` with the delta-method Wald interval: its
-profile path is not yet wired for $\beta_\mathrm{up}$ (the work is symmetric with `low`,
-simply not yet implemented), and it says so. Every other parameter is profiled on its
+profile path deliberately excludes $\beta_\mathrm{up}$ in experimental 0.1.0;
+this is a release boundary, not an implicit estimate of its uncertainty. Every
+other supported parameter is profiled on its
 single coordinate. The full table of coordinates and links:
 
 | Natural parameter | Internal coordinate | Link |

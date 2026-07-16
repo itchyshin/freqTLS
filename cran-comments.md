@@ -1,0 +1,27 @@
+## Test environments
+
+* local macOS arm64, R 4.6.0 (Apple clang 21.0.0; macOS Tahoe 26.5.2)
+* Windows and Ubuntu checks on the same frozen post-merge tarball are still
+  required before submission.
+
+## R CMD check results
+
+`R CMD build --no-manual --sha256 .` produced `freqTLS_0.1.0.tar.gz`
+(1,653,817 bytes; 210 entries; SHA-256
+`67518e0f585834791c919e86d1c2d20363a1d32edb4cb2a2404d0775d499ad55`).
+`R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` completed with 0
+errors, 0 warnings, and one ordinary first-submission NOTE. This is local
+candidate evidence only: a clean post-merge rebuild, Windows/Ubuntu evidence,
+URL review, and written co-author consent remain upload blockers.
+
+## Downstream dependencies
+
+There are no CRAN reverse dependencies for this first submission.
+
+## Release boundary and provenance
+
+freqTLS is an experimental maximum-likelihood TMB implementation of the
+thermal-load-sensitivity framework introduced in bayesTLS. The package vendors
+benchmark data and records its source and licence in `inst/COPYRIGHTS`,
+`inst/CITATION`, and the data documentation. The maintainer must confirm that
+all credited authors agree to their listed roles before submission.

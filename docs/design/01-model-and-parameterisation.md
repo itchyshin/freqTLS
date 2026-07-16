@@ -50,9 +50,9 @@ mid_i = log10(tref) - (T_i - CT_i) / z_i.
 ```
 
 So the temperature enters the midpoint directly through `CTmax` and `z`. The
-shape parameters `low`, `up`, `k` are shared across observations by default;
-since v0.2 they may be grouped by a factor (see `docs/dev-log/decisions.md`,
-2026-06-17), with the intercept-only default unchanged.
+shape parameters `low`, `up`, `k` are shared across observations by default.
+Experimental 0.1.0 also permits separate fixed designs for `low`, `up`, and
+`log_k`, while retaining that intercept-only default.
 
 ## Equivalence (same likelihood, same MLE)
 
@@ -102,8 +102,8 @@ choice (`low < midpoint < up`), so the two packages share the asymptote contract
 exactly. (Earlier freqTLS builds used a nested gap
 `up = low + (1 - low) * plogis(beta_gap)`; P1 switched to disjoint bounds — see
 `docs/dev-log/decisions.md`.) Under disjoint bounds `up` has its own coordinate
-`beta_up`; freqTLS nonetheless uses the Wald/delta interval for `up` because its
-profile path is not yet wired for `beta_up`. See
+`beta_up`; experimental 0.1.0 deliberately uses the Wald/delta interval for
+`up` because `up` profiling is outside the release boundary. See
 `docs/design/04-profile-likelihood.md`.
 
 ## Internal coordinates and links

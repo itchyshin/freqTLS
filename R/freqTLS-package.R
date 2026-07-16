@@ -6,7 +6,8 @@
 #' Builder (`TMB`), parameterised directly in `CTmax` and `z`
 #' (thermal sensitivity), so that both headline quantities can be profiled. It
 #' returns prior-free, asymmetry-respecting profile-likelihood confidence
-#' intervals for binomial and beta-binomial survival-count data.
+#' intervals for binomial and beta-binomial survival-count data and beta
+#' continuous-proportion responses.
 #'
 #' @section Credit and origins:
 #' The thermal-load-sensitivity modelling framework and the direct mapping from

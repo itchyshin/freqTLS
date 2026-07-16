@@ -336,3 +336,21 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
   gains `re_sd_low` / `re_sd_logk` (RNG-stream-preserving for existing calls).
 - Evidence: `src/profile_tls.cpp`, `R/formula.R`, `R/utils.R`, `R/simulate.R`,
   `tests/testthat/test-shape-random-effects.R`, `docs/design/08-random-effects.md`.
+
+## 2026-07-16 -- Release boundary: retain the expanded experimental 0.1.0 surface
+
+- Decision: the first CRAN candidate retains the shipped beta family, formula
+  interface, independent random intercepts on `CTmax` / `log_z` / `low` /
+  `log_k`, parametric-bootstrap intervals, deterministic heat-injury prediction,
+  and expanded benchmark/case-study material. They are not removed merely to
+  recreate the earlier narrow build-plan boundary.
+- Why: the maintainer explicitly chose to keep the shipped surface. The roadmap,
+  README, NEWS, tests, and implemented R/TMB paths already represent that product;
+  the authoritative instruction and limitation documents were the stale surfaces.
+- Remaining boundary: time-to-event and multi-trait responses, fitted
+  heat-injury/repair dynamics, a fit-time absolute-threshold mode, an `up` profile
+  or random effect, random slopes, crossed/nested grouping, and correlated random
+  effects remain unsupported. The release remains experimental until the CRAN
+  gate's exact-artifact, rights, platform, and submission evidence exists.
+- Consequence: reconcile the public documentation before any new CRAN candidate;
+  audit every reference page and pkgdown article against this decision.

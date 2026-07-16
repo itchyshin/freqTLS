@@ -12,7 +12,8 @@ Bayesian \code{bayesTLS} package. It fits single-stage four-parameter logistic
 Builder (\code{TMB}), parameterised directly in \code{CTmax} and \code{z}
 (thermal sensitivity), so that both headline quantities can be profiled. It
 returns prior-free, asymmetry-respecting profile-likelihood confidence
-intervals for binomial and beta-binomial survival-count data.
+intervals for binomial and beta-binomial survival-count data and beta
+continuous-proportion responses.
 }
 \section{Credit and origins}{
 
@@ -28,7 +29,7 @@ profile-likelihood machinery. Engineering patterns are adapted from \code{drmTMB
 Useful links:
 \itemize{
   \item \url{https://github.com/itchyshin/freqTLS}
-  \item \url{https://itchyshin.github.io/freqTLS}
+  \item \url{https://itchyshin.github.io/freqTLS/}
   \item Report bugs at \url{https://github.com/itchyshin/freqTLS/issues}
 }
 

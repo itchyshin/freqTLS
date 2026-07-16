@@ -22,10 +22,12 @@ Description: A maximum-likelihood implementation of the thermal-load-sensitivity
     ('TMB') likelihood with the midpoint reparameterised directly in CTmax and
     thermal sensitivity (z) so both headline quantities are estimable, and reports
     uncertainty through a unified trio of frequentist intervals -- Wald (delta),
-    profile-likelihood, and bootstrap -- for binomial and beta-binomial survival
-    counts, benchmarked against 'bayesTLS' on shared datasets.
+    profile-likelihood, and bootstrap -- for binomial, beta-binomial, and beta
+    responses, benchmarked against 'bayesTLS' where the shared data and model
+    configuration permit a fair comparison.
 License: GPL (>= 3)
-URL: https://github.com/itchyshin/freqTLS, https://itchyshin.github.io/freqTLS
+Copyright: See inst/COPYRIGHTS
+URL: https://github.com/itchyshin/freqTLS, https://itchyshin.github.io/freqTLS/
 BugReports: https://github.com/itchyshin/freqTLS/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -45,7 +47,6 @@ LinkingTo:
     RcppEigen,
     TMB
 Suggests:
-    bayesTLS,
     covr,
     glmmTMB,
     knitr,

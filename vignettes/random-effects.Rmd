@@ -188,4 +188,3 @@ is the same complementary stance the rest of `freqTLS` takes toward `bayesTLS`
 (see `vignette("frequentist-and-bayesian")`): the random effect buys you partial
 pooling without committing to priors on the parameters you report.
 ```
-

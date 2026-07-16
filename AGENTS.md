@@ -18,16 +18,16 @@ implementation slice.
   midpoint reparameterised **directly** in `CTmax` and `z` (thermal
   sensitivity) so that both headline quantities are direct, profile-able
   coordinates.
-- Support **count** response data only: `binomial` and `beta_binomial`
-  (overdispersion parameter `phi`).
-- Return **profile-likelihood confidence intervals** for `CTmax`, `z`, and
-  the shape parameters, displayed as Confidence Eyes (never posterior
-  densities; see the visual contract below).
-- Model the temperature effect through the midpoint only (shared `low`, `up`,
-  `k`), matching the `bayesTLS` constant-shape configuration so the two can be
-  benchmarked fairly.
-- Support fixed-effect groups on `CTmax` and `log_z` via `~ 0 + group`, so each
-  group has its own direct, profile-able `CTmax_g` and `z_g`.
+- Support binomial and beta-binomial count responses (overdispersion parameter
+  `phi`) and continuous proportions through the beta family.
+- Return Wald, profile-likelihood, and parametric-bootstrap **confidence
+  intervals** for direct coordinates; display finite intervals as Confidence
+  Eyes, never as posterior densities (see the visual contract below).
+- Keep the constant-shape midpoint-only configuration as the fair `bayesTLS`
+  benchmark, while allowing formula designs on the direct shape coordinates.
+- Support the tidy column interface and `tls_bf()` formula interface, including
+  fixed effects on `CTmax`, `log_z`, `low`, `up`, and `log_k`, plus independent
+  random intercepts on every one except `up`.
 - Benchmark freqTLS against `bayesTLS` (Bayesian) and the classical two-stage
   estimator on shared, vendored datasets, using a version-stamped cache.
 
@@ -37,17 +37,18 @@ introduced by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in the
 and `CTmax` are theirs; freqTLS contributes the TMB likelihood, the direct
 `CTmax`/`log_z` reparameterisation, and the profile-likelihood machinery.
 
-### Non-goals for v0.1
+### Supported scope and non-goals for 0.1.0
 
-These belong to a later phase or to a sibling package, and must not be described
-as implemented:
+The expanded surface above ships in the experimental 0.1.0 release. These
+capabilities remain outside that release and must not be described as
+implemented:
 
-- Beta / continuous responses (snowgum-style proportion data); time-to-event;
-  multi-trait responses.
-- Heat-injury / repair sub-models.
-- Temperature effects on `low`, `up`, or `k`.
-- Absolute-threshold default (the default is the **relative** threshold).
-- Random effects; a formula DSL; CRAN hardening.
+- Time-to-event and multi-trait responses.
+- Fitting heat-injury or repair sub-models (deterministic prediction from a
+  fitted curve is supported).
+- A fit-time absolute-threshold mode or a non-relative default.
+- A profile interval or random effect for `up`; random slopes; crossed or nested
+  grouping factors; and correlated multivariate random effects.
 
 General distributional regression belongs to `drmTMB`. The full Bayesian
 workflow, heat-injury models, and posterior inference belong to `bayesTLS`.
@@ -56,7 +57,8 @@ workflow, heat-injury models, and posterior inference belong to `bayesTLS`.
 
 Keep these stable across code, docs, tests, equations, and issues:
 `CTmax`, `z`, `log_z`, `low`, `up`, `k`, `phi`, `mid`, `tref`, `family_code`
-(0 = binomial, 1 = beta-binomial), `relative` vs `absolute` threshold. Use
+(0 = binomial, 1 = beta-binomial, 2 = beta), `relative` vs `absolute`
+threshold. Use
 "confidence" interval language; never "posterior" or
 "credible".
 
@@ -74,8 +76,9 @@ Keep these stable across code, docs, tests, equations, and issues:
 5. Do not change the profile-likelihood algorithm, targets, transforms, or the
    identifiability warnings without updating
    `docs/design/04-profile-likelihood.md`.
-6. Keep the temperature effect through the midpoint only until a design decision
-   in `docs/dev-log/decisions.md` says otherwise.
+6. Do not add random slopes, crossed/nested grouping, correlated random effects,
+   or an `up` random effect without a design decision in
+   `docs/dev-log/decisions.md`.
 7. Every meaningful change should update `docs/dev-log/check-log.md` with exact
    command text and an interpretation, not a summary.
 8. Every completed task or phase should create an after-task or after-phase
@@ -181,7 +184,8 @@ vignette, pkgdown, after-task, release, or paper-oriented text.
 Codex and Claude Code may both contribute to this repository. All agent work
 must follow the same project rules:
 
-- preserve the single-stage 4PL count-data scope and the v0.1 non-goals;
+- preserve the single-stage 4PL scope, the shipped 0.1.0 surface, and its
+  remaining non-goals;
 - avoid unreviewed likelihood or parameterisation changes;
 - update design docs when the model, likelihood, profile algorithm, or benchmark
   protocol changes;
@@ -271,3 +275,6 @@ include reference documentation and, when substantial, an article or tutorial.
 Keep `_pkgdown.yml` synchronized with exported functions and vignettes. The
 built site is written to `pkgdown-site/` (kept out of the package build) so it
 does not collide with the durable `docs/` governance tree.
+
+<!-- shinichi-hub -->
+> Read first — personal operating contract & second brain (house rules, memory, agents): /Users/z3437171/Dropbox/Github Local/Shinichi/AGENTS.md  (repo rules override the hub where they differ)

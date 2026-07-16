@@ -45,7 +45,8 @@ asymmetry rather than symmetrising it.
   then solve `D(theta) = cutoff` with `uniroot`. No bracket within the search
   means a non-closing side (warning 9) and the endpoint is returned `NA`.
 * **`up` uses the delta-method Wald fallback.** Under disjoint bounds `up` already
-  has its own coordinate `beta_up`, but the profile path is not yet wired for it
+  has its own coordinate `beta_up`, but profiling `up` is outside the 0.1.0
+  release boundary
   (the work is symmetric with `low`); freqTLS takes the documented Wald/delta
   fallback meanwhile. `profile(fit, "up")` and
   `confint(fit, "up", method = "profile")` emit an informational message, return
@@ -99,7 +100,8 @@ parameters.
 7. `CTmax` is extrapolated beyond the duration span.
 8. `phi` is at the binomial limit (beta-binomial collapsing to binomial).
 9. The profile does not close (an open CI): warn "weakly identified -- consider
-   bayesTLS or bootstrap" and set a `conf.status` marker (R-PROFILE). Since v0.2,
+   bayesTLS or bootstrap" and set a `conf.status` marker (R-PROFILE). In
+   experimental 0.1.0,
    `confint(fallback = TRUE)` (the default) fills the open side with a parametric
    bootstrap interval; `fallback = FALSE` returns `NA` on the open side as before.
 10. The MLE is on a boundary: warn that the interval calibration is unreliable.
@@ -113,7 +115,7 @@ The profile gives fast, prior-free, asymmetry-respecting confidence intervals
 when the MLE is interior and the data identify `psi`. For boundary asymptotes,
 very sparse designs, overdispersion concentrated at zero, or (future) random
 effects, the profile may not close; freqTLS warns when you are in that regime
-and, since v0.2, falls back to the parametric bootstrap below so an interval is
+and falls back to the parametric bootstrap below so an interval is
 still returned (the parity with bayesTLS, which always yields one). freqTLS
 never claims the profile is universally superior.
 
@@ -134,7 +136,8 @@ parameter's construction scale (`z`/`k`/`phi` on log, `low` on logit,
 `CTmax`/`up` on identity) and back-transformed, so the bootstrap is exactly
 equivariant in the same sense the profile is: the `z` interval equals `exp()` of
 the `log_z` interval. It is the likelihood-path analogue of the bayesTLS
-posterior interval -- both summarise estimator uncertainty without a prior. No
+Bayesian interval: both summarise estimator uncertainty, but only the former is
+frequentist and no prior is used. No
 Stan and no model recompilation are involved; only the response vector changes
 between replicates. A target with too few converged replicates returns `NA` with
 `conf.status = "bootstrap_unstable"` rather than a fabricated bound.

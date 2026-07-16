@@ -255,7 +255,9 @@ The map below shows the main workflow and how each box twins a `bayesTLS`
 function. The
 **"freqTLS extras"** box (gold, upper right) is the frequentist-only addition —
 Wald / profile / bootstrap intervals and the Confidence Eye — and the dashed
-**"trace & repair helpers — planned"** box is the one piece not yet ported.
+**"trace helpers"** box separates the planned user-facing scenario builder from
+the internal repair-rate helper already used by `predict_heat_injury()`; neither
+is part of the primary fitting workflow.
 
 ```{r function-map, echo = FALSE, results = "asis"}
 # Inline the SVG rather than include_graphics() so the figure does not depend on

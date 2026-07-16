@@ -44,12 +44,12 @@ families.
 By default the temperature effect runs through the midpoint only; `low`, `up`,
 and `k` are shared. This is the bayesTLS constant-shape configuration, keeps the
 model identifiable on typical thermal death-time data, and is the benchmark
-setting. Since v0.2, each of `low`, `up`, and `log_k` may carry its **own** design
+setting. In experimental 0.1.0, each of `low`, `up`, and `log_k` may carry its **own** design
 independently — a grouping factor (`low ~ group`), a general continuous covariate
 (`log_k ~ body_size`), or an intercept — no longer required to share one factor or
 match the `CTmax` / `log_z` grouping; `predict()` rebuilds each shape design from
-`newdata`, and the intercept-only default is byte-identical. Since v0.3, `low` and
-`log_k` may additionally carry a random intercept (`low ~ <fixed> + (1 | group)`).
+`newdata`, and the intercept-only default is byte-identical. `low` and `log_k`
+may additionally carry a random intercept (`low ~ <fixed> + (1 | group)`).
 See the 2026-06-17 entries in `docs/dev-log/decisions.md` and
 `docs/design/46-capability-matrix.md`.
 

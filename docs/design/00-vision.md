@@ -47,8 +47,9 @@ The primary readers are:
 
 The package supports:
 
-- the single-stage 4PL thermal-load-sensitivity model with the temperature effect
-  through the midpoint only (shared `low`, `up`, `k`);
+- the single-stage 4PL thermal-load-sensitivity model with a direct
+  `CTmax`/`log_z` midpoint and intercept-only shapes by default; the formula
+  interface may give `low`, `up`, and `log_k` their own fixed designs;
 - count response data (`binomial`, `beta_binomial` with overdispersion `phi`) and
   continuous proportions (`beta`);
 - ungrouped fits, fixed-effect groups via `~ 0 + group`, per-sub-parameter fixed
@@ -67,7 +68,8 @@ The package does not currently support (non-goals):
   asymptote `bounds`;
 - correlated, crossed, or random-slope random effects, or a random effect /
   profile coordinate for the upper asymptote `up`;
-- CRAN hardening / submission.
+- CRAN submission until the release ledger, author consent, and external platform
+  evidence are complete.
 
 ## Sibling boundary
 
@@ -80,7 +82,7 @@ The package does not currently support (non-goals):
 
 ## Core contracts
 
-| Contract | Meaning | Where implemented (planned) | Validation |
+| Contract | Meaning | Where implemented | Validation |
 | --- | --- | --- | --- |
 | `fit_tls()` | tidy-eval fit of the 4PL model by ML | `R/fit_tls.R` | `test-fit-binomial`, `test-fit-beta-binomial` |
 | `CTmax` | critical thermal maximum at `tref` | `src/profile_tls.cpp`, `R/extract.R` | `test-parameter-transforms` |

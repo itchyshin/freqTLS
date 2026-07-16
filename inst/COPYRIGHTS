@@ -45,7 +45,7 @@ and registration patterns above are adapted.
 
 == Confidence-Eye geometry adapted from gllvmTMB (GPL-3) ==
 
-Source: https://github.com/JenniNiku/gllvmTMB (or the local sibling package).
+Source: https://github.com/itchyshin/gllvmTMB (or the local sibling package).
 
 - R/plotting.R (Phase 4): the Confidence-Eye lens geometry in the helper
   tls_eye_polygon_df() adapts gllvmTMB's .eye_polygon_df(width_max = 0.70) from
@@ -60,13 +60,26 @@ Source: https://github.com/JenniNiku/gllvmTMB (or the local sibling package).
   survival/TDT/surface plots; only the lens geometry and eye structure are
   adapted.
 
-== Vendored benchmark data (CC BY 4.0) ==
+== Vendored benchmark data (separate data licences) ==
 
-The benchmark datasets shrimp_lethal, zebrafish_lethal, and snowgum_psii
-originate from the bayesTLS package (Daniel W. A. Noble, Pieter A. Arnold,
-Patrice Pottier) and are redistributed under the Creative Commons Attribution 4.0
-International licence (CC BY 4.0). The shrimp survival counts are rebuilt from the
-source CSV proportions, and the snowgum retained-PSII proportion is computed as
-final_fvfm / initial_fvfm from the source CSV (see data-raw/make_benchmark_data.R
-and R/data.R). Attribution is given in R/data.R and inst/CITATION. freqTLS code
-remains GPL (>= 3); the data licence applies only to the vendored datasets.
+The GPL (>= 3) licence applies to freqTLS code, not to the separately licensed
+data below. Their source, transformation, and licence are repeated in R/data.R,
+inst/CITATION, and the relevant case-study article.
+
+- aphid_tdt (CC0), dsuzukii (CC BY 4.0), and zebrafish_o2 (CC BY 4.0) have the
+  primary-source licence stated in their individual data documentation. The
+  complete component-level disposition, including the benchmark cache and
+  generated-result provenance, is in
+  docs/dev-log/release-checklists/2026-07-16-component-rights-ledger.md.
+- shrimp_lethal, shrimp_sublethal, and zebrafish_lethal are redistributed from
+  bayesTLS 1.0.0 under its CC BY 4.0 package licence. Retain bayesTLS
+  attribution and the CC BY 4.0 notice; the shrimp lethal reconstruction is
+  documented in R/data.R and the component ledger.
+- snowgum_psii and data_function_PSII_TDT_snowgum.csv are redistributed under
+  Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0):
+  Arnold PA et al. (2026), bioRxiv 10.64898/2026.04.09.717599, Experiment 1.
+  The retained-PSII proportion is computed as final_fvfm / initial_fvfm. Retain
+  the source attribution and CC BY-NC 4.0 notice with every redistribution.
+- The benchmark cache and derived result files in inst/extdata contain summaries
+  computed from those data; their consumers and provenance are recorded in the
+  release component ledger.

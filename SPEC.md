@@ -121,14 +121,19 @@ bayesTLS constant-shape (`temp_effects="mid"`): `mid(T)=b_mid_Intercept + b_mid_
 | **Authorship** | Shinichi Nakagawa (`aut`,`cre`) **+ Daniel W. A. Noble, Pieter A. Arnold, Patrice Pottier (`aut`)** | TLS framework is bayesTLS's, not ours alone. Confirm with them before release (a person should agree to being listed). |
 | **Midpoint param** | Direct `CTmax` + `log_z` | makes headline quantities profile-able (§6). |
 | **Asymptote reparam** | **Disjoint bounds** (bayesTLS `compute_4pl_bounds`) `low=low_min+low_w·plogis(beta_low)`, `up=up_min+up_w·plogis(beta_up)` | split `[lower,upper]` at the midpoint so `low<up` unconstrained; shares the bayesTLS contract; `up` is a direct coordinate. (P1 reversed the earlier nested gap.) Cost: `up` profile not yet wired → Wald/delta (§10). |
-| **Families v0.1** | binomial, beta-binomial(`phi`) | count data only. |
-| **Temp effect** | through `mid` only (shared `low/up/k`) | matches bayesTLS constant-shape = fair benchmark. |
-| **Groups** | fixed effects via `~ 0 + group` on CTmax & log_z | per-group CTmax_g, z_g are direct params → profile-able; contrasts via reference+contrast recoding. |
+| **Families in 0.1.0** | binomial, beta-binomial(`phi`), beta(`phi`) | counts and continuous proportions share the 4PL mean. |
+| **Temperature/shape design** | constant shape for the bayesTLS benchmark; formula designs may vary each direct shape coordinate | preserves the fair comparator while supporting the shipped expanded surface. |
+| **Formula and groups** | `tls_bf()` plus column interface; fixed designs on every direct coordinate and independent random intercepts except `up` | direct coordinates remain interpretable; slopes, crossed/nested terms, correlation, and `up` REs stay unsupported. |
 | **`y`,`n` in TMB** | `DATA_VECTOR` (Type) not IVECTOR | beta-binomial needs `lgamma(y+a)`, `a` a `Type`. |
 | **Uncertainty visuals** | **Confidence Eye, NOT posterior densities** (§13) | freqTLS yields *confidence* intervals; posterior visuals would mislead. Distinct identity vs bayesTLS; teaching contrast in the comparison vignette. Florence-owned gate. |
 | **Time unit** | data's native unit (hours); `tref` in same unit (CTmax@1h); pin matching `t_ref`/`time_multiplier` when calling bayesTLS | avoids unit mismatch (R-UNITS). |
 
-**Non-goals v0.1:** Beta/continuous (snowgum), time-to-event, multi-trait (dsuzukii), heat-injury/repair, temp effects on low/up/k, absolute-threshold default, random effects, formula DSL, CRAN hardening.
+**Remaining non-goals for experimental 0.1.0:** time-to-event and multi-trait
+responses; fitting heat-injury/repair dynamics; a fit-time absolute-threshold
+mode or non-relative default; a profile interval or random effect for `up`;
+random slopes; crossed/nested grouping; and correlated multivariate random
+effects. The beta family, formula DSL, independent random intercepts, bootstrap
+intervals, and deterministic heat-injury prediction ship in 0.1.0.
 
 ## 8. Package structure & file-by-file map (reuse → drmTMB GPL-3 paths)
 

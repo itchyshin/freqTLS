@@ -15,5 +15,11 @@
 ^README\.Rmd$
 ^\.claude$
 ^plans$
+^output$
+^scripts$
+^cran-comments\.md$
+^inst/extdata/data_temp_trace_aphid_summer2016\.csv$
+^inst/extdata/kristineberg$
+^inst/extdata/orsted_2024$
 ^LICENSE$
 ^LICENSE\.md$

@@ -1832,3 +1832,157 @@ Interpretation:
   reader-facing materials ship a broader surface. Do not describe freqTLS as
   CRAN-ready until that decision, dependency policy, tarball exclusions,
   submission metadata, URL/licensing review, and platform evidence are closed.
+
+## 2026-07-16 -- Expanded 0.1.0 release-surface remediation
+
+Goal:
+
+- Reconcile the shipped experimental 0.1.0 surface with its reader-facing
+  contract, audit function/reference and pkgdown surfaces, and create a
+  component-level tarball-rights ledger without claiming submission readiness.
+
+Changes:
+
+- Removed `bayesTLS` from `Suggests`; corrected DESCRIPTION to include the beta
+  family and added `Copyright: See inst/COPYRIGHTS`.
+- Synchronized AGENTS, SPEC, README, ROADMAP, limitations, capability/design
+  notes, citations, and function-map prose to the shipped beta/formula/
+  bootstrap/heat-injury/limited-random-intercept surface.
+- Marked seven internal helper topics `@noRd`; `devtools::document()` deleted
+  their generated Rd files. Updated bootstrap terminology to be frequentist.
+- Added `.Rbuildignore` exclusions for `output/`, `scripts/`, CRAN notes, and
+  unlicensed unused temperature traces. Added the component rights, function
+  reference, pkgdown page, and ultra-plan ledgers.
+- Corrected snow-gum attribution to its separate CC BY-NC 4.0 source and made
+  the build-site guard cover internal HTML/Markdown, search, and sitemap leaks.
+
+Checks run:
+
+- `Rscript -e 'devtools::document(); devtools::check_man()'` -> completed; no
+  documentation warnings; seven internal Rd pages removed.
+- Export/Rd audit from `NAMESPACE` and `man/*.Rd` -> 47 exports, 47 aliases,
+  zero missing aliases.
+- `git diff --check` -> clean.
+- `Rscript tools/build-site.R .` -> did not complete in this environment: the
+  pkgdown process stalled on remote asset requests. No rendered-site, tarball,
+  or `--as-cran` result is claimed from this attempt.
+- The first full `R CMD build .` attempt did not complete before the process
+  exited. The later no-vignette inventory build is recorded below.
+
+Interpretation:
+
+- Source documentation is materially more truthful and the function-reference
+  contract is auditable. The release remains **NOT READY**: source-tarball proof,
+  a completed rendered-site audit, rights evidence for several installed datasets
+  and generated caches, co-author consent, URL adjudication, and macOS/Windows/
+  Ubuntu checks are still separate gates.
+
+## 2026-07-16 -- Tarball exclusion proof
+
+Command:
+
+- `R CMD build --no-build-vignettes --no-manual --sha256 .`
+- `shasum -a 256 freqTLS_0.1.0.tar.gz`
+- `tar -tzf freqTLS_0.1.0.tar.gz | wc -l`
+- `tar -tzf freqTLS_0.1.0.tar.gz | rg '(^freqTLS/(output|scripts|docs|tools)/|^freqTLS/(AGENTS|SPEC|CLAUDE)\\.md$|^freqTLS/\\.codex)'`
+
+Outcome:
+
+- Build succeeded. The local exclusion-proof tarball is 471 KB with 169 entries
+  and SHA-256 `5729d5b7b9c0b0288d6128cff57b5aa25b8bc2af9d3a4d38f875c86c19569e18`.
+- The forbidden-path and excluded-temperature-trace scans returned no entries.
+
+Interpretation:
+
+- `.Rbuildignore` now proves the requested maintainer-output exclusions in an
+  actual tarball. This is not a frozen release candidate because the build used
+  `--no-build-vignettes` and the source tree remained under remediation.
+
+## 2026-07-16 -- Full test rerun and pkgdown rendering diagnosis
+
+Commands:
+
+- `Rscript -e 'devtools::test(reporter = "summary")'`
+- `Rscript tools/build-site.R .`
+
+Outcome:
+
+- The full test suite completed with no failures or warnings and one expected
+  benchmark-sanity skip. The skip says the cache is in the old profileTLS data
+  format and points to the P6 rebuild path.
+- The pkgdown build completed home/reference generation but stalled while
+  rendering the first article on a remote CloudFront asset. A temporary local
+  MathJax runtime removed the explicit MathJax error but not that CloudFront
+  dependency; it was discarded and no vignette configuration was retained.
+
+Interpretation:
+
+- Code and regenerated documentation are locally test-clean. The rendered-site
+  acceptance gate remains open until the network-dependent renderer completes
+  from a clean environment; no previous `pkgdown-site/` files are treated as
+  final evidence.
+
+## 2026-07-16 -- Full-vignette source tarball
+
+Commands:
+
+- `R CMD build --no-manual --sha256 .`
+- `shasum -a 256 freqTLS_0.1.0.tar.gz`
+- `stat -f '%z bytes' freqTLS_0.1.0.tar.gz`
+- `tar -tzf freqTLS_0.1.0.tar.gz | wc -l`
+- `tar -tzf freqTLS_0.1.0.tar.gz | rg '(^freqTLS/(output|scripts|docs|tools)/|^freqTLS/(AGENTS|SPEC|CLAUDE)\\.md$|^freqTLS/\\.codex)'`
+
+Outcome:
+
+- The normal build completed and rebuilt all 13 vignettes. The resulting local
+  tarball has SHA-256
+  `e01ecc20ea5a340c29f10f38d2526fc8e9b5af93b70683b41a3ec7c97c00247f`,
+  is 1,653,799 bytes, contains 210 entries, and includes 40 `inst/doc/` files.
+- The forbidden-path and excluded-temperature-trace scans returned no entries.
+
+Interpretation:
+
+- This supersedes the earlier no-vignette exclusion proof. It is a full local
+  candidate artifact, not a submission-frozen candidate: the source worktree
+  remains dirty and the rendered pkgdown, consent, URL, and cross-platform
+  gates remain open.
+
+## 2026-07-16 -- Exact local artifact check
+
+Command:
+
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz`
+
+Outcome:
+
+- The exact normal full-vignette artifact with SHA-256
+  `399518646766d4fab5cc090d9b2d318f545dd68a2800797888f8d8ca1f38e4f5`
+  completed with 0 errors, 0 warnings, and one ordinary new-submission NOTE.
+
+Interpretation:
+
+- This proves the local macOS technical rung for that exact artifact. It does
+  not establish clean post-merge source state, co-author consent, URL review,
+  rendered-site visual review, or matching Windows/Ubuntu checks.
+
+## 2026-07-16 -- Corrected-provenance exact artifact check
+
+Commands:
+
+- `R CMD build --no-manual --sha256 .`
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz`
+
+Outcome:
+
+- Corrected the 404 `gllvmTMB` provenance URL in `inst/COPYRIGHTS` to the
+  repository's actual origin. The rebuilt full-vignette tarball has SHA-256
+  `67518e0f585834791c919e86d1c2d20363a1d32edb4cb2a2404d0775d499ad55`,
+  size 1,653,844 bytes, and 210 entries. Its forbidden-path scan was empty.
+- The exact artifact check completed with 0 errors, 0 warnings, and one normal
+  new-submission NOTE on macOS arm64 / R 4.6.0.
+
+Interpretation:
+
+- This supersedes the preceding local artifact for technical evidence. It does
+  not close written co-author consent, browser adjudication of publisher DOI
+  responses, matching Windows/Ubuntu checks, or clean post-merge rebuilding.

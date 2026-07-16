@@ -18,6 +18,7 @@
 #'
 #' @name tls-diagnostics
 #' @keywords internal
+#' @noRd
 NULL
 
 #' Run the data-adequacy diagnostics (warnings 1-8)

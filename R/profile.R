@@ -98,7 +98,7 @@ profile.profile_tls <- function(fitted, parm, level = 0.95, npoints = 30L,
   if (identical(target$kind, "up")) {
     cli::cli_inform(c(
       "{.val {target$parm}} is profiled with the delta-method Wald interval.",
-      i = "The profile path is not yet wired for the disjoint-bounds {.val up} coordinate {.code beta_up} (SPEC.md S10)."
+      i = "The disjoint-bounds {.val up} coordinate {.code beta_up} is outside the experimental 0.1.0 profile boundary (SPEC.md S10)."
     ))
     return(tls_up_wald_profile(fitted, level, target$parm))
   }

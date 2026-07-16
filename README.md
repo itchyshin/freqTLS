@@ -113,11 +113,11 @@ The workflow mirrors `bayesTLS` — **standardize → fit → quantities →
 plot** — so most `bayesTLS` analyses run on `freqTLS` by changing little
 more than the package the data and functions come from. The engine is
 maximum likelihood (no Stan, no MCMC, no internet); uncertainty is a
-frequentist trio (Wald, profile, bootstrap) instead of a posterior. A few
-differences are deliberate and documented in
+frequentist trio (Wald, profile, bootstrap) instead of a posterior. A
+few differences are deliberate and documented in
 `vignette("comparing-to-bayesTLS")`: the absolute (p-survival) threshold
-and non-default asymptote `bounds` are not yet wired through the ML
-backbone (fit on the relative midpoint, then convert with
+and non-default asymptote `bounds` are outside the experimental 0.1.0
+fitting boundary (fit on the relative midpoint, then convert with
 `extract_tdt()`); uncertainty comes as bootstrap replicates rather than
 posterior draws; and the temperature effect defaults to the
 constant-shape configuration.
@@ -234,8 +234,8 @@ biased low with few groups.
 Two populations can differ not only in *where* the thermal-death curve
 sits (`CTmax`, `z`) but in its *shape* — how steeply survival collapses
 with exposure (`k`), or the background and maximum survival (`low`,
-`up`). The formula interface lets `low`, `up`, and `log_k`
-vary by a grouping factor, relaxing the shared-shape restriction. Here a
+`up`). The formula interface lets `low`, `up`, and `log_k` vary by a
+grouping factor, relaxing the shared-shape restriction. Here a
 heat-tolerant and a heat-sensitive population differ in both `CTmax` and
 the curve steepness `k`:
 
@@ -312,16 +312,15 @@ priors, no MCMC, no Stan).
 
 The seven case-study datasets vendored with `freqTLS` (`shrimp_lethal`,
 `shrimp_sublethal`, `zebrafish_lethal`, `zebrafish_o2`, `snowgum_psii`,
-`dsuzukii`, and `aphid_tdt`) are the shared datasets of the
-[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) framework,
-redistributed with attribution. They include the two new published case
-studies — `aphid_tdt` (cereal aphids across species and ages; Li et
-al. 2023) and `zebrafish_o2` (zebrafish across an oxygen gradient;
-Saruhashi et al. 2026) — alongside `dsuzukii` (*Drosophila suzukii* by
-sex; Ørsted et al. 2024, Zenodo 10.5281/zenodo.10602268) and
-`snowgum_psii` (retained PSII for the beta family). See `?aphid_tdt`,
-`?zebrafish_o2`, the other dataset help pages, and `inst/CITATION` for
-sources and licences. `freqTLS` code is released under GPL (\>= 3); the
-original data licences apply to the vendored data. Please cite
-`bayesTLS` and the original data sources (see `citation("freqTLS")`)
-when you use these datasets.
+`dsuzukii`, and `aphid_tdt`) retain their **source-specific licences and
+attribution**. They include the two new published case studies —
+`aphid_tdt` (cereal aphids across species and ages; Li et al. 2023) and
+`zebrafish_o2` (zebrafish across an oxygen gradient; Saruhashi et
+al. 2026) — alongside `dsuzukii` (*Drosophila suzukii* by sex; Ørsted et
+al. 2024, Zenodo 10.5281/zenodo.10602268) and `snowgum_psii` (retained
+PSII for the beta family; CC BY-NC 4.0). See each data help page,
+`inst/COPYRIGHTS`, and `inst/CITATION` for the component-level source,
+transformation, and licence. `freqTLS` code is GPL (\>= 3); those
+original data licences apply to the vendored data. Cite the original
+source and `citation("freqTLS")` when you use a dataset; cite `bayesTLS`
+only where its method or benchmark results are used.

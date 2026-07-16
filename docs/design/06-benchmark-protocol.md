@@ -76,6 +76,7 @@ loose tolerance, and a one-command regeneration path keeps the cache current.
 
 ## Licence (R-LICENSE)
 
-The vendored data is CC BY 4.0. Attribution lives in `R/data.R` (`@source`),
-`inst/CITATION` (a freqTLS plus bayesTLS bibentry), and the README; freqTLS
-code is GPL-3, with provenance in `inst/COPYRIGHTS`.
+Each vendored component retains its source-specific licence. In particular,
+the snow-gum extract is CC BY-NC 4.0, not CC BY 4.0. Attribution and the
+component-level rights ledger live in `R/data.R`, `inst/CITATION`,
+`inst/COPYRIGHTS`, and the release checklist; freqTLS code is GPL-3.

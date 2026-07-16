@@ -117,12 +117,12 @@ fit_4pl <- function(data,
 
   if (!identical(threshold, "relative"))
     cli::cli_abort(c(
-      "{.code threshold = \"absolute\"} is not yet wired into the TMB backbone.",
+      "{.code threshold = \"absolute\"} is outside the experimental 0.1.0 fitting boundary.",
       i = "Fit with {.code threshold = \"relative\"} (the default); the absolute (p-survival) CTmax/z will be available via {.fn extract_tdt} once that path lands."
     ))
   if (!isTRUE(all.equal(as.numeric(bounds), c(0, 1))))
     cli::cli_abort(c(
-      "Non-default {.arg bounds} are not yet wired through the engine.",
+      "Non-default {.arg bounds} are outside the experimental 0.1.0 fitting boundary.",
       i = "Use the default {.code bounds = c(0, 1)} for now."
     ))
 

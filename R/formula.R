@@ -15,7 +15,7 @@
 #'
 #' The remaining arguments are sub-parameter formulas keyed by their left-hand
 #' side, one of `low`, `up`, `log_k`, `CTmax`, or `log_z`. Any sub-parameter you
-#' omit defaults to `~ 1`. Since v0.2, each of `low`, `up`, and `log_k` may carry
+#' omit defaults to `~ 1`. In experimental 0.1.0, each of `low`, `up`, and `log_k` may carry
 #' its **own** design independently — a grouping factor (`low ~ group`), a
 #' continuous covariate (`log_k ~ body_size`), or an intercept — no longer required
 #' to share one factor or match the `CTmax` / `log_z` grouping. `CTmax` and `log_z`
@@ -337,7 +337,7 @@ tls_parse_formula <- function(formula, data, quiet = FALSE) {
 
   # ---- shape sub-parameter designs (low, up via disjoint bounds, log_k) -----
   # Intercept-only by default; each may be grouped or carry a continuous covariate
-  # (v0.2). Since v0.3, `low` and `log_k` may also carry a single random intercept
+  # (experimental 0.1.0). `low` and `log_k` may also carry a single random intercept
   # `(1 | group)` (the RE bar is stripped here and the fixed design built from the
   # fixed part). Under disjoint bounds `up` has its own coordinate `beta_up`, but
   # the compiled objective has no random-intercept term for it, so a RE bar on `up`

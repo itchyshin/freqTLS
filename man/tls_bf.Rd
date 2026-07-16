@@ -32,7 +32,7 @@ matter).
 
 The remaining arguments are sub-parameter formulas keyed by their left-hand
 side, one of \code{low}, \code{up}, \code{log_k}, \code{CTmax}, or \code{log_z}. Any sub-parameter you
-omit defaults to \code{~ 1}. Since v0.2, each of \code{low}, \code{up}, and \code{log_k} may carry
+omit defaults to \code{~ 1}. In experimental 0.1.0, each of \code{low}, \code{up}, and \code{log_k} may carry
 its \strong{own} design independently — a grouping factor (\code{low ~ group}), a
 continuous covariate (\code{log_k ~ body_size}), or an intercept — no longer required
 to share one factor or match the \code{CTmax} / \code{log_z} grouping. \code{CTmax} and \code{log_z}

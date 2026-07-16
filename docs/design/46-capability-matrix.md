@@ -54,7 +54,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
 | Interface | Status | Notes |
 | --- | --- | --- |
 | column (tidy-eval `y`/`n`/`time`/`temp`/`group`) | fitted (P1-P2) | the original interface; unchanged |
-| formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; `CTmax`/`log_z` fixed-effect predictors; v0.1 shapes are intercept-only and random effects are deferred to v0.2 |
+| formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; independent fixed-effect designs on all direct coordinates and independent random intercepts on every coordinate except `up` |
 
 ## v0.2 milestone (released in 0.1.0)
 
@@ -124,7 +124,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
   (the compiled objective has no random-intercept term for `up`). See
   `docs/design/08-random-effects.md`.
 
-## Planned (post-v0.1) and non-goals
+## Remaining non-goals for experimental 0.1.0
 
 - Random effects beyond single intercepts on `CTmax` / `log_z` / `low` / `log_k`
   (random slopes, a RE on the upper asymptote `up`, a second / crossed grouping
@@ -133,9 +133,6 @@ Both interfaces map to the same engine and produce numerically identical fits:
   the path for a correlated random structure. The single intercepts on `CTmax` /
   `log_z` / `low` / `log_k` -- with profile intervals for the fixed effects and a
   prior-free RE-aware bootstrap for the variance components -- are fitted.
-- Beta / continuous responses: **fitted in v0.2** (`family = "beta"`), with the
-  vendored `snowgum_psii` dataset (retained PSII proportion, CC BY 4.0) as the
-  real-data showcase.
 - Time-to-event responses: non-goal (the wider TDT literature is largely
   failure-time data; the 4PL count/proportion model is the wrong tool for it).
 - Multi-trait responses (dsuzukii): non-goal.
@@ -143,14 +140,8 @@ Both interfaces map to the same engine and produce numerically identical fits:
   dynamics as part of the likelihood): non-goal (belongs to bayesTLS).
   Deterministic heat-injury **prediction** from the already-fitted curve is
   fitted in v0.2 (`predict_heat_injury()`; see the v0.2 section).
-- Grouped effects on `low`, `up`, `log_k`: **fitted in v0.2** (see the v0.2
-  section). General continuous covariates on the shapes are **also fitted** (each
-  shape carries its own independent design; link-scale coefficients + Wald).
 - Absolute-threshold default: non-goal (the default is relative).
-- A formula interface (`tls_bf()`): **fitted in v0.1** (a thin front-end to the
-  column interface). Predictors on `low`/`up`/`k`, independent `CTmax` / `log_z`
-  designs, and random effects through it are deferred to v0.2.
-- CRAN hardening: non-goal for v0.1.
+- CRAN submission remains a release gate, not an implemented package capability.
 
 ## Risk register cross-reference
 

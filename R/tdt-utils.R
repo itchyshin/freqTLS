@@ -94,6 +94,7 @@ clock_to_minutes <- function(x) {
 #' Error on missing columns
 #'
 #' @keywords internal
+#' @noRd
 tdt_check_columns <- function(data, cols, arg_name = "columns") {
   cols <- cols[!is.na(cols) & nzchar(cols)]
   missing <- setdiff(cols, names(data))
@@ -107,6 +108,7 @@ tdt_check_columns <- function(data, cols, arg_name = "columns") {
 #' Format bare names as `(1 | name)` random-effect terms
 #'
 #' @keywords internal
+#' @noRd
 tdt_format_random_effects <- function(random_effects = NULL) {
   if (is.null(random_effects) || length(random_effects) == 0) return(character())
   out <- vapply(random_effects, function(term) {
@@ -119,6 +121,7 @@ tdt_format_random_effects <- function(random_effects = NULL) {
 #' Extract variable names from random-effect terms
 #'
 #' @keywords internal
+#' @noRd
 tdt_random_effect_variables <- function(random_effects = NULL) {
   terms <- tdt_format_random_effects(random_effects)
   unique(unlist(lapply(terms, function(term) {
@@ -143,6 +146,7 @@ tdt_random_effect_variables <- function(random_effects = NULL) {
 #' @return Named list with `low_min`, `low_max`, `low_w`, `up_min`, `up_max`,
 #'         `up_w`, `midpoint`.
 #' @keywords internal
+#' @noRd
 compute_4pl_bounds <- function(lower = 0, upper = 1,
                                pad = 0.001, gap = 0.002) {
   if (upper <= lower)
@@ -176,6 +180,7 @@ compute_4pl_bounds <- function(lower = 0, upper = 1,
 #' @param unit Character scalar time-unit label.
 #' @return Numeric scalar: the unit's length in minutes.
 #' @keywords internal
+#' @noRd
 tdt_unit_to_minutes <- function(unit) {
   if (is.null(unit) || length(unit) != 1L || is.na(unit))
     stop("time unit is NULL/NA", call. = FALSE)
@@ -202,6 +207,7 @@ tdt_unit_to_minutes <- function(unit) {
 #' @param output_time_unit Target output time unit (e.g. `"min"`).
 #' @return Numeric scalar multiplier.
 #' @keywords internal
+#' @noRd
 tdt_resolve_time_multiplier <- function(time_multiplier, meta,
                                         output_time_unit) {
   if (!is.null(time_multiplier)) return(time_multiplier)

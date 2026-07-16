@@ -32,7 +32,9 @@ library(freqTLS)
 
 ## The dataset
 
-`snowgum_psii` is vendored from `bayesTLS` under CC BY 4.0 (see `?snowgum_psii`).
+`snowgum_psii` is a separately licensed extract from Arnold et al. (2026),
+distributed under CC BY-NC 4.0 (see `?snowgum_psii`, `inst/COPYRIGHTS`, and
+`inst/CITATION`); it is not relicensed through `bayesTLS`.
 Each row is one leaf disc heated at a `(Temp, Time)` combination; the response
 `fvfm_prop` is the **retained-PSII proportion** — the chlorophyll-fluorescence
 efficiency (Fv/Fm) after the heat dose divided by its value before. A value near
