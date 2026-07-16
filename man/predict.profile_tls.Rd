@@ -2,12 +2,21 @@
 % Please edit documentation in R/predict.R
 \name{predict.profile_tls}
 \alias{predict.profile_tls}
+\alias{predict.freq_tls}
 \title{Predict survival, link, or midpoint from a fitted freqTLS model}
 \usage{
 \method{predict}{profile_tls}(
   object,
   newdata,
-  type = c("survival", "link", "midpoint"),
+  type = c("survival", "link", "midpoint", "parameters"),
+  re.form = c("population", "conditional"),
+  ...
+)
+
+\method{predict}{freq_tls}(
+  object,
+  newdata,
+  type = c("survival", "link", "midpoint", "parameters"),
   re.form = c("population", "conditional"),
   ...
 )
@@ -20,9 +29,11 @@ every predictor used in the fitted \code{CTmax}, \code{log_z}, \code{low}, \code
 \code{log_k} fixed designs. Include \code{group} for a grouped column-interface fit.
 Conditional random-effect predictions additionally require every fitted
 grouping column. \code{duration} must be strictly positive (it is
-\code{log10}-transformed). For \code{type = "midpoint"}, \code{duration} may be omitted.}
+\code{log10}-transformed). For \code{type = "midpoint"} or \code{"parameters"}, \code{duration}
+may be omitted.}
 
-\item{type}{One of \code{"survival"} (default), \code{"link"}, or \code{"midpoint"}.}
+\item{type}{One of \code{"survival"} (default), \code{"link"}, \code{"midpoint"}, or
+\code{"parameters"}.}
 
 \item{re.form}{How to handle fitted random intercepts. \code{"population"}
 (default) sets them to zero; \code{"conditional"} adds the fitted BLUP for each
@@ -32,8 +43,9 @@ effects fit, \code{predict()} warns that it is returning a population prediction
 \item{...}{Reserved; must be empty.}
 }
 \value{
-A numeric vector with one element per row of \code{newdata}. Survival
-values lie in \verb{(0, 1)}.
+For \code{type = "parameters"}, a data frame with one row per row of
+\code{newdata} and columns \code{CTmax}, \code{z}, \code{low}, \code{up}, and \code{k}. Otherwise a
+numeric vector with one element per row; survival values lie in \verb{(0, 1)}.
 }
 \description{
 \code{predict()} evaluates the fitted four-parameter logistic (4PL) thermal-load-
@@ -43,7 +55,7 @@ same forward map as the TMB engine in \code{src/profile_tls.cpp}:
 \deqn{p = low + (up - low)\,\mathrm{plogis}(-k(\log_{10}(duration) - mid)).}
 }
 \details{
-Three response types are available:
+Four response types are available:
 \itemize{
 \item \code{"survival"} (default) returns the fitted survival probability in \verb{(0, 1)}.
 \item \code{"link"} returns the logit of the survival probability,
@@ -51,6 +63,9 @@ Three response types are available:
 \item \code{"midpoint"} returns the temperature-dependent 4PL midpoint \code{mid} on the
 \code{log10(duration)} axis (constant within a temperature, so the \code{duration}
 column is ignored for this type but a \code{temp} column is still required).
+\item \code{"parameters"} returns the row-specific natural-scale \code{CTmax}, \code{z}, \code{low},
+\code{up}, and \code{k} values. This is useful for interacted formula designs; the
+\code{duration} column may be omitted.
 }
 
 \code{newdata} must also contain every predictor used by the fitted fixed-effect

@@ -32,14 +32,8 @@ shrimp_lethal
 Replicate lethal-TDT trials for brown shrimp (\emph{Crangon crangon}). Each
 row is one tank of individuals exposed to a fixed assay temperature for a
 fixed duration; the response is the proportion that died. The model-ready
-frame for Case Study 1 (lethal endpoint).
-}
-\examples{
-std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
-                        duration = "Duration_exposure_hours",
-                        n_total = "N_individuals_after_trial",
-                        mortality = "Mortality_after_trial",
-                        random_effects = c("Date", "Tank"),
-                        duration_unit = "hours")
+fixture retained for compatibility benchmarking. It is unpublished and is
+not an active teaching example.
 }
 \keyword{datasets}
+\keyword{internal}

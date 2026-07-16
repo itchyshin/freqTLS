@@ -89,10 +89,12 @@ whole design and flags weakly identified parameters.
 
 ## How it differs from bayesTLS
 
-`freqTLS` and [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) fit
-the **same model**. Under the matched constant-shape configuration they
-target the same likelihood and the same fitted curve; they differ only
-in how uncertainty is summarised.
+`freqTLS` follows the empirical workflow in the [`bayesTLS`
+supplement](https://daniel1noble.github.io/bayesTLS/) while using a
+different inference engine. When the data, response family, formulas,
+threshold, reference time, and estimand are identical, the packages
+target the same likelihood-defined curve. Their APIs and uncertainty
+objects are **not** drop-in replacements.
 
 |  | `bayesTLS` | `freqTLS` |
 |----|----|----|
@@ -101,7 +103,7 @@ in how uncertainty is summarised.
 | Needs Stan / MCMC | Yes | No |
 | Speed | Sampling (seconds to minutes) | Optimisation (~ms to ~1 s; see the timing table in `vignette("comparing-to-bayesTLS")`) |
 | Weak identification | Priors can still yield a finite posterior interval | Open profiles are flagged; bootstrap fallback can also be unstable |
-| Extras | Heat-injury and repair sub-models, priors | Explicit non-closing / identifiability flags |
+| Extras | Posterior propagation, fitted Bayesian heat-injury/repair workflows, priors | Explicit non-closing/identifiability flags, Confidence Eyes, profile/Wald/bootstrap intervals |
 
 Use `freqTLS` when you want fast, prior-free, asymmetry-respecting
 intervals and an explicit identifiability check. When a profile does not
@@ -113,13 +115,8 @@ complementary lenses on the same model, not competitors.
 
 ## Installation
 
-After the package appears on CRAN, install the released version with:
-
-``` r
-install.packages("freqTLS")
-```
-
-Or install the development version from
+`freqTLS` 0.2.0.9000 is an experimental development version and is not a
+CRAN release. Install it from
 [GitHub](https://github.com/itchyshin/freqTLS):
 
 ``` r
@@ -187,8 +184,8 @@ tidy_parameters(grouped_fit)[
 ```
 
 `extract_tdt()`, `predict_survival_curves()`, and `diagnose_tdt_fit()`
-complete the twin surface; the column / formula engine interface
-(`fit_tls()`, `tls_bf()`) remains available underneath.
+complete the shared-name analogue surface; the column / formula engine
+interface (`fit_tls()`, `tls_bf()`) remains available underneath.
 
 ``` r
 # 4. Plot the fitted survival surface (the Confidence Eye is shown above)
@@ -219,7 +216,7 @@ all.equal(coef(fit_f), coef(fit))
 ```
 
 Add a sub-parameter formula for predictors on `CTmax` and `log_z` (for
-example `CTmax ~ life_stage, log_z ~ life_stage` for a grouped fit).
+example `CTmax ~ population, log_z ~ population` for a grouped fit).
 These two headline coordinates must use the same fixed-effect design
 columns; their supported random-intercept groupings may differ. The
 shape coordinates may use independent fixed designs.
@@ -373,17 +370,16 @@ Stan).
 
 ## Data credits
 
-The six case-study datasets vendored with `freqTLS` (`shrimp_lethal`,
-`shrimp_sublethal`, `zebrafish_lethal`, `zebrafish_o2`, `dsuzukii`, and
-`aphid_tdt`) are drawn from the thermal-load-sensitivity literature and
-the [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) framework,
-redistributed with attribution. They include the two new published case
-studies — `aphid_tdt` (cereal aphids across species and ages; Li et
-al. 2023) and `zebrafish_o2` (zebrafish across an oxygen gradient;
-Saruhashi et al. 2026) — alongside `dsuzukii` (*Drosophila suzukii* by
-sex; Ørsted et al. 2024, Zenodo 10.5281/zenodo.10602268). See
-`?aphid_tdt`, `?zebrafish_o2`, the other dataset help pages, and
-`inst/CITATION` for sources and licences. `freqTLS` code is released
-under GPL (\>= 3); the original data licences apply to the vendored
-data. Please cite `bayesTLS` and the original data sources (see
-`citation("freqTLS")`) when you use these datasets.
+The active teaching cases use `zebrafish_o2` (oxygen-gradient
+zebrafish), `aphid_tdt` (cereal aphids), `snowgum_psii` (Snow-gum PSII),
+and `dsuzukii` (mortality and awake/coma endpoints). Their original
+sources and component licences are recorded in `inst/CITATION`,
+`inst/COPYRIGHTS`, and the repository licence ledger. Snow-gum remains
+CC BY-NC 4.0 in this development version; do not assume the package’s
+GPL licence removes that restriction.
+
+`shrimp_lethal`, `shrimp_sublethal`, and `zebrafish_lethal` are retained
+only as unpublished compatibility/benchmark fixtures. They are not
+current teaching examples and must not be used as substitutes for the
+canonical cases. Please cite `bayesTLS` and each original data source
+when using any bundled data.

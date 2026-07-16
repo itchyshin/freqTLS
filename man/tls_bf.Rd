@@ -58,8 +58,8 @@ grammar).
 \examples{
 tls_bf(
   survived | trials(total) ~ time(duration) + temp(temp),
-  CTmax ~ life_stage,
-  log_z ~ life_stage
+  CTmax ~ population,
+  log_z ~ population
 )
 # cbind() response idiom, ungrouped:
 tls_bf(cbind(survived, died) ~ time(duration) + temp(temp))

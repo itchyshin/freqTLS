@@ -2,7 +2,7 @@
 % Please edit documentation in R/tls.R
 \name{diagnose_tdt_fit}
 \alias{diagnose_tdt_fit}
-\title{Diagnose a freqTLS fit (frequentist twin of \code{diagnose_tdt_fit})}
+\title{Diagnose a freqTLS fit (frequentist analogue of \code{diagnose_tdt_fit})}
 \usage{
 diagnose_tdt_fit(object)
 }

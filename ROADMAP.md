@@ -9,7 +9,13 @@ The authoritative fitted/planned/unsupported boundary is
 `docs/dev-log/known-limitations.md` and `docs/design/46-capability-matrix.md`;
 the live phase board is `docs/dev-log/dashboard/`.
 
-**Version status:** 0.1.0 (experimental lifecycle).
+**Version status:** 0.2.0.9000 (experimental development; not submitted to CRAN).
+
+The active phase rebases the reader-facing examples on the pinned `bayesTLS`
+supplement: the same canonical empirical data, subsets, endpoints, formulas,
+thresholds, reference times, and estimands, with a different inference engine
+and uncertainty language. Brown shrimp and life-stage zebrafish remain
+benchmark-only legacy fixtures and leave active teaching surfaces.
 
 Status legend: `initial` (scaffold only, not yet implemented), `implemented`
 (landed with tests, docs, examples, check-log, and an after-task report), and
@@ -82,21 +88,23 @@ Done). The adversarial Definition-of-Done gate before "core done" is Rose + Pat 
 Fisher. Execution is sequential P0 -> P1 -> P2 -> P3 (shared engine contract),
 then parallel P4 and P5, then P6.
 
-## v0.1.0 release-candidate boundary
+## Experimental v0.2 boundary
 
-The `v0.1`/`v0.2`/`v0.3` headings below are historical build milestones folded
-into the single 0.1.0 release candidate. They record how the surface grew; they
-are not evidence that any version has been published to CRAN.
+The older `v0.1`/`v0.2`/`v0.3` headings below are historical build milestones.
+They record how the engine grew; they are not evidence that a version was
+published to CRAN.
 
 The v0.1 milestone (core) is count data (binomial and beta-binomial), shared
 shape, grouped `CTmax`/`z`, profile CIs (and Wald), a brms/drmTMB-style formula
 interface (`tls_bf()`), and the cached three-way benchmark. The v0.2 and v0.3
 milestones (below) then added the Beta family, random effects, bootstrap CIs,
-heat-injury, and shape predictors — **all of which ship in 0.1.0**. Genuinely
+heat-injury, and shape predictors — **all retained experimentally in
+0.2.0.9000**. Genuinely
 still out of scope: time-to-event, multi-trait responses, a fit-time
 absolute-threshold option and non-default `bounds`, a profile interval or random
 effect for the upper asymptote `up`. CRAN hardening is the active release gate. See
-`docs/design/46-capability-matrix.md`.
+`docs/design/46-capability-matrix.md`. Censored-time, hurdle-productivity, and
+fitted repair dynamics remain bayesTLS-only.
 
 ## v0.2 build milestone (included in the 0.1.0 candidate)
 
@@ -108,7 +116,11 @@ against `bayesTLS` -- the two packages are two valid lenses on the same model.
   profile or a non-positive-definite Hessian (`fallback = TRUE`). freqTLS now
   attempts a finite interval without a prior; unstable bootstrap fits return an
   explicit `NA` rather than fabricating bounds.
-* **Real `bayesTLS` benchmark cache -- done.** Built from `bayesTLS` 1.0.0.
+* **Canonical `bayesTLS` comparator cache -- done.** Built on Totoro from the
+  pinned bayesTLS commit `76510412`, independently published by exact SHA-256,
+  and checked for exact data/formulas/thresholds plus passing sampler
+  diagnostics. The comparison article reports actual point differences without
+  treating posterior medians and ML estimates as identical targets.
 * **Random intercept on `CTmax` -- done.** `CTmax ~ <fixed> + (1 | group)` via
   TMB Laplace; no-RE path byte-identical; `sigma_CTmax` reported (ML, biased low
   with few groups); `ranef()` BLUPs; and profile-likelihood intervals for the

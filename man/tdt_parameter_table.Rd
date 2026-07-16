@@ -2,7 +2,7 @@
 % Please edit documentation in R/tls.R
 \name{tdt_parameter_table}
 \alias{tdt_parameter_table}
-\title{4PL parameter table (frequentist twin of \code{tdt_parameter_table})}
+\title{4PL parameter table (frequentist analogue of \code{tdt_parameter_table})}
 \usage{
 tdt_parameter_table(object, method = NULL, level = 0.95)
 }

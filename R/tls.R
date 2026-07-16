@@ -1,12 +1,12 @@
-# The bayesTLS-twin quantity extractor. tls() reshapes the freqTLS engine's
+# The bayesTLS-analogue quantity extractor. tls() reshapes the freqTLS engine's
 # CTmax / z estimates + confidence intervals into bayesTLS's tls() output
 # contract (a `$summary` with quantity / median / lower / upper, one row per
-# group x quantity, plus `$meta`). A bayesTLS script's tls() call should run on
-# freqTLS unchanged for the relative-threshold quantities.
+# group x quantity, plus `$meta`). Shared names express a common scientific
+# step, not drop-in object or uncertainty compatibility.
 
 #' Thermal-load-sensitivity quantities (z, CTmax) with confidence intervals
 #'
-#' The frequentist twin of `bayesTLS::tls()`. Reads a [fit_4pl()] (`freq_tls`)
+#' The frequentist analogue of `bayesTLS::tls()`. Reads a [fit_4pl()] (`freq_tls`)
 #' fit and returns the headline thermal-death-time quantities — thermal
 #' sensitivity `z` and `CTmax` — as point estimates with confidence intervals,
 #' one row per group when the fit is grouped. Uncertainty uses the engine's
@@ -164,7 +164,7 @@ print.tls <- function(x, ...) {
   invisible(x)
 }
 
-#' Diagnose a freqTLS fit (frequentist twin of `diagnose_tdt_fit`)
+#' Diagnose a freqTLS fit (frequentist analogue of `diagnose_tdt_fit`)
 #'
 #' The maximum-likelihood analogue of `bayesTLS::diagnose_tdt_fit()`: where the
 #' Bayesian version reports Rhat / ESS / divergences, the freqTLS version reports
@@ -206,7 +206,7 @@ diagnose_tdt_fit <- function(object) {
   )
 }
 
-#' 4PL parameter table (frequentist twin of `tdt_parameter_table`)
+#' 4PL parameter table (frequentist analogue of `tdt_parameter_table`)
 #'
 #' Returns the fitted 4PL parameters (`low`, `up`, `k`, `CTmax`, `z`, and `phi`
 #' for over-dispersed families) as point estimates with confidence intervals, in

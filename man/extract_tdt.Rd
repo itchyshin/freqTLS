@@ -42,7 +42,7 @@ Each quantity is \verb{list(draws = <tibble>, summary = <tibble>)}. Column names
 follow bayesTLS: \code{z_median/z_lower/z_upper} for z; \code{temp_median/temp_lower/ temp_upper} for CTmax and T_crit; per-draw value columns are \code{z} / \code{temp}.
 }
 \description{
-The frequentist twin of \code{bayesTLS::extract_tdt()}. Runs a parametric bootstrap
+The frequentist analogue of \code{bayesTLS::extract_tdt()}. Runs a parametric bootstrap
 (via the freqTLS engine), derives the thermal-death-time quantities on each
 replicate, and returns the same nested \verb{$z} / \verb{$CTmax} / \verb{$T_crit} structure
 (each a list of \code{draws} + \code{summary}). The per-replicate tables are the

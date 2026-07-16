@@ -1,14 +1,25 @@
-# freqTLS Implementation Plan (ultraplan)
+# freqTLS implementation specification
 
 > **For agentic workers:** This is the canonical SPEC + plan (doubles as repo `SPEC.md`). Every implementing agent reads this first. Use superpowers:subagent-driven-development / executing-plans; steps use checkbox (`- [ ]`) syntax. Definition of Done is in §2.
 
-**Goal:** Build a focused, high-quality maximum-likelihood / profile-likelihood R package `freqTLS` that fits single-stage 4PL thermal-load-sensitivity models via TMB, parameterised **directly in `CTmax` and `z`**, returns **profile-likelihood confidence intervals** (shown as Confidence Eyes, not posteriors), and **benchmarks against `bayesTLS`** on shared datasets — built and governed by the drmTMB-style named-perspective team with full dev-log memory discipline.
+**Current goal (0.2.0.9000):** Maintain a focused, experimental
+maximum-likelihood / profile-likelihood R package whose empirical teaching
+cases follow the pinned `bayesTLS` supplement (rendered 2026-07-14; commit
+`76510412e06c594c96894a1baba1f0e1a34a5aea`) as closely as the frequentist
+engine permits. Organisms, datasets, filters, endpoints, formulas, thresholds,
+reference times, and estimands match; inference and uncertainty language remain
+explicitly frequentist.
+
+Brown shrimp and life-stage zebrafish are benchmark-only legacy fixtures, not
+active examples. Canonical cases are oxygen-gradient zebrafish, cereal aphids,
+Snow-gum PSII, and both supported *Drosophila suzukii* endpoints. Censored-time
+and hurdle-productivity analyses remain bayesTLS-only.
 
 **Architecture:** small purpose-built TMB C++ 4PL likelihood (binomial,
 beta-binomial, and beta; direct `CTmax`/`log_z` midpoint reparameterisation) +
 column and formula R interfaces + profile-likelihood machinery adapted from
-drmTMB's `confint`/`tmbprofile` patterns + a cached three-way benchmark
-(classical two-stage vs bayesTLS posterior vs freqTLS) + Confidence-Eye visuals
+drmTMB's `confint`/`tmbprofile` patterns + a pinned canonical bayesTLS
+comparator cache + live freqTLS refits + Confidence-Eye visuals
 + pkgdown site, all under an agent-kit-bootstrapped team with `docs/dev-log/`
 memory.
 
@@ -103,7 +114,7 @@ docs/dev-log/
 - **`ROADMAP.md`** — phases 0–N with status (initial/implemented/planned), version status line, release boundary, links to the capability matrix. v0.1.0 = binomial and beta-binomial counts plus beta continuous proportions, shared shape by default, grouped CTmax/z, profile CIs, and the benchmark.
 - **`README.Rmd`** — "Start here" links · **Credit / origins** (TLS framework is bayesTLS's; Noble/Arnold/Pottier are co-authors) · preview status (intentionally bounded) · install · quick example · model equation · experimental lifecycle badge · data credits.
 - **`NEWS.md`** — version history.
-- **Design docs** (`docs/design/`, numbered like drmTMB): `00-vision`, `01-model-and-parameterisation` (4PL + direct CTmax/z + equivalence to bayesTLS), `02-family-registry` (binomial, beta-binomial, and the tested Beta family folded from the former v0.2 milestone into v0.1.0), `03-likelihoods` (symbolic + C++ notes), `04-profile-likelihood` (algorithm/targets/transforms/diagnostics), `05-testing-strategy`, `06-benchmark-protocol` (three-way, fair config, cache, R-SHRIMP), `07-collaboration-and-site`, `10-after-task-protocol`, `46-capability-matrix` (fitted-vs-planned = the missing-cell audit), `90-bayesTLS-critique` (the §5 balanced critique, cited, as a durable record).
+- **Design docs** (`docs/design/`, numbered like drmTMB): `00-vision`, `01-model-and-parameterisation` (4PL + direct CTmax/z + equivalence to bayesTLS), `02-family-registry` (binomial, beta-binomial, and the tested Beta family), `03-likelihoods` (symbolic + C++ notes), `04-profile-likelihood` (algorithm/targets/transforms/diagnostics), `05-testing-strategy`, `06-benchmark-protocol` (canonical parity, cache, diagnostics, legacy boundary), `07-collaboration-and-site`, `10-after-task-protocol`, `46-capability-matrix` (fitted-vs-planned = the missing-cell audit), `90-bayesTLS-critique` (the §5 balanced critique, cited, as a durable record).
 - **Consistency rule (one work ledger):** whenever capability is added/removed, update in the SAME commit — `README` + `ROADMAP` + `NEWS` + `docs/dev-log/known-limitations.md` + the relevant design doc; write an after-task report whose Consistency Review runs `rg` stale-wording scans; check PR overlap before editing shared files (`check-log.md`, `known-limitations.md`). GitHub Issues ↔ after-task ↔ ROADMAP kept in sync.
 
 ---
@@ -137,7 +148,7 @@ bayesTLS constant-shape (`temp_effects="mid"`): `mid(T)=b_mid_Intercept + b_mid_
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| **License** | **GPL-3** (override spec's MIT) | LICENSE already GPL-3; we adapt drmTMB (GPL-3) patterns. Redistributed data retain their source licences and attribution. Snow-gum material is CC BY-NC 4.0 and stays outside the package unless compatible written permission is recorded. |
+| **License** | **GPL-3** for code; component-specific data terms | Redistributed data retain source licences. Snow-gum is CC BY-NC 4.0 in the current development branch. A maintainer attestation permits non-commercial GitHub/pkgdown teaching use, but unrestricted/commercial downstream redistribution and CRAN remain blocked until a rights-holder grant is archived. |
 | **Authorship** | Shinichi Nakagawa (`aut`,`cre`) **+ Daniel W. A. Noble, Pieter A. Arnold, Patrice Pottier (`aut`)** | TLS framework is bayesTLS's, not ours alone. Confirm with them before release (a person should agree to being listed). |
 | **Midpoint param** | Direct `CTmax` + `log_z` | makes headline quantities profile-able (§6). |
 | **Asymptote reparam** | **Disjoint bounds** (bayesTLS `compute_4pl_bounds`) `low=low_min+low_w·plogis(beta_low)`, `up=up_min+up_w·plogis(beta_up)` | split `[lower,upper]` at the midpoint so `low<up` unconstrained; shares the bayesTLS contract; `up` is a direct coordinate. (P1 reversed the earlier nested gap.) Cost: `up` profile not yet wired → Wald/delta (§10). |
@@ -269,18 +280,30 @@ regime.* Never claim profile universally superior.
 | `test-group` | ΔCTmax 0.6, Δz 0.8; `CTmax:grp`,`z:grp` finite profiles |
 | `test-benchmark-sanity` | cache vs live freqTLS within loose tol (CTmax~1°C, z~25%); no Stan |
 
-## 12. bayesTLS benchmark harness ("fully incorporate")
+## 12. bayesTLS canonical comparator harness
 
-**Column mapping → `fit_tls(y=survived,n=total,time=duration,temp=,group=)`:** shrimp — `temp=Temperature_assay`, `duration=Duration_exposure_hours`, `total=N_individuals_after_trial`, `survived=N-round(Mortality_after_trial*N)` (**R-SHRIMP fix from CSV**), ungrouped. zebrafish — `temp=assay_temp`, `duration=duration_h`, `total=n_total`, `survived=n_surv` (shipped OK), `group=life_stage`.
+The active comparison covers oxygen-gradient zebrafish, cereal aphids at age
+six and across ages, Snow-gum PSII, and the mortality and awake/coma
+*Drosophila suzukii* endpoints. The manifest locks exact bytes, filters,
+responses, families, formulas, grouping, `t_ref`, thresholds, and estimands.
 
-- **Vendoring** (source-specific licences with attribution): installed raw CSVs
-  retain native columns; `standardize_data(mortality = ...)` reconstructs shrimp
-  counts from the vendored proportion at fit time; `R/data.R` supplies
-  `@source`/attribution; `inst/CITATION` cites freqTLS + bayesTLS. The component
-  ledger records transformations and terms and excludes permission-pending
-  material.
-- **Three-way comparison** (no reimplementation): classical `bayesTLS::ts_stage1→ts_stage2→ts_ci`; Bayesian `bayesTLS::fit_4pl(temp_effects="mid")→extract_tdt(target_surv="relative")`; freqTLS `fit_tls→confint(method="profile")`. Compare point + CI width/asymmetry; zebrafish 3×3 per life stage. Fairness footnote (R-RELABS): freqTLS and bayesTLS use the matched constant-shape, relative-threshold configuration. The classical two-stage estimator is an absolute-LT50 approximation and is comparable only when the lower and upper survival asymptotes are near 0 and 1; label it as an approximate comparator rather than an equivalent relative-threshold fit.
-- **Cache** (Stan won't run on CI): `data-raw/build_benchmark_cache.R` (maintainer-run) → `inst/extdata/bayesTLS_benchmark_cache.rds` (summaries + `meta` provenance: bayesTLS_version/git_sha/cmdstan_version/date_built/seed/config/R-SHRIMP note). `vignettes/comparing-to-bayesTLS.Rmd` shows live calls `eval=FALSE`, reads cache `eval=TRUE`, runs freqTLS live, prints provenance.
+- **Comparator construction:** the maintainer-only builder loads clean freqTLS
+  and bayesTLS source trees, requires pinned bayesTLS commit `76510412`, runs on
+  Totoro with bounded parallelism and `OPENBLAS_NUM_THREADS=1`, and keeps raw
+  posterior fits outside the repository.
+- **Publication gate:** an independent invocation publishes only the reviewed
+  candidate SHA-256 when all R-hat, ESS, divergence, tree-depth, and BFMI gates
+  pass. The installed cache contains curated summaries and provenance, never raw
+  posterior draws.
+- **Interpretation:** `vignettes/comparing-to-bayesTLS.Rmd` refits freqTLS live,
+  reports actual ML-minus-posterior-median differences, and labels confidence
+  and credible intervals separately. Snow-gum is the locked shared-shape
+  analogue. Drosophila mortality compares only the absolute 240-minute LT50
+  point; relative direct `z` is not subtracted from absolute Bayesian `z`.
+- **Legacy boundary:** shrimp and life-stage zebrafish remain installed only as
+  unpublished compatibility fixtures. Their historical caches and R-SHRIMP
+  repair tests remain internal and cannot appear in current teaching,
+  navigation, search, or comparison tables.
 
 ## 13. Visual identity — the Confidence Eye (Florence-owned) + docs/pkgdown/CI
 
@@ -297,7 +320,7 @@ regime.* Never claim profile universally superior.
 **Docs:** README (§4); vignettes `getting-started`, `model-math` (4PL + direct
 CTmax/z + relative-vs-absolute + bridge identities), `profile-likelihood` (LR
 profiles, asymmetry, profile vs Wald, non-closing), `comparing-to-bayesTLS`
-(cached three-way). **_pkgdown.yml** Bootstrap5/flatly, grouped navbar +
+(canonical paired cache plus live ML refits). **_pkgdown.yml** Bootstrap5/flatly, grouped navbar +
 reference sections; homepage = tagline + equation + quick-start + one survival
 plot + one Confidence-Eye profile plot + comparison table + experimental badge.
 **CI:** `R-CMD-check.yaml` on main pushes, pull requests, and manual dispatch covers Ubuntu R
@@ -343,10 +366,11 @@ calling the whole product universally profile-able.
 
 **Phase 4 — Predict + plotting** (Florence+Darwin) ∥ **Phase 5 — Benchmark**
 (Curie+Jason+Rose). P4: `predict.R`, `plotting.R` (Confidence Eye),
-`test-predict`. P5: installed raw proportions + fit-time R-SHRIMP reconstruction,
-`R/data.R`, `inst/CITATION`, `build_benchmark_cache.R`, cache,
-`test-benchmark-sanity`. **Gates:** monotone surfaces + eye plots render +
-Florence audit; vendored shrimp counts sane + sanity test green.
+`test-predict`. P5: canonical manifest, exact dataset/filter tests, the
+Totoro-only bayesTLS builder, reviewed cache publisher, live ML comparison, and
+legacy compatibility guards. **Gates:**
+monotone surfaces + eye plots render + Florence audit; all canonical hashes,
+formulas, thresholds, diagnostics, and legacy-exclusion tests green.
 
 **Phase 6 — Docs + site** (documentation-writer+pkgdown-editor+Pat+Darwin+literature-curator+Grace). README, four vignettes, NEWS, `_pkgdown.yml` final. **Gate:** `devtools::document/test/check` + `pkgdown::build_site()` clean locally.
 
@@ -354,7 +378,7 @@ Each phase closes with an **after-task report + check-log entry + known-limitati
 
 ## 16. Multi-agent fleet execution
 
-Orchestrate per §1 ownership. **Sequential** P0→P1→P2→P3 (shared engine contract); **parallel** P4∥P5 after P3; P6 last. I (Ada/orchestrator) verify each phase's gate with real R output before proceeding (verification-before-completion). **Adversarial DoD review gate before "core done": Rose** (after-task-audit: stale wording, consistency, R-SHRIMP) **+ Pat** (a new user can fit + interpret + read the warnings) **+ Fisher** (profile equivariance, identifiability, fair benchmark). Each agent reads SPEC.md + AGENTS.md, cites only lines actually read, writes an after-task report, and never claims success without pasted output.
+Orchestrate per §1 ownership. **Sequential** P0→P1→P2→P3 (shared engine contract); **parallel** P4∥P5 after P3; P6 last. I (Ada/orchestrator) verify each phase's gate with real R output before proceeding (verification-before-completion). **Adversarial DoD review gate before "core done": Rose** (after-task-audit: stale wording, consistency, legacy exclusion) **+ Pat** (a new user can fit + interpret + read the warnings) **+ Fisher** (profile equivariance, identifiability, fair benchmark). Each agent reads SPEC.md + AGENTS.md, cites only lines actually read, writes an after-task report, and never claims success without pasted output.
 
 ## 17. Verification — acceptance ("core done" only when ALL pass)
 ```r
@@ -368,4 +392,8 @@ fit <- fit_tls(dat, y=survived, n=total, time=duration, temp=temp, family="beta_
 summary(fit); confint(fit, parm="CTmax", method="profile"); confint(fit, parm="z", method="profile")
 plot_survival_curves(fit); plot(profile(fit, "CTmax"))   # Confidence-Eye style
 ```
-Plus: benchmark article renders from cache (no Stan); three-way table populates for shrimp + zebrafish; `docs/dev-log/` has check-log + after-task/after-phase entries; Florence figure-audit passed; Rose+Pat+Fisher DoD gate signed off.
+Plus: the canonical comparison article renders from the reviewed cache without
+Stan, refits freqTLS live, reports actual differences without mixing estimands,
+and contains no active shrimp/life-stage examples; `docs/dev-log/` has check-log
++ after-task/after-phase entries; Florence figure-audit passed; Rose+Pat+Fisher
+DoD gate signed off.

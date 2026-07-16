@@ -6,7 +6,14 @@ fitted, planned, and unsupported. It is kept synchronized with
 the same commit when a capability changes (AGENTS.md design rule 10). The live
 phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 
-> **freqTLS 0.1.0 source surface.** freqTLS is the frequentist twin of bayesTLS;
+> **Experimental 0.2.0.9000 teaching contract.** Active empirical cases mirror
+> the pinned bayesTLS supplement: `zebrafish_o2`, `aphid_tdt`, `snowgum_psii`,
+> and the mortality and awake/coma endpoints from `dsuzukii`. Brown shrimp and
+> life-stage zebrafish remain benchmark-only legacy fixtures, not active
+> examples. Censored-time, hurdle-productivity, and fitted repair dynamics are
+> unsupported/bayesTLS-only. Every implemented cell below remains experimental.
+
+> **Historical 0.1.0 source surface.** freqTLS is the frequentist analogue of bayesTLS;
 > this describes the implemented package source and is not a claim that 0.1.0
 > has been submitted to or published by CRAN. The user-facing API is
 > `standardize_data()` -> `fit_4pl()` -> `tls()` / `extract_tdt()` /
@@ -15,7 +22,7 @@ phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 > `get_ctmax`, ...) remain as the internal engine and still work. The matrices
 > below state the current family, design, interval, and target-specific limits.
 
-## 0.1.0 family x design x interval grid
+## 0.2.0.9000 family x design x interval grid
 
 For the ordinary curve parameters, 0.1.0 implements the full cross-product of
 three families, ungrouped/grouped designs, and Wald/profile/bootstrap confidence
@@ -111,10 +118,14 @@ Both interfaces map to the same engine and produce numerically identical fits:
   non-closing profile or a non-positive-definite Hessian (`fallback = TRUE`, the
   default). Rendered as a distinct lens in the Confidence Eye. See
   `docs/design/04-profile-likelihood.md`.
-- bayesTLS benchmark cache: **built** from the real `bayesTLS` 1.0.0 + classical
-  two-stage fits (`inst/extdata/bayesTLS_benchmark_cache.rds`), covering shrimp,
-  zebrafish per stage, and *D. suzukii* per sex in the matched relative-threshold,
-  constant-shape configuration. Snow-gum-derived rows were removed for licensing.
+- Canonical bayesTLS comparator cache: **built and independently published**
+  from pinned bayesTLS commit `76510412` on Totoro
+  (`inst/extdata/canonical_bayesTLS_cache.rds`; SHA-256
+  `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`).
+  It covers all six locked analysis units, records exact hashes/formulas/
+  thresholds/versions/seeds and passed sampler diagnostics, and is displayed
+  beside live freqTLS fits with actual point differences. The older shrimp and
+  life-stage-zebrafish cache remains internal legacy evidence only.
 - Multicore bootstrap (`cores`): **fitted** -- forked refits, reproducible
   regardless of cores.
 - `derive_ctmax()`: absolute-threshold critical temperature (closed-form inverse
@@ -154,13 +165,15 @@ Both interfaces map to the same engine and produce numerically identical fits:
   `log_z` / `low` / `log_k` -- with profile intervals for the fixed effects and a
   prior-free RE-aware bootstrap for the variance components -- are fitted.
 - Beta / continuous responses: **fitted in v0.2** (`family = "beta"`). The
-  simulated parameter-recovery tests and examples demonstrate this capability.
-  The snow-gum source is CC BY-NC 4.0, so its data and vignette remain in the
-  build-excluded licensing-pending area. Their exclusion does not remove the
-  tested beta engine capability.
+  simulated parameter-recovery tests and the Snow-gum development example
+  demonstrate this capability. The processed Snow-gum object and vignette are
+  installed/rendered only for the authorized non-commercial GitHub/pkgdown
+  development use; CRAN and commercial redistribution remain blocked.
 - Time-to-event responses: non-goal (the wider TDT literature is largely
   failure-time data; the 4PL count/proportion model is the wrong tool for it).
-- Multi-trait responses (dsuzukii): non-goal.
+- Multi-trait joint likelihoods remain a non-goal. The aggregated awake/coma
+  count endpoint is supported; censored `t_coma` and hurdle `prod` models are
+  not.
 - **Fitting** heat-injury / repair sub-models (estimating injury or repair
   dynamics as part of the likelihood): non-goal (belongs to bayesTLS).
   Deterministic heat-injury **prediction** from the already-fitted curve is

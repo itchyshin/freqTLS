@@ -68,8 +68,9 @@ value to align multiple datasets to a common centre.}
 \value{
 A tibble with the standardised columns plus a \code{"tdt_meta"} attribute
 storing \code{temp_mean}, \code{duration_unit}, \code{random_effects},
-\code{response_type} (\code{"count"} or \code{"proportion"}), and \code{response_var}
-(the response column name for a proportion fit, else \code{NULL}).
+\code{response_type} (\code{"count"} or \code{"proportion"}), \code{response_var}
+(the response column name for a proportion fit, else \code{NULL}), and
+\code{proportion_eps} (the clamp used for a proportion fit, else \code{NULL}).
 }
 \description{
 Rewrites user column names into a single project-standard schema and attaches
@@ -88,7 +89,8 @@ are derived and the standardised columns include \code{n_total}, \code{n_surv},
 \eqn{F_v/F_m} ratio with no denominator: supply \code{proportion} and omit the
 count arguments. The value is stored in \code{survival} (clamped into the open
 interval \verb{(proportion_eps, 1 - proportion_eps)} so the Beta likelihood is
-finite); no \code{n_total}/\code{n_surv} columns are created. \code{response_type} is
+finite). A warning reports the affected count and epsilon whenever values
+are changed; no \code{n_total}/\code{n_surv} columns are created. \code{response_type} is
 recorded as \code{"proportion"}.
 }
 

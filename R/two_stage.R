@@ -128,6 +128,7 @@ ts_stage2 <- function(stage1, t_ref = 60, time_multiplier = 1,
                       TC_rate_range = c(0.1, 1),
                       rows = c("stage1_ok", "finite_ok")) {
   rows <- match.arg(rows)
+  stopifnot(t_ref > 0, time_multiplier > 0)
   keep <- stage1[stage1[[rows]] & is.finite(stage1$log10_lt50), , drop = FALSE]
   n_excluded <- nrow(stage1) - nrow(keep)
 
@@ -201,6 +202,7 @@ ts_ci <- function(stage2, method = c("delta", "mvn"), level = 0.95,
                   t_ref = 60, time_multiplier = 1, TC_rate_range = c(0.1, 1),
                   temp_grid = NULL, n_sim = 1000, seed = 123) {
   method <- match.arg(method)
+  stopifnot(t_ref > 0, time_multiplier > 0)
   fit <- stage2$fit
   a   <- (1 - level) / 2
 

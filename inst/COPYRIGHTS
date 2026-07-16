@@ -87,12 +87,15 @@ them.
 
 The snow-gum PSII data are not CC BY 4.0. Arnold et al. (2026),
 doi:10.64898/2026.04.09.717599, release the source material under CC BY-NC 4.0.
-Written permission or compatible relicensing for unrestricted redistribution is
-pending. Therefore the snow-gum raw CSVs, derived snowgum_psii.rda, and its
-case-study source are retained only under the build-excluded
-data-raw/licensing-pending tree. Snow-gum rows were removed from the installed
-benchmark cache on 2026-07-11. Attribution does not remove the non-commercial
-restriction.
+On 2026-07-16 the freqTLS maintainer recorded coauthor Pieter A. Arnold's
+agreement to use the byte-identical 394-row object in the current
+non-commercial GitHub repository and pkgdown teaching site. That attestation
+does not establish an unrestricted/commercial downstream grant and does not
+override CC BY-NC 4.0. The development package therefore labels the component
+separately; CRAN submission remains blocked until a written rights-holder grant
+explicitly covers CRAN redistribution, commercial downstream reuse, and
+adaptations, or the data are compatibly relicensed. The raw CSVs remain under
+the build-excluded data-raw/licensing-pending tree.
 
 The Kristineberg hourly station extract has no explicit redistribution licence
 in the source page reviewed for this release, and that page asks users to
@@ -107,6 +110,17 @@ package simulations or fits. They are covered by the freqTLS package licence
 except where a cache incorporates third-party data; the component ledger records
 those dependencies explicitly. freqTLS code remains GPL (>= 3); third-party
 data retain their stated licences.
+
+The active canonical comparator cache
+`inst/extdata/canonical_bayesTLS_cache.rds` contains curated bayesTLS posterior
+summaries and diagnostics for the six locked v0.2 analysis units. It was built
+from bayesTLS commit `76510412e06c594c96894a1baba1f0e1a34a5aea`; the published
+file SHA-256 is
+`3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`.
+Source-data licences remain attached to the summaries. In particular, the
+Snow-gum rows remain limited to the recorded non-commercial GitHub/pkgdown use;
+the cache is part of the same CRAN/commercial/adaptation block as the installed
+Snow-gum object.
 
 The cross-case-study cache `inst/extdata/case_study_summary_cache.rds` is built
 by `data-raw/build_case_study_summary_cache.R` from the shipped brown-shrimp,

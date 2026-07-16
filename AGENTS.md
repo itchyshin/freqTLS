@@ -41,12 +41,16 @@ introduced by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in the
 and `CTmax` are theirs; freqTLS contributes the TMB likelihood, the direct
 `CTmax`/`log_z` reparameterisation, and the profile-likelihood machinery.
 
-### Non-goals for v0.1.0
+### Experimental v0.2 boundary
 
-These belong to a later phase or to a sibling package, and must not be described
-as implemented:
+Version `0.2.0.9000` retains the Beta family, formula interface, limited
+independent random intercepts, shape formulas, deterministic heat-injury
+prediction, bootstrap intervals, and Confidence Eyes. All remain experimental.
 
-- Time-to-event and multi-trait / multivariate responses.
+These capabilities are not implemented and must not be described as available:
+
+- Censored time-to-event, hurdle Gamma/lognormal productivity, and multi-trait
+  or multivariate responses.
 - Fitting heat-injury or repair-rate sub-models. Deterministic heat-injury
   prediction from a fitted 4PL and user-supplied repair scenarios are supported.
 - Absolute-threshold default (the default is the **relative** threshold).
@@ -54,9 +58,21 @@ as implemented:
   coordinate; any random effect on `up`.
 - Universal profile support for `up`, variance components, or general
   continuous shape slopes.
+- CRAN submission or release hardening.
 
 General distributional regression belongs to `drmTMB`. The full Bayesian
 workflow, heat-injury models, and posterior inference belong to `bayesTLS`.
+
+### Teaching-template contract
+
+The empirical teaching baseline is the `bayesTLS` supplement rendered
+2026-07-14 from commit `76510412e06c594c96894a1baba1f0e1a34a5aea`.
+Canonical active cases are oxygen-gradient zebrafish, cereal aphids, Snow-gum
+PSII, and the mortality and awake/coma endpoints from the two *Drosophila
+suzukii* examples. Brown shrimp and life-stage zebrafish remain unpublished
+benchmark-only compatibility data: do not use them in active tutorials,
+navigation, README examples, current comparison tables, or generated discovery
+surfaces.
 
 ### Canonical terms
 
@@ -91,8 +107,10 @@ Keep these stable across code, docs, tests, equations, and issues:
    package, document the source file, license, and adaptation in
    `inst/COPYRIGHTS` before treating the change as complete. Record each data
    component's source-specific licence in the data ledger and attribution files.
-   Snow-gum source material is CC BY-NC 4.0 and must remain build-excluded unless
-   compatible written redistribution permission is recorded.
+   Snow-gum source material is CC BY-NC 4.0. Its current processed development
+   object may be used on GitHub/pkgdown under the archived coauthor attestation;
+   CRAN, commercial downstream use, and adaptations remain blocked until a
+   broader compatible written grant is recorded.
 10. Keep public capability synchronized in one commit: when a capability is
     added or removed, update `README.Rmd`, `ROADMAP.md`, `NEWS.md`,
     `docs/dev-log/known-limitations.md`, `docs/design/46-capability-matrix.md`,
@@ -188,7 +206,8 @@ vignette, pkgdown, after-task, release, or paper-oriented text.
 Codex and Claude Code may both contribute to this repository. All agent work
 must follow the same project rules:
 
-- preserve the single-stage 4PL count-data scope and the v0.1 non-goals;
+- preserve the experimental v0.2 single-stage 4PL scope, including the tested
+  count and Beta families, while respecting every unsupported boundary above;
 - avoid unreviewed likelihood or parameterisation changes;
 - update design docs when the model, likelihood, profile algorithm, or benchmark
   protocol changes;

@@ -36,7 +36,7 @@ A \code{freq_surv_curves} object: \verb{$summary} (a tibble of
 and \verb{$meta}.
 }
 \description{
-The frequentist twin of \code{bayesTLS::predict_survival_curves()}. Evaluates the
+The frequentist analogue of \code{bayesTLS::predict_survival_curves()}. Evaluates the
 fitted 4PL survival probability over a temperature-by-duration grid and adds
 parametric-bootstrap confidence bands. For random-effects fits the curves are
 population-level: random intercepts are integrated during bootstrap refits,

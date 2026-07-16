@@ -15,7 +15,8 @@
 #'   \eqn{F_v/F_m} ratio with no denominator: supply `proportion` and omit the
 #'   count arguments. The value is stored in `survival` (clamped into the open
 #'   interval `(proportion_eps, 1 - proportion_eps)` so the Beta likelihood is
-#'   finite); no `n_total`/`n_surv` columns are created. `response_type` is
+#'   finite). A warning reports the affected count and epsilon whenever values
+#'   are changed; no `n_total`/`n_surv` columns are created. `response_type` is
 #'   recorded as `"proportion"`.
 #'
 #' If the dataset spans multiple categories (life stages, species, populations,
@@ -56,8 +57,9 @@
 #'                       value to align multiple datasets to a common centre.
 #' @return A tibble with the standardised columns plus a `"tdt_meta"` attribute
 #'         storing `temp_mean`, `duration_unit`, `random_effects`,
-#'         `response_type` (`"count"` or `"proportion"`), and `response_var`
-#'         (the response column name for a proportion fit, else `NULL`).
+#'         `response_type` (`"count"` or `"proportion"`), `response_var`
+#'         (the response column name for a proportion fit, else `NULL`), and
+#'         `proportion_eps` (the clamp used for a proportion fit, else `NULL`).
 #' @examples
 #' # Count data
 #' raw <- data.frame(
@@ -137,11 +139,28 @@ standardize_data <- function(data,
   if (is_proportion) {
     response_type <- "proportion"
     response_var  <- "survival"
+    if ("survival" %in% names(data) && !identical(proportion, "survival"))
+      warning("standardize_data() overwrites the existing `survival` column with ",
+              "the clamped proportion response. Rename it in the raw data to keep ",
+              "its original contents.", call. = FALSE)
     p             <- as.numeric(out[[proportion]])
     if (any(p > 1 + 1e-6, na.rm = TRUE) || any(p < -1e-6, na.rm = TRUE))
       stop("`proportion` has values outside [0, 1]. A continuous-proportion ",
            "response must be a fraction in [0, 1] (e.g. post/pre Fv/Fm).",
            call. = FALSE)
+    clamped <- is.finite(p) &
+      (p < proportion_eps | p > 1 - proportion_eps)
+    if (any(clamped)) {
+      warning(
+        "standardize_data() clamped ", sum(clamped), " of ",
+        sum(is.finite(p)), " finite proportion values into [",
+        format(proportion_eps, scientific = FALSE), ", ",
+        format(1 - proportion_eps, scientific = FALSE),
+        "] for the Beta likelihood. Check whether boundary values and this ",
+        "epsilon are scientifically appropriate.",
+        call. = FALSE
+      )
+    }
     out$survival  <- pmin(pmax(p, proportion_eps), 1 - proportion_eps)
     keep <- is.finite(out$survival) & is.finite(out$temp) &
             is.finite(out$duration) & out$duration > 0
@@ -208,7 +227,8 @@ standardize_data <- function(data,
     duration_unit  = duration_unit,
     random_effects = random_effects,
     response_type  = response_type,
-    response_var   = response_var
+    response_var   = response_var,
+    proportion_eps = if (is_proportion) proportion_eps else NULL
   )
 
   tibble::as_tibble(out)

@@ -71,6 +71,21 @@ bibentry(
 
 bibentry(
   bibtype = "Misc",
+  title = "Thermal Load Sensitivity of Photosystem II in Snow Gum",
+  author = c(
+    person("Pieter A.", "Arnold")
+  ),
+  year = "2026",
+  doi = "10.64898/2026.04.09.717599",
+  note = paste(
+    "Snow-gum PSII source, CC BY-NC 4.0. The freqTLS development copy is",
+    "for the approved non-commercial GitHub/pkgdown teaching use; see",
+    "inst/COPYRIGHTS for the unresolved CRAN/commercial redistribution gate."
+  )
+)
+
+bibentry(
+  bibtype = "Misc",
   title = "Data and Code for: Oxygen Availability and Oxygen Delivery but Not Oxidative Stress Shape Heat Tolerance in Diploid and Triploid Zebrafish Larvae",
   author = c(
     person("S", "Saruhashi"), person(c("J", "G", "J"), "Boerrigter"),

@@ -2,7 +2,9 @@
 #'
 #' Internal engine: assembles the TMB AD function, optimises it with
 #' [stats::nlminb()] (falling back to [stats::optim()] with `method = "BFGS"`
-#' if `nlminb` fails to converge), runs [TMB::sdreport()] for standard errors,
+#' if `nlminb` fails to converge), refines a nominal solution whose raw
+#' gradient remains above `1e-3` with `nloptr`'s preconditioned truncated-Newton
+#' method, runs [TMB::sdreport()] for standard errors,
 #' and reports convergence with the positive-definite-Hessian flag. This is the
 #' single place that talks to `MakeADFun`; [fit_tls()] assembles the data,
 #' parameters, and map and hands them here.
@@ -79,6 +81,54 @@ fit_tls_engine <- function(tmb_data, parameters, map = list(), control = list(),
         x = "nlminb error: {conditionMessage(opt)}",
         x = "optim(BFGS) error: {conditionMessage(opt_bfgs)}"
       ))
+    }
+  }
+
+  # A large formula can satisfy nlminb's relative objective criterion while a
+  # few contrast/slope coordinates still have a material raw gradient. Refine
+  # only in that case. NLopt may report its generic line-search failure at a
+  # stationary point; accept the refinement based on the package's explicit
+  # objective/gradient contract, not that status code alone.
+  grad_before <- tryCatch(max(abs(obj$gr(opt$par))), error = function(e) Inf)
+  if (is.finite(grad_before) && grad_before >= 1e-3) {
+    refined <- tryCatch(
+      nloptr::nloptr(
+        x0 = opt$par,
+        eval_f = function(x) list(objective = obj$fn(x), gradient = obj$gr(x)),
+        opts = list(
+          algorithm = "NLOPT_LD_TNEWTON_PRECOND_RESTART",
+          xtol_rel = 1e-12,
+          ftol_rel = 1e-14,
+          maxeval = 5000L,
+          print_level = if (isTRUE(control$trace)) 1L else 0L
+        )
+      ),
+      error = function(e) e
+    )
+    if (!inherits(refined, "error")) {
+      grad_after <- tryCatch(max(abs(obj$gr(refined$solution))),
+                             error = function(e) Inf)
+      objective_before <- opt$objective %||% opt$value %||% obj$fn(opt$par)
+      objective_after <- refined$objective
+      objective_ok <- is.finite(objective_after) &&
+        objective_after <= objective_before + 1e-7 * (1 + abs(objective_before))
+      if (objective_ok && is.finite(grad_after) && grad_after < grad_before) {
+        solution <- refined$solution
+        names(solution) <- names(opt$par)
+        opt <- list(
+          par = solution,
+          objective = objective_after,
+          convergence = if (grad_after < 1e-3) 0L else refined$status,
+          iterations = refined$iterations,
+          message = paste0(
+            "Refined stationary point accepted by the freqTLS objective/gradient ",
+            "contract (NLopt status ", refined$status, "); max|gradient| = ",
+            signif(grad_after, 4)
+          ),
+          optimizer = "nloptr_TNEWTON"
+        )
+        optimizer <- "nloptr_TNEWTON"
+      }
     }
   }
   opt$optimizer <- optimizer

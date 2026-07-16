@@ -393,10 +393,16 @@ plot_heat_injury <- function(object, trace, group = NULL, target_surv = NULL,
     ggplot2::ylim(0, 1) +
     ggplot2::labs(
       x = xlab, y = ylab,
-      caption = paste0("Shaded: ", pct,
-                       "% pointwise parametric-bootstrap confidence band ",
-                       "(prior-free; curve parameters redrawn from the fitted model; B = ",
-                       nboot, ").")
+      caption = paste(strwrap(paste0(
+        "Shaded: ", pct,
+        "% pointwise parametric-bootstrap confidence band ",
+        "(prior-free; curve parameters redrawn from the fitted model; B = ",
+        nboot, ")."
+      ), width = 96L), collapse = "\n")
     ) +
-    ggplot2::theme_bw(base_size = 11)
+    ggplot2::theme_bw(base_size = 11) +
+    ggplot2::theme(
+      plot.caption = ggplot2::element_text(hjust = 0),
+      plot.margin = ggplot2::margin(5.5, 12, 16, 12)
+    )
 }

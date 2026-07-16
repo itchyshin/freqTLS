@@ -303,6 +303,7 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
     "%d%% confidence intervals (%s). %s; hollow point = estimate%s.",
     round(100 * level), src_lab, shape_lab, rug_lab
   )
+  caption <- paste(strwrap(caption, width = 88L), collapse = "\n")
   subtitle <- if (none_drawable) {
     "No interval closed; hollow points only (see `?confint.profile_tls`)."
   } else if (any_open) {
@@ -318,7 +319,11 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
     title = "Confidence Eyes for headline parameters",
     subtitle = subtitle,
     caption = caption
-  )
+  ) +
+    ggplot2::theme(
+      plot.caption = ggplot2::element_text(hjust = 0),
+      plot.margin = ggplot2::margin(5.5, 12, 16, 12)
+    )
 }
 
 #' Plot fitted survival curves against duration
@@ -512,10 +517,14 @@ plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
       x = "Temperature (\u00b0C)",
       y = sprintf("Duration to %d%% survival (log scale)", pct),
       title = "Thermal death-time curve",
-      caption = sprintf(
+      caption = paste(strwrap(sprintf(
         "Duration at which fitted survival crosses %.2f (relative threshold), read off the 4PL midpoint at tref = %s.",
         p, format(fit$tref)
-      )
+      ), width = 88L), collapse = "\n")
+    ) +
+    ggplot2::theme(
+      plot.caption = ggplot2::element_text(hjust = 0),
+      plot.margin = ggplot2::margin(5.5, 12, 16, 12)
     )
   if (grouped) {
     p_plot <- p_plot +

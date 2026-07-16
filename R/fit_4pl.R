@@ -1,8 +1,8 @@
-# The bayesTLS-twin fitting facade. fit_4pl() mirrors bayesTLS::fit_4pl()'s
+# The bayesTLS-analogue fitting facade. fit_4pl() shares bayesTLS::fit_4pl()'s
 # user-facing API (the direct CTmax/z formula interface, `by`, `threshold`,
 # `t_ref`, `bounds`, `family`) but fits by maximum likelihood through the freqTLS
 # TMB engine (fit_tls) and returns a `freq_tls` workflow object that the quantity
-# twins (tls / extract_tdt / predict_*) read. The supported surface is similar to,
+# analogues (tls / extract_tdt / predict_*) read. The supported surface is similar to,
 # but not a drop-in replacement for, bayesTLS.
 
 #' Build a freqTLS 4PL formula from the direct CTmax/z interface
@@ -73,11 +73,11 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 
 #' Fit the 4PL thermal-load-sensitivity model by maximum likelihood (TMB)
 #'
-#' The frequentist twin of `bayesTLS::fit_4pl()`. Consumes [standardize_data()]
+#' The frequentist analogue of `bayesTLS::fit_4pl()`. Consumes [standardize_data()]
 #' output and fits the single-stage 4PL thermal death-time model, parameterised
 #' directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 #' Returns a `freq_tls` workflow object; uncertainty (Wald / profile / bootstrap)
-#' is computed on demand by the quantity twins ([tls()], `confint()`).
+#' is computed on demand by the quantity analogues ([tls()], `confint()`).
 #'
 #' @section Experimental software:
 #' **Use freqTLS at your own risk.** Results and APIs may be incorrect or

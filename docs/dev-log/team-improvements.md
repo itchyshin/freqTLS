@@ -44,3 +44,26 @@ column to be labelled as an approximate absolute-LT50 comparator, used only when
 lethal asymptotes near zero and one make the thresholds close. The cache gate now
 also requires a verified source commit and URL rather than accepting an unknown
 SHA.
+
+## 2026-07-16 -- Canonical parity build lessons
+
+- A pkgdown builder must install the exact checkout, not skip installation when
+  an installed package has the same version. Development versions can retain
+  one version string across many commits; version-only reuse silently renders
+  stale code and datasets.
+- Formula starts must respect the design matrix. Intercept models initialise
+  only the intercept; no-intercept cell-mean models initialise every cell. A
+  single generic start vector made the canonical all-age interaction appear
+  numerically weaker than it was.
+- A `workflow_run` deployment should not share one global concurrency group
+  with skipped pull-request runs. Key the group by the upstream branch so an
+  irrelevant skipped run cannot cancel a valid `main` deployment.
+- Comparator publication should be two-stage: write raw fits and an immutable
+  candidate outside the repository, review its exact SHA-256 and diagnostics,
+  then copy only those reviewed bytes. When case summaries have different
+  grouping columns, use a typed row bind that preserves missing group fields
+  instead of base `rbind()`.
+- Search-index cleanup must test reader queries, not only forbidden URLs.
+  Removing legacy page paths still allowed historical snippets containing the
+  generic word `shrimp`; the post-build filter now rejects generic shrimp and
+  life-stage terms as well as object names.

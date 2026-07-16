@@ -49,8 +49,8 @@
 #' @examples
 #' tls_bf(
 #'   survived | trials(total) ~ time(duration) + temp(temp),
-#'   CTmax ~ life_stage,
-#'   log_z ~ life_stage
+#'   CTmax ~ population,
+#'   log_z ~ population
 #' )
 #' # cbind() response idiom, ungrouped:
 #' tls_bf(cbind(survived, died) ~ time(duration) + temp(temp))
@@ -399,6 +399,7 @@ tls_parse_formula <- function(formula, data, quiet = FALSE) {
     group = ct_design[["group"]],
     # Per-shape right-hand sides, so predict() can rebuild the shape designs from
     # newdata (NULL-safe: an intercept-only shape rebuilds to a column of ones).
+    fixed_terms = list(CTmax = ct_re$fixed_rhs, log_z = lz_re$fixed_rhs),
     shape_terms = list(low = low_rhs, up = up_rhs, log_k = logk_rhs),
     re = ct_re$re,
     re_logz = lz_re$re,

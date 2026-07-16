@@ -6,17 +6,26 @@ freqTLS, indexed by capability. It mirrors the missing-cell audit in
 `ROADMAP.md`, `NEWS.md`, and the capability matrix in the same commit when a
 capability changes.
 
-> **0.1.0 release candidate (2026-07-11).** The bayesTLS-style API is implemented:
+> **Experimental 0.2.0.9000 (2026-07-16).** The active empirical teaching set
+> mirrors the pinned bayesTLS supplement: oxygen-gradient zebrafish, cereal
+> aphids, Snow-gum PSII, and the mortality and awake/coma *Drosophila suzukii*
+> endpoints. Brown shrimp and life-stage zebrafish remain unpublished
+> benchmark-only compatibility fixtures and must not appear in active
+> tutorials, navigation, README examples, current comparisons, or generated
+> discovery surfaces. Censored-time, hurdle-productivity, posterior inference,
+> fitted repair dynamics, and CRAN submission are outside this phase.
+
+> **Historical 0.1.0 candidate (2026-07-11).** The bayesTLS-style API included:
 > `standardize_data`/`fit_4pl`/`tls`/`extract_tdt`/`predict_survival_curves`/
-> `diagnose_tdt_fit`/`two_stage`, with disjoint-bounds asymptotes. Current twin
+> `diagnose_tdt_fit`/`two_stage`, with disjoint-bounds asymptotes. Its analogue
 > limitations: `fit_4pl` fixes `bounds = c(0, 1)` and fits the relative backbone
 > (absolute/LTx and T_crit are derived post-hoc via `extract_tdt`/`tls` bootstrap,
 > not profiled); `extract_tdt` bands are bootstrap (slower than the relative
 > profile path). The benchmark cache is version-stamped and maintainer-built.
 
-## Current status: v0.1.0 release candidate
+## Current status: experimental v0.2.0.9000
 
-As of 2026-06-16 the full v0.1 surface is implemented and tested. The TMB 4PL
+The v0.1 implementation established the TMB 4PL
 engine, `fit_tls()`, and `simulate_tls()` (Phase 1); the S3 method surface
 (`print`/`summary`/`coef`/`vcov`/`logLik`/`AIC`/`nobs`) and the tidy extractors
 (`tidy_parameters()`, `get_ctmax()`, `get_z()`, `get_shape()`) (Phase 2); the
@@ -25,11 +34,9 @@ identifiability warnings, and the eye-style profile plot (Phase 3); prediction
 (`predict()`, `predict_survival_surface()`, `derive_lt()`) and the Confidence-Eye
 and curve/surface plots (Phase 4); the R-SHRIMP-corrected `shrimp_lethal` and
 `zebrafish_lethal` datasets and the benchmark harness (Phase 5); and the README,
-the full vignette suite (model details plus five case-study articles), NEWS, and the live
-pkgdown site (Phases 6–7) are all landed with
-tests, documentation, examples, check-log entries, and after-task reports
-(Definition of Done). The capabilities below are the 0.1.0 candidate boundary;
-"fitted" means landed under the Definition of Done, not accepted by CRAN.
+the original vignette suite, NEWS, and pkgdown site (Phases 6–7). The v0.2 work
+reclassifies those historical surfaces against the pinned bayesTLS teaching set;
+"fitted" below means implemented and locally tested, not accepted by CRAN.
 
 ### Grouped API contract (fitted)
 
@@ -114,26 +121,25 @@ Additional implemented capability:
 
 Fitted:
 
-- The vendored datasets `shrimp_lethal` (148 rows, ungrouped, temps 30-33 C) and
-  `zebrafish_lethal` (323 rows, grouped by `life_stage`: young_embryos,
-  old_embryos, larvae) are built and documented (CC BY 4.0, attribution in
-  `R/data.R`, `inst/CITATION`, `inst/COPYRIGHTS`, README). freqTLS fits both
-  with sensible estimates (shrimp CTmax 31.8 C / z 2.2 C; zebrafish per-stage
-  CTmax 39.8-41.4 C / z ~1.8-2.0 C; both converge, pdHess TRUE, beta-binomial).
-- The *Eucalyptus pauciflora* snow-gum PSII source is CC BY-NC 4.0. Its raw and
-  processed files are retained only under `data-raw/licensing-pending/` and are
-  not installed, tested, cached, or rendered by the release candidate unless
-  compatible written redistribution permission is recorded.
+- `shrimp_lethal`, `shrimp_sublethal`, and `zebrafish_lethal` remain installed
+  only as unpublished compatibility fixtures. They may be used by internal
+  legacy benchmark tests but are excluded from active examples, navigation,
+  search, summaries, and current comparison claims.
+- The byte-identical *Eucalyptus pauciflora* Snow-gum PSII object is installed,
+  tested, and rendered in the experimental GitHub/pkgdown development build
+  under the recorded non-commercial coauthor authorization. CRAN, commercial
+  downstream redistribution, and adaptations remain blocked pending a broader
+  written grant; see `docs/design/47-data-license-ledger.md`.
 - `dsuzukii` (1407 rows, per-individual *Drosophila suzukii* mortality by sex with
   a 0/1 `dead` indicator; CC BY 4.0, Ørsted et al. 2024, Zenodo
   10.5281/zenodo.10602268) is the lethal endpoint. Aggregating to `(temp, time,
   sex)` cells and fitting `fit_4pl`/`fit_tls(group = sex, family =
   "beta_binomial", tref = 240)` (240 min = 4 h, relative midpoint threshold) recovers the
-  published per-sex CTmax ~35.2 C and z ~3.0/3.2 (conv 0). The sublethal heat-coma
-  and productivity endpoints are non-goals (time-to-event / reproductive-response
-  models). Their `t_coma` and `prod` columns remain in the deposited long-form
-  record and derived dataset for provenance and study context, but they are not
-  valid freqTLS responses and are not consumed by package analyses.
+  published per-sex CTmax ~35.2 C and z ~3.0/3.2 (conv 0). The awake/coma count
+  endpoint is also supported after aggregation as
+  `n_awake = sum(is.na(t_coma))`; this is distinct from fitting the censored
+  individual `t_coma` times. Censored time-to-coma and hurdle productivity
+  remain unsupported and are routed to bayesTLS.
 - **R-SHRIMP is handled at `standardize_data()` time.** freqTLS vendors the raw
   CSV mortality *proportion* (`Mortality_after_trial`) with
   `N_individuals_after_trial`, not baked-in counts.
@@ -145,7 +151,8 @@ Fitted:
 
 Benchmark-cache limitations:
 
-- The bayesTLS + two-stage benchmark cache
+- The existing bayesTLS + two-stage benchmark cache is a retained **internal
+  legacy cache**, not current empirical teaching evidence. It
   (`inst/extdata/bayesTLS_benchmark_cache.rds`) covers shrimp, zebrafish (per
   stage), and *D. suzukii* (per sex), freshly rebuilt against `bayesTLS` 1.0.0
   commit `578740f20f3a2e6e81b3b700b1d0f0e5a06ecf8a` + CmdStan 2.36 via the
@@ -153,8 +160,16 @@ Benchmark-cache limitations:
   step because bayesTLS + CmdStan must not be a CI dependency; the script is
   guarded and stops when they are absent. Snow-gum-derived rows and metadata
   were excluded from the rebuild on 2026-07-11 for licensing. The cache's
-  `freqTLS_note` records the live-fit/comparator contract. The `test-benchmark-sanity`
-  tripwire covers the retained configurations.
+  `freqTLS_note` records the historical live-fit/comparator contract. The
+  `test-benchmark-sanity` tripwire covers only those retained configurations.
+  The canonical six-unit comparator cache is now published at
+  `inst/extdata/canonical_bayesTLS_cache.rds` and covers the five endpoints plus
+  the all-age aphid extension. It contains Bayesian summaries and diagnostics;
+  the comparison article refits freqTLS live and reports actual point
+  differences. Its Snow-gum rows use the locked shared-shape analogue, not the
+  richer shape terms displayed in the pinned supplement. Drosophila mortality
+  compares only the absolute 240-minute LT50 point because the direct freqTLS
+  `z` coordinate is a relative-threshold estimand.
 
 ## Out of scope for v0.1.0
 
