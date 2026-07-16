@@ -5,20 +5,18 @@
 # repository. Only a reviewed, small summary cache can be copied to
 # inst/extdata/canonical_bayesTLS_cache.rds.
 #
-# Exact Totoro invocation (after installing the pinned bayesTLS checkout and
-# the freqTLS branch being validated):
+# Exact Totoro candidate-build invocation from a clean freqTLS checkout:
 #
 #   env OPENBLAS_NUM_THREADS=1 \
-#     BAYESTLS_GIT_SHA=76510412e06c594c96894a1baba1f0e1a34a5aea \
+#     BAYESTLS_SOURCE_DIR="$HOME/bayesTLS-pinned" \
 #     FREQTLS_BAYES_CORES=4 \
 #     FREQTLS_CANONICAL_RAW_DIR="$HOME/freqtls-cache/76510412" \
-#     FREQTLS_PUBLISH_CACHE=1 \
 #     Rscript data-raw/build_canonical_comparator_cache.R
 #
 # `FREQTLS_BAYES_CORES` is capped at 16 (well below Totoro's shared-server
-# ceiling of 100). If any sampler diagnostic fails, publication additionally
-# requires an exact comma-separated `FREQTLS_ACCEPT_DIAGNOSTIC_FAILURES` list
-# and a non-empty `FREQTLS_DIAGNOSTIC_NOTE`; both are recorded in the cache.
+# ceiling of 100). This script never publishes into inst/extdata. After an
+# independent review, use publish_canonical_comparator_cache.R with the exact
+# candidate SHA-256. Publication fails closed if any sampler diagnostic failed.
 
 if (
   identical(Sys.getenv("CI"), "true") ||
@@ -34,7 +32,7 @@ if (!identical(Sys.getenv("OPENBLAS_NUM_THREADS"), "1")) {
   stop("Set OPENBLAS_NUM_THREADS=1 before starting R on Totoro.", call. = FALSE)
 }
 
-needed <- c("bayesTLS", "brms", "cmdstanr", "digest", "freqTLS", "posterior")
+needed <- c("brms", "cmdstanr", "digest", "pkgload", "posterior")
 missing <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) {
   stop(
@@ -45,16 +43,6 @@ if (length(missing)) {
 }
 
 source(file.path("data-raw", "canonical_comparator_manifest.R"))
-
-installed_bayestls_sha <- Sys.getenv("BAYESTLS_GIT_SHA")
-if (!identical(installed_bayestls_sha, CANONICAL_BAYESTLS_SHA)) {
-  stop(
-    "BAYESTLS_GIT_SHA must equal the pinned supplement commit ",
-    CANONICAL_BAYESTLS_SHA,
-    ".",
-    call. = FALSE
-  )
-}
 
 cmdstan_version <- tryCatch(
   as.character(cmdstanr::cmdstan_version()),
@@ -112,7 +100,7 @@ if (is.na(freqtls_sha)) {
 tracked_changes <- tryCatch(
   system2(
     "git",
-    c("status", "--porcelain", "--untracked-files=no"),
+    c("status", "--porcelain", "--untracked-files=all"),
     stdout = TRUE,
     stderr = FALSE
   ),
@@ -126,12 +114,57 @@ if (length(tracked_changes) && any(nzchar(tracked_changes))) {
   )
 }
 
-if (!identical(as.character(utils::packageVersion("freqTLS")), "0.2.0.9000")) {
+freqtls_version <- read.dcf(file.path(repo_root, "DESCRIPTION"))[, "Version"]
+if (!identical(unname(freqtls_version), "0.2.0.9000")) {
   stop(
     "Install the experimental freqTLS 0.2.0.9000 review commit first.",
     call. = FALSE
   )
 }
+
+bayestls_source <- Sys.getenv("BAYESTLS_SOURCE_DIR")
+if (!nzchar(bayestls_source) || !dir.exists(bayestls_source)) {
+  stop(
+    "BAYESTLS_SOURCE_DIR must point to the clean pinned bayesTLS checkout.",
+    call. = FALSE
+  )
+}
+bayestls_source <- normalizePath(
+  bayestls_source,
+  winslash = "/",
+  mustWork = TRUE
+)
+bayestls_sha <- git_sha(bayestls_source)
+if (!identical(bayestls_sha, CANONICAL_BAYESTLS_SHA)) {
+  stop(
+    "BAYESTLS_SOURCE_DIR is not at the pinned commit ",
+    CANONICAL_BAYESTLS_SHA,
+    ".",
+    call. = FALSE
+  )
+}
+bayestls_changes <- system2(
+  "git",
+  c("-C", bayestls_source, "status", "--porcelain", "--untracked-files=all"),
+  stdout = TRUE,
+  stderr = FALSE
+)
+if (length(bayestls_changes) && any(nzchar(bayestls_changes))) {
+  stop(
+    "BAYESTLS_SOURCE_DIR has tracked changes; provenance is not exact.",
+    call. = FALSE
+  )
+}
+
+# Load both packages from the verified source trees. This prevents a different
+# installed namespace from being labelled with either recorded Git commit.
+pkgload::load_all(repo_root, quiet = TRUE, export_all = FALSE, helpers = FALSE)
+pkgload::load_all(
+  bayestls_source,
+  quiet = TRUE,
+  export_all = FALSE,
+  helpers = FALSE
+)
 
 specs <- canonical_comparator_specs()
 seeds <- setNames(20260716L + seq_along(specs), names(specs))
@@ -249,6 +282,8 @@ for (case_id in names(specs)) {
     analysis_rows = nrow(dat),
     endpoint = spec$endpoint,
     licence = spec$licence,
+    comparison_scope = spec$comparison_scope %||% "whole fitted unit",
+    pinned_call_difference = spec$pinned_call_difference %||% "none",
     subset = spec$subset,
     family = spec$family,
     formulas = spec$formulas,
@@ -274,13 +309,6 @@ rownames(diagnostics) <- NULL
 
 diagnostic_failures <- diagnostics$case_id[!diagnostics$all_pass]
 diagnostic_failures <- unique(as.character(diagnostic_failures))
-accepted_failures <- trimws(strsplit(
-  Sys.getenv("FREQTLS_ACCEPT_DIAGNOSTIC_FAILURES"),
-  ",",
-  fixed = TRUE
-)[[1]])
-accepted_failures <- accepted_failures[nzchar(accepted_failures)]
-diagnostic_note <- trimws(Sys.getenv("FREQTLS_DIAGNOSTIC_NOTE"))
 
 cache <- list(
   meta = list(
@@ -297,7 +325,7 @@ cache <- list(
     ),
     supplement_url = "https://daniel1noble.github.io/bayesTLS/",
     supplement_render_date = CANONICAL_BAYESTLS_RENDER_DATE,
-    freqTLS_version = as.character(utils::packageVersion("freqTLS")),
+    freqTLS_version = unname(freqtls_version),
     freqTLS_git_sha = freqtls_sha,
     package_versions = vapply(
       c("bayesTLS", "brms", "cmdstanr", "posterior", "digest", "freqTLS"),
@@ -313,8 +341,6 @@ cache <- list(
     cases = case_meta,
     diagnostic_all_pass = !length(diagnostic_failures),
     diagnostic_failures = diagnostic_failures,
-    accepted_diagnostic_failures = accepted_failures,
-    diagnostic_note = diagnostic_note,
     raw_fit_location = paste0(
       "Maintainer-local external directory; raw fits are not distributed. ",
       "Build root basename: ",
@@ -333,30 +359,19 @@ cache <- list(
 candidate_path <- file.path(raw_dir, "canonical_bayesTLS_cache-candidate.rds")
 saveRDS(cache, candidate_path, version = 3)
 message("Wrote external review candidate: ", candidate_path)
-
-if (!identical(Sys.getenv("FREQTLS_PUBLISH_CACHE"), "1")) {
-  message(
-    "Not publishing into inst/extdata (set FREQTLS_PUBLISH_CACHE=1 after review)."
-  )
-  quit(save = "no", status = 0)
-}
-
+message(
+  "Candidate SHA-256: ",
+  digest::digest(file = candidate_path, algo = "sha256")
+)
 if (length(diagnostic_failures)) {
-  if (
-    !setequal(accepted_failures, diagnostic_failures) ||
-      !nzchar(diagnostic_note)
-  ) {
-    stop(
-      "Sampler diagnostics failed for: ",
-      paste(diagnostic_failures, collapse = ", "),
-      ". Review the external candidate. To publish after investigation, set ",
-      "FREQTLS_ACCEPT_DIAGNOSTIC_FAILURES to exactly those case IDs and record ",
-      "the rationale in FREQTLS_DIAGNOSTIC_NOTE.",
-      call. = FALSE
-    )
-  }
+  message(
+    "NOT PUBLISHABLE: sampler diagnostics failed for ",
+    paste(diagnostic_failures, collapse = ", "),
+    ". Investigate and rebuild."
+  )
+} else {
+  message(
+    "Diagnostics pass. Review the candidate, then publish its exact SHA-256 ",
+    "with data-raw/publish_canonical_comparator_cache.R."
+  )
 }
-
-out <- file.path("inst", "extdata", "canonical_bayesTLS_cache.rds")
-saveRDS(cache, out, version = 3)
-message("Published small curated cache: ", out)

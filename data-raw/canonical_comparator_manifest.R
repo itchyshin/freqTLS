@@ -84,7 +84,7 @@ canonical_comparator_specs <- function() {
     ),
     aphid_all_age = list(
       case_id = "aphid_all_age",
-      status = "canonical_extension",
+      status = "canonical_mirror",
       source_object = "aphid_tdt",
       licence = "CC0 1.0",
       endpoint = "survival counts",
@@ -140,6 +140,10 @@ canonical_comparator_specs <- function() {
       t_ref = 60,
       threshold = "relative",
       lethal = FALSE,
+      pinned_call_difference = paste(
+        "Locked freqTLS analogue uses shared low/up/k; the rendered pinned",
+        "supplement inherits recovery-by-temperature shape terms."
+      ),
       chains = 4L,
       iter = 6000L,
       warmup = 3000L,
@@ -172,6 +176,14 @@ canonical_comparator_specs <- function() {
       threshold = "absolute",
       fit_threshold = "relative",
       lethal = FALSE,
+      comparison_scope = paste(
+        "Joint direct model only; separate-sex teaching fits remain live",
+        "example checks rather than additional cached comparator units."
+      ),
+      pinned_call_difference = paste(
+        "Same direct model specification; this cache uses longer, more",
+        "conservative sampling controls than the rendered pinned call."
+      ),
       chains = 4L,
       iter = 4000L,
       warmup = 2000L,
@@ -206,6 +218,10 @@ canonical_comparator_specs <- function() {
       t_ref = 60,
       threshold = "relative",
       lethal = FALSE,
+      pinned_call_difference = paste(
+        "Same likelihood and nonlinear formulas through fit_4pl(); the",
+        "rendered pinned supplement writes the equivalent brms::bf by hand."
+      ),
       chains = 4L,
       iter = 4000L,
       warmup = 2000L,

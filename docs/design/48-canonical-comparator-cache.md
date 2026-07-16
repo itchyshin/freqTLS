@@ -43,32 +43,48 @@ The six fitted units are:
 
 ## Totoro build and publication gate
 
-Install freqTLS from the exact review commit and install bayesTLS from the
-pinned checkout. Configure CmdStan, then run from the freqTLS repository root:
+Install the build dependencies, configure CmdStan, and keep clean checkouts of
+freqTLS and the pinned bayesTLS source. Run from the freqTLS repository root.
+
+The builder refuses CI, requires `OPENBLAS_NUM_THREADS=1`, and caps parallelism
+at 16 cores. The default is four. `BAYESTLS_SOURCE_DIR` is mandatory: the
+builder verifies that checkout's clean Git state and exact commit, then loads
+bayesTLS from that source tree rather than trusting an environment label or an
+unrelated installed namespace. It likewise loads freqTLS from the clean current
+checkout, so both recorded commits identify the executed code.
+
+Raw `brms` fits and the first curated candidate remain under
+`FREQTLS_CANONICAL_RAW_DIR`, outside the repository. The candidate build never
+writes into `inst/extdata`. First build it:
 
 ```sh
 env OPENBLAS_NUM_THREADS=1 \
-  BAYESTLS_GIT_SHA=76510412e06c594c96894a1baba1f0e1a34a5aea \
+  BAYESTLS_SOURCE_DIR="$HOME/bayesTLS-pinned" \
   FREQTLS_BAYES_CORES=4 \
   FREQTLS_CANONICAL_RAW_DIR="$HOME/freqtls-cache/76510412" \
-  FREQTLS_PUBLISH_CACHE=1 \
   Rscript data-raw/build_canonical_comparator_cache.R
 ```
 
-The builder refuses CI, requires `OPENBLAS_NUM_THREADS=1`, and caps parallelism
-at 16 cores. The default is four. Raw `brms` fits and the first curated
-candidate remain under `FREQTLS_CANONICAL_RAW_DIR`, outside the repository. The
-only distributable output is the small summary file
+After reviewing the summaries, hashes, formulas, thresholds, differences, and
+diagnostics, publish that exact candidate in a separate invocation:
+
+```sh
+env FREQTLS_CANONICAL_CANDIDATE="$HOME/freqtls-cache/76510412/canonical_bayesTLS_cache-candidate.rds" \
+  FREQTLS_REVIEWED_CANDIDATE_SHA256=<reviewed-sha256> \
+  Rscript data-raw/publish_canonical_comparator_cache.R
+```
+
+The publisher verifies the independently supplied candidate SHA-256, both
+source commits, every case hash, complete case coverage, and all sampler
+diagnostics before copying the exact bytes to
 `inst/extdata/canonical_bayesTLS_cache.rds`.
 
-Every cached row records the source and analysis hashes, subset, endpoint,
+Every fitted case records the source and analysis hashes, subset, endpoint,
 family, formulas, grouping, `t_ref`, fit and reported thresholds, quantities,
 seed, chains, iterations, warmup, controls, bayesTLS and freqTLS commits and
 versions, CmdStan and R versions, build time, and diagnostics. If any diagnostic
-does not pass, the candidate is still retained for investigation but the
-official cache is blocked. Publication then requires the exact failing case IDs
-in `FREQTLS_ACCEPT_DIAGNOSTIC_FAILURES` and a substantive explanation in
-`FREQTLS_DIAGNOSTIC_NOTE`; both become cache metadata.
+does not pass, the candidate is retained for investigation but publication
+fails closed; the model must be investigated and rebuilt.
 
 ## Review rule
 
@@ -78,4 +94,3 @@ in point estimates and intervals. They do not average discrepant estimates,
 silently widen tolerances, or remove a difficult case. A discrepancy triggers
 an audit of data hashes, formulas, thresholds, centring, units, convergence,
 identifiability, and posterior diagnostics before any biological explanation.
-

@@ -29,6 +29,22 @@ test_that("canonical comparator manifest pins every active empirical fit", {
     "76510412e06c594c96894a1baba1f0e1a34a5aea"
   )
   expect_identical(CANONICAL_BAYESTLS_RENDER_DATE, "2026-07-14")
+  expect_true(all(vapply(
+    specs,
+    function(x) {
+      x$status %in%
+        c(
+          "canonical_mirror",
+          "frequentist_analogue",
+          "freqTLS_only_extension",
+          "experimental_extension",
+          "benchmark_only_legacy",
+          "unsupported_bayesTLS_only",
+          "remove"
+        )
+    },
+    logical(1)
+  )))
 
   expect_identical(
     specs$zebrafish_oxygen$formulas,
@@ -162,6 +178,9 @@ test_that("published canonical cache has complete provenance and no legacy cases
   expect_match(cache$meta$cmdstan_version, "^[0-9]+\\.[0-9]+")
   expect_identical(cache$meta$openblas_num_threads, "1")
   expect_lte(cache$meta$bounded_cores, 16L)
+  expect_true(cache$meta$diagnostic_all_pass)
+  expect_length(cache$meta$diagnostic_failures, 0L)
+  expect_true(all(cache$diagnostics$all_pass))
 
   expected_cases <- c(
     "zebrafish_oxygen",
@@ -178,6 +197,38 @@ test_that("published canonical cache has complete provenance and no legacy cases
   expect_true(all(is.finite(cache$summaries$median)))
   expect_true(all(is.finite(cache$summaries$lower)))
   expect_true(all(is.finite(cache$summaries$upper)))
+  expect_true(all(cache$summaries$lower <= cache$summaries$median))
+  expect_true(all(cache$summaries$median <= cache$summaries$upper))
+
+  source(manifest_path, local = environment())
+  specs <- canonical_comparator_specs()
+  expected_groups <- c(
+    zebrafish_oxygen = 2L,
+    aphid_age6 = 3L,
+    aphid_all_age = 9L,
+    snowgum_psii = 2L,
+    drosophila_mortality = 2L,
+    drosophila_awake = 2L
+  )
+  for (case_id in expected_cases) {
+    meta <- cache$meta$cases[[case_id]]
+    spec <- specs[[case_id]]
+    rows <- cache$summaries[cache$summaries$case_id == case_id, , drop = FALSE]
+    expect_identical(
+      meta$analysis_hash_sha256,
+      unname(CANONICAL_ANALYSIS_HASHES[[case_id]])
+    )
+    expect_identical(meta$formulas, spec$formulas)
+    expect_identical(meta$t_ref, spec$t_ref)
+    expect_identical(meta$reported_threshold, spec$threshold)
+    expect_identical(nrow(rows), 2L * expected_groups[[case_id]])
+    parameter_counts <- table(rows$parameter)
+    expect_setequal(names(parameter_counts), c("CTmax", "z"))
+    expect_identical(
+      as.integer(parameter_counts[c("CTmax", "z")]),
+      rep(expected_groups[[case_id]], 2L)
+    )
+  }
   expect_match(cache$meta$legacy_exclusion, "Shrimp")
   expect_match(cache$meta$legacy_exclusion, "life-stage zebrafish")
   expect_false(any(grepl(
