@@ -1,4 +1,4 @@
-# Build the pinned canonical bayesTLS comparator cache for freqTLS v0.2.
+# Build the pinned canonical bayesTLS comparator cache for experimental freqTLS 0.1.0.
 #
 # MAINTAINER ONLY. This script runs Stan and must never run on GitHub Actions.
 # Raw brms fits and the first curated candidate are written outside the
@@ -115,9 +115,9 @@ if (length(tracked_changes) && any(nzchar(tracked_changes))) {
 }
 
 freqtls_version <- read.dcf(file.path(repo_root, "DESCRIPTION"))[, "Version"]
-if (!identical(unname(freqtls_version), "0.2.0.9000")) {
+if (!identical(unname(freqtls_version), "0.1.0")) {
   stop(
-    "Install the experimental freqTLS 0.2.0.9000 review commit first.",
+    "Install the experimental freqTLS 0.1.0 candidate first.",
     call. = FALSE
   )
 }

@@ -2698,3 +2698,23 @@ Interpretation:
 - The old frozen tarball and current-main 0.2 closure record are not evidence
   for this integration candidate. The candidate must be rebuilt from this branch
   after the full source, reference, pkgdown, and tarball audits complete.
+
+## 2026-07-16 -- Rendered pkgdown audit on the 0.1.0 integration branch
+
+Evidence:
+
+- `Rscript tools/build-site.R .` -> complete; post-build cleanup removed
+  `AGENTS`, `CLAUDE`, and `SPEC` HTML/Markdown artifacts and filled reference
+  example alt text.
+- Built-site inventory -> 103 HTML pages, 15 articles, and 82 reference pages.
+- Rendered HTML stale scan for `0.2.0.9000`, experimental v0.2, and superseded
+  Snow-gum-block language -> 0 hits.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- Export/Rd scan -> 47 `NAMESPACE` exports and 0 exports without a generated
+  Rd alias; `devtools::check_man()` -> clean.
+
+Interpretation:
+
+- The generated public surface is coherent with the current 0.1.0 source
+  boundary. It is intermediate evidence only: any installed-byte change requires
+  a fresh site build and a new exact-candidate ledger entry.

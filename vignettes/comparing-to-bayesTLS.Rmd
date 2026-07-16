@@ -61,13 +61,13 @@ sampler diagnostics.
 ```{r provenance}
 data.frame(
   item = c(
-    "bayesTLS", "freqTLS", "CmdStan", "R", "built (UTC)",
+    "bayesTLS", "freqTLS cache-build source", "CmdStan", "R", "built (UTC)",
     "OpenBLAS threads", "bounded cores"
   ),
   recorded_value = c(
     paste0(bayes_cache$meta$bayesTLS_version, " @ ",
            substr(bayes_cache$meta$bayesTLS_git_sha, 1, 12)),
-    paste0(bayes_cache$meta$freqTLS_version, " @ ",
+    paste0("pre-release source @ ",
            substr(bayes_cache$meta$freqTLS_git_sha, 1, 12)),
     bayes_cache$meta$cmdstan_version,
     bayes_cache$meta$R_version,

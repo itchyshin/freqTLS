@@ -19,8 +19,8 @@
 #' * `method = "bootstrap"` returns prior-free parametric-bootstrap percentile
 #'   intervals: survival counts are regenerated at the observed design from the
 #'   fitted 4PL, the model is refitted `nboot` times, and the interval is the
-#'   percentile range of the replicate estimates. This is the likelihood-path
-#'   analogue of the bayesTLS posterior interval. It returns a finite interval
+#'   percentile range of the replicate estimates. This is a frequentist
+#'   resampling interval, not a posterior or credible interval. It returns a finite interval
 #'   only when enough stable, non-degenerate refits remain.
 #'
 #' When a profile does not close on one side, or the fitted Hessian is not
