@@ -12,7 +12,9 @@ Current rung: clean-checkout macOS technical candidate only; **NOT READY for upl
 
 ## Upload blockers
 
-1. Written consent from every credited co-author for the recorded author roles.
+1. Final `Authors@R` order and each author's approval of that final order.
+   Shinichi confirmed on 2026-07-16 that all co-authors authorise package use;
+   Dan will resolve the order before submission.
 2. A clean post-merge checkout that rebuilds this candidate identity (or records
    its replacement identity).
 3. Matching Windows and Ubuntu evidence on that post-merge artifact.

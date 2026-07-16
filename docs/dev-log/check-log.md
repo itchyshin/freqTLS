@@ -2026,3 +2026,18 @@ Interpretation:
   transformation record, and public consumer pages remain required as recorded
   in the component-rights ledger. This is distinct from consent to package
   author roles by all credited authors.
+
+## 2026-07-16 -- Package author-role consent confirmation
+
+Evidence:
+
+- Shinichi confirmed that every credited co-author has authorised package use.
+- The author order may change; Dan will resolve the final order before
+  submission.
+
+Interpretation:
+
+- Consent to use is recorded, but final `Authors@R` order and its approval are
+  still an upload blocker. This does not convert the candidate into an upload
+  claim: final same-hash reviewer verdicts and the remaining deployment /
+  integration evidence still apply.

@@ -12,7 +12,8 @@
 `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` completed with 0
 errors, 0 warnings, and one ordinary first-submission NOTE. This is local
 candidate evidence only: a clean post-merge rebuild, Windows/Ubuntu evidence,
-URL review, and written co-author consent remain upload blockers.
+URL review, final same-hash reviewer verdicts, and final author-order metadata
+remain upload blockers.
 
 ## Downstream dependencies
 
@@ -24,4 +25,8 @@ freqTLS is an experimental maximum-likelihood TMB implementation of the
 thermal-load-sensitivity framework introduced in bayesTLS. The package vendors
 benchmark data and records its source and licence in `inst/COPYRIGHTS`,
 `inst/CITATION`, and the data documentation. The maintainer must confirm that
-all credited authors agree to their listed roles before submission.
+all credited authors agree to their listed roles before submission. Shinichi
+confirmed on 2026-07-16 that all credited co-authors have authorised package
+use. The final author order is intentionally deferred for Dan to resolve before
+submission; it must be reflected in `Authors@R` and approved by the authors
+before upload.
