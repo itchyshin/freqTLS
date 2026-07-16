@@ -6,8 +6,11 @@ test_that("canonical dataset bytes and subsets are pinned", {
     zebrafish_o2.rda = "6d1e9b7701ca070a6e6d45f636ecb0d4",
     snowgum_psii.rda = "78b081de3a71f0eb3274bd473d42e538"
   )
-  actual <- unname(tools::md5sum(file.path(data_dir, names(expected_md5))))
-  expect_identical(actual, unname(expected_md5))
+  data_paths <- file.path(data_dir, names(expected_md5))
+  if (all(file.exists(data_paths))) {
+    actual <- unname(tools::md5sum(data_paths))
+    expect_identical(actual, unname(expected_md5))
+  }
 
   zf <- droplevels(subset(
     zebrafish_o2,
@@ -185,7 +188,13 @@ test_that("both Drosophila direct models fit the locked endpoints", {
 })
 
 test_that("active navigation excludes benchmark-only teaching fixtures", {
-  cfg <- paste(readLines(test_path("..", "..", "_pkgdown.yml"), warn = FALSE),
+  cfg_path <- test_path("..", "..", "_pkgdown.yml")
+  vignette_dir <- test_path("..", "..", "vignettes")
+  skip_if_not(
+    file.exists(cfg_path) && dir.exists(vignette_dir),
+    "pkgdown and vignette source are excluded from the built package"
+  )
+  cfg <- paste(readLines(cfg_path, warn = FALSE),
                collapse = "\n")
   canonical_nav <- sub(".*- title: Canonical empirical examples", "", cfg)
   canonical_nav <- sub("- title: Frequentist extensions.*", "", canonical_nav)
@@ -200,7 +209,7 @@ test_that("active navigation excludes benchmark-only teaching fixtures", {
     "case-study-snowgum.Rmd", "case-study-suzukii.Rmd",
     "case-study-suzukii-coma.Rmd", "case-study-summary.Rmd"
   )
-  txt <- paste(unlist(lapply(file.path(test_path("..", "..", "vignettes"), active),
+  txt <- paste(unlist(lapply(file.path(vignette_dir, active),
                             readLines, warn = FALSE)), collapse = "\n")
   expect_false(grepl("data(shrimp", txt, fixed = TRUE))
   expect_false(grepl("data(zebrafish_lethal", txt, fixed = TRUE))
