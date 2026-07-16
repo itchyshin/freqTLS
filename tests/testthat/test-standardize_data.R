@@ -29,9 +29,28 @@ test_that("mortality and survival proportions convert to counts consistently", {
 
 test_that("proportion path flags a continuous Beta response and clamps to (0,1)", {
   rp <- data.frame(tC = c(30, 32, 34), eh = c(1, 2, 4), fv = c(1, 0.5, 0))
-  s <- standardize_data(rp, temp = "tC", duration = "eh", proportion = "fv")
+  expect_warning(
+    s <- standardize_data(
+      rp, temp = "tC", duration = "eh", proportion = "fv"
+    ),
+    "clamped 2 of 3 finite proportion values.*0.001.*0.999"
+  )
   expect_identical(attr(s, "tdt_meta")$response_type, "proportion")
   expect_true(all(s$survival > 0 & s$survival < 1))           # clamped off 0/1
+})
+
+test_that("Snow-gum boundary adjustment is counted and visible", {
+  data("snowgum_psii", package = "freqTLS")
+  expect_warning(
+    out <- standardize_data(
+      snowgum_psii,
+      temp = "Temp", duration = "Time", proportion = "fvfm_prop",
+      duration_unit = "minutes"
+    ),
+    "clamped 90 of 394 finite proportion values.*0.001.*0.999"
+  )
+  expect_identical(sum(out$survival == 0.001), 89L)
+  expect_identical(sum(out$survival == 0.999), 1L)
 })
 
 test_that("exactly one response must be supplied", {

@@ -92,10 +92,11 @@ bayes_cache$diagnostics[c(
 ## Refit the same frequentist specifications
 
 The code below refits the exact current freqTLS specifications from the
-installed datasets. It is hidden to keep this article readable; the five case
-articles show the same preparation and fitting code in full.
+installed datasets. The fitting output is suppressed because the diagnostic
+table follows, but the code remains visible and copyable. The five case
+articles explain each preparation and fit in smaller steps.
 
-```{r freq-fits, include=FALSE}
+```{r freq-fits, results='hide', message=FALSE, warning=FALSE}
 data(zebrafish_o2)
 zf <- droplevels(subset(
   zebrafish_o2,
@@ -292,6 +293,7 @@ names(paired)[names(paired) == "lower"] <- "bayes_lower"
 names(paired)[names(paired) == "upper"] <- "bayes_upper"
 names(paired)[names(paired) == "interval_method"] <- "bayes_interval"
 paired$difference_freq_minus_bayes <- paired$freq_estimate - paired$bayes_median
+stopifnot(nrow(paired) == 18L)
 
 paired[c(
   "case_id", "endpoint", "threshold", "t_ref", "group", "parameter",
@@ -331,6 +333,7 @@ aphid_join <- merge(
 )
 aphid_join$difference_freq_minus_bayes <-
   aphid_join$freq_estimate - aphid_join$median
+stopifnot(nrow(aphid_join) == 18L)
 aggregate(
   abs(difference_freq_minus_bayes) ~ parameter,
   data = aphid_join,
@@ -353,6 +356,17 @@ must not be subtracted from the Bayesian absolute values. Only the absolute
 mort_lt50 <- data.frame(
   group = mort_fit$fit$group_levels,
   freq_estimate = vapply(mort_fit$fit$group_levels, function(sex_level) {
+    temp_grid <- seq(min(mort$temp), max(mort$temp), length.out = 1001)
+    grid_difference <- predict(
+      mort_fit,
+      data.frame(temp = temp_grid, duration = 240, group = sex_level),
+      type = "survival"
+    ) - 0.5
+    crossing <- which(
+      grid_difference[-length(grid_difference)] *
+        grid_difference[-1L] <= 0
+    )
+    stopifnot(length(crossing) == 1L)
     objective <- function(temp) {
       predict(
         mort_fit,
@@ -360,7 +374,11 @@ mort_lt50 <- data.frame(
         type = "survival"
       ) - 0.5
     }
-    uniroot(objective, range(mort$temp), tol = 1e-10)$root
+    uniroot(
+      objective,
+      temp_grid[c(crossing, crossing + 1L)],
+      tol = 1e-10
+    )$root
   }, numeric(1))
 )
 mort_bayes <- subset(
@@ -376,6 +394,7 @@ names(mort_compare)[names(mort_compare) == "median"] <- "bayes_median"
 mort_compare$difference_freq_minus_bayes <-
   mort_compare$freq_estimate - mort_compare$bayes_median
 mort_compare$freq_interval <- "none: exact-model bootstrap unstable"
+stopifnot(nrow(mort_compare) == 2L)
 mort_compare
 ```
 

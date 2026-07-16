@@ -1,96 +1,105 @@
-# Benchmark Protocol
+# Canonical bayesTLS comparison protocol
 
-freqTLS benchmarks itself against `bayesTLS` (Bayesian) and the classical
-two-stage estimator on shared, vendored datasets. The benchmark must be fair and
-reproducible without Stan in CI. The review checklist is the
-`benchmark-vs-bayesTLS-audit` skill (Jason maps the comparator; Rose audits the
-claims and provenance).
+## Purpose
 
-## Datasets and column mapping
+freqTLS uses the pinned bayesTLS supplement as its empirical teaching template.
+The comparison asks whether both engines received the same scientific analysis;
+it does not require a maximum-likelihood estimate to equal a posterior median.
+Agreement is a cross-check, not proof of correctness, because shared errors can
+make both packages agree.
 
-freqTLS uses the column contract
-`fit_tls(y = survived, n = total, time = duration, temp = temp, group = )`.
+The authoritative Bayesian baseline is bayesTLS commit
+`76510412e06c594c96894a1baba1f0e1a34a5aea`, rendered 2026-07-14. The exact
+machine-readable contract is `data-raw/canonical_comparator_manifest.R`.
 
-- **shrimp** (`shrimp_lethal`, ungrouped): `temp = Temperature_assay`,
-  `duration = Duration_exposure_hours`, `total = N_individuals_after_trial`,
-  `survived = N - round(Mortality_after_trial * N)`. The shrimp counts must be
-  rebuilt from the CSV proportion (R-SHRIMP, below).
-- **zebrafish** (`zebrafish_lethal`, grouped by life stage): `temp = assay_temp`,
-  `duration = duration_h`, `total = n_total`, `survived = n_surv` (shipped
-  correctly), `group = life_stage`.
-- **D. suzukii** (`dsuzukii`, per-individual, grouped by sex): aggregate the 0/1
-  `dead` indicator to `(temp, time, sex)` cells (`total = n()`,
-  `survived = sum(dead == 0)`); then `temp = temp`, `duration = time` (minutes),
-  `group = sex`, `tref = 240` minutes. Count data, so the full three-way applies.
+## Active analysis units
 
-## The R-SHRIMP data fix
+| ID | Exact analysis | Family | Formula and estimand |
+| --- | --- | --- | --- |
+| `zebrafish_oxygen` | `zebrafish_o2`; diploid; normoxia + hyperoxia | beta-binomial | `ctmax/z = ~ 0 + oxygen`, `low = ~ 0 + oxygen`, shared `up/k`; relative; `t_ref = 60` |
+| `aphid_age6` | `aphid_tdt`; heat; age 6 | beta-binomial | `ctmax/z = ~ 0 + species`, `k = ~ temp_c`, shared `low/up`; relative; `t_ref = 60` |
+| `aphid_all_age` | `aphid_tdt`; all heat-branch ages | beta-binomial | `ctmax/z = ~ 1 + species * age`, `k = ~ temp_c`, shared `low/up`; relative; `t_ref = 60` |
+| `snowgum_psii` | retained PSII proportion; Dark vs Light; plant random intercept | Beta | `ctmax = ~ 0 + recovery + (1 | plant)`, `z = ~ 0 + recovery`, shared shape; relative; `t_ref = 60` |
+| `drosophila_mortality` | aggregate `dead` by temperature x duration x sex | beta-binomial | `ctmax/z = ~ 0 + sex`, `low/up/k = ~ temp_c`; absolute LT50 report at `t_ref = 240` from a relative direct-coordinate fit |
+| `drosophila_awake` | aggregate missing `t_coma` by temperature x level x sex; duration zero removed | beta-binomial | `ctmax/z = ~ sex`, `low/up/k = ~ temp_c`; relative; `t_ref = 60` |
 
-The bayesTLS shipped `shrimp_lethal` death counts are corrupted upstream. The CSV
-column `Mortality_after_trial` is a **proportion** (for example `0.0909 = 1/11`,
-`0.5 = 5/10`), but the upstream `make_datasets.R:25` mislabels it a death count
-and `:34` applies `as.integer(...)`, which floors proportions below 1 to 0, so the
-shipped death counts collapse to nearly all zero. freqTLS sidesteps this by
-vendoring the **raw CSV proportion** (`Mortality_after_trial`) together with
-`N_individuals_after_trial`, rather than any baked-in counts;
-`standardize_data(mortality = "Mortality_after_trial")` then rebuilds the death
-counts as `round(prop * N)` (hence `survived = N - round(prop * N)`) at fit time.
-`R/data.R` documents the vendored proportion, and the vendored `.rda` is verified
-against the CSV before finalising.
+Snow-gum is a transparent frequentist analogue: the active paired cache refits
+the locked shared-shape specification in bayesTLS. It does not claim to
+reproduce the richer recovery-by-temperature shape terms displayed in the
+pinned supplement.
 
-## Three-way comparison (no reimplementation)
+For Drosophila mortality, the direct freqTLS `CTmax` and `z` coordinates are
+relative-midpoint quantities, while the pinned reported pair is absolute. The
+public comparison therefore derives and compares only the absolute 240-minute
+LT50 point. It withholds an allegedly equivalent absolute `z` rather than
+subtracting unlike estimands.
 
-freqTLS does not reimplement the comparators; it calls bayesTLS:
+## Data and specification gates
 
-- classical two-stage: `bayesTLS::ts_stage1 -> ts_stage2 -> ts_ci`;
-- Bayesian: `bayesTLS::fit_4pl(temp_effects = "mid") ->
-  extract_tdt(target_surv = "relative")` -- the fair configuration;
-- freqTLS: `fit_tls() -> confint(method = "profile")`.
+Every analysis unit records and tests:
 
-The comparison reports point estimates plus CI width and asymmetry; zebrafish is a
-3x3 per life stage and *D. suzukii* a 3x2 per sex. The interval-bearing model fits
-(`bayesTLS` posterior, `freqTLS` profile) are locked to the **relative**
-midpoint threshold (R-RELABS) -- which is the `freqTLS` `CTmax` parameter -- and
-the **constant-shape** model, with the time unit and `tref` matched per dataset
-(R-UNITS: hours/`tref = 1` for shrimp and zebrafish, minutes/`tref = 240` for
-*D. suzukii*). The classical two-stage estimates
-the absolute LT50 by construction; for the near-0/near-1 lethal asymptotes of the
-count datasets the relative midpoint and the absolute LT50 are close. A fairness
-footnote states this.
+- the source-object SHA-256 and deterministic analysis-subset SHA-256;
+- the row filter or aggregation and response endpoint;
+- the family and all five nonlinear formulas;
+- grouping and random-effect structure;
+- duration unit, resolved `t_ref`, fit threshold, reported threshold, and
+  extracted quantities;
+- source-data licence and public classification.
 
-## Cache and provenance (R-STALE)
+`test-canonical-case-specifications.R` exercises the live freqTLS fits and
+requires convergence, a positive-definite Hessian, and the raw-gradient gate.
+`test-canonical-comparator-cache.R` verifies the manifest, hashes, cache
+coverage, diagnostics, and legacy exclusion.
 
-Stan will not run on CI, so the benchmark reads a maintainer-built cache at
-`inst/extdata/bayesTLS_benchmark_cache.rds` (summaries plus a `meta` block:
-`bayesTLS_version`, `git_sha`, `source_url`, `cmdstan_version`, `date_built`,
-`seed`, `config`, `datasets`, `rshrimp_note`, and `freqTLS_note`).
-`data-raw/build_benchmark_cache.R` is the
-maintainer-run builder. It requires a pinned `bayesTLS` checkout (or verified
-`BAYESTLS_GIT_SHA`) and stops rather than writing a cache with an unknown commit.
-The vignette `vignettes/comparing-to-bayesTLS.Rmd` shows
-the live bayesTLS calls with `eval = FALSE`, reads the cache with `eval = TRUE`,
-runs freqTLS live, and prints the provenance. `test-benchmark-sanity` is a
-tripwire that checks the cached numbers against a live freqTLS fit within a
-loose tolerance, and a one-command regeneration path keeps the cache current.
-The release cache was freshly rebuilt on 2026-07-11 against `bayesTLS` 1.0.0 at
-commit `578740f20f3a2e6e81b3b700b1d0f0e5a06ecf8a`, using CmdStan 2.36.0. It
-contains only shrimp, zebrafish, and *D. suzukii* summaries; permission-pending
-snow-gum material was excluded at build time. The `freqTLS_note` records that
-freqTLS is fitted live and explains the matched model configuration and the
-classical comparator's threshold difference. A future rebuild must retain the
-snow-gum exclusion unless compatible written permission is recorded; a
-numerical summary is not licence-independent merely because it no longer
-contains the input rows.
+## Totoro construction and publication
 
-## Licence (R-LICENSE)
+Stan and simulation campaigns never run in GitHub Actions. The maintainer-only
+builder runs on Totoro with `OPENBLAS_NUM_THREADS=1`, four cores by default, and
+a hard 16-core cap. It refuses CI, a dirty checkout, a different bayesTLS
+commit, an unverified installed namespace, or an output directory inside the
+repository.
 
-Licensing is component-specific; `docs/design/47-data-license-ledger.md` is the
-release gate. Brown-shrimp and life-stage zebrafish files were obtained from the
-CC BY 4.0 `bayesTLS` distribution. The *D. suzukii* assay data from Zenodo
-record 10602268 are CC BY 4.0, and the aphid assay data are CC0. The unused
-NicheMapR/NCEP microclimate trace is excluded because the workflow licence did
-not establish the complete underlying-data redistribution chain. The snow-gum
-source is **CC BY-NC 4.0**, not CC BY 4.0. Both environmental traces and the
-snow-gum raw files, derived dataset, and case-study vignette are retained under
-the build-excluded `data-raw/licensing-pending/` tree until compatible terms or
-written permission are recorded. Attribution alone does not cure a
-non-commercial or missing-licence restriction.
+The builder writes raw fits and
+`canonical_bayesTLS_cache-candidate.rds` outside the repository. Publication is
+a separate command that requires the independently reviewed candidate SHA-256
+and rechecks both source commits, complete case coverage, every analysis hash,
+and all sampler diagnostics before copying the exact bytes to
+`inst/extdata/canonical_bayesTLS_cache.rds`.
+
+The 2026-07-16 published cache has SHA-256
+`3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`. It was
+built with bayesTLS 1.0.0, freqTLS 0.2.0.9000 at `b32c860`, CmdStan 2.39.0,
+R 4.5.3, four bounded cores, and one OpenBLAS thread. Across all six fits,
+maximum R-hat was 1.0019, divergences and tree-depth hits were zero, and every
+ESS and BFMI gate passed. Raw posterior fits remain maintainer-local.
+
+## Public comparison rule
+
+`vignettes/comparing-to-bayesTLS.Rmd` reads the immutable Bayesian summaries,
+refits the current freqTLS specifications, prints convergence/Hessian/gradient
+evidence, and reports actual point differences. Confidence intervals and
+credible intervals remain separately named and interpreted. Inner joins have
+fail-closed cardinality checks so a missing group or parameter cannot silently
+disappear.
+
+A discrepancy triggers an audit of hashes, filters, formulas, factor levels,
+centring, units, thresholds, convergence, identifiability, and sampler
+diagnostics. Estimates are never averaged, tolerances are never widened to hide
+a result, and a difficult case is never silently replaced.
+
+## Legacy compatibility boundary
+
+Brown shrimp and life-stage zebrafish are unpublished benchmark-only fixtures.
+Their data objects, R-SHRIMP repair test, and historical cache remain installed
+for compatibility regression testing, but they are absent from active examples,
+navigation, search, sitemap, LLM discovery, current summaries, and comparator
+tables. Historical evidence is not current parity evidence.
+
+## Licence boundary
+
+The component ledger at `docs/design/47-data-license-ledger.md` is authoritative.
+The canonical cache inherits every input's terms. In particular, the Snow-gum
+object and its cached summaries are currently authorized only for the
+non-commercial GitHub/pkgdown development teaching use. CRAN, commercial
+downstream redistribution, and adaptations remain blocked until a broader
+written rights-holder grant is archived or the data are compatibly relicensed.

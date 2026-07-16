@@ -1,10 +1,10 @@
 # Shared API crosswalk: freqTLS 0.2 versus pinned bayesTLS
 
-**Date:** 2026-07-16  
+**Date:** 2026-07-16
 **Audience:** maintainers deciding which shared names are true compatibility
-contracts and which are only parallel scientific operations  
+contracts and which are only parallel scientific operations
 **freqTLS baseline:** `codex/v02-bayestls-parity`, audited from its R sources and
-generated `NAMESPACE`  
+generated `NAMESPACE`
 **bayesTLS baseline:** commit
 `76510412e06c594c96894a1baba1f0e1a34a5aea`, the source behind the supplement
 rendered on 2026-07-14

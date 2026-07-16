@@ -15,7 +15,8 @@
 #'   \eqn{F_v/F_m} ratio with no denominator: supply `proportion` and omit the
 #'   count arguments. The value is stored in `survival` (clamped into the open
 #'   interval `(proportion_eps, 1 - proportion_eps)` so the Beta likelihood is
-#'   finite); no `n_total`/`n_surv` columns are created. `response_type` is
+#'   finite). A warning reports the affected count and epsilon whenever values
+#'   are changed; no `n_total`/`n_surv` columns are created. `response_type` is
 #'   recorded as `"proportion"`.
 #'
 #' If the dataset spans multiple categories (life stages, species, populations,
@@ -147,6 +148,19 @@ standardize_data <- function(data,
       stop("`proportion` has values outside [0, 1]. A continuous-proportion ",
            "response must be a fraction in [0, 1] (e.g. post/pre Fv/Fm).",
            call. = FALSE)
+    clamped <- is.finite(p) &
+      (p < proportion_eps | p > 1 - proportion_eps)
+    if (any(clamped)) {
+      warning(
+        "standardize_data() clamped ", sum(clamped), " of ",
+        sum(is.finite(p)), " finite proportion values into [",
+        format(proportion_eps, scientific = FALSE), ", ",
+        format(1 - proportion_eps, scientific = FALSE),
+        "] for the Beta likelihood. Check whether boundary values and this ",
+        "epsilon are scientifically appropriate.",
+        call. = FALSE
+      )
+    }
     out$survival  <- pmin(pmax(p, proportion_eps), 1 - proportion_eps)
     keep <- is.finite(out$survival) & is.finite(out$temp) &
             is.finite(out$duration) & out$duration > 0

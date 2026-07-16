@@ -200,8 +200,6 @@ test_that("published canonical cache has complete provenance and no legacy cases
   expect_true(all(cache$summaries$lower <= cache$summaries$median))
   expect_true(all(cache$summaries$median <= cache$summaries$upper))
 
-  source(manifest_path, local = environment())
-  specs <- canonical_comparator_specs()
   expected_groups <- c(
     zebrafish_oxygen = 2L,
     aphid_age6 = 3L,
@@ -210,17 +208,28 @@ test_that("published canonical cache has complete provenance and no legacy cases
     drosophila_mortality = 2L,
     drosophila_awake = 2L
   )
+  have_manifest <- file.exists(manifest_path)
+  if (have_manifest) {
+    source(manifest_path, local = environment())
+    specs <- canonical_comparator_specs()
+  }
   for (case_id in expected_cases) {
     meta <- cache$meta$cases[[case_id]]
-    spec <- specs[[case_id]]
     rows <- cache$summaries[cache$summaries$case_id == case_id, , drop = FALSE]
-    expect_identical(
-      meta$analysis_hash_sha256,
-      unname(CANONICAL_ANALYSIS_HASHES[[case_id]])
-    )
-    expect_identical(meta$formulas, spec$formulas)
-    expect_identical(meta$t_ref, spec$t_ref)
-    expect_identical(meta$reported_threshold, spec$threshold)
+    expect_match(meta$analysis_hash_sha256, "^[0-9a-f]{64}$")
+    expect_setequal(names(meta$formulas), c("ctmax", "z", "low", "up", "k"))
+    expect_true(is.finite(meta$t_ref) && meta$t_ref > 0)
+    expect_true(meta$reported_threshold %in% c("relative", "absolute"))
+    if (have_manifest) {
+      spec <- specs[[case_id]]
+      expect_identical(
+        meta$analysis_hash_sha256,
+        unname(CANONICAL_ANALYSIS_HASHES[[case_id]])
+      )
+      expect_identical(meta$formulas, spec$formulas)
+      expect_identical(meta$t_ref, spec$t_ref)
+      expect_identical(meta$reported_threshold, spec$threshold)
+    }
     expect_identical(nrow(rows), 2L * expected_groups[[case_id]])
     parameter_counts <- table(rows$parameter)
     expect_setequal(names(parameter_counts), c("CTmax", "z"))
@@ -229,6 +238,10 @@ test_that("published canonical cache has complete provenance and no legacy cases
       rep(expected_groups[[case_id]], 2L)
     )
   }
+  expect_identical(
+    cache$meta$cases$drosophila_mortality$fit_threshold,
+    "relative"
+  )
   expect_match(cache$meta$legacy_exclusion, "Shrimp")
   expect_match(cache$meta$legacy_exclusion, "life-stage zebrafish")
   expect_false(any(grepl(

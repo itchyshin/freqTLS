@@ -23,6 +23,9 @@
   diagnostics, source versions, seeds, and a public table of actual
   freqTLS-minus-bayesTLS differences. The historical shrimp/life-stage cache
   remains internal legacy evidence only.
+* `standardize_data()` now warns with the affected count and epsilon whenever
+  a continuous proportion is moved off 0 or 1 for the Beta likelihood. The
+  Snow-gum example makes its 90 adjusted values explicit.
 
 # freqTLS 0.1.0 (unreleased historical candidate)
 

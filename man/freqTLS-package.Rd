@@ -11,8 +11,12 @@ Bayesian \code{bayesTLS} package. It fits single-stage four-parameter logistic
 (4PL) thermal-load-sensitivity (thermal death-time) models via Template Model
 Builder (\code{TMB}), parameterised directly in \code{CTmax} and \code{z}
 (thermal sensitivity), so that both headline quantities can be profiled. It
-returns prior-free, asymmetry-respecting profile-likelihood confidence
-intervals for binomial and beta-binomial survival-count data.
+returns prior-free Wald, profile-likelihood, or parametric-bootstrap
+confidence intervals for binomial and beta-binomial survival counts and the
+experimental Beta continuous-proportion family. Formula shape effects,
+limited random intercepts, and deterministic heat-injury prediction are also
+experimental; censored-time, hurdle-productivity, posterior, and fitted
+repair models remain outside freqTLS.
 }
 \section{Experimental software}{
 

@@ -89,7 +89,8 @@ are derived and the standardised columns include \code{n_total}, \code{n_surv},
 \eqn{F_v/F_m} ratio with no denominator: supply \code{proportion} and omit the
 count arguments. The value is stored in \code{survival} (clamped into the open
 interval \verb{(proportion_eps, 1 - proportion_eps)} so the Beta likelihood is
-finite); no \code{n_total}/\code{n_surv} columns are created. \code{response_type} is
+finite). A warning reports the affected count and epsilon whenever values
+are changed; no \code{n_total}/\code{n_surv} columns are created. \code{response_type} is
 recorded as \code{"proportion"}.
 }
 

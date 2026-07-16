@@ -1,9 +1,9 @@
 # bayesTLS parity ledger for the freqTLS v0.2 teaching surface
 
-**Audit date:** 2026-07-16  
-**freqTLS baseline:** `c9f101429d95846bf41207a66085e59ffcef5b4c` (`origin/main`)  
-**bayesTLS baseline:** `76510412e06c594c96894a1baba1f0e1a34a5aea`  
-**Rendered baseline:** <https://daniel1noble.github.io/bayesTLS/>, supplement rendered 2026-07-14  
+**Audit date:** 2026-07-16
+**freqTLS baseline:** `c9f101429d95846bf41207a66085e59ffcef5b4c` (`origin/main`)
+**bayesTLS baseline:** `76510412e06c594c96894a1baba1f0e1a34a5aea`
+**Rendered baseline:** <https://daniel1noble.github.io/bayesTLS/>, supplement rendered 2026-07-14
 **Scope:** starting source/rendered surfaces, their disposition, and a final-state
 reconciliation. Fit evidence is recorded in the canonical tests and check log.
 

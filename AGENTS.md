@@ -206,7 +206,8 @@ vignette, pkgdown, after-task, release, or paper-oriented text.
 Codex and Claude Code may both contribute to this repository. All agent work
 must follow the same project rules:
 
-- preserve the single-stage 4PL count-data scope and the v0.1 non-goals;
+- preserve the experimental v0.2 single-stage 4PL scope, including the tested
+  count and Beta families, while respecting every unsupported boundary above;
 - avoid unreviewed likelihood or parameterisation changes;
 - update design docs when the model, likelihood, profile algorithm, or benchmark
   protocol changes;

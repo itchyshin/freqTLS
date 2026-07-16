@@ -43,7 +43,7 @@ legacy_pages <- c(
 )
 legacy_search_terms <- c(
   "case-study-shrimp", "shrimp_lethal", "shrimp_sublethal",
-  "zebrafish_lethal", "brown shrimp", "life-stage zebrafish"
+  "zebrafish_lethal", "shrimp", "life-stage"
 )
 internal_artifacts <- c(internal_pages, paste0(internal_stems, ".md"))
 to_remove <- file.path(dst, internal_artifacts)

@@ -11,9 +11,12 @@ test_that("standardize_data records the proportion clamp and warns on overwrite"
                   response = c(0, 1), survival = c("old", "values"))
   out <- NULL
   expect_warning(
-    out <- standardize_data(
-      x, temp = "temp_raw", duration = "duration_raw",
-      proportion = "response", proportion_eps = 0.01
+    expect_warning(
+      out <- standardize_data(
+        x, temp = "temp_raw", duration = "duration_raw",
+        proportion = "response", proportion_eps = 0.01
+      ),
+      "clamped 2 of 2 finite proportion values"
     ),
     "overwrites the existing `survival` column",
     fixed = TRUE
