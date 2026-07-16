@@ -59,7 +59,7 @@ A \code{tls} object: a list with \verb{$summary} (a tibble of
 \verb{[<group>,] quantity, median, lower, upper}) and \verb{$meta}.
 }
 \description{
-The frequentist twin of \code{bayesTLS::tls()}. Reads a \code{\link[=fit_4pl]{fit_4pl()}} (\code{freq_tls})
+The frequentist analogue of \code{bayesTLS::tls()}. Reads a \code{\link[=fit_4pl]{fit_4pl()}} (\code{freq_tls})
 fit and returns the headline thermal-death-time quantities — thermal
 sensitivity \code{z} and \code{CTmax} — as point estimates with confidence intervals,
 one row per group when the fit is grouped. Uncertainty uses the engine's

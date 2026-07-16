@@ -49,31 +49,32 @@ articles:
     navbar: Model details
     contents:
       - model-math
-      - profile-likelihood
-      - random-effects
-  - title: Comparison
-    navbar: Comparison
+  - title: Canonical empirical examples
+    navbar: Examples
+    contents:
+      - case-study-zebrafish
+      - case-study-li-aphids
+      - case-study-snowgum
+      - case-study-suzukii
+      - case-study-suzukii-coma
+      - case-study-summary
+  - title: Frequentist extensions
+    navbar: Extensions
     contents:
       - comparing-to-bayesTLS
       - frequentist-and-bayesian
-  - title: Applications
-    navbar: Applications
-    contents:
       - heat-injury
-  - title: Case studies
-    navbar: Case studies
+      - profile-likelihood
+      - random-effects
+  - title: Legacy notices
     contents:
       - case-study-shrimp
-      - case-study-zebrafish
-      - case-study-li-aphids
-      - case-study-suzukii
-      - case-study-summary
 
 reference:
-  - title: Fit and extract (the bayesTLS-style twin API)
+  - title: Fit and extract (shared-name workflow analogues)
     desc: >
-      The primary, bayesTLS-compatible workflow: standardise the data, fit the
-      4PL by maximum likelihood, and extract the thermal-death-time quantities.
+      The primary frequentist workflow: standardise the same data, fit the 4PL
+      by maximum likelihood, and extract analogous thermal-death-time quantities.
     contents:
       - standardize_data
       - make_4pl_formula
@@ -93,7 +94,7 @@ reference:
       - ts_curve
   - title: Engine (lower-level interface)
     desc: >
-      The TMB engine the twin is built on; use it directly for full formula
+      The TMB engine behind freqTLS; use it directly for full formula
       control.
     contents:
       - fit_tls
@@ -140,15 +141,13 @@ reference:
       - clock_to_minutes
       - format_interval
       - tdt_quantile
-  - title: Data
-    desc: Vendored benchmark datasets; see each help page for source-specific credit and licence terms.
+  - title: Canonical teaching data
+    desc: Published empirical examples mirrored from the pinned bayesTLS supplement; see each help page for source-specific credit and component licences.
     contents:
-      - shrimp_lethal
-      - shrimp_sublethal
-      - zebrafish_lethal
       - zebrafish_o2
       - dsuzukii
       - aphid_tdt
+      - snowgum_psii
   - title: Package
     contents:
       - freqTLS-package

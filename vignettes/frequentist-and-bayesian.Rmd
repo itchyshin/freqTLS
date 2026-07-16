@@ -51,10 +51,10 @@ about the parameters**:
   **posterior**, and reports a **credible interval** — a probability statement
   about the parameter, conditional on the prior.
 
-On strong data these agree closely — on the brown-shrimp benchmark the two
-packages' `CTmax` estimates differ by only about 0.07 °C (cached in
-`benchmark_vs_bayes.rds`; the full three-way comparison, which adds the classical
-two-stage method, is in `vignette("comparing-to-bayesTLS")`). They diverge
+On strong synthetic data these often agree closely. The canonical paired
+comparison first locks the same data, formulas, threshold, and resolved
+reference time, then reports the actual difference; see
+`vignette("comparing-to-bayesTLS")`. They can diverge
 exactly where the data are weak and the prior starts to do the work — which is
 precisely where you most need to know what is data and what is assumption.
 

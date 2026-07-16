@@ -72,7 +72,7 @@ attr(dat, "truth")[c("CTmax", "z", "phi")]
 temperature, duration, and survival-count columns and records the data contract;
 then `fit_4pl()` fits the 4PL by maximum likelihood and returns a `freq_tls`
 workflow object. `t_ref` is the reference time at which `CTmax` is defined: the
-twin facade `fit_4pl()` uses the `bayesTLS` spelling `t_ref` (default 60), while
+shared-name facade `fit_4pl()` uses the `bayesTLS` spelling `t_ref` (default 60), while
 the lower-level engine `fit_tls()` (below) uses `tref` (default 1) — the same
 quantity, in the data's duration unit. The simulated durations here are already in
 reference units, so we pass `1`.
@@ -95,7 +95,7 @@ fit
 ### Formula interface
 
 For the supported moderators, `fit_4pl()` takes a **similar direct interface** to `bayesTLS` —
-`ctmax =`, `z =`, or the `by =` shorthand (e.g. `by = "life_stage"` for a grouped
+`ctmax =`, `z =`, or the `by =` shorthand (e.g. `by = "population"` for a grouped
 fit). Under the hood the engine also exposes a `brms`/`drmTMB`-style grammar via
 `tls_bf()` — the left-hand side names the survival counts (`successes |
 trials(total)`), the right-hand side tags the two axes with the `time()` and
@@ -251,7 +251,7 @@ biased low when fewer than about eight groups are sampled).
 
 `freqTLS` deliberately mirrors the `bayesTLS` workflow, so the same
 **standardise → fit → quantities → plot** path runs by maximum likelihood.
-The map below shows the main workflow and how each box twins a `bayesTLS`
+The map below shows the main workflow and how each box corresponds to a `bayesTLS`
 function. The
 **"freqTLS extras"** box (gold, upper right) is the frequentist-only addition —
 Wald / profile / bootstrap intervals and the Confidence Eye — and the dashed

@@ -209,3 +209,21 @@ test_that("plot_survival_curves() works on a formula-grouped fit", {
   p <- plot_survival_curves(fit)
   expect_s3_class(p, "ggplot")
 })
+
+test_that("formula starts put baselines on intercepts, not slopes or contrasts", {
+  d <- data.frame(
+    species = factor(rep(c("a", "b"), each = 3)),
+    age = factor(rep(c("young", "old", "young"), 2)),
+    temp_c = seq(-1, 1, length.out = 6)
+  )
+  X_factorial <- model.matrix(~ species * age, d)
+  X_shape <- model.matrix(~ temp_c, d)
+  X_onehot <- model.matrix(~ 0 + species, d)
+
+  expect_equal(
+    freqTLS:::tls_formula_start(X_factorial, 36),
+    c(36, rep(0, ncol(X_factorial) - 1L))
+  )
+  expect_equal(freqTLS:::tls_formula_start(X_shape, log(5)), c(log(5), 0))
+  expect_equal(freqTLS:::tls_formula_start(X_onehot, 36), c(36, 36))
+})

@@ -1,6 +1,6 @@
 Package: freqTLS
 Title: Frequentist Inference for Thermal Load Sensitivity Models
-Version: 0.1.0
+Version: 0.2.0.9000
 Authors@R: c(
     person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com",
            role = c("aut", "cre", "cph"),
@@ -41,6 +41,7 @@ Imports:
     cli,
     ggplot2,
     MASS,
+    nloptr,
     parallel,
     rlang,
     stats,
@@ -51,6 +52,7 @@ LinkingTo:
     RcppEigen,
     TMB
 Suggests:
+    digest,
     glmmTMB,
     knitr,
     rmarkdown,

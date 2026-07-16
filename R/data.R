@@ -8,7 +8,8 @@
 #' Replicate lethal-TDT trials for brown shrimp (\emph{Crangon crangon}). Each
 #' row is one tank of individuals exposed to a fixed assay temperature for a
 #' fixed duration; the response is the proportion that died. The model-ready
-#' frame for Case Study 1 (lethal endpoint).
+#' fixture retained for compatibility benchmarking. It is unpublished and is
+#' not an active teaching example.
 #'
 #' @format A data frame with 148 rows and 6 variables:
 #' \describe{
@@ -27,13 +28,7 @@
 #'   licensed CC BY 4.0. freqTLS retains the mortality proportion and documents
 #'   its count reconstruction above. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
-#' @examples
-#' std <- standardize_data(shrimp_lethal, temp = "Temperature_assay",
-#'                         duration = "Duration_exposure_hours",
-#'                         n_total = "N_individuals_after_trial",
-#'                         mortality = "Mortality_after_trial",
-#'                         random_effects = c("Date", "Tank"),
-#'                         duration_unit = "hours")
+#' @keywords datasets internal
 "shrimp_lethal"
 
 #' Brown shrimp sublethal time-to-knockdown data
@@ -42,6 +37,7 @@
 #' individuals contributes the elapsed time to loss of response to touch
 #' (knockdown) at a fixed assay temperature. Cleaned from the raw clock-time
 #' records (excluded rows dropped; start/stop times parsed to elapsed minutes).
+#' This unpublished object is retained only for compatibility benchmarking.
 #'
 #' @format A data frame with 299 rows and 5 variables:
 #' \describe{
@@ -56,6 +52,7 @@
 #'   by Noble, Arnold, and Pottier (2026), licensed CC BY 4.0. freqTLS dropped
 #'   excluded rows and converted the clock times to elapsed minutes. Raw file:
 #'   \code{system.file("extdata", "data_sublethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
+#' @keywords datasets internal
 "shrimp_sublethal"
 
 #' Zebrafish lethal thermal-death-time data across life stages
@@ -63,7 +60,9 @@
 #' Lethal-TDT trials for zebrafish (\emph{Danio rerio}) at three life stages.
 #' Built from the raw daily survival sheet by summing the per-day
 #' morning/afternoon mortality counts into one death count per trial and dropping
-#' excluded rows. One row per assay trial. The model-ready frame for Case Study 2.
+#' excluded rows. One row per assay trial. This unpublished life-stage object is
+#' retained only for compatibility benchmarking; the active zebrafish example
+#' is the oxygen-gradient \code{zebrafish_o2} dataset.
 #'
 #' @format A data frame with 323 rows and 7 variables:
 #' \describe{
@@ -82,6 +81,7 @@
 #'   aggregated daily mortality counts, and derived survivors as documented
 #'   above. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_zebrafish.csv", package = "freqTLS")}.
+#' @keywords datasets internal
 "zebrafish_lethal"
 
 #' Drosophila suzukii multi-trait thermal-tolerance data
@@ -90,12 +90,12 @@
 #' (\emph{Drosophila suzukii}), one row per fly, carrying three thermal-tolerance
 #' endpoints measured under static heat exposures at 34--38 degrees C:
 #' a lethal endpoint (\code{dead}), a sublethal knockdown time-to-event
-#' (\code{t_coma}), and a sublethal reproductive endpoint (\code{prod}). Only
-#' \code{dead} is a valid freqTLS response: aggregate it to counts for the
-#' beta-binomial lethal fit. The \code{t_coma} and \code{prod} columns are
-#' retained to preserve the deposited record and provide study context; they
-#' require time-to-event and reproductive-response models that freqTLS does not
-#' fit. \code{lvl} indexes the exposure-duration grid as a
+#' (\code{t_coma}), and a sublethal reproductive endpoint (\code{prod}).
+#' Aggregate \code{dead} to mortality/survival counts for Case 4. For the
+#' supported awake/coma arm of Case 4.2, aggregate \code{is.na(t_coma)} to an
+#' awake count at each temperature x level x sex cell. freqTLS does not fit the
+#' censored time-to-coma response or the hurdle productivity response; those
+#' analyses remain in bayesTLS. \code{lvl} indexes the exposure-duration grid as a
 #' percentage of the estimated median time-to-coma from the authors' initial TDT
 #' curves; \code{time} is the realised duration in minutes.
 #'
@@ -169,11 +169,14 @@
 #'   \code{system.file("extdata", "data_lethal_TDT_zebrafish_oxygen.csv", package = "freqTLS")}.
 #' @examples
 #' \donttest{
-#' std <- standardize_data(zebrafish_o2, temp = "temp", duration = "duration_min",
+#' zf <- droplevels(subset(zebrafish_o2,
+#'   ploidy == "diploid" & oxygen %in% c("normoxia", "hyperoxia")))
+#' std <- standardize_data(zf, temp = "temp", duration = "duration_min",
 #'                         n_total = "n_total", n_surv = "n_surv",
 #'                         duration_unit = "minutes")
-#' wf <- fit_4pl(std, ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen, t_ref = 60)
-#' tls(wf, by = "oxygen", lethal = TRUE)   # z, CTmax, T_crit per oxygen treatment
+#' wf <- fit_4pl(std, ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen,
+#'               low = ~ 0 + oxygen, up = ~ 1, k = ~ 1, t_ref = 60)
+#' tls(wf, by = "oxygen", lethal = FALSE)  # z and CTmax; no Tcrit
 #' }
 "zebrafish_o2"
 
@@ -216,7 +219,44 @@
 #' std <- standardize_data(a, temp = "temp", duration = "duration_min",
 #'                         n_total = "n_total", n_surv = "n_surv",
 #'                         duration_unit = "minutes")
-#' wf <- fit_4pl(std, ctmax = ~ 0 + species, z = ~ 0 + species, t_ref = 60)
-#' tls(wf, by = "species", lethal = TRUE)   # z, CTmax, T_crit per species
+#' wf <- fit_4pl(std, ctmax = ~ 0 + species, z = ~ 0 + species,
+#'               low = ~ 1, up = ~ 1, k = ~ temp_c, t_ref = 60)
+#' tls(wf, by = "species", lethal = FALSE)  # z and CTmax; no Tcrit here
 #' }
 "aphid_tdt"
+
+#' Snow-gum retained PSII after heat exposure
+#'
+#' Retained photosystem-II function for snow gum (\emph{Eucalyptus pauciflora})
+#' leaf sections after a temperature x duration heat dose and either Dark or
+#' Light recovery. \code{fvfm_prop} is post-exposure Fv/Fm divided by the
+#' pre-exposure value. It is a continuous proportion, so the canonical model
+#' uses the experimental Beta family rather than a count likelihood.
+#'
+#' @format A data frame with 394 rows and 8 variables:
+#' \describe{
+#'   \item{Temp}{Assay temperature (degrees C).}
+#'   \item{Time}{Exposure duration (minutes).}
+#'   \item{recovery}{Recovery condition: \code{Dark} or \code{Light}.}
+#'   \item{plant}{Plant identifier for the CTmax random intercept.}
+#'   \item{meas_day}{Measurement-day identifier.}
+#'   \item{initial_fvfm}{Pre-exposure Fv/Fm.}
+#'   \item{final_fvfm}{Post-exposure Fv/Fm.}
+#'   \item{fvfm_prop}{Retained PSII proportion.}
+#' }
+#' @source Arnold et al. (2026), \doi{10.64898/2026.04.09.717599}. The
+#'   development copy is redistributed under CC BY-NC 4.0 with attribution.
+#'   A maintainer attestation records coauthor permission for the current
+#'   non-commercial GitHub/pkgdown teaching use. Unrestricted/commercial
+#'   downstream redistribution and CRAN remain blocked until a written
+#'   rights-holder grant is archived; see \file{inst/COPYRIGHTS}.
+#' @examples
+#' \donttest{
+#' std <- standardize_data(snowgum_psii, temp = "Temp", duration = "Time",
+#'                         proportion = "fvfm_prop", duration_unit = "minutes")
+#' wf <- fit_4pl(std, ctmax = ~ 0 + recovery + (1 | plant),
+#'               z = ~ 0 + recovery, low = ~ 1, up = ~ 1, k = ~ 1,
+#'               family = "beta", t_ref = 60, method = "wald", quiet = TRUE)
+#' tls(wf, by = "recovery", lethal = FALSE, method = "wald")
+#' }
+"snowgum_psii"

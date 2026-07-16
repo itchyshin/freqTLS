@@ -7,13 +7,16 @@
 #' \deqn{p = low + (up - low)\,\mathrm{plogis}(-k(\log_{10}(duration) - mid)).}
 #'
 #' @details
-#' Three response types are available:
+#' Four response types are available:
 #' * `"survival"` (default) returns the fitted survival probability in `(0, 1)`.
 #' * `"link"` returns the logit of the survival probability,
 #'   `qlogis(survival)`.
 #' * `"midpoint"` returns the temperature-dependent 4PL midpoint `mid` on the
 #'   `log10(duration)` axis (constant within a temperature, so the `duration`
 #'   column is ignored for this type but a `temp` column is still required).
+#' * `"parameters"` returns the row-specific natural-scale `CTmax`, `z`, `low`,
+#'   `up`, and `k` values. This is useful for interacted formula designs; the
+#'   `duration` column may be omitted.
 #'
 #' `newdata` must also contain every predictor used by the fitted fixed-effect
 #' designs for `CTmax`, `log_z`, `low`, `up`, or `log_k`. For a grouped column-
@@ -31,16 +34,19 @@
 #'   `log_k` fixed designs. Include `group` for a grouped column-interface fit.
 #'   Conditional random-effect predictions additionally require every fitted
 #'   grouping column. `duration` must be strictly positive (it is
-#'   `log10`-transformed). For `type = "midpoint"`, `duration` may be omitted.
-#' @param type One of `"survival"` (default), `"link"`, or `"midpoint"`.
+#'   `log10`-transformed). For `type = "midpoint"` or `"parameters"`, `duration`
+#'   may be omitted.
+#' @param type One of `"survival"` (default), `"link"`, `"midpoint"`, or
+#'   `"parameters"`.
 #' @param re.form How to handle fitted random intercepts. `"population"`
 #'   (default) sets them to zero; `"conditional"` adds the fitted BLUP for each
 #'   random-effect grouping column in `newdata`. When omitted for a random-
 #'   effects fit, `predict()` warns that it is returning a population prediction.
 #' @param ... Reserved; must be empty.
 #'
-#' @return A numeric vector with one element per row of `newdata`. Survival
-#'   values lie in `(0, 1)`.
+#' @return For `type = "parameters"`, a data frame with one row per row of
+#'   `newdata` and columns `CTmax`, `z`, `low`, `up`, and `k`. Otherwise a
+#'   numeric vector with one element per row; survival values lie in `(0, 1)`.
 #'
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
@@ -76,7 +82,8 @@
 #' @importFrom stats predict
 #' @export
 predict.profile_tls <- function(object, newdata,
-                                type = c("survival", "link", "midpoint"),
+                                type = c("survival", "link", "midpoint",
+                                         "parameters"),
                                 re.form = c("population", "conditional"),
                                 ...) {
   dots <- list(...)
@@ -94,7 +101,7 @@ predict.profile_tls <- function(object, newdata,
     cli::cli_abort("{.arg newdata} must be a data frame with columns {.code temp} and {.code duration}.")
   }
 
-  needs_duration <- type != "midpoint"
+  needs_duration <- !type %in% c("midpoint", "parameters")
   required <- if (needs_duration) c("temp", "duration") else "temp"
   missing_cols <- setdiff(required, names(newdata))
   if (length(missing_cols) > 0L) {
@@ -120,6 +127,17 @@ predict.profile_tls <- function(object, newdata,
     ))
   }
   pars <- tls_predict_pars(object, newdata, re.form = re.form)
+
+  if (identical(type, "parameters")) {
+    return(data.frame(
+      CTmax = pars$CTmax,
+      z = pars$z,
+      low = pars$low,
+      up = pars$up,
+      k = pars$k,
+      row.names = NULL
+    ))
+  }
 
   log10_tref <- log10(object$tref)
   mid <- log10_tref - (temp - pars$CTmax) / pars$z
@@ -149,6 +167,22 @@ predict.profile_tls <- function(object, newdata,
   surv
 }
 
+#' @rdname predict.profile_tls
+#' @export
+predict.freq_tls <- function(object, newdata,
+                             type = c("survival", "link", "midpoint",
+                                      "parameters"),
+                             re.form = c("population", "conditional"),
+                             ...) {
+  predict.profile_tls(
+    object = object,
+    newdata = newdata,
+    type = type,
+    re.form = re.form,
+    ...
+  )
+}
+
 #' Resolve per-row CTmax, z, low, up, and k for a prediction
 #'
 #' Maps each row of `newdata` to its group's parameter values (or the single
@@ -168,6 +202,17 @@ tls_predict_pars <- function(fit, newdata, re.form = "population") {
   levels_g <- fit$group_levels
   ng <- length(levels_g)
   n_row <- nrow(newdata)
+  shape_vars <- unique(unlist(lapply(fit$shape_terms %||% list(), all.vars)))
+  if ("temp_c" %in% shape_vars && !"temp_c" %in% names(newdata)) {
+    center <- fit$prediction_meta$temp_center %||% NULL
+    if (!"temp" %in% names(newdata) || is.null(center) || !is.finite(center)) {
+      cli::cli_abort(c(
+        "Prediction must rebuild the fitted {.code temp_c} shape covariate.",
+        i = "Supply {.code temp_c} in {.arg newdata}, or fit standardized data whose {.code tdt_meta$temp_mean} is available."
+      ))
+    }
+    newdata$temp_c <- as.numeric(newdata$temp) - center
+  }
   X_CT_fit <- fit$tmb_inputs$data$X_CT
   X_logz_fit <- fit$tmb_inputs$data$X_logz
   general_fixed <- ncol(X_CT_fit) > 1L && is.null(fit$diag_data$group)
@@ -245,6 +290,8 @@ tls_predict_pars <- function(fit, newdata, re.form = "population") {
   # design labels; transformed/interacted designs fail loudly rather than
   # silently returning an intercept-only prediction.
   fixed_rhs <- function(role) {
+    stored <- fit$fixed_terms[[role]] %||% NULL
+    if (!is.null(stored)) return(stored)
     x_call <- fit$call$x
     if (!is.call(x_call)) return(NULL)
     head <- x_call[[1L]]

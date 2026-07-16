@@ -56,8 +56,9 @@
 #'                       value to align multiple datasets to a common centre.
 #' @return A tibble with the standardised columns plus a `"tdt_meta"` attribute
 #'         storing `temp_mean`, `duration_unit`, `random_effects`,
-#'         `response_type` (`"count"` or `"proportion"`), and `response_var`
-#'         (the response column name for a proportion fit, else `NULL`).
+#'         `response_type` (`"count"` or `"proportion"`), `response_var`
+#'         (the response column name for a proportion fit, else `NULL`), and
+#'         `proportion_eps` (the clamp used for a proportion fit, else `NULL`).
 #' @examples
 #' # Count data
 #' raw <- data.frame(
@@ -137,6 +138,10 @@ standardize_data <- function(data,
   if (is_proportion) {
     response_type <- "proportion"
     response_var  <- "survival"
+    if ("survival" %in% names(data) && !identical(proportion, "survival"))
+      warning("standardize_data() overwrites the existing `survival` column with ",
+              "the clamped proportion response. Rename it in the raw data to keep ",
+              "its original contents.", call. = FALSE)
     p             <- as.numeric(out[[proportion]])
     if (any(p > 1 + 1e-6, na.rm = TRUE) || any(p < -1e-6, na.rm = TRUE))
       stop("`proportion` has values outside [0, 1]. A continuous-proportion ",
@@ -208,7 +213,8 @@ standardize_data <- function(data,
     duration_unit  = duration_unit,
     random_effects = random_effects,
     response_type  = response_type,
-    response_var   = response_var
+    response_var   = response_var,
+    proportion_eps = if (is_proportion) proportion_eps else NULL
   )
 
   tibble::as_tibble(out)

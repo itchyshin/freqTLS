@@ -1,0 +1,104 @@
+---
+title: "Case 4.2: Drosophila suzukii awake/coma response"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case 4.2: Drosophila suzukii awake/coma response}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7,
+                      fig.height = 4.5, dpi = 96)
+```
+
+Case 4.2 in the
+[`bayesTLS` supplement](https://daniel1noble.github.io/bayesTLS/) contains
+several analyses. freqTLS supports only the awake/coma count arm. It does not
+replace the censored time-to-coma or hurdle-productivity models with a different
+endpoint.
+
+```{r setup}
+library(freqTLS)
+data(dsuzukii)
+```
+
+## Exact awake-count aggregation
+
+Within each temperature x exposure-level x sex cell, `n_awake` is the number of
+individuals with missing `t_coma`. Duration is the first recorded `time` in the
+cell, and duration-zero controls are dropped.
+
+```{r data}
+cell <- interaction(dsuzukii$temp, dsuzukii$lvl, dsuzukii$sex, drop = TRUE)
+coma <- do.call(rbind, lapply(split(dsuzukii, cell), function(d) {
+  data.frame(
+    temp = d$temp[1], lvl = d$lvl[1], sex = d$sex[1],
+    duration = d$time[1], n_total = nrow(d),
+    n_awake = sum(is.na(d$t_coma))
+  )
+}))
+coma <- droplevels(subset(coma, duration > 0))
+coma_std <- standardize_data(
+  coma, temp = "temp", duration = "duration",
+  n_total = "n_total", n_surv = "n_awake", duration_unit = "minutes"
+)
+```
+
+## Locked model
+
+The awake/coma response is beta-binomial. The direct headline formulas retain
+an intercept (`~ sex`), while `low`, `up`, and `k` each vary with centred assay
+temperature. The reference is 60 minutes and the estimand is the relative
+midpoint.
+
+```{r fit}
+coma_fit <- fit_4pl(
+  coma_std,
+  ctmax = ~ sex,
+  z = ~ sex,
+  low = ~ temp_c,
+  up = ~ temp_c,
+  k = ~ temp_c,
+  family = "beta_binomial",
+  t_ref = 60,
+  method = "wald",
+  quiet = TRUE
+)
+diagnose_tdt_fit(coma_fit)
+check_tls(coma_fit)
+```
+
+The lower-asymptote coefficients are weakly identified even though the
+optimizer, Hessian, and raw-gradient checks pass. The actual estimates and
+standard errors make that limitation visible.
+
+```{r shape-identification}
+coma_shape <- subset(
+  coma_fit$fit$estimates,
+  grepl("^(low|up|k):", parameter),
+  select = c(parameter, estimate, std.error)
+)
+coma_shape
+```
+
+```{r quantities}
+coma_table <- tls(coma_fit, by = "sex", lethal = FALSE, method = "wald")$summary
+names(coma_table)[names(coma_table) == "median"] <- "estimate"
+coma_table
+```
+
+Only `CTmax` and `z` are reported; `Tcrit` is not. Large shape-coefficient
+standard errors or warnings are part of the result, not material to hide.
+
+```{r fitted-curves, fig.alt="Observed awake proportions and fitted Drosophila suzukii awake-coma curves, separated by sex and assay temperature."}
+plot_survival_curves(coma_fit$fit)
+```
+
+## Unsupported arms
+
+The individual `t_coma` values form a censored time-to-event outcome, and
+`prod` requires a hurdle model for zero reproduction plus positive clutch size.
+freqTLS 0.2.0.9000 implements neither. Use the corresponding bayesTLS Case 4.2
+sections for those analyses rather than treating the count model above as a
+replacement.

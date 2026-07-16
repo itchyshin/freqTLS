@@ -126,6 +126,13 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
       ))
     }
     spec <- tls_parse_formula(x, data, quiet = quiet)
+    tdt_meta <- attr(data, "tdt_meta")
+    temp_center <- tdt_meta$temp_mean %||% {
+      if (all(c("temp", "temp_c") %in% names(data))) {
+        delta <- unique(as.numeric(data$temp) - as.numeric(data$temp_c))
+        if (length(delta) == 1L && is.finite(delta)) delta else NULL
+      } else NULL
+    }
     y_v <- spec$y
     n_v <- spec$n
     time_v <- spec$time
@@ -140,6 +147,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
       X_CT = spec$X_CT, X_logz = spec$X_logz,
       X_low = spec$X_low, X_up = spec$X_up, X_logk = spec$X_logk,
       levels = spec$levels, grouped = spec$grouped,
+      fixed_terms = spec$fixed_terms,
       shape_terms = spec$shape_terms,
       re = spec$re,
       re_logz = spec$re_logz,
@@ -154,6 +162,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
       ))
     }
     data <- x
+    temp_center <- NULL
 
     # ---- tidy-eval the columns ----------------------------------------------
     y_q <- rlang::enquo(y)
@@ -323,7 +332,15 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
   )
 
   # ---- starting values ------------------------------------------------------
-  parameters <- tls_default_start(temp_v, ng, n_low, n_up, n_logk, bounds = b4)
+  parameters <- tls_default_start(
+    temp_v,
+    X_CT = design$X_CT,
+    X_logz = design$X_logz,
+    X_low = X_low,
+    X_up = X_up,
+    X_logk = X_logk,
+    bounds = b4
+  )
   if (!is.null(start)) {
     if (!is.list(start)) cli::cli_abort("{.arg start} must be a named list.")
     parameters[names(start)] <- start[names(start)]
@@ -419,7 +436,9 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
     group_levels = design$levels,
     # Per-shape right-hand sides for rebuilding shape designs from newdata in
     # predict() (NULL for the column interface, whose shapes are intercept-only).
+    fixed_terms = design$fixed_terms,
     shape_terms = design$shape_terms,
+    prediction_meta = list(temp_center = temp_center),
     re = re_spec,
     re_logz = re_logz_spec,
     re_low = re_low_spec,
@@ -463,19 +482,33 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
 #' @return Named list of starts matching `src/profile_tls.cpp` parameters.
 #' @keywords internal
 #' @noRd
-tls_default_start <- function(temp_v, ng, n_low = 1L, n_up = n_low,
-                              n_logk = n_low, bounds = compute_4pl_bounds(0, 1)) {
+tls_formula_start <- function(X, baseline) {
+  out <- rep(0, ncol(X))
+  intercept <- which(colnames(X) %in% "(Intercept)")
+  if (length(intercept) == 1L) {
+    out[intercept] <- baseline
+  } else {
+    # No-intercept factor designs are one-hot: every level needs the natural
+    # baseline. Retain the previous all-baseline behaviour for other
+    # no-intercept designs because they have no separate intercept coordinate.
+    out[] <- baseline
+  }
+  out
+}
+
+tls_default_start <- function(temp_v, X_CT, X_logz, X_low, X_up, X_logk,
+                              bounds = compute_4pl_bounds(0, 1)) {
   # Central-ish asymptote starts (low ~ 0.05, up ~ 0.95) on the disjoint-bounds
   # logit: extreme starts near the interval edges can make the RE Laplace inner
   # solve ill-conditioned and the gradient non-finite at iteration 0.
   beta_low0 <- stats::qlogis((0.05 - bounds$low_min) / bounds$low_w)
   beta_up0  <- stats::qlogis((0.95 - bounds$up_min) / bounds$up_w)
   list(
-    beta_low = rep(beta_low0, n_low),
-    beta_up = rep(beta_up0, n_up),
-    beta_logk = rep(log(5), n_logk),
-    beta_CT = rep(stats::median(temp_v), ng),
-    beta_logz = rep(log(3), ng),
+    beta_low = tls_formula_start(X_low, beta_low0),
+    beta_up = tls_formula_start(X_up, beta_up0),
+    beta_logk = tls_formula_start(X_logk, log(5)),
+    beta_CT = tls_formula_start(X_CT, stats::median(temp_v)),
+    beta_logz = tls_formula_start(X_logz, log(3)),
     log_phi = log(100)
   )
 }

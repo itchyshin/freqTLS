@@ -46,11 +46,14 @@ confidence intervals on those direct parameters.
 }
 \examples{
 \donttest{
-std <- standardize_data(zebrafish_o2, temp = "temp", duration = "duration_min",
+zf <- droplevels(subset(zebrafish_o2,
+  ploidy == "diploid" & oxygen \%in\% c("normoxia", "hyperoxia")))
+std <- standardize_data(zf, temp = "temp", duration = "duration_min",
                         n_total = "n_total", n_surv = "n_surv",
                         duration_unit = "minutes")
-wf <- fit_4pl(std, ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen, t_ref = 60)
-tls(wf, by = "oxygen", lethal = TRUE)   # z, CTmax, T_crit per oxygen treatment
+wf <- fit_4pl(std, ctmax = ~ 0 + oxygen, z = ~ 0 + oxygen,
+              low = ~ 0 + oxygen, up = ~ 1, k = ~ 1, t_ref = 60)
+tls(wf, by = "oxygen", lethal = FALSE)  # z and CTmax; no Tcrit
 }
 }
 \keyword{datasets}

@@ -18,11 +18,15 @@
 args <- commandArgs(trailingOnly = TRUE)
 pkg_path <- if (length(args) >= 1) args[[1]] else "."
 
-# Examples on the reference pages need the package on the search path. Install
-# it (into a temporary library by default) unless it is already available, so
-# the script works both on a fresh local checkout and in CI where the package
-# is already installed via `local::.`.
-install_pkg <- !requireNamespace("freqTLS", quietly = TRUE)
+# Examples on the reference and article pages must execute against this exact
+# checkout. A version-only comparison is unsafe for development releases:
+# several source revisions can all be `0.2.0.9000`. Always let pkgdown install
+# the current source into its build library before rendering.
+install_pkg <- TRUE
+# Start from an empty generated site. Incremental pkgdown builds can otherwise
+# preserve removed articles, figures, and discovery entries, which makes a
+# source cleanup look successful while stale public HTML remains.
+pkgdown::clean_site(pkg_path, quiet = TRUE, force = TRUE)
 pkgdown::build_site(pkg_path, preview = FALSE, devel = FALSE,
                     new_process = FALSE, install = install_pkg)
 
@@ -31,6 +35,16 @@ dst <- pkgdown::as_pkgdown(pkg_path)$dst_path
 
 internal_stems <- c("AGENTS", "CLAUDE", "SPEC")
 internal_pages <- paste0(internal_stems, ".html")
+legacy_pages <- c(
+  "case-study-shrimp.html",
+  "shrimp_lethal.html",
+  "shrimp_sublethal.html",
+  "zebrafish_lethal.html"
+)
+legacy_search_terms <- c(
+  "case-study-shrimp", "shrimp_lethal", "shrimp_sublethal",
+  "zebrafish_lethal", "brown shrimp", "life-stage zebrafish"
+)
 internal_artifacts <- c(internal_pages, paste0(internal_stems, ".md"))
 to_remove <- file.path(dst, internal_artifacts)
 existing <- to_remove[file.exists(to_remove)]
@@ -56,9 +70,14 @@ if (file.exists(search_path)) {
   is_internal <- vapply(search, function(entry) {
     path <- entry$path
     if (is.null(path) || length(path) != 1L) path <- ""
-    basename(sub("[#?].*$", "", path)) %in% internal_pages
+    basename(sub("[#?].*$", "", path)) %in% c(internal_pages, legacy_pages)
   }, logical(1))
-  search <- search[is_valid_path & !is_internal]
+  has_legacy_text <- vapply(search, function(entry) {
+    value <- tolower(paste(unlist(entry, use.names = FALSE), collapse = " "))
+    any(vapply(tolower(legacy_search_terms), grepl, logical(1), x = value,
+               fixed = TRUE))
+  }, logical(1))
+  search <- search[is_valid_path & !is_internal & !has_legacy_text]
   writeLines(
     jsonlite::toJSON(search, auto_unbox = TRUE, null = "null", na = "null"),
     search_path,
@@ -70,7 +89,110 @@ sitemap_path <- file.path(dst, "sitemap.xml")
 if (file.exists(sitemap_path)) {
   sitemap <- readLines(sitemap_path, warn = FALSE, encoding = "UTF-8")
   internal_url <- paste0("/(", paste(internal_stems, collapse = "|"), ")[.]html")
-  writeLines(sitemap[!grepl(internal_url, sitemap)], sitemap_path, useBytes = TRUE)
+  legacy_url <- paste0("/(articles/)?(",
+                       paste(sub("[.]html$", "", legacy_pages), collapse = "|"),
+                       ")[.]html")
+  writeLines(sitemap[!grepl(internal_url, sitemap) & !grepl(legacy_url, sitemap)],
+             sitemap_path, useBytes = TRUE)
+}
+
+llms_path <- file.path(dst, "llms.txt")
+if (file.exists(llms_path)) {
+  llms <- readLines(llms_path, warn = FALSE, encoding = "UTF-8")
+  legacy_stems <- sub("[.]html$", "", legacy_pages)
+  hit <- Reduce(`|`, lapply(legacy_stems, grepl, x = llms, fixed = TRUE))
+  drop <- hit
+  for (i in which(hit)) {
+    if (i > 1L && grepl("^[[:space:]]*[-] \\[", llms[i - 1L]) &&
+        !grepl("\\]\\(", llms[i - 1L])) drop[i - 1L] <- TRUE
+    if (i < length(llms) && grepl("^[[:space:]]*:", llms[i + 1L]))
+      drop[i + 1L] <- TRUE
+  }
+  writeLines(llms[!drop], llms_path, useBytes = TRUE)
+}
+
+# pkgdown requires every vignette to belong to an article group, so the legacy
+# tombstone is configured in a hidden-by-policy group. Remove that group from
+# the rendered article index while retaining the direct tombstone URL for old
+# links. Search, sitemap, and LLM discovery are filtered independently above.
+articles_index_path <- file.path(dst, "articles", "index.html")
+if (file.exists(articles_index_path)) {
+  articles_index <- paste(
+    readLines(articles_index_path, warn = FALSE, encoding = "UTF-8"),
+    collapse = "\n"
+  )
+  articles_index <- sub(
+    '(?s)<div class="section ">\\s*<h3>Legacy notices</h3>.*?</dl></div>',
+    "",
+    articles_index,
+    perl = TRUE
+  )
+  writeLines(articles_index, articles_index_path, useBytes = TRUE)
+}
+articles_index_md <- file.path(dst, "articles", "index.md")
+if (file.exists(articles_index_md)) {
+  articles_md <- paste(readLines(articles_index_md, warn = FALSE),
+                       collapse = "\n")
+  articles_md <- sub("(?s)\\n### Legacy notices.*$", "", articles_md,
+                     perl = TRUE)
+  writeLines(articles_md, articles_index_md, useBytes = TRUE)
+}
+
+if (file.exists(llms_path)) {
+  llms <- readLines(llms_path, warn = FALSE, encoding = "UTF-8")
+  legacy_heading <- which(trimws(llms) == "### Legacy notices")
+  if (length(legacy_heading)) {
+    drop <- unique(c(legacy_heading, legacy_heading + 1L))
+    drop <- drop[drop >= 1L & drop <= length(llms)]
+    llms <- llms[-drop]
+    writeLines(llms, llms_path, useBytes = TRUE)
+  }
+}
+
+# pkgdown's alias redirects bypass the normal page template, and pkgdown does
+# not create a 404 page. Reuse the rendered common warning fragment so every
+# deployed HTML response, including redirects and errors, carries exactly one
+# accessible warning without duplicating the warning source.
+home_path <- file.path(dst, "index.html")
+home_html <- paste(readLines(home_path, warn = FALSE, encoding = "UTF-8"),
+                   collapse = "\n")
+warning_match <- regexpr(
+  '(?s)<aside id="freqtls-experimental-warning".*?</aside>',
+  home_html,
+  perl = TRUE
+)
+if (warning_match[[1L]] < 0L) {
+  stop("The common experimental-warning fragment is missing from index.html.")
+}
+warning_fragment <- regmatches(home_html, warning_match)
+
+html_files <- list.files(dst, pattern = "[.]html$", recursive = TRUE,
+                         full.names = TRUE)
+for (html_path in html_files) {
+  html <- paste(readLines(html_path, warn = FALSE, encoding = "UTF-8"),
+                collapse = "\n")
+  if (!grepl('id="freqtls-experimental-warning"', html, fixed = TRUE)) {
+    if (grepl("</body>", html, fixed = TRUE)) {
+      html <- sub("</body>", paste0(warning_fragment, "\n</body>"), html,
+                  fixed = TRUE)
+    } else {
+      html <- sub("</html>", paste0("<body>\n", warning_fragment,
+                                    "\n</body>\n</html>"), html, fixed = TRUE)
+    }
+    writeLines(html, html_path, useBytes = TRUE)
+  }
+}
+
+not_found_path <- file.path(dst, "404.html")
+if (!file.exists(not_found_path)) {
+  not_found <- c(
+    "<!doctype html>", '<html lang="en"><head><meta charset="utf-8">',
+    "<title>Page not found — freqTLS</title></head><body>", warning_fragment,
+    '<main class="container"><h1>Page not found</h1>',
+    '<p>The requested freqTLS page does not exist. <a href="index.html">Return to the package home page</a>.</p></main>',
+    "</body></html>"
+  )
+  writeLines(not_found, not_found_path, useBytes = TRUE)
 }
 
 # ---- accessibility: alt text for the reference example figures ------------
@@ -149,6 +271,19 @@ internal_url <- paste0("/(", paste(internal_stems, collapse = "|"), ")[.]html")
 if (grepl(internal_url, discovery_text)) {
   stop("Internal page URL survived in a public discovery file.")
 }
+legacy_url <- paste0("/(articles/|reference/)?(",
+                     paste(sub("[.]html$", "", legacy_pages), collapse = "|"),
+                     ")[.](html|md)")
+if (grepl(legacy_url, discovery_text)) {
+  stop("A benchmark-only legacy page survived in a public discovery file.")
+}
+if (file.exists(articles_index_path)) {
+  articles_index <- paste(readLines(articles_index_path, warn = FALSE),
+                          collapse = "\n")
+  if (grepl("case-study-shrimp.html", articles_index, fixed = TRUE)) {
+    stop("A benchmark-only legacy page survived in the article index.")
+  }
+}
 
 if (file.exists(search_path)) {
   search <- jsonlite::fromJSON(search_path, simplifyVector = FALSE)
@@ -159,6 +294,23 @@ if (file.exists(search_path)) {
   if (any(bad_path)) {
     stop("The public search index contains a missing or malformed path.")
   }
+  search_text <- paste(readLines(search_path, warn = FALSE), collapse = "\n")
+  if (any(vapply(tolower(legacy_search_terms), grepl, logical(1),
+                 x = tolower(search_text), fixed = TRUE))) {
+    stop("A benchmark-only legacy term survived in the public search index.")
+  }
+}
+
+rendered_html <- list.files(dst, pattern = "[.]html$", recursive = TRUE,
+                            full.names = TRUE)
+warning_count <- vapply(rendered_html, function(path) {
+  html <- paste(readLines(path, warn = FALSE), collapse = "\n")
+  hit <- gregexpr('id="freqtls-experimental-warning"', html, fixed = TRUE)[[1L]]
+  if (identical(hit, -1L)) 0L else length(hit)
+}, integer(1))
+if (any(warning_count != 1L)) {
+  stop("Experimental warning count is not exactly one on: ",
+       paste(rendered_html[warning_count != 1L], collapse = ", "))
 }
 
 # Fail if Pandoc has interpreted wildcard function names inside the inline SVG

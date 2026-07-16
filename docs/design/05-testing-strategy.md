@@ -20,7 +20,22 @@ data uses per-group `CTmax`/`z` with shared shape. The return is a base
 `data.frame` with the true parameters attached as `attr(, "truth")`. The `phi`
 convention (R-PHI) is documented: `phi` is the sum of the Beta shapes.
 
-## Test inventory (v0.1)
+## Optimiser and start contract (v0.2)
+
+Formula starts distinguish two parameterisations. For an intercept-containing
+design, the biological baseline initialises only `(Intercept)` and slopes or
+contrasts start at zero. For a no-intercept cell-means design, every cell
+coefficient receives the biological baseline. This prevents an interacted
+formula such as `~ 1 + species * age` from adding the baseline once per term.
+
+`nlminb()` remains the primary optimiser, with BFGS as its error/non-convergence
+fallback. When the nominal solution has `max(abs(gradient)) >= 1e-3`, the engine
+may attempt deterministic preconditioned truncated-Newton refinement through
+`nloptr`. It accepts the refinement only when the objective is no worse and the
+maximum raw gradient is smaller. Tests judge the accepted point by that shared
+objective/gradient contract, not by an NLopt status code alone.
+
+## Test inventory (v0.1 plus v0.2 parity guards)
 
 | Test | Asserts (tolerances) |
 | --- | --- |
@@ -31,6 +46,9 @@ convention (R-PHI) is documented: `phi` is the sum of the Beta shapes.
 | `test-predict` | survival decreases with duration and with temperature; `newdata` works; predictions in (0,1) |
 | `test-group` | recover `dCTmax` ~0.6, `dz` ~0.8; `CTmax:grp` and `z:grp` finite profiles |
 | `test-benchmark-sanity` | cached bayesTLS vs live freqTLS within a loose tolerance (`CTmax` ~1 deg C, `z` ~25%); no Stan |
+| `test-formula` | intercept starts leave slopes at zero; no-intercept designs initialise every cell mean |
+| `test-canonical-case-specifications` | exact canonical hashes, filters, endpoints, formulas, `t_ref`, thresholds, no forbidden `Tcrit`, converged all-age aphid cells, and both Drosophila direct models |
+| `test-shared-api-compatibility` | inference-independent utility equality and explicitly non-identical uncertainty-object contracts |
 
 ## CRAN-safe discipline
 

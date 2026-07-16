@@ -1,0 +1,90 @@
+---
+title: "Case 3: Snow-gum PSII under Dark and Light recovery"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case 3: Snow-gum PSII under Dark and Light recovery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7,
+                      fig.height = 4.5, dpi = 96)
+```
+
+This is the frequentist analogue of the Snow-gum PSII case in the
+[`bayesTLS` supplement](https://daniel1noble.github.io/bayesTLS/). The response
+is retained photosystem-II function, not mortality, so the experimental Beta
+family is used.
+
+```{r setup}
+library(freqTLS)
+data(snowgum_psii)
+```
+
+## Data and boundary handling
+
+`fvfm_prop` is post-exposure Fv/Fm divided by its pre-exposure value. The
+394-row object is byte-identical to the pinned bayesTLS object. Exact zeros are
+clamped inward by `standardize_data()` because a Beta density is defined on
+the open interval `(0, 1)`; the warning makes this adjustment visible.
+
+```{r data}
+leaf_std <- standardize_data(
+  snowgum_psii,
+  temp = "Temp", duration = "Time", proportion = "fvfm_prop",
+  duration_unit = "minutes"
+)
+table(snowgum_psii$recovery)
+```
+
+## Locked model
+
+Recovery condition has direct effects on `CTmax` and `z`; plant supplies one
+independent random intercept on `CTmax`; `low`, `up`, and `k` are shared. The
+reference time is 60 minutes and the threshold is the relative midpoint.
+
+This shared-shape choice is an intentional freqTLS analogue, not a claim of
+formula identity: the pinned bayesTLS supplement also teaches
+recovery-by-temperature shape terms. Those additional Bayesian shape terms are
+not silently substituted here.
+
+```{r fit}
+leaf_fit <- fit_4pl(
+  leaf_std,
+  ctmax = ~ 0 + recovery + (1 | plant),
+  z = ~ 0 + recovery,
+  low = ~ 1,
+  up = ~ 1,
+  k = ~ 1,
+  family = "beta",
+  t_ref = 60,
+  method = "wald",
+  quiet = TRUE
+)
+diagnose_tdt_fit(leaf_fit)
+```
+
+```{r quantities}
+leaf_tls <- tls(leaf_fit, by = "recovery", lethal = FALSE, method = "wald")
+leaf_table <- leaf_tls$summary
+names(leaf_table)[names(leaf_table) == "median"] <- "estimate"
+leaf_table
+```
+
+```{r eye, fig.alt="Wald Confidence Eyes for Snow-gum CTmax and z after Dark and Light recovery."}
+plot_confidence_eye(leaf_fit, parm = c("CTmax", "z"), method = "wald")
+```
+
+This sublethal endpoint reports only `CTmax` and `z`; `Tcrit` is not a valid
+headline quantity here. Inspect convergence, Hessian/gradient diagnostics, the
+Beta boundary warning, and the limited-random-intercept assumptions before
+interpretation.
+
+## Licence boundary
+
+Arnold et al. (2026; doi:10.64898/2026.04.09.717599) release the current source
+under CC BY-NC 4.0. The development package records coauthor authorization for
+the current non-commercial GitHub/pkgdown teaching use. That does not establish
+unrestricted/commercial downstream rights: CRAN remains blocked until the
+broader written grant is archived. See `inst/COPYRIGHTS` and the licence ledger.

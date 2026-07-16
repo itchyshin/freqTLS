@@ -1,4 +1,25 @@
-# freqTLS 0.1.0 (release candidate)
+# freqTLS 0.2.0.9000
+
+* Rebased the empirical teaching plan on the pinned bayesTLS supplement
+  rendered 2026-07-14 (commit `76510412e06c594c96894a1baba1f0e1a34a5aea`).
+  Canonical cases are oxygen-gradient zebrafish, cereal aphids, Snow-gum PSII,
+  and the mortality and awake/coma *Drosophila suzukii* endpoints.
+* Brown shrimp and life-stage zebrafish remain installed benchmark-only legacy
+  fixtures but are removed from active examples, navigation, and current
+  comparison surfaces.
+* Retained Beta responses, limited random intercepts, shape formulas,
+  deterministic heat-injury prediction, the formula interface, and the
+  frequentist interval/diagnostic displays as explicitly experimental.
+* Censored-time, hurdle-productivity, fitted repair dynamics, and CRAN
+  submission remain out of scope.
+* Corrected formula starts so intercept models initialise only their intercept
+  while no-intercept cell-mean models initialise every cell. Difficult fits may
+  receive a deterministic `nloptr` Newton refinement when it improves both the
+  objective and maximum gradient.
+* Added row-specific parameter prediction for interacted formula designs via
+  `predict(..., type = "parameters")`, including `freq_tls` S3 dispatch.
+
+# freqTLS 0.1.0 (unreleased historical candidate)
 
 * Corrected grouped contrast direction so `dCTmax:A-B`, `dlog_z:A-B`, and
   `dz:A-B` now follow their written meaning: group A minus group B.
@@ -12,7 +33,7 @@ reported through a frequentist trio — Wald (delta), profile-likelihood, and
 bootstrap — instead of a posterior. Forked from **profileTLS** (commit
 `6f963a9`, v0.3.3), which it supersedes.
 
-## bayesTLS-twin API
+## bayesTLS-analogue API (historical 0.1 surface)
 
 * `standardize_data()` — the shared raw-data entry point for count or
   continuous-proportion responses (adopted from bayesTLS).
@@ -34,8 +55,8 @@ bootstrap — instead of a posterior. Forked from **profileTLS** (commit
   intervals.
 * The plots (`plot_confidence_eye()`, `plot_survival_curves()`, `plot_tdt_curve()`,
   `plot_heat_injury()`) and extractors accept the `freq_tls` workflow object.
-* Six shared case-study datasets, including `aphid_tdt` (Li et al. 2023) and
-  `zebrafish_o2` (Saruhashi et al. 2026).
+* Shared empirical data included `aphid_tdt` and `zebrafish_o2`; the active
+  v0.2 teaching set and legacy boundary are listed above.
 
 ## Inference and calibration
 
@@ -51,7 +72,7 @@ bootstrap — instead of a posterior. Forked from **profileTLS** (commit
   bayesTLS's CTmax to ~0.07 °C on the brown-shrimp data, beside the classical
   two-stage estimator.
 
-## Twin S3 surface
+## Analogue S3 surface
 
 * `confint()`, `summary()`, `ranef()`, and `coef()`/`logLik()`/`vcov()`/`nobs()`,
   the heat-injury functions (`predict_heat_injury()` / `plot_heat_injury()` /
@@ -65,15 +86,13 @@ bootstrap — instead of a posterior. Forked from **profileTLS** (commit
 * The **frequentist-and-bayesian** centerpiece carries the coverage panel and the
   three-way benchmark; `comparing-to-bayesTLS` carries the live + cached
   comparison.
-* Worked case studies mirroring the shared manuscript: brown shrimp; zebrafish
-  under hypoxia / normoxia / hyperoxia (OCLTT); cereal aphids (Li 2023);
-  *D. suzukii* by sex;
-  and a cross-taxon summary.
+* Historical 0.1 articles included unpublished compatibility fixtures. They are
+  not part of the active v0.2 teaching set.
 
 ## Simulation
 
 * The build-excluded repository directory `scripts/simulations/` contains a
-  freqTLS (ML/TMB) twin of the bayesTLS two-stage-bias simulation (shared
+  freqTLS (ML/TMB) analogue of the bayesTLS two-stage-bias simulation (shared
   data-generating process + scoring), with a comparison to the bayesTLS results.
   These maintainer scripts and their DRAC launcher are not installed with the
   package.

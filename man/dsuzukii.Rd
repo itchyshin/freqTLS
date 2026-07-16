@@ -36,12 +36,12 @@ Per-individual thermal-tolerance assays for the spotted-wing fly
 (\emph{Drosophila suzukii}), one row per fly, carrying three thermal-tolerance
 endpoints measured under static heat exposures at 34--38 degrees C:
 a lethal endpoint (\code{dead}), a sublethal knockdown time-to-event
-(\code{t_coma}), and a sublethal reproductive endpoint (\code{prod}). Only
-\code{dead} is a valid freqTLS response: aggregate it to counts for the
-beta-binomial lethal fit. The \code{t_coma} and \code{prod} columns are
-retained to preserve the deposited record and provide study context; they
-require time-to-event and reproductive-response models that freqTLS does not
-fit. \code{lvl} indexes the exposure-duration grid as a
+(\code{t_coma}), and a sublethal reproductive endpoint (\code{prod}).
+Aggregate \code{dead} to mortality/survival counts for Case 4. For the
+supported awake/coma arm of Case 4.2, aggregate \code{is.na(t_coma)} to an
+awake count at each temperature x level x sex cell. freqTLS does not fit the
+censored time-to-coma response or the hurdle productivity response; those
+analyses remain in bayesTLS. \code{lvl} indexes the exposure-duration grid as a
 percentage of the estimated median time-to-coma from the authors' initial TDT
 curves; \code{time} is the realised duration in minutes.
 }

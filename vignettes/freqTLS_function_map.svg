@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 880" font-family="Helvetica, Arial, sans-serif" width="100%" role="img" aria-labelledby="ftls-map-title ftls-map-desc">
   <title id="ftls-map-title">freqTLS function map</title>
-  <desc id="ftls-map-desc">Maximum-likelihood twin of the bayesTLS workflow. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls, with tls_z, tls_ctmax and tls_tcrit, plus extract_tdt and the derive_lt, derive_ctmax and derive_tcrit primitives); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury, with make_temperature_scenarios and repair_rate_schoolfield marked not yet ported); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists the freqTLS-only extras: Wald, profile and bootstrap confidence intervals with profile-t calibration, the Confidence Eye, and twelve identifiability warnings.</desc>
+  <desc id="ftls-map-desc">Maximum-likelihood analogue of the bayesTLS workflow. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls, with tls_z, tls_ctmax and tls_tcrit, plus extract_tdt and the derive_lt, derive_ctmax and derive_tcrit primitives); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury, with make_temperature_scenarios and repair_rate_schoolfield marked not yet ported); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists the freqTLS-only extras: Wald, profile and bootstrap confidence intervals with profile-t calibration, the Confidence Eye, and twelve identifiability warnings.</desc>
   <defs>
     <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="#555"/>
@@ -10,7 +10,7 @@
 
   <!-- Title -->
   <text x="40" y="46" font-size="26" font-weight="bold" fill="#333">freqTLS function map</text>
-  <text x="42" y="72" font-size="13" fill="#777">Maximum-likelihood twin of the bayesTLS workflow. Core user workflow; report/access and prediction are parallel downstream uses.</text>
+  <text x="42" y="72" font-size="13" fill="#777">Maximum-likelihood analogue of the bayesTLS workflow. Core user workflow; report/access and prediction are parallel downstream uses.</text>
 
   <!-- Column header chips -->
   <g font-size="12" font-weight="bold" text-anchor="middle">
@@ -158,11 +158,11 @@
     <text x="1300" y="424" font-size="10.5" fill="#666">survival curves · surface ·</text>
     <text x="1300" y="438" font-size="10.5" fill="#666">TDT curve · heat injury</text>
   </g>
-  <!-- freqTLS extras (no bayesTLS twin) -->
+  <!-- freqTLS extras (no direct bayesTLS analogue) -->
   <g text-anchor="middle">
     <rect x="1180" y="150" width="240" height="120" rx="7" fill="#fff2cc" stroke="#e0b94e" stroke-dasharray="5,4"/>
     <text x="1300" y="176" font-size="12.5" font-weight="bold" fill="#7f6000">freqTLS extras</text>
-    <text x="1300" y="190" font-size="9.5" fill="#998200">(no bayesTLS twin)</text>
+    <text x="1300" y="190" font-size="9.5" fill="#998200">(no direct bayesTLS analogue)</text>
     <text x="1300" y="212" font-size="10" fill="#666">Wald · profile · bootstrap CIs</text>
     <text x="1300" y="226" font-size="10" fill="#666">(profile-t calibrated)</text>
     <text x="1300" y="244" font-size="10" fill="#666">the Confidence Eye;</text>

@@ -65,7 +65,13 @@ clock_to_minutes <- function(x) {
     # is taken as already-minutes. A vector that mixes the two is ambiguous --
     # warn instead of silently reinterpreting it (the old all-or-nothing rule
     # turned c(0.5, 720) into 0.5 min, not 720 min).
-    if (length(nona) && all(nona >= 0 & nona <= 1)) return(x * 24 * 60)
+    if (length(nona) && all(nona >= 0 & nona <= 1)) {
+      message("clock_to_minutes(): all numeric values are in [0, 1]; ",
+              "treating them as Excel day-fractions (× 1440 min). ",
+              "If they are already minutes, pass them as values > 1 or ",
+              "convert with as.numeric() first.")
+      return(x * 24 * 60)
+    }
     if (length(nona) && any(nona > 0 & nona < 1) && any(nona > 1))
       warning("clock_to_minutes(): numeric input mixes values < 1 and > 1; ",
               "treating ALL as minutes. If the < 1 values are Excel day-fractions ",

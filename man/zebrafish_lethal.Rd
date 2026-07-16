@@ -32,6 +32,9 @@ zebrafish_lethal
 Lethal-TDT trials for zebrafish (\emph{Danio rerio}) at three life stages.
 Built from the raw daily survival sheet by summing the per-day
 morning/afternoon mortality counts into one death count per trial and dropping
-excluded rows. One row per assay trial. The model-ready frame for Case Study 2.
+excluded rows. One row per assay trial. This unpublished life-stage object is
+retained only for compatibility benchmarking; the active zebrafish example
+is the oxygen-gradient \code{zebrafish_o2} dataset.
 }
 \keyword{datasets}
+\keyword{internal}

@@ -29,5 +29,7 @@ Sublethal TDT trials for brown shrimp (\emph{Crangon crangon}): each cup of
 individuals contributes the elapsed time to loss of response to touch
 (knockdown) at a fixed assay temperature. Cleaned from the raw clock-time
 records (excluded rows dropped; start/stop times parsed to elapsed minutes).
+This unpublished object is retained only for compatibility benchmarking.
 }
 \keyword{datasets}
+\keyword{internal}

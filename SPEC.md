@@ -1,8 +1,19 @@
-# freqTLS Implementation Plan (ultraplan)
+# freqTLS implementation specification
 
 > **For agentic workers:** This is the canonical SPEC + plan (doubles as repo `SPEC.md`). Every implementing agent reads this first. Use superpowers:subagent-driven-development / executing-plans; steps use checkbox (`- [ ]`) syntax. Definition of Done is in §2.
 
-**Goal:** Build a focused, high-quality maximum-likelihood / profile-likelihood R package `freqTLS` that fits single-stage 4PL thermal-load-sensitivity models via TMB, parameterised **directly in `CTmax` and `z`**, returns **profile-likelihood confidence intervals** (shown as Confidence Eyes, not posteriors), and **benchmarks against `bayesTLS`** on shared datasets — built and governed by the drmTMB-style named-perspective team with full dev-log memory discipline.
+**Current goal (0.2.0.9000):** Maintain a focused, experimental
+maximum-likelihood / profile-likelihood R package whose empirical teaching
+cases follow the pinned `bayesTLS` supplement (rendered 2026-07-14; commit
+`76510412e06c594c96894a1baba1f0e1a34a5aea`) as closely as the frequentist
+engine permits. Organisms, datasets, filters, endpoints, formulas, thresholds,
+reference times, and estimands match; inference and uncertainty language remain
+explicitly frequentist.
+
+Brown shrimp and life-stage zebrafish are benchmark-only legacy fixtures, not
+active examples. Canonical cases are oxygen-gradient zebrafish, cereal aphids,
+Snow-gum PSII, and both supported *Drosophila suzukii* endpoints. Censored-time
+and hurdle-productivity analyses remain bayesTLS-only.
 
 **Architecture:** small purpose-built TMB C++ 4PL likelihood (binomial,
 beta-binomial, and beta; direct `CTmax`/`log_z` midpoint reparameterisation) +
@@ -137,7 +148,7 @@ bayesTLS constant-shape (`temp_effects="mid"`): `mid(T)=b_mid_Intercept + b_mid_
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| **License** | **GPL-3** (override spec's MIT) | LICENSE already GPL-3; we adapt drmTMB (GPL-3) patterns. Redistributed data retain their source licences and attribution. Snow-gum material is CC BY-NC 4.0 and stays outside the package unless compatible written permission is recorded. |
+| **License** | **GPL-3** for code; component-specific data terms | Redistributed data retain source licences. Snow-gum is CC BY-NC 4.0 in the current development branch. A maintainer attestation permits non-commercial GitHub/pkgdown teaching use, but unrestricted/commercial downstream redistribution and CRAN remain blocked until a rights-holder grant is archived. |
 | **Authorship** | Shinichi Nakagawa (`aut`,`cre`) **+ Daniel W. A. Noble, Pieter A. Arnold, Patrice Pottier (`aut`)** | TLS framework is bayesTLS's, not ours alone. Confirm with them before release (a person should agree to being listed). |
 | **Midpoint param** | Direct `CTmax` + `log_z` | makes headline quantities profile-able (§6). |
 | **Asymptote reparam** | **Disjoint bounds** (bayesTLS `compute_4pl_bounds`) `low=low_min+low_w·plogis(beta_low)`, `up=up_min+up_w·plogis(beta_up)` | split `[lower,upper]` at the midpoint so `low<up` unconstrained; shares the bayesTLS contract; `up` is a direct coordinate. (P1 reversed the earlier nested gap.) Cost: `up` profile not yet wired → Wald/delta (§10). |

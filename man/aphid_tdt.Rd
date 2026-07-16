@@ -49,8 +49,9 @@ a <- subset(aphid_tdt, branch == "heat" & age == "6")
 std <- standardize_data(a, temp = "temp", duration = "duration_min",
                         n_total = "n_total", n_surv = "n_surv",
                         duration_unit = "minutes")
-wf <- fit_4pl(std, ctmax = ~ 0 + species, z = ~ 0 + species, t_ref = 60)
-tls(wf, by = "species", lethal = TRUE)   # z, CTmax, T_crit per species
+wf <- fit_4pl(std, ctmax = ~ 0 + species, z = ~ 0 + species,
+              low = ~ 1, up = ~ 1, k = ~ temp_c, t_ref = 60)
+tls(wf, by = "species", lethal = FALSE)  # z and CTmax; no Tcrit here
 }
 }
 \keyword{datasets}

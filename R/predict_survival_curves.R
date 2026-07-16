@@ -1,4 +1,4 @@
-# The bayesTLS-twin survival-surface predictor. predict_survival_curves() returns
+# The bayesTLS-analogue survival-surface predictor. predict_survival_curves() returns
 # the fitted survival probability over a temperature x duration grid with
 # confidence bands, in bayesTLS's $summary shape (survival_lower/median/upper).
 # Bands come from the parametric bootstrap (the freq analogue of posterior draws);
@@ -7,7 +7,7 @@
 
 #' Predict the fitted survival surface with bootstrap confidence bands
 #'
-#' The frequentist twin of `bayesTLS::predict_survival_curves()`. Evaluates the
+#' The frequentist analogue of `bayesTLS::predict_survival_curves()`. Evaluates the
 #' fitted 4PL survival probability over a temperature-by-duration grid and adds
 #' parametric-bootstrap confidence bands. For random-effects fits the curves are
 #' population-level: random intercepts are integrated during bootstrap refits,

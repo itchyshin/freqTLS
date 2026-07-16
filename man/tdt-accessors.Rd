@@ -29,7 +29,7 @@ get_tcrit_draws(et)
 A tibble (see \code{\link[=extract_tdt]{extract_tdt()}} for the column contract).
 }
 \description{
-Twins of the bayesTLS \verb{get_*_summary} / \verb{get_*_draws} accessors. \verb{*_summary}
+Analogues of the bayesTLS \verb{get_*_summary} / \verb{get_*_draws} accessors. \verb{*_summary}
 returns the median + interval tibble; \verb{*_draws} returns the per-replicate
 (bootstrap) tibble — the frequentist analogue of posterior draws.
 }

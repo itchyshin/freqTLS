@@ -1,4 +1,4 @@
-# The bayesTLS-twin comprehensive extractor. extract_tdt() returns the nested
+# The bayesTLS-analogue comprehensive extractor. extract_tdt() returns the nested
 # $z / $CTmax / $T_crit structure (draws + summary) bayesTLS produces, but the
 # per-"draw" rows are parametric-bootstrap replicates (the frequentist analogue
 # of posterior draws) rather than MCMC draws. Point estimates (`*_median`) are the
@@ -8,7 +8,7 @@
 
 #' Extract z, CTmax and (optionally) T_crit with bootstrap confidence intervals
 #'
-#' The frequentist twin of `bayesTLS::extract_tdt()`. Runs a parametric bootstrap
+#' The frequentist analogue of `bayesTLS::extract_tdt()`. Runs a parametric bootstrap
 #' (via the freqTLS engine), derives the thermal-death-time quantities on each
 #' replicate, and returns the same nested `$z` / `$CTmax` / `$T_crit` structure
 #' (each a list of `draws` + `summary`). The per-replicate tables are the
@@ -160,7 +160,7 @@ print.freq_tdt <- function(x, ...) {
   invisible(x)
 }
 
-# ---- accessors (twins of bayesTLS get_*_summary / get_*_draws) ---------------
+# ---- accessors (analogues of bayesTLS get_*_summary / get_*_draws) ------------
 
 stop_if_not_freq_tdt <- function(et) {
   if (!is.list(et) || is.null(et$z) || is.null(et$CTmax))
@@ -169,7 +169,7 @@ stop_if_not_freq_tdt <- function(et) {
 
 #' Accessors for an extract_tdt() result
 #'
-#' Twins of the bayesTLS `get_*_summary` / `get_*_draws` accessors. `*_summary`
+#' Analogues of the bayesTLS `get_*_summary` / `get_*_draws` accessors. `*_summary`
 #' returns the median + interval tibble; `*_draws` returns the per-replicate
 #' (bootstrap) tibble — the frequentist analogue of posterior draws.
 #'
