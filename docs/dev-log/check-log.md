@@ -1986,3 +1986,28 @@ Interpretation:
 - This supersedes the preceding local artifact for technical evidence. It does
   not close written co-author consent, browser adjudication of publisher DOI
   responses, matching Windows/Ubuntu checks, or clean post-merge rebuilding.
+
+## 2026-07-16 -- Clean-worktree tarball check
+
+Commands:
+
+- `git worktree add --detach /tmp/freqtls-rc-a9e59f3 a9e59f3`
+- `R CMD build --no-manual --sha256 .`
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz`
+
+Outcome:
+
+- The first clean-worktree check found its `.git` pointer in the tarball. The
+  follow-up commit `a9e59f3` added `^\\.git$` to `.Rbuildignore`.
+- The rebuilt clean-checkout tarball has SHA-256
+  `53461c1bed3081e590f993665a63f733903cd791f08095bf35aaa3a759a7787b`,
+  1,653,827 bytes, and 210 entries. Its exclusion scan found no `.git` or
+  other forbidden path.
+- The exact clean-worktree `--as-cran` check completed with 0 errors, 0
+  warnings, and one ordinary new-submission NOTE on macOS arm64 / R 4.6.0.
+
+Interpretation:
+
+- This is the strongest local technical rung. It is still not an upload claim:
+  merging, matching Windows/Ubuntu evidence, consent, browser URL adjudication,
+  and same-hash reviewer verdicts are independent gates.

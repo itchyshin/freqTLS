@@ -8,7 +8,7 @@
 
 `R CMD build --no-manual --sha256 .` produced `freqTLS_0.1.0.tar.gz`
 (1,653,817 bytes; 210 entries; SHA-256
-`67518e0f585834791c919e86d1c2d20363a1d32edb4cb2a2404d0775d499ad55`).
+`53461c1bed3081e590f993665a63f733903cd791f08095bf35aaa3a759a7787b`).
 `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` completed with 0
 errors, 0 warnings, and one ordinary first-submission NOTE. This is local
 candidate evidence only: a clean post-merge rebuild, Windows/Ubuntu evidence,

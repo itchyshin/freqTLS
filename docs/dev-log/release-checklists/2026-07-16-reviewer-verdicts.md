@@ -1,8 +1,8 @@
 # Release-verdict register — experimental 0.1.0
 
 Candidate under review: `freqTLS_0.1.0.tar.gz`  
-SHA-256: `67518e0f585834791c919e86d1c2d20363a1d32edb4cb2a2404d0775d499ad55`  
-Current rung: local macOS technical candidate only; **NOT READY for upload**.
+SHA-256: `53461c1bed3081e590f993665a63f733903cd791f08095bf35aaa3a759a7787b`  
+Current rung: clean-checkout macOS technical candidate only; **NOT READY for upload**.
 
 | Verifier | Required same-hash evidence | Current verdict |
 |---|---|---|
