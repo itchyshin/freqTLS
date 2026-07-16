@@ -15,7 +15,8 @@
 # Maintainer-run. NOT in CI. Re-run from the package root:
 #   Rscript data-raw/beta-binomial-phi-study.R          # full (~20 min)
 #   Rscript data-raw/beta-binomial-phi-study.R smoke     # tiny smoke run
-# Output: inst/extdata/beta_binomial_phi_results.rds (read by comparing-to-bayesTLS).
+# Output: inst/extdata/beta_binomial_phi_results.rds (retained generated evidence;
+# no active article currently consumes it).
 # ---------------------------------------------------------------------------
 
 if (requireNamespace("pkgload", quietly = TRUE) && file.exists("DESCRIPTION")) {

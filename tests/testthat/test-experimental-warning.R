@@ -37,14 +37,19 @@ test_that("the experimental warning is present on every independent surface", {
 
 test_that("the pkgdown warning uses one accessible site-wide template include", {
   pkgdown_path <- test_path("..", "..", "_pkgdown.yml")
+  css_path <- test_path("..", "..", "pkgdown", "extra.css")
   skip_if_not(file.exists(pkgdown_path), "source tree not available")
+  skip_if_not(file.exists(css_path), "source-tree pkgdown CSS not available")
   pkgdown <- paste(readLines(pkgdown_path, warn = FALSE), collapse = "\n")
+  css <- paste(readLines(css_path, warn = FALSE), collapse = "\n")
 
   expect_length(gregexpr('id="freqtls-experimental-warning"', pkgdown,
                          fixed = TRUE)[[1]], 1L)
   expect_match(pkgdown, 'role="alert"', fixed = TRUE)
   expect_match(pkgdown, 'aria-labelledby="freqtls-experimental-warning-title"',
                fixed = TRUE)
+  expect_match(css, ".freqtls-experimental-warning", fixed = TRUE)
+  expect_match(css, "margin-top: 56px", fixed = TRUE)
 })
 
 test_that("the experimental pkgdown site publishes at its advertised root", {

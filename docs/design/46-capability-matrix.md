@@ -24,7 +24,7 @@ phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 
 ## 0.2.0.9000 family x design x interval grid
 
-For the ordinary curve parameters, 0.1.0 implements the full cross-product of
+For the ordinary curve parameters, the current experimental source implements the full cross-product of
 three families, ungrouped/grouped designs, and Wald/profile/bootstrap confidence
 intervals. `beta` consumes a continuous proportion in `(0, 1)`; the two count
 families consume successes/trials. “Yes” means implemented with tests and
@@ -77,7 +77,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
 | column (tidy-eval `y`/`n`/`time`/`temp`/`group`) | fitted (P1-P2) | the original interface; unchanged |
 | formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; `CTmax` and `log_z` share fixed design columns, while `low`, `up`, and `log_k` have independent fixed designs; one limited independent random intercept on `CTmax`, `log_z`, `low`, or `log_k` per coordinate |
 
-## Historical v0.2 build milestone (included in 0.1.0)
+## Historical build milestones retained in experimental 0.2.0.9000
 
 - Covariate (grouped) effects on the shape parameters (`low` / `up` / `log_k`):
   **fitted** -- via the formula interface (`low ~ group`, `up ~ group`,
@@ -136,7 +136,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
   rate-floor analogue), a deterministic transform of the fitted `CTmax`/`z`.
   Lethal-endpoint only; `rate` is a fixed input (freqTLS does not sample it,
   unlike the Bayesian path). This completes the `extract_tdt()` absolute family.
-- Random intercepts on `CTmax` (v0.2) and on `log_z` / `low` / `log_k` (v0.3)
+- Random intercepts on `CTmax`, `log_z`, `low`, and `log_k`
   (`<param> ~ <fixed> + (1 | group)`): **fitted** -- TMB Laplace, no-RE path
   byte-identical; `sigma_CTmax` (°C) / `sigma_logz` (SD on `log z`) / `sigma_low`
   (SD on `logit low`) / `sigma_logk` (SD on `log k`), all ML and biased low with
@@ -155,7 +155,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
   critical-temperature, and heat-injury helpers are population-level for
   random-effects fits.
 
-## Planned (post-v0.1) and non-goals
+## Unsupported or planned after experimental v0.2
 
 - Random effects beyond single intercepts on `CTmax` / `log_z` / `low` / `log_k`
   (random slopes, a RE on the upper asymptote `up`, a second / crossed grouping
@@ -185,7 +185,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
 - A formula interface (`tls_bf()`): **fitted** (a thin front-end to the column
   interface). Predictors on `low`/`up`/`log_k`, shared-column fixed designs for
   `CTmax` / `log_z`, and the limited random-intercept structures listed above
-  are included in 0.1.0.
+  are retained in experimental 0.2.0.9000.
 - CRAN hardening is release engineering rather than a model capability; this
   matrix does not claim public CRAN availability.
 

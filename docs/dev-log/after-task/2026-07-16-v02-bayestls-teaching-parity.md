@@ -39,7 +39,9 @@ empirical examples.
   are clamped into `[0.001, 0.999]`, and tests the 89-zero/one-one adjustment.
 - Hardened the site build so it installs the exact checkout, filters legacy
   terms and URLs, removes internal governance pages, and requires one warning
-  banner on every rendered HTML page.
+  banner on every rendered HTML page. The common stylesheet now also reserves
+  the fixed navbar's 56-pixel height so the warning headline is visible rather
+  than merely present in the DOM.
 
 ## 3a. Decisions and Rejected Alternatives
 
@@ -78,10 +80,10 @@ documents under `docs/`. The exhaustive file-level classification is
 
 - `Rscript -e 'devtools::document()'` regenerated package and
   `standardize_data()` help from roxygen sources.
-- `Rscript -e 'devtools::test(stop_on_failure = TRUE)'` passed 1,033 tests with
+- `Rscript -e 'devtools::test(stop_on_failure = TRUE)'` passed 1,042 tests with
   0 failures, 0 warnings, and 0 skips after the audit repairs.
 - `Rscript -e 'devtools::check(document = FALSE, manual = FALSE, error_on =
-  "error")'` completed in 3 minutes 12 seconds with 0 errors, 0 warnings, and 0
+  "error")'` completed in 3 minutes 27 seconds with 0 errors, 0 warnings, and 0
   notes, including installed-package tests, examples, donttest examples, and
   rebuilt vignettes.
 - `Rscript tools/build-site.R` built 103 HTML pages from an exact temporary
@@ -90,7 +92,7 @@ documents under `docs/`. The exhaustive file-level classification is
   `id="freqtls-experimental-warning"` in every HTML file and returned 103 pages,
   minimum 1, maximum 1. All seven intended canonical article routes existed.
 - `rg -n -i "shrimp|life-stage|zebrafish_lethal"
-  pkgdown-site/dev/search.json` returned no hit. Legacy URLs were absent from
+  pkgdown-site/search.json` returned no hit. Legacy URLs were absent from
   `sitemap.xml`, `llms.txt`, and `articles/index.html`.
 - `Rscript -e 'x <- readRDS("inst/extdata/canonical_bayesTLS_cache.rds"); ...'`
   confirmed 40 summary rows, six diagnostic rows, maximum R-hat 1.0019, zero
@@ -100,6 +102,26 @@ documents under `docs/`. The exhaustive file-level classification is
 - `gh pr checks 7` at implementation HEAD `d6b1acd` reported pass on Ubuntu R
   release, Ubuntu R devel, Windows R release, and macOS R release in run
   `29514936172`.
+- PRs #6, #8, #7, and #9 merged sequentially. Current `main` is `f22980b`; its
+  four-platform R-CMD-check run `29518817974` and root pkgdown deployment run
+  `29519504501` both passed.
+- A live audit requested all 75 sitemap URLs and received HTTP 200 for every
+  route. Each route contained one warning element, and the discovery files had
+  no active shrimp or life-stage-zebrafish teaching entry. That audit also
+  caught the fixed navbar obscuring the warning headline, which this closure
+  change repairs.
+- `Rscript -e 'devtools::test(filter =
+  "experimental-warning|canonical-case-specifications|canonical-comparator-cache",
+  stop_on_failure = TRUE)'` passed 198 tests with no failure, warning, or skip.
+- `Rscript tools/build-site.R && Rscript -e
+  'pkgdown::check_pkgdown()'` rebuilt 103 HTML pages at `pkgdown-site/` and
+  reported no pkgdown problems. Fresh headless-Chrome screenshots confirmed
+  the full warning above the homepage, canonical article, reference, news,
+  authors, and 404 content at desktop and narrow widths.
+- The project figure-audit workflow opened all 12 freshly rendered article PNGs
+  individually. Confidence Eyes retained hollow estimates and named Wald or
+  profile intervals; the non-closing profile drew no lens. The durable table is
+  `docs/dev-log/figure-audits/2026-07-16-v02-pkgdown.md`.
 
 ## 6. Tests of the Tests
 
@@ -122,21 +144,25 @@ package help, and generated Rd were re-audited after Rose found retained v0.1
 language. The public prose uses confidence language for freqTLS and posterior/
 credible language only for the explicitly Bayesian comparator.
 
-The final independent gate returned Fisher READY and Pat READY. Fisher verified
-formula/threshold/estimand parity, cache diagnostics, actual differences, join
-cardinality, and the Drosophila root guard. Pat verified the visible Snow-gum
-clamp warning, copyable comparison code, canonical navigation, diagnostic and
-interval language, and bayesTLS routing. Rose found no remaining source blocker;
-the four-platform implementation-head CI pass and this validated closure record
-close the two conditions remaining in her re-audit.
+Fisher returned READY on current `main`: exact data identity, locked formulas,
+thresholds and estimands, cache diagnostics, actual paired differences, join
+cardinality, profile equivariance, and the Drosophila root guard all passed.
+Pat and Rose initially returned NOT-DONE because the deployed fixed navbar hid
+the warning headline and because this report, the parity ledger, the licence
+ledger, and v0.2 governance retained stale counts or wording. The closure branch
+repairs every named defect and rebuilds the site. Their fresh re-audits both
+returned READY: Pat confirmed the complete warning at desktop and real mobile
+breakpoints; Rose confirmed the exact inventories, current v0.2 governance,
+licence consumers, closure evidence, and clean stale-claim scan.
 
 ## 7a. Issue Ledger
 
 `gh issue list --state open --limit 100 --json number,title,url` returned `[]`;
 no overlapping issue required an update. PR #6 delivered the urgent warning and
-merged first. PR #8 fixed pkgdown concurrency and merged separately. Draft PR
-#7 carries the v0.2 parity, canonical cache, audit repairs, and this closure
-record.
+merged first. PR #8 fixed pkgdown concurrency and merged separately. PR #7
+delivered the v0.2 parity, canonical cache, and main audit repairs. PR #9 then
+corrected the pkgdown publication root. The focused closure branch repairs the
+final visual and governance defects found only after live deployment.
 
 ## 9. What Did Not Go Smoothly
 
@@ -147,8 +173,12 @@ cell-mean designs. Base `rbind()` rejected comparator summaries with different
 grouping columns. A global pkgdown concurrency group let skipped PR workflows
 cancel the valid main deployment. The first installed-package cache test tried
 to source build-excluded `data-raw`. Finally, the Snow-gum tutorial claimed a
-visible Beta clamp while the code was silent. Each failure now has a code,
-test, build, or governance guard.
+visible Beta clamp while the code was silent. The first successful deployment
+also published under `/dev/` while the advertised root returned 404; PR #9
+forced a single root site and removed stale development output. The next visual
+audit found that Bootstrap's fixed navbar covered the top 56 pixels of the
+warning even though every structural banner test passed. Each failure now has
+a code, test, build, visual, or governance guard.
 
 ## 11. Team Learning
 
@@ -176,7 +206,7 @@ engine changes.
 
 Covered: source and rendered README, home/articles/reference/news/authors/error
 pages, canonical empirical cases, reference examples, warning injection,
-navbar/search/sitemap/LLM discovery, source and installed tests, cache
+navbar/search/sitemap/LLM discovery, all 12 rendered article figures, source and installed tests, cache
 provenance, licence ledger, and GitHub/pkgdown publication workflow. Deferred:
 CRAN submission, removal/deprecation of legacy data objects, censored/hurdle
 models, fitted repair dynamics, and raw posterior-output distribution.

@@ -89,7 +89,7 @@ grouping label, so it carries none.
 ## Implemented core matrix
 
 The original core matrix covered two count families, two designs, and two CI
-methods. The release candidate adds the Beta family, formula/shape designs,
+methods. Experimental v0.2 retains the Beta family, formula/shape designs,
 limited random intercepts, and parametric bootstrap with target-specific routing:
 
 - families: `binomial` and `beta_binomial` for count data, plus `beta` for
@@ -112,10 +112,9 @@ Additional implemented capability:
 - the 12 identifiability warnings (emitted, never silent);
 - Confidence-Eye uncertainty plots (the default), survival curves, the thermal
   death-time curve, and the survival surface;
-- the cached three-way benchmark against bayesTLS and the classical two-stage
-  estimator on the vendored `shrimp_lethal` and `zebrafish_lethal` datasets,
-  with the shrimp death counts rebuilt from the vendored CSV proportion at
-  `standardize_data()` time (R-SHRIMP).
+- the canonical six-unit comparator against pinned bayesTLS, with actual
+  ML-minus-posterior-median differences; the older shrimp/life-stage cache is
+  retained only as internal compatibility evidence.
 
 ### Benchmark data and cache (Phase 5)
 
@@ -171,12 +170,12 @@ Benchmark-cache limitations:
   compares only the absolute 240-minute LT50 point because the direct freqTLS
   `z` coordinate is a relative-threshold estimand.
 
-## Out of scope for v0.1.0
+## Out of scope for experimental v0.2
 
 - Time-to-event responses; multi-trait responses.
 - **Fitting** heat-injury / repair sub-models (belongs to `bayesTLS`);
-  deterministic heat-injury **prediction** from the fitted curve is fitted in
-  the 0.1.0 candidate (see "Heat-injury prediction" below).
+  deterministic heat-injury **prediction** from the fitted curve is retained in
+  experimental v0.2 (see "Heat-injury prediction" below).
 - An absolute-threshold default (the default is the relative threshold).
 - Correlated, random-slope, crossed, nested, or `up` random effects.
 - Universal profile intervals for `up`, variance components, or general
@@ -208,10 +207,10 @@ empirical 95% coverage of `z` falls to ~0.65 in the worst regime, while the
 `confint(method = "wald")`. This is not a clamping artefact; see
 `data-raw/beta-binomial-phi-study.R`.
 
-## Random effects (historical v0.2/v0.3 build milestones; in 0.1.0 candidate)
+## Random effects (experimental v0.2 capability)
 
-Single random intercepts on `CTmax` (v0.2) and on `log_z`, `low`, and `log_k`
-(v0.3), `<param> ~ <fixed> + (1 | group)`, are fitted by TMB's Laplace
+Single random intercepts on `CTmax`, `log_z`, `low`, and `log_k`,
+`<param> ~ <fixed> + (1 | group)`, are fitted by TMB's Laplace
 approximation. Caveats:
 
 - `sigma_CTmax` / `sigma_logz` / `sigma_low` / `sigma_logk` are maximum-likelihood
@@ -252,7 +251,7 @@ remain population-level for random-effects fits. General continuous fixed
 designs on `CTmax`/`log_z` are rebuilt by `predict()` from `newdata`; specialised
 grid helpers do not yet accept arbitrary covariate settings.
 
-## Beta family (historical v0.2 build milestone; in 0.1.0 candidate)
+## Beta family (experimental v0.2 capability)
 
 The `beta` family (`family = "beta"`, `family_code = 2`) fits a continuous
 proportion response `y` in `(0, 1)` directly, `y ~ Beta(p * phi, (1 - p) * phi)`,
@@ -268,7 +267,7 @@ estimates, Wald, profile (including a `phi` profile), and parametric-bootstrap
 intervals are all available, and grouped `CTmax`/`z` work. The count families are
 byte-identical to before. See `docs/design/02-family-registry.md`.
 
-## Heat-injury prediction (historical v0.2 build milestone; in 0.1.0 candidate)
+## Heat-injury prediction (experimental v0.2 capability)
 
 `predict_heat_injury()` is a deterministic predictor, not a fitted model: it
 accumulates thermal damage from the already-fitted 4PL under a user-supplied
@@ -286,7 +285,7 @@ optional Sharpe-Schoolfield `repair` parameters are a user-supplied scenario
 layer that is **not identified** by the survival data (a warning is emitted when
 repair is used).
 
-## Grouped shape parameters (historical v0.2 build milestone; in 0.1.0 candidate)
+## Grouped shape parameters (experimental v0.2 capability)
 
 `low`, `up`, and `log_k` may vary by a grouping factor via the formula interface
 (`low ~ group`, `up ~ group`, `log_k ~ group`), relaxing the midpoint-only
