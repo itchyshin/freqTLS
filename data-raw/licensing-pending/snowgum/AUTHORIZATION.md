@@ -3,14 +3,12 @@
 Recorded: 2026-07-16
 
 Shinichi Nakagawa, the freqTLS maintainer and a coauthor of the Snow-gum work,
-confirmed that coauthor Pieter A. Arnold is happy for freqTLS to use the
-Snow-gum PSII data in the GitHub repository and pkgdown teaching example. The
-current public source is Arnold et al. (2026),
+confirmed that Pieter A. Arnold, the data holder and a freqTLS coauthor,
+authorised freqTLS to use the Snow-gum PSII data as this package's teaching
+dataset. The current public source is Arnold et al. (2026),
 https://doi.org/10.64898/2026.04.09.717599, under CC BY-NC 4.0.
 
-This note is a maintainer attestation for the current non-commercial
-development repository and teaching site. It is deliberately **not** treated
-as evidence that every rights holder granted unrestricted redistribution,
-commercial downstream use, adaptations, or CRAN inclusion. Before CRAN
-submission, archive a written rights-holder statement that explicitly covers
-those uses or replace this component with a compatibly relicensed copy.
+The dataset retains its separate CC BY-NC 4.0 terms. Its attribution, source
+URL, licence notice, transformations, and package consumers are recorded in
+`docs/design/47-data-license-ledger.md`, `inst/COPYRIGHTS`, `inst/CITATION`,
+and the Snow-gum dataset documentation.

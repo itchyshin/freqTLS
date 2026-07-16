@@ -21,7 +21,7 @@ submission. Any unlisted file is a release blocker.
 | `data/shrimp_sublethal.rda` | `bayesTLS` source `inst/extdata/data_sublethal_TDT_brown_shrimp.csv` | Brown-shrimp experiment contributors / `bayesTLS` distributors | `bayesTLS` package distribution is CC BY 4.0 | Drop excluded rows; parse clock times to elapsed minutes; select identifiers | documented package dataset | **SHIP** with `bayesTLS` attribution |
 | `data/zebrafish_lethal.rda` | `bayesTLS` source `inst/extdata/data_lethal_TDT_zebrafish.csv` | Life-stage zebrafish experiment contributors / `bayesTLS` distributors | `bayesTLS` package distribution is CC BY 4.0 | Drop excluded trials; sum daily mortality columns; derive survivors; type life stage | internal legacy benchmark only | **SHIP** with `bayesTLS` attribution |
 | `data/zebrafish_o2.rda` | Saruhashi et al. (2026), Zenodo `10.5281/zenodo.20075355`; source `inst/extdata/data_lethal_TDT_zebrafish_oxygen.csv` | Saruhashi and data contributors named by the deposit | CC BY 4.0 | Relabel ploidy and oxygen treatments; type and select columns; no rows dropped | oxygen-gradient case study | **SHIP** with attribution and change notice |
-| `data/snowgum_psii.rda` | Arnold et al. (2026), `10.64898/2026.04.09.717599`; pinned-object SHA-256 `20fd38c0dca50e29723b409371d60146197064641c9b51c579cf926d21e89864` | Arnold et al.; Pieter A. Arnold is a freqTLS coauthor | CC BY-NC 4.0. On 2026-07-16 the maintainer recorded Pieter A. Arnold's agreement to the current non-commercial GitHub/pkgdown teaching use. This is not evidence of an unrestricted/commercial downstream grant. | Analysis-ready 394-row object copied byte-for-byte from the pinned bayesTLS supplement | Snow-gum PSII case study and exact-data tests | **DEVELOPMENT ONLY / CRAN BLOCK** until a written rights-holder grant explicitly covers CRAN, commercial downstream reuse, and adaptations, or the data are compatibly relicensed |
+| `data/snowgum_psii.rda` | Arnold et al. (2026), `10.64898/2026.04.09.717599`; pinned-object SHA-256 `20fd38c0dca50e29723b409371d60146197064641c9b51c579cf926d21e89864` | Pieter A. Arnold / Arnold et al. | CC BY-NC 4.0; Pieter A. Arnold, the data holder and package coauthor, authorised this package use on 2026-07-16. | Analysis-ready 394-row object copied byte-for-byte from the pinned bayesTLS supplement | Snow-gum PSII case study and exact-data tests | **SHIP** as a separately licensed CC BY-NC 4.0 component; retain attribution, source URL, licence notice, and transformation record |
 
 ## Raw and derived external data (`inst/extdata/**`)
 
@@ -38,7 +38,7 @@ submission. Any unlisted file is a release blocker.
 
 | Component | Source | Rights holder | Licence / permission | Transformation | Package consumer | CRAN verdict |
 | --- | --- | --- | --- | --- | --- | --- |
-| `inst/extdata/canonical_bayesTLS_cache.rds` | Totoro refits of the six locked canonical analysis units using bayesTLS 1.0.0 at commit `76510412e06c594c96894a1baba1f0e1a34a5aea`; published-file SHA-256 `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0` | freqTLS maintainers for the compilation; source-data holders retain rights in inputs | Package licence plus each input's terms; Snow-gum rows inherit CC BY-NC 4.0 and the recorded non-commercial GitHub/pkgdown authorization | Curated posterior medians, intervals, provenance and diagnostics only; raw fits remain local | active `comparing-to-bayesTLS` article and cache-integrity tests | **DEVELOPMENT ONLY / CRAN BLOCK** with the Snow-gum component until the broader written grant is archived |
+| `inst/extdata/canonical_bayesTLS_cache.rds` | Totoro refits of the six locked canonical analysis units using bayesTLS 1.0.0 at commit `76510412e06c594c96894a1baba1f0e1a34a5aea`; published-file SHA-256 `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0` | freqTLS maintainers for the compilation; source-data holders retain rights in inputs | Package licence plus each input's terms; Snow-gum rows inherit CC BY-NC 4.0 and Pieter A. Arnold's recorded holder authorization | Curated posterior medians, intervals, provenance and diagnostics only; raw fits remain local | active `comparing-to-bayesTLS` article and cache-integrity tests | **SHIP** with source-specific attribution and the Snow-gum CC BY-NC notice |
 | `inst/extdata/bayesTLS_benchmark_cache.rds` | Historical maintainer fits to shrimp, life-stage zebrafish, and *D. suzukii* using `bayesTLS` 1.0.0 at commit `578740f20f3a2e6e81b3b700b1d0f0e5a06ecf8a`, CmdStan 2.36.0, and the classical comparator | freqTLS maintainers for the compilation; source-data holders retain rights in inputs | Package licence plus the source-specific licences of the retained datasets | Versioned historical summaries and diagnostics | internal legacy benchmark tests only; not an active comparison or teaching cache | **SHIP** with retained dataset attribution |
 | `inst/extdata/case_study_summary_cache.rds` | Historical `data-raw/build_case_study_summary_cache.R` fits to shrimp, life-stage zebrafish, and *D. suzukii* | freqTLS maintainers for the compilation; source-data holders retain rights in inputs | Package licence plus the source-specific CC BY 4.0 licences | Version-stamped historical profile/contrast rows | internal legacy integrity test only; no active summary page consumes it | **SHIP** with retained dataset attribution |
 | `inst/extdata/benchmark_vs_bayes.rds` | `data-raw/benchmark-vs-bayes.R`; brown-shrimp three-estimator comparison | freqTLS maintainers; shrimp source attribution retained | Package licence plus upstream shrimp CC BY 4.0 | Store point estimates and pairwise differences | internal legacy benchmark only; no active article consumes it | **SHIP** with upstream attribution |
@@ -53,7 +53,7 @@ submission. Any unlisted file is a release blocker.
 
 | Component | Source and terms | Release treatment |
 | --- | --- | --- |
-| `data-raw/licensing-pending/snowgum/snowgum_psii.rda` | Source/provenance copy of the installed development object; Arnold et al. (2026), `10.64898/2026.04.09.717599`; **CC BY-NC 4.0** | Current GitHub/pkgdown teaching use is covered by the maintainer attestation; CRAN and unrestricted/commercial downstream redistribution remain blocked. |
+| `data-raw/licensing-pending/snowgum/snowgum_psii.rda` | Source/provenance copy of the installed development object; Arnold et al. (2026), `10.64898/2026.04.09.717599`; **CC BY-NC 4.0** | Build-excluded provenance copy; installed data ship under the separately recorded CC BY-NC 4.0 terms and Pieter A. Arnold's authorization. |
 | `data-raw/licensing-pending/snowgum/data_function_PSII_TDT_snowgum.csv` | Arnold et al. (2026), Experiment 1; **CC BY-NC 4.0** | Not installed or consumed by package code. |
 | `data-raw/licensing-pending/snowgum/data_function_PSII_TDT_snowgum_glasshouse.csv` | Exact file-level holder statement and standalone grant not recorded; conservatively treated under the snow-gum restriction | Not installed; provenance and compatible permission are required before use. |
 | `data-raw/licensing-pending/snowgum/case-study-leaf-psii.Rmd` | Analysis source derived from the restricted snow-gum data | Not built or linked by pkgdown. |
@@ -65,9 +65,8 @@ submission. Any unlisted file is a release blocker.
 ## Closed packaging actions
 
 1. Snow-gum raw files remain in the build-excluded licensing-pending tree. The
-   byte-identical processed object is installed only in the experimental
-   development branch for the approved non-commercial GitHub/pkgdown teaching
-   use. CRAN remains blocked until the broader written grant is archived.
+   byte-identical processed object and the cache summaries are shipped under the
+   separate CC BY-NC 4.0 notice and Pieter A. Arnold's recorded authorization.
 2. `inst/extdata/bayesTLS_benchmark_cache.rds` was freshly rebuilt without
    snow-gum inputs against the pinned bayesTLS commit recorded above; its
    `freqTLS_note` states the retained scope and comparison contract.
@@ -77,7 +76,7 @@ submission. Any unlisted file is a release blocker.
    their complete underlying-data redistribution chains were not established.
 5. The final source-tarball inventory must confirm that no build-excluded raw
    path is included. The installed `data/snowgum_psii.rda` is the deliberate,
-   documented exception for the current non-commercial development site.
+   documented separately licensed teaching dataset.
 
 The release manager should preserve copies outside the CRAN package if these
 materials are needed for private validation or manuscript reproduction. Their

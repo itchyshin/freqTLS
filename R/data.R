@@ -246,10 +246,9 @@
 #' }
 #' @source Arnold et al. (2026), \doi{10.64898/2026.04.09.717599}. The
 #'   development copy is redistributed under CC BY-NC 4.0 with attribution.
-#'   A maintainer attestation records coauthor permission for the current
-#'   non-commercial GitHub/pkgdown teaching use. Unrestricted/commercial
-#'   downstream redistribution and CRAN remain blocked until a written
-#'   rights-holder grant is archived; see \file{inst/COPYRIGHTS}.
+#'   Pieter A. Arnold, the data holder, authorised package use on 2026-07-16.
+#'   The dataset remains separately licensed CC BY-NC 4.0; retain its
+#'   attribution and source URL when reusing it. See \file{inst/COPYRIGHTS}.
 #' @examples
 #' \donttest{
 #' std <- standardize_data(snowgum_psii, temp = "Temp", duration = "Time",

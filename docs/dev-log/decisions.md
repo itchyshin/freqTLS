@@ -422,3 +422,20 @@ specification is `SPEC.md`; these entries record the decisions that shaped it.
 - Consequence: resubmit this exact file, then verify CRAN acceptance and public
   package/check pages before changing release-candidate wording or claiming the
   package is on CRAN.
+
+## 2026-07-16 -- Reconstitute the experimental 0.1.0 release lane on current main
+
+- Decision: retain the current `main` implementation and its identical exported
+  API, but replace its incompatible `0.2.0.9000` reader-facing release story with
+  the approved experimental `0.1.0` candidate contract. The historical milestone
+  labels are implementation history, not a release sequence.
+- Reason: the CRAN-remediation lane must audit the submitted product as a whole.
+  A conflict review found no export delta between the release lane and current
+  `main`, but found contradictory version, Snow-gum, and release claims.
+- Snow-gum: Pieter A. Arnold, identified by the maintainer as the data holder,
+  authorised use of the CC BY-NC 4.0 dataset in this package. It ships as a
+  separately licensed component with source, attribution, transformation, and
+  consumer records; it does not change the GPL licence of the package code.
+- Consequence: every generated and reader-facing surface must be rebuilt and
+  audited from this integration branch. No prior tarball hash or reviewer verdict
+  is evidence for the replacement candidate.

@@ -6,15 +6,15 @@ fitted, planned, and unsupported. It is kept synchronized with
 the same commit when a capability changes (AGENTS.md design rule 10). The live
 phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 
-> **Experimental 0.2.0.9000 teaching contract.** Active empirical cases mirror
+> **Experimental 0.1.0 teaching contract.** Active empirical cases mirror
 > the pinned bayesTLS supplement: `zebrafish_o2`, `aphid_tdt`, `snowgum_psii`,
 > and the mortality and awake/coma endpoints from `dsuzukii`. Brown shrimp and
 > life-stage zebrafish remain benchmark-only legacy fixtures, not active
 > examples. Censored-time, hurdle-productivity, and fitted repair dynamics are
 > unsupported/bayesTLS-only. Every implemented cell below remains experimental.
 
-> **Historical 0.1.0 source surface.** freqTLS is the frequentist analogue of bayesTLS;
-> this describes the implemented package source and is not a claim that 0.1.0
+> **0.1.0 source surface.** freqTLS is the frequentist analogue of bayesTLS;
+> this describes the experimental release candidate and is not a claim that 0.1.0
 > has been submitted to or published by CRAN. The user-facing API is
 > `standardize_data()` -> `fit_4pl()` -> `tls()` / `extract_tdt()` /
 > `predict_survival_curves()` / `diagnose_tdt_fit()`, with `two_stage` as the
@@ -22,7 +22,7 @@ phase status is on the dashboard (`docs/dev-log/dashboard/status.json`).
 > `get_ctmax`, ...) remain as the internal engine and still work. The matrices
 > below state the current family, design, interval, and target-specific limits.
 
-## 0.2.0.9000 family x design x interval grid
+## 0.1.0 family x design x interval grid
 
 For the ordinary curve parameters, the current experimental source implements the full cross-product of
 three families, ungrouped/grouped designs, and Wald/profile/bootstrap confidence
@@ -77,7 +77,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
 | column (tidy-eval `y`/`n`/`time`/`temp`/`group`) | fitted (P1-P2) | the original interface; unchanged |
 | formula (`tls_bf()` -> `fit_tls()`) | fitted | brms/drmTMB-style grammar; `CTmax` and `log_z` share fixed design columns, while `low`, `up`, and `log_k` have independent fixed designs; one limited independent random intercept on `CTmax`, `log_z`, `low`, or `log_k` per coordinate |
 
-## Historical build milestones retained in experimental 0.2.0.9000
+## Implementation milestones consolidated in experimental 0.1.0
 
 - Covariate (grouped) effects on the shape parameters (`low` / `up` / `log_k`):
   **fitted** -- via the formula interface (`low ~ group`, `up ~ group`,
@@ -155,7 +155,7 @@ Both interfaces map to the same engine and produce numerically identical fits:
   critical-temperature, and heat-injury helpers are population-level for
   random-effects fits.
 
-## Unsupported or planned after experimental v0.2
+## Unsupported in experimental 0.1.0
 
 - Random effects beyond single intercepts on `CTmax` / `log_z` / `low` / `log_k`
   (random slopes, a RE on the upper asymptote `up`, a second / crossed grouping
@@ -164,11 +164,11 @@ Both interfaces map to the same engine and produce numerically identical fits:
   the path for a correlated random structure. The single intercepts on `CTmax` /
   `log_z` / `low` / `log_k` -- with profile intervals for the fixed effects and a
   prior-free RE-aware bootstrap for the variance components -- are fitted.
-- Beta / continuous responses: **fitted in v0.2** (`family = "beta"`). The
+- Beta / continuous responses: **fitted** (`family = "beta"`). The
   simulated parameter-recovery tests and the Snow-gum development example
-  demonstrate this capability. The processed Snow-gum object and vignette are
-  installed/rendered only for the authorized non-commercial GitHub/pkgdown
-  development use; CRAN and commercial redistribution remain blocked.
+  demonstrate this capability. The processed Snow-gum object and vignette ship
+  as a separately licensed CC BY-NC 4.0 component under the recorded
+  data-holder authorization.
 - Time-to-event responses: non-goal (the wider TDT literature is largely
   failure-time data; the 4PL count/proportion model is the wrong tool for it).
 - Multi-trait joint likelihoods remain a non-goal. The aggregated awake/coma
@@ -177,15 +177,15 @@ Both interfaces map to the same engine and produce numerically identical fits:
 - **Fitting** heat-injury / repair sub-models (estimating injury or repair
   dynamics as part of the likelihood): non-goal (belongs to bayesTLS).
   Deterministic heat-injury **prediction** from the already-fitted curve is
-  fitted in v0.2 (`predict_heat_injury()`; see the v0.2 section).
-- Grouped effects on `low`, `up`, `log_k`: **fitted in v0.2** (see the v0.2
+  fitted in 0.1.0 (`predict_heat_injury()`; see the implementation section).
+- Grouped effects on `low`, `up`, `log_k`: **fitted** (see the implementation
   section). General continuous covariates on the shapes are **also fitted** (each
   shape carries its own independent design; link-scale coefficients + Wald).
 - Absolute-threshold default: non-goal (the default is relative).
 - A formula interface (`tls_bf()`): **fitted** (a thin front-end to the column
   interface). Predictors on `low`/`up`/`log_k`, shared-column fixed designs for
   `CTmax` / `log_z`, and the limited random-intercept structures listed above
-  are retained in experimental 0.2.0.9000.
+  are retained in experimental 0.1.0.
 - CRAN hardening is release engineering rather than a model capability; this
   matrix does not claim public CRAN availability.
 

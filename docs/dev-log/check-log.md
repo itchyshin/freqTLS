@@ -2671,3 +2671,30 @@ Interpretation:
   tree, and records current-main CI, deployment, and live-route evidence. The
   experimental, non-CRAN, unsupported-model, and Snow-gum rights boundaries are
   unchanged.
+
+## 2026-07-16 -- 0.1.0 release-lane integration baseline
+
+Goal:
+
+- Reconcile the approved experimental 0.1.0 CRAN-remediation scope with the
+  newer `main` implementation before producing a replacement source candidate.
+
+Checks and evidence:
+
+- `git merge-base origin/main build/freqtls` -> `e1a817e`; API comparison of
+  `NAMESPACE` exports between `origin/main` and `build/freqtls` -> no delta.
+- CRAN Repository Policy, source-package clauses (accessed 2026-07-16) ->
+  copyright/IP of every component must be clear and unambiguous; the maintainer
+  warrants agreement to use credited authors' material; CRAN must have a
+  perpetual distribution right.
+- Shinichi confirmed that all coauthors authorise package use, and that Pieter
+  A. Arnold is the Snow-gum data holder who authorised use of that dataset.
+- `Rscript -e 'devtools::document()'` -> regenerated `man/snowgum_psii.Rd`.
+- `Rscript -e 'devtools::build_readme()'` -> regenerated `README.md`; local
+  dependency freshness notices only (`MASS`, `Rcpp`, `rlang`).
+
+Interpretation:
+
+- The old frozen tarball and current-main 0.2 closure record are not evidence
+  for this integration candidate. The candidate must be rebuilt from this branch
+  after the full source, reference, pkgdown, and tarball audits complete.

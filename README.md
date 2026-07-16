@@ -115,8 +115,8 @@ complementary lenses on the same model, not competitors.
 
 ## Installation
 
-`freqTLS` 0.2.0.9000 is an experimental development version and is not a
-CRAN release. Install it from
+`freqTLS` 0.1.0 is an experimental release candidate and has not been
+submitted to CRAN. Install it from
 [GitHub](https://github.com/itchyshin/freqTLS):
 
 ``` r

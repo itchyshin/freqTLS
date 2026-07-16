@@ -2,7 +2,7 @@
 
 freqTLS 0.1.0 models **count** survival data (binomial, beta-binomial) and
 **continuous proportion** responses in `(0, 1)` (the beta family). The beta
-family was initially scheduled for v0.2, but its implementation and
+family was initially scheduled for a later milestone, but its implementation and
 parameter-recovery tests were completed and folded into the 0.1.0 release
 candidate. The count response is the number of survivors `y` out of `n` trials;
 the beta response is a single proportion `y` with no trials. All families share

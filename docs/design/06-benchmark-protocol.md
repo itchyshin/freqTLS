@@ -68,7 +68,7 @@ and all sampler diagnostics before copying the exact bytes to
 
 The 2026-07-16 published cache has SHA-256
 `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`. It was
-built with bayesTLS 1.0.0, freqTLS 0.2.0.9000 at `b32c860`, CmdStan 2.39.0,
+built with bayesTLS 1.0.0, the pre-release freqTLS implementation at `b32c860`, CmdStan 2.39.0,
 R 4.5.3, four bounded cores, and one OpenBLAS thread. Across all six fits,
 maximum R-hat was 1.0019, divergences and tree-depth hits were zero, and every
 ESS and BFMI gate passed. Raw posterior fits remain maintainer-local.

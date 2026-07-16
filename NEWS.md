@@ -1,4 +1,4 @@
-# freqTLS 0.2.0.9000
+# freqTLS 0.1.0 (experimental release candidate)
 
 * Rebased the empirical teaching plan on the pinned bayesTLS supplement
   rendered 2026-07-14 (commit `76510412e06c594c96894a1baba1f0e1a34a5aea`).
@@ -63,8 +63,8 @@ bootstrap — instead of a posterior. Forked from **profileTLS** (commit
   intervals.
 * The plots (`plot_confidence_eye()`, `plot_survival_curves()`, `plot_tdt_curve()`,
   `plot_heat_injury()`) and extractors accept the `freq_tls` workflow object.
-* Shared empirical data included `aphid_tdt` and `zebrafish_o2`; the active
-  v0.2 teaching set and legacy boundary are listed above.
+* Shared empirical data include `aphid_tdt` and `zebrafish_o2`; the active
+  teaching set and legacy boundary are listed above.
 
 ## Inference and calibration
 
@@ -94,8 +94,8 @@ bootstrap — instead of a posterior. Forked from **profileTLS** (commit
 * The **frequentist-and-bayesian** centerpiece carries the coverage panel and the
   three-way benchmark; `comparing-to-bayesTLS` carries the live + cached
   comparison.
-* Historical 0.1 articles included unpublished compatibility fixtures. They are
-  not part of the active v0.2 teaching set.
+* Historical articles included unpublished compatibility fixtures. They are not
+  part of the active teaching set.
 
 ## Simulation
 

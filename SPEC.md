@@ -2,7 +2,7 @@
 
 > **For agentic workers:** This is the canonical SPEC + plan (doubles as repo `SPEC.md`). Every implementing agent reads this first. Use superpowers:subagent-driven-development / executing-plans; steps use checkbox (`- [ ]`) syntax. Definition of Done is in §2.
 
-**Current goal (0.2.0.9000):** Maintain a focused, experimental
+**Current goal (0.1.0):** Deliver a focused, experimental
 maximum-likelihood / profile-likelihood R package whose empirical teaching
 cases follow the pinned `bayesTLS` supplement (rendered 2026-07-14; commit
 `76510412e06c594c96894a1baba1f0e1a34a5aea`) as closely as the frequentist
@@ -39,7 +39,7 @@ bootstrap/Delta, not profile likelihood). `bayesTLS` is a complete Bayesian
 `brms`/Stan package. `freqTLS` is the **likelihood/profile-likelihood
 complement**: the matched configuration uses the same likelihood and fitted
 curve, fit by ML via TMB, with `CTmax` and `z` as direct parameters so supported
-targets can be profiled. The current experimental 0.2.0.9000 surface also provides
+targets can be profiled. The experimental 0.1.0 surface also provides
 Wald/bootstrap routes, diagnostics, formula and column interfaces, limited
 random intercepts, prediction, and the tested beta family. **drmTMB** (local,
 GPL-3) supplied engineering and governance patterns; package-specific
@@ -79,7 +79,7 @@ drmTMB ships a reusable kit at `docs/agent-kit/` (`README.md`, `team-roles.md`, 
 
 Stand up:
 - **`.claude/agents/`** (13 named + 4 job-function `.md`) and **`.codex/agents/`** (`.toml` mirrors, 1-to-1) — adapt each agent body's context to freqTLS scope (4PL, direct CTmax/z, profile CIs, benchmark-vs-bayesTLS).
-- **`AGENTS.md`** — sections mirroring drmTMB: Core Scope (single-stage 4PL TLS; binomial and beta-binomial counts plus beta continuous proportions; direct CTmax/z; experimental-v0.2 boundaries); Design Rules (every family needs simulation tests; every exported fn needs roxygen; parameterisation changes update `docs/design/01-…`; likelihood changes update `docs/design/03-…`; every change updates `check-log.md`; completed tasks write after-task reports; ported drmTMB code documents provenance in `inst/COPYRIGHTS`); Standard Commands; Recovery Checkpoints; **Definition of Done**; Writing Style; Multi-Agent Collaboration (name→agent map); Standing Review Roles; Team-Improvement loop; pkgdown policy.
+- **`AGENTS.md`** — sections mirroring drmTMB: Core Scope (single-stage 4PL TLS; binomial and beta-binomial counts plus beta continuous proportions; direct CTmax/z; experimental-0.1.0 boundaries); Design Rules (every family needs simulation tests; every exported fn needs roxygen; parameterisation changes update `docs/design/01-…`; likelihood changes update `docs/design/03-…`; every change updates `check-log.md`; completed tasks write after-task reports; ported drmTMB code documents provenance in `inst/COPYRIGHTS`); Standard Commands; Recovery Checkpoints; **Definition of Done**; Writing Style; Multi-Agent Collaboration (name→agent map); Standing Review Roles; Team-Improvement loop; pkgdown policy.
 - **`CLAUDE.md`** — points to `AGENTS.md` as source of truth; sets freqTLS-specific invariants (stable names `CTmax`,`z`,`log_z`,`low`,`up`,`k`,`phi`; relative threshold default; "confidence" language, never "posterior"; sibling boundary vs bayesTLS & drmTMB).
 - **`.agents/skills/`** — adapt drmTMB skills: `tmb-likelihood-review` (Gauss), `figure-visual-audit` (Florence; Confidence Eye), `add-simulation-test`/`simulation-test-plan` (Curie), `after-task-audit` (Rose; with freqTLS `rg` patterns: `CTmax|log_z|tref|relative|absolute|beta_binomial`), `prose-style-review`, `release-readiness-review`. **New:** `profile-ci-review` (Fisher — equivariance `ci_z==exp(ci_log_z)`, χ² cutoff, open/boundary/multimodal handling) and `benchmark-vs-bayesTLS-audit` (Jason/Rose — fair config, cache provenance, R-SHRIMP).
 - **`.claude/hooks/session-start.sh`** — adapt drmTMB's idempotent R/TMB toolchain setup; `.claude/settings.json` (SessionStart hook).
@@ -111,7 +111,7 @@ docs/dev-log/
 ## 4. Project docs (vision / roadmap / status) + sync protocol
 
 - **`docs/design/00-vision.md`** — freqTLS identity: *the fast, prior-free, profile-likelihood complement to bayesTLS*. Core idea: direct CTmax/z parameterisation → directly profile-able headline quantities + honest identifiability diagnostics. Signature features: profile-likelihood confidence intervals (Confidence Eyes) for CTmax & z, and the 12-warning identifiability story. Audience: thermal-biology ecologists. Sibling boundary: bayesTLS (Bayesian, broad workflow, heat-injury) and drmTMB (general distributional regression).
-- **`ROADMAP.md`** — phases 0–N with status (initial/implemented/planned), version status line, release boundary, links to the capability matrix. Experimental `0.2.0.9000` retains binomial and beta-binomial counts, beta continuous proportions, shared shape by default, grouped CTmax/z, profile/Wald/bootstrap CIs, and the canonical benchmark.
+- **`ROADMAP.md`** — phases 0–N with status (initial/implemented/planned), version status line, release boundary, links to the capability matrix. Experimental `0.1.0` retains binomial and beta-binomial counts, beta continuous proportions, shared shape by default, grouped CTmax/z, profile/Wald/bootstrap CIs, and the canonical benchmark.
 - **`README.Rmd`** — "Start here" links · **Credit / origins** (TLS framework is bayesTLS's; Noble/Arnold/Pottier are co-authors) · preview status (intentionally bounded) · install · quick example · model equation · experimental lifecycle badge · data credits.
 - **`NEWS.md`** — version history.
 - **Design docs** (`docs/design/`, numbered like drmTMB): `00-vision`, `01-model-and-parameterisation` (4PL + direct CTmax/z + equivalence to bayesTLS), `02-family-registry` (binomial, beta-binomial, and the tested Beta family), `03-likelihoods` (symbolic + C++ notes), `04-profile-likelihood` (algorithm/targets/transforms/diagnostics), `05-testing-strategy`, `06-benchmark-protocol` (canonical parity, cache, diagnostics, legacy boundary), `07-collaboration-and-site`, `10-after-task-protocol`, `46-capability-matrix` (fitted-vs-planned = the missing-cell audit), `90-bayesTLS-critique` (the §5 balanced critique, cited, as a durable record).
@@ -148,18 +148,18 @@ bayesTLS constant-shape (`temp_effects="mid"`): `mid(T)=b_mid_Intercept + b_mid_
 
 | Decision | Choice | Rationale |
 |---|---|---|
-| **License** | **GPL-3** for code; component-specific data terms | Redistributed data retain source licences. Snow-gum is CC BY-NC 4.0 in the current development branch. A maintainer attestation permits non-commercial GitHub/pkgdown teaching use, but unrestricted/commercial downstream redistribution and CRAN remain blocked until a rights-holder grant is archived. |
+| **License** | **GPL-3** for code; component-specific data terms | Redistributed data retain source licences. Snow-gum is a separately licensed CC BY-NC 4.0 teaching component; Pieter A. Arnold, the data holder, authorised its package use. |
 | **Authorship** | Shinichi Nakagawa (`aut`,`cre`) **+ Daniel W. A. Noble, Pieter A. Arnold, Patrice Pottier (`aut`)** | TLS framework is bayesTLS's, not ours alone. Confirm with them before release (a person should agree to being listed). |
 | **Midpoint param** | Direct `CTmax` + `log_z` | makes headline quantities profile-able (§6). |
 | **Asymptote reparam** | **Disjoint bounds** (bayesTLS `compute_4pl_bounds`) `low=low_min+low_w·plogis(beta_low)`, `up=up_min+up_w·plogis(beta_up)` | split `[lower,upper]` at the midpoint so `low<up` unconstrained; shares the bayesTLS contract; `up` is a direct coordinate. (P1 reversed the earlier nested gap.) Cost: `up` profile not yet wired → Wald/delta (§10). |
-| **Families in experimental v0.2** | binomial, beta-binomial(`phi`), beta(`phi`) | counts plus continuous proportions in `(0, 1)`. |
+| **Families in experimental 0.1.0** | binomial, beta-binomial(`phi`), beta(`phi`) | counts plus continuous proportions in `(0, 1)`. |
 | **Temp effect** | midpoint-only by default; optional independent fixed designs on `low/up/log_k` | the default matches bayesTLS constant-shape for a fair benchmark. |
 | **Predictors / groups** | column + `tls_bf()` formula interfaces; fixed effects on direct coordinates; one independent random intercept on `CTmax`, `log_z`, `low`, or `log_k` | grouped headline parameters remain direct/profile-able; unsupported targets route honestly to Wald/bootstrap. |
 | **`y`,`n` in TMB** | `DATA_VECTOR` (Type) not IVECTOR | beta-binomial needs `lgamma(y+a)`, `a` a `Type`. |
 | **Uncertainty visuals** | **Confidence Eye, NOT posterior densities** (§13) | freqTLS yields *confidence* intervals; posterior visuals would mislead. Distinct identity vs bayesTLS; teaching contrast in the comparison vignette. Florence-owned gate. |
 | **Time unit** | data's native unit (hours); `tref` in same unit (CTmax@1h); pin matching `t_ref`/`time_multiplier` when calling bayesTLS | avoids unit mismatch (R-UNITS). |
 
-**Non-goals for experimental v0.2:** time-to-event and multi-trait responses; fitted
+**Non-goals for experimental 0.1.0:** time-to-event and multi-trait responses; fitted
 heat-injury/repair dynamics; an absolute-threshold default; correlated,
 random-slope, crossed, nested, or `up` random effects; universal profiles for
 `up`, variance components, or continuous shape slopes; Bayesian/posterior
@@ -331,7 +331,7 @@ cache.
 ## 14. Risk register + missing-cell audit
 
 **Missing-cell audit (`docs/design/46-capability-matrix.md`):** experimental
-`0.2.0.9000` includes binomial, beta-binomial, and beta families; ungrouped,
+`0.1.0` includes binomial, beta-binomial, and beta families; ungrouped,
 grouped, formula, supported shape-design, and limited random-intercept paths;
 and Wald, target-supported profile, and parametric-bootstrap intervals. The
 matrix records target-specific fallbacks and unsupported cells rather than
