@@ -2011,3 +2011,18 @@ Interpretation:
 - This is the strongest local technical rung. It is still not an upload claim:
   merging, matching Windows/Ubuntu evidence, consent, browser URL adjudication,
   and same-hash reviewer verdicts are independent gates.
+
+## 2026-07-16 -- Snow-gum permission confirmation
+
+Evidence:
+
+- Shinichi confirmed that Pieter, the snow-gum data holder and an author, has
+  authorised use of the dataset in freqTLS.
+
+Interpretation:
+
+- This closes the dataset-specific permission question for the separately
+  licensed CC BY-NC 4.0 snow-gum component. Its attribution, licence notice,
+  transformation record, and public consumer pages remain required as recorded
+  in the component-rights ledger. This is distinct from consent to package
+  author roles by all credited authors.
