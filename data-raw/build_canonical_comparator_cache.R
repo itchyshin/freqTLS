@@ -32,7 +32,7 @@ if (!identical(Sys.getenv("OPENBLAS_NUM_THREADS"), "1")) {
   stop("Set OPENBLAS_NUM_THREADS=1 before starting R on Totoro.", call. = FALSE)
 }
 
-needed <- c("brms", "cmdstanr", "digest", "pkgload", "posterior")
+needed <- c("brms", "cmdstanr", "digest", "dplyr", "pkgload", "posterior")
 missing <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
 if (length(missing)) {
   stop(
@@ -302,9 +302,9 @@ for (case_id in names(specs)) {
   )
 }
 
-summaries <- do.call(rbind, summary_rows)
+summaries <- dplyr::bind_rows(summary_rows)
 rownames(summaries) <- NULL
-diagnostics <- do.call(rbind, diagnostic_rows)
+diagnostics <- dplyr::bind_rows(diagnostic_rows)
 rownames(diagnostics) <- NULL
 
 diagnostic_failures <- diagnostics$case_id[!diagnostics$all_pass]
