@@ -17,8 +17,10 @@ template:
         </div>
       </aside>
 
+# freqTLS has no released/CRAN site yet: publish the current experimental
+# development documentation as the single site at the advertised root URL.
 development:
-  mode: auto
+  mode: release
 
 home:
   title: freqTLS — frequentist inference for thermal death-time models
