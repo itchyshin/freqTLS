@@ -1,6 +1,7 @@
 test_that("the experimental warning is present on every independent surface", {
-  pkgdown <- paste(readLines(test_path("..", "..", "_pkgdown.yml"), warn = FALSE),
-                   collapse = "\n")
+  pkgdown_path <- test_path("..", "..", "_pkgdown.yml")
+  skip_if_not(file.exists(pkgdown_path), "source tree not available")
+  pkgdown <- paste(readLines(pkgdown_path, warn = FALSE), collapse = "\n")
   readme <- paste(readLines(test_path("..", "..", "README.Rmd"), warn = FALSE),
                   collapse = "\n")
   package_doc <- paste(readLines(test_path("..", "..", "R", "freqTLS-package.R"),
@@ -35,8 +36,9 @@ test_that("the experimental warning is present on every independent surface", {
 })
 
 test_that("the pkgdown warning uses one accessible site-wide template include", {
-  pkgdown <- paste(readLines(test_path("..", "..", "_pkgdown.yml"), warn = FALSE),
-                   collapse = "\n")
+  pkgdown_path <- test_path("..", "..", "_pkgdown.yml")
+  skip_if_not(file.exists(pkgdown_path), "source tree not available")
+  pkgdown <- paste(readLines(pkgdown_path, warn = FALSE), collapse = "\n")
 
   expect_length(gregexpr('id="freqtls-experimental-warning"', pkgdown,
                          fixed = TRUE)[[1]], 1L)
