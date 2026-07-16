@@ -102,11 +102,12 @@ heat-injury, and shape predictors — **all retained experimentally in
 0.2.0.9000**. Genuinely
 still out of scope: time-to-event, multi-trait responses, a fit-time
 absolute-threshold option and non-default `bounds`, a profile interval or random
-effect for the upper asymptote `up`. CRAN hardening is the active release gate. See
+effect for the upper asymptote `up`. CRAN hardening and submission are deferred
+from the experimental v0.2 development release. See
 `docs/design/46-capability-matrix.md`. Censored-time, hurdle-productivity, and
 fitted repair dynamics remain bayesTLS-only.
 
-## v0.2 build milestone (included in the 0.1.0 candidate)
+## Historical v0.2 build milestone (retained in experimental 0.2.0.9000)
 
 Building beyond the v0.1 core, with complementary (not competitive) framing
 against `bayesTLS` -- the two packages are two valid lenses on the same model.
@@ -153,7 +154,7 @@ against `bayesTLS` -- the two packages are two valid lenses on the same model.
   `log_z` grouping. Per-shape engine widths (byte-identical default), link-scale
   coefficient estimates (`k:body_size` is a log-scale slope) with Wald intervals,
   and `predict()` rebuilds each shape design from `newdata`.
-## v0.3 build milestone (included in the 0.1.0 candidate)
+## Historical v0.3 build milestone (retained in experimental 0.2.0.9000)
 
 * **Random intercept on `log_z` (item 5) — done.** `log_z ~ <fixed> + (1 | group)`
   adds a random intercept on thermal sensitivity, the symmetric counterpart of the

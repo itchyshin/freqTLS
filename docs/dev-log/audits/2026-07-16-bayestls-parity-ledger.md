@@ -32,13 +32,13 @@ Every inventoried surface has exactly one of these target classifications.
 | README/homepage level-two sections | 11 | 11 | 11 section rows below |
 | README/homepage R chunks | 9 | 9 | 9 chunk rows below |
 | Vignettes/articles | 12 | 14 | 12 starting rows plus Snow-gum and Case 4.2 additions below |
-| Article level-two sections | 81 | 54 | Starting sections classified; final rewrites/additions reconciled below |
-| Article R chunks | 126 | 93 | Starting chunks classified; final rewrites/additions reconciled below |
+| Article level-two sections | 81 | 55 | Starting sections classified; final rewrites/additions reconciled below |
+| Article R chunks | 126 | 101 | Starting chunks classified; final rewrites/additions reconciled below |
 | Rd topics | 56 | 57 | Starting topics plus installed `snowgum_psii` topic |
 | Rd topics containing `\\examples{}` | 46 | 46 | `Example` column below; all classified |
 | NAMESPACE exports | 47 | Crosswalk below: 21 shared, 26 freqTLS-only |
 | Packaged `.rda` datasets | 6 | 7 | Six starting objects plus installed `snowgum_psii` |
-| `inst/extdata` files | 15 | 15 | 9 result caches and 6 raw CSVs below |
+| `inst/extdata` files | 15 | 16 | 10 result caches and 6 raw CSVs below |
 | Generated discovery surfaces | 3 | 3 | navbar/article index/reference index, `search.json`, `sitemap.xml`/`llms.txt` |
 
 No homepage section or chunk, article section or chunk, Rd topic/example,
@@ -175,9 +175,10 @@ topic and therefore one example classification.
 | `profile.profile_tls` | yes | `FX` | Retain synthetic example and open-profile behaviour. |
 | `profile_tls-methods` | yes | `FX` | Retain synthetic S3 examples. |
 | `ranef` | yes | `EX` | Retain synthetic limited-random-intercept example. |
-| `shrimp_lethal` | yes | `BL` | Remove runnable/public teaching example; keep benchmark-only data documentation out of discovery. |
+| `shrimp_lethal` | no | `BL` | Runnable/public teaching example removed; keep benchmark-only data documentation out of discovery. |
 | `shrimp_sublethal` | no | `BL` | Keep benchmark-only documentation out of discovery. |
 | `simulate_tls` | yes | `FX` | Retain synthetic generator. |
+| `snowgum_psii` | yes | `FA` | Retain the canonical Dark-versus-Light example with the non-commercial development-use boundary explicit. |
 | `standardize_data` | yes | `CM` | Test count and proportion paths against pinned inputs/metadata. |
 | `tdt-accessors` | yes | `FX` | Retain frequentist accessor examples. |
 | `tdt_check_columns` | no | `CM` | Internal/shared validation semantics; keep out of primary reference grouping. |
@@ -199,7 +200,7 @@ topic and therefore one example classification.
 | `zebrafish_lethal` | no | `BL` | Keep benchmark-only documentation out of discovery; never use as the zebrafish case. |
 | `zebrafish_o2` | yes | `CM` | Replace example with diploid normoxia/hyperoxia specification and `lethal = FALSE`. |
 
-Reference totals: **56/56 topics and 46/46 example blocks classified**.
+Reference totals: **57/57 topics and 46/46 example blocks classified**.
 
 ### Exported-function crosswalk
 
@@ -297,9 +298,11 @@ with confidence objects.
 ## Closure statement
 
 Baseline inventory is complete: **11/11 homepage sections, 9/9 homepage chunks,
-12/12 articles, 81/81 article sections, 126/126 article chunks, 56/56 Rd topics,
-46/46 Rd example blocks, 47/47 exports, all packaged datasets, all 15 extdata
-files, and all navigation/search/sitemap/llms surfaces are classified.** New
+12/12 articles, 81/81 article sections, 126/126 article chunks, 56/56 starting
+Rd topics, 46/46 Rd example blocks, 47/47 exports, all packaged datasets, all
+15 starting extdata files, and all navigation/search/sitemap/llms surfaces are
+classified.** The added Snow-gum Rd topic and canonical comparator cache are
+also classified, bringing the final tree to 57 Rd topics and 16 extdata files. New
 surfaces are specified as target additions. There are no unclassified baseline
 surfaces; the five blockers above are explicit implementation gates rather than
 inventory gaps.

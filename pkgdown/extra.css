@@ -2,6 +2,10 @@
   border-bottom: 2px solid #8a4b08;
   background: #fff3cd;
   color: #3b2a05;
+  /* pkgdown fixes the 56 px navbar to the viewport. The warning is injected
+     before that navbar, so reserve the same height instead of letting the
+     navbar obscure the warning headline. */
+  margin-top: 56px;
   padding: 0.8rem 0;
 }
 

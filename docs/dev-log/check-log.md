@@ -2581,7 +2581,7 @@ Checks and evidence:
   `freqtls-experimental-warning` element per page; all seven canonical article
   routes present.
 - `rg -n -i "shrimp|life-stage|zebrafish_lethal"
-  pkgdown-site/dev/search.json` -> no matches; legacy URLs absent from sitemap,
+  pkgdown-site/search.json` -> no matches; legacy URLs absent from sitemap,
   LLM discovery, and article index.
 - `devtools::test(filter = "canonical-comparator-cache", stop_on_failure =
   TRUE)` -> 120 pass, 0 fail/warn/skip after installed-package hardening.
@@ -2604,3 +2604,70 @@ Interpretation:
   only for the current non-commercial GitHub/pkgdown use and remains a CRAN/
   commercial/adaptation blocker. Important analyses still require independent
   bayesTLS refitting and user scrutiny; agreement is not proof of correctness.
+
+## 2026-07-16 -- Experimental v0.2 publication and closure repair
+
+Goal:
+
+- Verify the merged v0.2 package and advertised root site, then close defects
+  found only by independent live, visual, and governance review.
+
+Checks and evidence:
+
+- PRs #6, #8, #7, and #9 merged sequentially as `40f5c64`, `de812c1`,
+  `c81d51f`, and `f22980b`; no implementation change was made directly on
+  `main`.
+- `gh run view 29518817974` -> all four R-CMD-check jobs passed at exact current
+  `main` SHA `f22980b95f597775e1efeadc7f93911566dabce7`.
+- `gh run view 29519504501` -> the pkgdown deployment passed at the same SHA and
+  published the experimental site at the advertised repository root.
+- Live sitemap audit -> 75/75 URLs returned HTTP 200 and each contained exactly
+  one `freqtls-experimental-warning` element. `search.json`, `sitemap.xml`, and
+  `llms.txt` contained no active shrimp or life-stage-zebrafish teaching entry.
+- The live visual audit found that the fixed Bootstrap navbar covered the
+  warning's headline and first sentence. `pkgdown/extra.css` now reserves the
+  navbar's 56-pixel height, and `test-experimental-warning.R` pins that offset.
+- `Rscript -e 'devtools::test(filter =
+  "experimental-warning|canonical-case-specifications|canonical-comparator-cache",
+  stop_on_failure = TRUE)'` -> 198 pass, 0 fail, 0 warn, 0 skip.
+- `Rscript -e 'devtools::test(stop_on_failure = TRUE)'` -> 1,042 pass, 0 fail,
+  0 warn, 0 skip.
+- `Rscript -e 'devtools::check(document = FALSE, manual = FALSE, error_on =
+  "error")'` -> completed in 3 minutes 27 seconds with 0 errors, 0 warnings,
+  and 0 notes; installed tests, examples, donttest examples, and vignette
+  rebuilding all passed.
+- `Rscript tools/build-site.R` -> 103 HTML pages rebuilt from the exact checkout
+  at `pkgdown-site/`; internal governance pages and stale `/dev/` output were
+  absent; generated-artifact assertions passed.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- Fresh headless-Chrome screenshots of home, zebrafish, reference, news,
+  authors, and 404 pages showed the complete warning below the navbar before
+  page content. Desktop and narrow-width surfaces were included.
+- The project figure-audit workflow opened all 12 freshly rendered article PNGs
+  individually. Confidence Eyes retained pale lenses and hollow estimates,
+  interval methods/scales were named, and the non-closing profile drew no lens.
+  Evidence: `docs/dev-log/figure-audits/2026-07-16-v02-pkgdown.md`.
+- Current-tree inventory -> 14 vignettes, 55 level-two article sections, 101 R
+  chunks, 57 Rd topics, 46 Rd example blocks, and 16 `inst/extdata` files. The
+  parity ledger now records those exact totals, adds `snowgum_psii`, and marks
+  `shrimp_lethal` as having no runnable example.
+- Consumer scan of all current vignettes -> `benchmark_vs_bayes.rds`,
+  `beta_binomial_phi_results.rds`, and `performance_results.rds` are not active
+  article inputs; the licence ledger now labels them retained/internal rather
+  than naming obsolete consumers.
+- Stale-contract scan of SPEC, ROADMAP, capability matrix, and known limitations
+  -> current claims consistently describe experimental `0.2.0.9000`; the only
+  retained 0.1-candidate text is explicitly dated historical context.
+- Final independent gate -> Fisher READY on data/model/estimand/cache evidence;
+  Pat READY after desktop and real-mobile warning inspection; Rose READY after
+  inventory, governance, licence-consumer, closure-record, and stale-claim
+  re-audits.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- Scientific parity and package behavior were already green. The closure repair
+  makes the warning visibly usable, aligns the exhaustive ledgers with the real
+  tree, and records current-main CI, deployment, and live-route evidence. The
+  experimental, non-CRAN, unsupported-model, and Snow-gum rights boundaries are
+  unchanged.
