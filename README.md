@@ -18,14 +18,16 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 3)](https://img.shields.io/badge/license-GPL%20(%3E%3D%203)-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 <!-- badges: end -->
 
-> **⚠️ Experimental software — use at your own risk.** `freqTLS` is
-> under active development, and its results may be incorrect or change
-> without notice. You are responsible for checking your data, model
-> specification, convergence, diagnostics, and interpretation. For
-> important analyses, we strongly encourage you to independently
-> cross-check the results with
-> [`bayesTLS`](https://github.com/daniel1noble/bayesTLS), the Bayesian
-> sister package.
+> **⚠️ `freqTLS` is experimental and provided without assurance. Use at
+> your own risk.** Results and APIs may be incorrect or change. You are
+> responsible for checking your data, design, model specification,
+> convergence, identifiability, diagnostics, and interpretation.
+> Important analyses should be independently refitted and cross-checked
+> with the Bayesian sister package
+> [`bayesTLS`](https://daniel1noble.github.io/bayesTLS/) ([source
+> repository](https://github.com/daniel1noble/bayesTLS)). Agreement is a
+> cross-check, not proof of correctness: shared data or model errors can
+> make both packages agree.
 
 `freqTLS` fits the single-stage four-parameter logistic (4PL) thermal
 death-time model by maximum likelihood via

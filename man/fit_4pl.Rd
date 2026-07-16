@@ -65,6 +65,18 @@ directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 Returns a \code{freq_tls} workflow object; uncertainty (Wald / profile / bootstrap)
 is computed on demand by the quantity twins (\code{\link[=tls]{tls()}}, \code{confint()}).
 }
+\section{Experimental software}{
+
+\strong{Use freqTLS at your own risk.} Results and APIs may be incorrect or
+change. Users are responsible for checking their data, design, model
+specification, convergence, identifiability, diagnostics, and
+interpretation. Important analyses should be independently refitted and
+cross-checked with \href{https://daniel1noble.github.io/bayesTLS/}{bayesTLS}
+(\href{https://github.com/daniel1noble/bayesTLS}{source repository}). Agreement
+is a cross-check, not proof of correctness; shared data or model errors can
+make both packages agree.
+}
+
 \section{Before interpretation}{
 
 Before interpreting the fit, run \code{\link[=check_tls]{check_tls()}}. Its help page gives a recovery
