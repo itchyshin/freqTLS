@@ -13,7 +13,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: pkgdown
+  # A workflow_run is created for every R-CMD-check, including PR checks whose
+  # deploy job is skipped below. Keep those runs in their own branch group so a
+  # skipped PR run cannot cancel an in-progress trusted main deployment.
+  group: pkgdown-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:
