@@ -91,6 +91,17 @@ A `freq_tls` object: a list with `$fit` (the engine fit), `$data`,
 `$formula`, and `$meta` (threshold, t_ref, bounds, temp_mean,
 response_type, family, grouped, moderators, method).
 
+## Experimental software
+
+**Use freqTLS at your own risk.** Results and APIs may be incorrect or
+change. Users are responsible for checking their data, design, model
+specification, convergence, identifiability, diagnostics, and
+interpretation. Important analyses should be independently refitted and
+cross-checked with [bayesTLS](https://daniel1noble.github.io/bayesTLS/)
+([source repository](https://github.com/daniel1noble/bayesTLS)).
+Agreement is a cross-check, not proof of correctness; shared data or
+model errors can make both packages agree.
+
 ## Before interpretation
 
 Before interpreting the fit, run
