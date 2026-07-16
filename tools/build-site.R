@@ -33,6 +33,16 @@ pkgdown::build_site(pkg_path, preview = FALSE, devel = FALSE,
 # Resolve the build destination from the pkgdown config (defaults to docs/).
 dst <- pkgdown::as_pkgdown(pkg_path)$dst_path
 
+# freqTLS publishes one experimental site at the advertised root URL. pkgdown's
+# clean_site() deliberately preserves a previous auto-mode dev/ tree, so remove
+# that generated directory explicitly after switching to single-site mode. This
+# prevents local audits or manual deployments from retaining a stale /dev site.
+stale_dev_path <- file.path(dst, "dev")
+if (dir.exists(stale_dev_path)) {
+  unlink(stale_dev_path, recursive = TRUE, force = TRUE)
+  message("Removed stale auto-mode site: ", stale_dev_path)
+}
+
 internal_stems <- c("AGENTS", "CLAUDE", "SPEC")
 internal_pages <- paste0(internal_stems, ".html")
 legacy_pages <- c(

@@ -46,3 +46,27 @@ test_that("the pkgdown warning uses one accessible site-wide template include", 
   expect_match(pkgdown, 'aria-labelledby="freqtls-experimental-warning-title"',
                fixed = TRUE)
 })
+
+test_that("the experimental pkgdown site publishes at its advertised root", {
+  pkgdown_path <- test_path("..", "..", "_pkgdown.yml")
+  workflow_path <- test_path("..", "..", ".github", "workflows",
+                             "pkgdown.yaml")
+  builder_path <- test_path("..", "..", "tools", "build-site.R")
+  skip_if_not(
+    file.exists(pkgdown_path) && file.exists(workflow_path) &&
+      file.exists(builder_path),
+    "source-tree pkgdown configuration is not available"
+  )
+
+  pkgdown <- paste(readLines(pkgdown_path, warn = FALSE), collapse = "\n")
+  workflow <- paste(readLines(workflow_path, warn = FALSE), collapse = "\n")
+  builder <- paste(readLines(builder_path, warn = FALSE), collapse = "\n")
+
+  expect_match(pkgdown, "url: https://itchyshin.github.io/freqTLS/", fixed = TRUE)
+  expect_match(pkgdown, "development:\n  mode: release", fixed = TRUE)
+  expect_match(workflow, "folder: pkgdown-site", fixed = TRUE)
+  expect_false(grepl("folder: pkgdown-site/dev", workflow, fixed = TRUE))
+  expect_match(builder, 'stale_dev_path <- file.path(dst, "dev")', fixed = TRUE)
+  expect_match(builder, "unlink(stale_dev_path, recursive = TRUE, force = TRUE)",
+               fixed = TRUE)
+})
