@@ -30,5 +30,6 @@ clock_to_minutes("08:30:00")
 clock_to_minutes("25:30")   # 25 h 30 min = 1530 min
 #> [1] 1530
 clock_to_minutes(0.5)       # half a day = 720 min
+#> clock_to_minutes(): all numeric values are in [0, 1]; treating them as Excel day-fractions (x 1440 min). If they are already minutes, pass them as values > 1 or convert with as.numeric() first.
 #> [1] 720
 ```

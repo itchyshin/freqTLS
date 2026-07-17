@@ -73,7 +73,7 @@ standardize_data(
 
 - proportion_eps:
 
-  Half-open clamp applied to `proportion` so values sit strictly inside
+  Boundary clamp applied to `proportion` so values sit strictly inside
   `(0, 1)` (the Beta density is undefined at exactly 0 or 1). Default
   `0.001`.
 
@@ -98,8 +98,9 @@ standardize_data(
 
 A tibble with the standardised columns plus a `"tdt_meta"` attribute
 storing `temp_mean`, `duration_unit`, `random_effects`, `response_type`
-(`"count"` or `"proportion"`), and `response_var` (the response column
-name for a proportion fit, else `NULL`).
+(`"count"` or `"proportion"`), `response_var` (the response column name
+for a proportion fit, else `NULL`), and `proportion_eps` (the clamp used
+for a proportion fit, else `NULL`).
 
 ## Details
 
@@ -115,13 +116,16 @@ Two response types are supported:
   \\F_v/F_m\\ ratio with no denominator: supply `proportion` and omit
   the count arguments. The value is stored in `survival` (clamped into
   the open interval `(proportion_eps, 1 - proportion_eps)` so the Beta
-  likelihood is finite); no `n_total`/`n_surv` columns are created.
-  `response_type` is recorded as `"proportion"`.
+  likelihood is finite). A warning reports the affected count and
+  epsilon whenever values are changed; no `n_total`/`n_surv` columns are
+  created. `response_type` is recorded as `"proportion"`.
 
 If the dataset spans multiple categories (life stages, species,
-populations, etc.), filter to one category before calling this function
-and fit a separate model per subset — the fitter does not estimate
-category-level effects.
+populations, etc.), retain the grouping column. Use
+`fit_4pl(by = "group")` or grouped formulas in
+[`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md) to
+estimate category-level effects, or filter first when separate models
+are scientifically preferable.
 
 ## Examples
 
@@ -165,6 +169,7 @@ standardize_data(raw_p,
                  temp       = "temperature_C",
                  duration   = "exposure_h",
                  proportion = "fvfm_ratio")
+#> Warning: standardize_data() clamped 2 of 12 finite proportion values into [0.001, 0.999] for the Beta likelihood. Check whether boundary values and this epsilon are scientifically appropriate.
 #> # A tibble: 12 × 8
 #>    temperature_C exposure_h fvfm_ratio  temp duration  logd survival temp_c
 #>            <dbl>      <dbl>      <dbl> <dbl>    <dbl> <dbl>    <dbl>  <dbl>

@@ -1,9 +1,9 @@
 # Package index
 
-## Fit and extract (the bayesTLS-style twin API)
+## Fit and extract (shared-name workflow analogues)
 
-The primary, bayesTLS-compatible workflow: standardise the data, fit the
-4PL by maximum likelihood, and extract the thermal-death-time
+The primary frequentist workflow: standardise the same data, fit the 4PL
+by maximum likelihood, and extract analogous thermal-death-time
 quantities.
 
 - [`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md)
@@ -42,12 +42,12 @@ quantities.
 - [`diagnose_tdt_fit()`](https://itchyshin.github.io/freqTLS/reference/diagnose_tdt_fit.md)
   :
 
-  Diagnose a freqTLS fit (frequentist twin of `diagnose_tdt_fit`)
+  Diagnose a freqTLS fit (frequentist analogue of `diagnose_tdt_fit`)
 
 - [`tdt_parameter_table()`](https://itchyshin.github.io/freqTLS/reference/tdt_parameter_table.md)
   :
 
-  4PL parameter table (frequentist twin of `tdt_parameter_table`)
+  4PL parameter table (frequentist analogue of `tdt_parameter_table`)
 
 ## Classical two-stage comparator
 
@@ -64,8 +64,7 @@ The per-temperature GLM + OLS estimator, for benchmarking.
 
 ## Engine (lower-level interface)
 
-The TMB engine the twin is built on; use it directly for full formula
-control.
+The TMB engine behind freqTLS; use it directly for full formula control.
 
 - [`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
   : Fit a single-stage 4PL thermal-load-sensitivity model by maximum
@@ -115,6 +114,7 @@ Predict survival, derive lethal times, and draw the fitted curves, the
 survival surface, and the Confidence Eye.
 
 - [`predict(`*`<profile_tls>`*`)`](https://itchyshin.github.io/freqTLS/reference/predict.profile_tls.md)
+  [`predict(`*`<freq_tls>`*`)`](https://itchyshin.github.io/freqTLS/reference/predict.profile_tls.md)
   : Predict survival, link, or midpoint from a fitted freqTLS model
 - [`predict_survival_surface()`](https://itchyshin.github.io/freqTLS/reference/predict_survival_surface.md)
   : Predict a survival surface over a temperature-by-duration grid
@@ -163,25 +163,20 @@ Small shared helpers (time conversion, interval formatting, quantiles).
 - [`tdt_quantile()`](https://itchyshin.github.io/freqTLS/reference/tdt_quantile.md)
   : Quantile wrapper with TDT-friendly defaults
 
-## Data
+## Canonical teaching data
 
-Vendored example datasets; see each data help page and inst/COPYRIGHTS
-for source-specific licence and attribution terms.
+Published empirical examples mirrored from the pinned bayesTLS
+supplement; see each help page for source-specific credit and component
+licences.
 
-- [`shrimp_lethal`](https://itchyshin.github.io/freqTLS/reference/shrimp_lethal.md)
-  : Brown shrimp lethal thermal-death-time data
-- [`shrimp_sublethal`](https://itchyshin.github.io/freqTLS/reference/shrimp_sublethal.md)
-  : Brown shrimp sublethal time-to-knockdown data
-- [`zebrafish_lethal`](https://itchyshin.github.io/freqTLS/reference/zebrafish_lethal.md)
-  : Zebrafish lethal thermal-death-time data across life stages
 - [`zebrafish_o2`](https://itchyshin.github.io/freqTLS/reference/zebrafish_o2.md)
   : Zebrafish lethal-TDT data across an oxygen gradient
-- [`snowgum_psii`](https://itchyshin.github.io/freqTLS/reference/snowgum_psii.md)
-  : Snow gum leaf PSII functional-impairment thermal-tolerance data
 - [`dsuzukii`](https://itchyshin.github.io/freqTLS/reference/dsuzukii.md)
   : Drosophila suzukii multi-trait thermal-tolerance data
 - [`aphid_tdt`](https://itchyshin.github.io/freqTLS/reference/aphid_tdt.md)
   : Cereal-aphid lethal-TDT data, three species across three ages
+- [`snowgum_psii`](https://itchyshin.github.io/freqTLS/reference/snowgum_psii.md)
+  : Snow-gum retained PSII after heat exposure
 
 ## Package
 

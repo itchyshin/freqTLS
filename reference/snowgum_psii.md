@@ -1,21 +1,10 @@
-# Snow gum leaf PSII functional-impairment thermal-tolerance data
+# Snow-gum retained PSII after heat exposure
 
-Chlorophyll-fluorescence (\\F_v/F_m\\) measurements on excised snow gum
-(*Eucalyptus pauciflora*) leaf sections before and 16–24 h after heat
-exposure, from Experiment 1 (post-heat light vs dark recovery) of Arnold
-et al. (2026). Short branches were cut from six mature trees grown
-outdoors in Canberra, ACT; \\\sim\\1 cm\\^2\\ leaf sections were
-dark-adapted, given an initial \\F_v/F_m\\, then submerged in a
-temperature-controlled water bath under sub-saturating light across a
-grid of assay temperatures (30–56 degrees C) and exposure durations
-(5–120 min). After heat, paired arrays were held for 90 min in moderate
-light (`recovery = "Light"`) or in darkness (`recovery = "Dark"`); a
-final \\F_v/F_m\\ was taken 16–24 h later. The response is the
-continuous proportion `fvfm_prop` (post/pre ratio), modelled with a Beta
-likelihood. The model-ready frame for the leaf PSII case study
-(sublethal, continuous-proportion endpoint). The light/dark contrast is
-a two-group categorical moderator; in the source experiment post-heat
-light lowered apparent heat tolerance.
+Retained photosystem-II function for snow gum (*Eucalyptus pauciflora*)
+leaf sections after a temperature x duration heat dose and either Dark
+or Light recovery. `fvfm_prop` is post-exposure Fv/Fm divided by the
+pre-exposure value. It is a continuous proportion, so the canonical
+model uses the experimental Beta family rather than a count likelihood.
 
 ## Usage
 
@@ -29,63 +18,64 @@ A data frame with 394 rows and 8 variables:
 
 - Temp:
 
-  Assay temperature (degrees C); 30, 35, 40, 44, 48, 52, 56.
+  Assay temperature (degrees C).
 
 - Time:
 
-  Exposure duration (minutes); 5, 15, 30, 60, 120.
+  Exposure duration (minutes).
 
 - recovery:
 
-  Post-heat recovery light condition: `"Dark"` (darkness immediately
-  after heat) or `"Light"` (90 min moderate light post-heat). A
-  two-level moderator.
+  Recovery condition: `Dark` or `Light`.
 
 - plant:
 
-  Replicate mature tree (factor, 6 levels); the natural random-effect
-  grouping.
+  Plant identifier for the CTmax random intercept.
 
 - meas_day:
 
-  Assay day (factor, 2 levels). Two levels only, so a poor random-effect
-  grouping; better treated as fixed or omitted.
+  Measurement-day identifier.
 
 - initial_fvfm:
 
-  \\F_v/F_m\\ measured before heat exposure.
+  Pre-exposure Fv/Fm.
 
 - final_fvfm:
 
-  \\F_v/F_m\\ measured 16–24 h after heat exposure.
+  Post-exposure Fv/Fm.
 
 - fvfm_prop:
 
-  Retained PSII function, `final_fvfm / initial_fvfm` (a proportion in
-  the unit interval; 0 indicates complete loss of measurable PSII
-  function).
+  Retained PSII proportion.
 
 ## Source
 
-Arnold PA, Harris RJ, Aitken SM, Hoek MM, Cook AM, Leigh A, Nicotra AB
-(2026) Towards a standard approach to investigating the thermal load
-sensitivity of photosystem II via chlorophyll fluorescence. bioRxiv
+Arnold et al. (2026),
 [doi:10.64898/2026.04.09.717599](https://doi.org/10.64898/2026.04.09.717599)
-(CC BY-NC 4.0), Experiment 1, snow gum slice. Raw file:
-`system.file("extdata", "data_function_PSII_TDT_snowgum.csv", package = "freqTLS")`.
-
-## Details
-
-Two of the 396 raw rows have post/pre \\F_v/F_m\\ marginally above 1
-(both Dark, low dose) where a leaf measured slightly higher after heat
-than before; retained function cannot exceed 1, so these are treated as
-measurement noise and excluded, leaving 394 rows.
+. The development copy is redistributed under CC BY-NC 4.0 with
+attribution. Pieter A. Arnold, the data holder, authorised package use
+on 2026-07-16. The dataset remains separately licensed CC BY-NC 4.0;
+retain its attribution and source URL when reusing it. See
+`inst/COPYRIGHTS`.
 
 ## Examples
 
 ``` r
+# \donttest{
 std <- standardize_data(snowgum_psii, temp = "Temp", duration = "Time",
-                        proportion = "fvfm_prop",
-                        random_effects = "plant",
-                        duration_unit = "minutes")
+                        proportion = "fvfm_prop", duration_unit = "minutes")
+#> Warning: standardize_data() clamped 90 of 394 finite proportion values into [0.001, 0.999] for the Beta likelihood. Check whether boundary values and this epsilon are scientifically appropriate.
+wf <- fit_4pl(std, ctmax = ~ 0 + recovery + (1 | plant),
+              z = ~ 0 + recovery, low = ~ 1, up = ~ 1, k = ~ 1,
+              family = "beta", t_ref = 60, method = "wald", quiet = TRUE)
+tls(wf, by = "recovery", lethal = FALSE, method = "wald")
+#> <tls> relative threshold; quantities: z, CTmax (wald intervals)
+#> # A tibble: 4 × 5
+#>   recovery quantity median lower upper
+#>   <chr>    <chr>     <dbl> <dbl> <dbl>
+#> 1 Dark     CTmax     45.7  45.2  46.3 
+#> 2 Light    CTmax     44.1  43.6  44.6 
+#> 3 Dark     z          4.71  4.29  5.16
+#> 4 Light    z          3.64  3.20  4.14
+# }
 ```

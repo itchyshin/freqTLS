@@ -1,6 +1,6 @@
 # Extract z, CTmax and (optionally) T_crit with bootstrap confidence intervals
 
-The frequentist twin of `bayesTLS::extract_tdt()`. Runs a parametric
+The frequentist analogue of `bayesTLS::extract_tdt()`. Runs a parametric
 bootstrap (via the freqTLS engine), derives the thermal-death-time
 quantities on each replicate, and returns the same nested `$z` /
 `$CTmax` / `$T_crit` structure (each a list of `draws` + `summary`). The
@@ -77,3 +77,22 @@ value columns are `z` / `temp`.
 [`tls()`](https://itchyshin.github.io/freqTLS/reference/tls.md),
 [`get_z_summary()`](https://itchyshin.github.io/freqTLS/reference/tdt-accessors.md),
 [`get_ctmax_summary()`](https://itchyshin.github.io/freqTLS/reference/tdt-accessors.md)
+
+## Examples
+
+``` r
+# \donttest{
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+tdt <- extract_tdt(fit, nboot = 10, seed = 1)
+tdt$CTmax$summary
+#> # A tibble: 1 × 3
+#>   temp_median temp_lower temp_upper
+#>         <dbl>      <dbl>      <dbl>
+#> 1        35.9       35.8       36.1
+# }
+```

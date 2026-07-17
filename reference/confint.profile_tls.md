@@ -35,8 +35,9 @@ confint(
 
   Character vector of target names (for example `"CTmax"`, `"z"`,
   `"log_z"`, `"low"`, `"k"`, `"phi"`, grouped names such as `"CTmax:A"`,
-  or contrasts such as `"dCTmax:A-B"`). `NULL` (default) returns
-  intervals for the natural-scale parameters of the fit.
+  or contrasts such as `"dCTmax:A-B"`, which means group A minus group
+  B). `NULL` (default) returns intervals for the natural-scale
+  parameters of the fit.
 
 - level:
 
@@ -74,10 +75,10 @@ confint(
 
 - cores:
 
-  Number of CPU cores for the bootstrap refits (default `1`).
-  `cores > 1` refits replicates in parallel by forking (Unix; sequential
-  on Windows). Results are identical for a given `boot_seed` regardless
-  of `cores`.
+  Number of CPU cores for the bootstrap refits (default `1`, maximum
+  `2`). Requests above two warn and use two. `cores > 1` refits
+  replicates in parallel by forking (Unix; sequential on Windows).
+  Results are identical for a given `boot_seed` regardless of `cores`.
 
 - ...:
 
@@ -112,30 +113,31 @@ row per target and columns `parameter`, `conf.low`, `conf.high`,
   percentile intervals: survival counts are regenerated at the observed
   design from the fitted 4PL, the model is refitted `nboot` times, and
   the interval is the percentile range of the replicate estimates. This
-  is the likelihood-path frequentist alternative to a likelihood-profile
-  interval, and returns a finite interval whenever the estimator is
-  stable.
+  is a frequentist resampling interval, not a posterior or credible
+  interval. It returns a finite interval only when enough stable,
+  non-degenerate refits remain.
 
 When a profile does not close on one side, or the fitted Hessian is not
 positive definite (`pdHess = FALSE`),
 [`confint()`](https://rdrr.io/r/stats/confint.html) falls back to the
-parametric bootstrap for the affected parameters (with a message) so an
-interval is still returned – the parity with a Bayesian fit, which
-always yields one. Set `fallback = FALSE` to keep the strict profile
-behaviour, which returns `NA` on the open side (never a fabricated
-bound) with a warning that the parameter is weakly identified (SPEC.md
-S10, R-PROFILE). The upper asymptote `up` has its own coordinate
-`beta_up` under disjoint bounds but is not yet profiled, so it is
-reported with the delta-method Wald interval under the profile/Wald
-methods, with a message.
+parametric bootstrap for the affected parameters (with a message). The
+fallback can still return `NA` when too few valid refits remain. Set
+`fallback = FALSE` to keep the strict profile behaviour, which returns
+`NA` on the open side (never a fabricated bound) with a warning that the
+parameter is weakly identified (see
+[`vignette("profile-likelihood")`](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md)).
+The upper asymptote `up` has its own coordinate `beta_up` under disjoint
+bounds but is not yet profiled, so it is reported with the delta-method
+Wald interval under the profile/Wald methods, with a message.
 
 For a fit with a random intercept (`CTmax ~ <fixed> + (1 | group)`),
 `method = "profile"` profiles the fixed-effect coordinates by re-running
 the Laplace approximation at each grid point, which is slower than a
-fixed-effects profile. `sigma_CTmax` keeps its log-scale Wald interval,
-the non-closing fallback uses Wald (the bootstrap does not yet carry the
-random block), and `method = "bootstrap"` returns the Wald intervals
-with a message.
+fixed-effects profile. Variance components keep their log-scale Wald
+intervals under the profile method, and a non-closing random-effects
+profile falls back to Wald. `method = "bootstrap"` instead redraws every
+active random-intercept block and refits with the Laplace approximation,
+returning percentile intervals when enough stable refits remain.
 
 ## Examples
 

@@ -4,7 +4,8 @@ Sublethal TDT trials for brown shrimp (*Crangon crangon*): each cup of
 individuals contributes the elapsed time to loss of response to touch
 (knockdown) at a fixed assay temperature. Cleaned from the raw
 clock-time records (excluded rows dropped; start/stop times parsed to
-elapsed minutes).
+elapsed minutes). This unpublished object is retained only for
+compatibility benchmarking.
 
 ## Usage
 
@@ -39,5 +40,7 @@ A data frame with 299 rows and 5 variables:
 ## Source
 
 Brown shrimp sublethal time-to-knockdown assay (Case Study 1, sublethal
-endpoint). Raw file:
+endpoint), obtained from the bayesTLS package distribution by Noble,
+Arnold, and Pottier (2026), licensed CC BY 4.0. freqTLS dropped excluded
+rows and converted the clock times to elapsed minutes. Raw file:
 `system.file("extdata", "data_sublethal_TDT_brown_shrimp.csv", package = "freqTLS")`.

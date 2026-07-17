@@ -121,9 +121,9 @@ simulate_tls(
   asymptote `low` (logit scale)** and on the steepness **`log(k)`** —
   the shape-coordinate analogues of `re_sd` / `re_sd_z`
   (`low_g = plogis(qlogis(low) + d_g)`, `k_g = exp(log(k) + e_g)`; `up`
-  tracks `low` by a fixed head-room fraction). They combine freely with
-  `re_sd` / `re_sd_z`; realised deviations are in
-  `attr(, "truth")$b_low` / `$b_logk`.
+  tracks `low` by a fixed head-room fraction). The simulator can
+  generate these deviations alongside `re_sd` / `re_sd_z`; realised
+  deviations are in `attr(, "truth")$b_low` / `$b_logk`.
 
 - n_re_groups:
 
@@ -152,7 +152,7 @@ data-generating parameters are attached as `attr(, "truth")`.
 
 ## Details
 
-### The `phi` convention (R-PHI)
+### The `phi` convention
 
 For the beta-binomial family, `phi` is the **sum of the Beta shape
 parameters**: counts are drawn as

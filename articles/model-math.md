@@ -5,7 +5,7 @@ four-parameter logistic (4PL) thermal death-time curve, the direct
 `CTmax`/`z` parameterisation, the disjoint-bounds asymptote transform,
 the relative-versus-absolute survival threshold, and the exact algebraic
 bridge to [`bayesTLS`](https://github.com/daniel1noble/bayesTLS). The
-authoritative source is `docs/design/01-model-and-parameterisation.md`;
+package’s implementation contract is tested against these equations;
 this vignette mirrors it and checks the bridge identities numerically
 (no Stan required). If you already trust that freqTLS and bayesTLS
 target the same fitted curve, you can skip straight to the worked
@@ -84,10 +84,12 @@ c(slope = diff(mids), minus_one_over_z = -1 / zz)
 
 ## Disjoint-bounds asymptotes
 
-The asymptotes use the bayesTLS `compute_4pl_bounds()` parameterisation:
-the feasible band $`[\ell, u]`$ (default $`[0, 1]`$) is split at its
-midpoint, and `low` and `up` each map an unconstrained coefficient onto
-one half, so $`\mathrm{up} > \mathrm{low}`$ holds automatically:
+The asymptotes use the bayesTLS
+[`compute_4pl_bounds()`](https://itchyshin.github.io/freqTLS/reference/compute_4pl_bounds.md)
+parameterisation: the feasible band $`[\ell, u]`$ (default $`[0, 1]`$)
+is split at its midpoint, and `low` and `up` each map an unconstrained
+coefficient onto one half, so $`\mathrm{up} > \mathrm{low}`$ holds
+automatically:
 
 ``` math
 \mathrm{low} = \ell_{\min} + w_\mathrm{low}\,\mathrm{logit}^{-1}(\beta_\mathrm{low}),
@@ -106,11 +108,11 @@ the asymptote contract.
 
 Under this parameterisation `up` has its own coordinate
 $`\beta_\mathrm{up}`$, just like `low`. `freqTLS` nonetheless reports
-`up` with the delta-method Wald interval: its profile path deliberately
-excludes $`\beta_\mathrm{up}`$ in experimental 0.1.0; this is a release
-boundary, not an implicit estimate of its uncertainty. Every other
-supported parameter is profiled on its single coordinate. The full table
-of coordinates and links:
+`up` with the delta-method Wald interval: its profile path is not yet
+wired for $`\beta_\mathrm{up}`$ (the work is symmetric with `low`,
+simply not yet implemented), and it says so. Every other parameter is
+profiled on its single coordinate. The full table of coordinates and
+links:
 
 | Natural parameter     | Internal coordinate | Link                             |
 |-----------------------|---------------------|----------------------------------|

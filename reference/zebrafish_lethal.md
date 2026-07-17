@@ -3,8 +3,9 @@
 Lethal-TDT trials for zebrafish (*Danio rerio*) at three life stages.
 Built from the raw daily survival sheet by summing the per-day
 morning/afternoon mortality counts into one death count per trial and
-dropping excluded rows. One row per assay trial. The model-ready frame
-for Case Study 2.
+dropping excluded rows. One row per assay trial. This unpublished
+life-stage object is retained only for compatibility benchmarking; the
+active zebrafish example is the oxygen-gradient `zebrafish_o2` dataset.
 
 ## Usage
 
@@ -47,5 +48,9 @@ A data frame with 323 rows and 7 variables:
 
 ## Source
 
-Zebrafish lethal-TDT assay (Case Study 2). Raw file:
+Zebrafish lethal-TDT assay across life stages (Case Study 2), obtained
+from the bayesTLS package distribution by Noble, Arnold, and Pottier
+(2026), licensed CC BY 4.0. freqTLS removed excluded trials, aggregated
+daily mortality counts, and derived survivors as documented above. Raw
+file:
 `system.file("extdata", "data_lethal_TDT_zebrafish.csv", package = "freqTLS")`.

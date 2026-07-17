@@ -5,9 +5,25 @@ Bayesian `bayesTLS` package. It fits single-stage four-parameter
 logistic (4PL) thermal-load-sensitivity (thermal death-time) models via
 Template Model Builder (`TMB`), parameterised directly in `CTmax` and
 `z` (thermal sensitivity), so that both headline quantities can be
-profiled. It returns prior-free, asymmetry-respecting profile-likelihood
-confidence intervals for binomial and beta-binomial survival-count data
-and beta continuous-proportion responses.
+profiled. It returns prior-free Wald, profile-likelihood, or
+parametric-bootstrap confidence intervals for binomial and beta-binomial
+survival counts and the experimental Beta continuous-proportion family.
+Formula shape effects, limited random intercepts, and deterministic
+heat-injury prediction are also experimental; censored-time,
+hurdle-productivity, posterior, and fitted repair models remain outside
+freqTLS.
+
+## Experimental software
+
+**Use freqTLS at your own risk.** Results and APIs may be incorrect or
+change. Users are responsible for checking their data, design, model
+specification, convergence, identifiability, diagnostics, and
+interpretation. Important analyses should be independently refitted and
+cross-checked with the Bayesian sister package
+[bayesTLS](https://daniel1noble.github.io/bayesTLS/) ([source
+repository](https://github.com/daniel1noble/bayesTLS)). Agreement is a
+cross-check, not proof of correctness; shared data or model errors can
+make both packages agree.
 
 ## Credit and origins
 
@@ -32,12 +48,12 @@ Useful links:
 ## Author
 
 **Maintainer**: Shinichi Nakagawa <itchyshin@gmail.com>
-([ORCID](https://orcid.org/0000-0002-7765-5182))
+([ORCID](https://orcid.org/0000-0002-7765-5182)) \[copyright holder\]
 
 Authors:
 
 - Shinichi Nakagawa <itchyshin@gmail.com>
-  ([ORCID](https://orcid.org/0000-0002-7765-5182))
+  ([ORCID](https://orcid.org/0000-0002-7765-5182)) \[copyright holder\]
 
 - Pieter A. Arnold ([ORCID](https://orcid.org/0000-0002-6158-7752))
   (co-author of the bayesTLS framework)

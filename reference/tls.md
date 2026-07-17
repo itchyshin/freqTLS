@@ -1,6 +1,6 @@
 # Thermal-load-sensitivity quantities (z, CTmax) with confidence intervals
 
-The frequentist twin of `bayesTLS::tls()`. Reads a
+The frequentist analogue of `bayesTLS::tls()`. Reads a
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
 (`freq_tls`) fit and returns the headline thermal-death-time quantities
 — thermal sensitivity `z` and `CTmax` — as point estimates with
@@ -92,3 +92,35 @@ A `tls` object: a list with `$summary` (a tibble of
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md),
 `tls_z()`, `tls_ctmax()`,
 [`confint.profile_tls()`](https://itchyshin.github.io/freqTLS/reference/confint.profile_tls.md)
+
+## Examples
+
+``` r
+raw <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
+dat <- standardize_data(
+  raw, temp = "temp", duration = "duration",
+  n_total = "total", n_surv = "survived"
+)
+fit <- fit_4pl(
+  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+)
+tls(fit)
+#> <tls> relative threshold; quantities: z, CTmax (wald intervals)
+#> # A tibble: 2 × 4
+#>   quantity median lower upper
+#>   <chr>     <dbl> <dbl> <dbl>
+#> 1 CTmax     35.9  35.7  36.1 
+#> 2 z          4.00  3.64  4.40
+tls_z(fit)
+#> <tls> relative threshold; quantities: z (wald intervals)
+#> # A tibble: 1 × 4
+#>   quantity median lower upper
+#>   <chr>     <dbl> <dbl> <dbl>
+#> 1 z          4.00  3.64  4.40
+tls_ctmax(fit)
+#> <tls> relative threshold; quantities: CTmax (wald intervals)
+#> # A tibble: 1 × 4
+#>   quantity median lower upper
+#>   <chr>     <dbl> <dbl> <dbl>
+#> 1 CTmax      35.9  35.7  36.1
+```
