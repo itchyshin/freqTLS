@@ -2739,3 +2739,19 @@ Interpretation:
 - This is the current macOS technical artifact. It does not establish a
   cross-platform or upload claim: matching platform evidence, final author
   order, and reviewer verdicts still apply to this exact candidate identity.
+
+## 2026-07-17 -- Post-merge 0.1.0 technical candidate
+
+Evidence:
+
+- `git diff --stat 99da90b0d90f81acf57747807aeb670796f29434 562cb027ced270e6ef32aaee265094f2d760b580` -> no package-source difference between the Actions-tested PR head and merge commit.
+- From a clean detached checkout of `562cb027ced270e6ef32aaee265094f2d760b580`, `Rscript --vanilla -e 'devtools::document(); devtools::check_man()'` -> completed cleanly.
+- `Rscript tools/build-site.R .` -> complete; rendered-site inventory -> 103 HTML pages, 15 articles, 82 reference pages; stale-claim and internal-page scans -> 0 hits; `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `R CMD build --no-resave-data --no-manual` -> `/tmp/freqtls-postmerge-562cb02/freqTLS_0.1.0.tar.gz`; `shasum -a 256` -> `0b97a520a7dff05d859fa36a30fa7ea7cd304159e9dcf91d9679567ed1f0a5aa`; 1,191,636 bytes and 226 entries.
+- Forbidden-path scan for `output`, `scripts`, `docs`, `tools`, `data-raw`, `.codex`, `.git`, `.github`, and internal contract files -> 0 entries; Snow-gum data/cache entries -> 3.
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` -> 0 errors, 0 warnings, 1 ordinary `New submission` NOTE; installed tests, examples, `donttest` examples, and vignette rebuilding passed.
+- GitHub Actions run `29543780687` -> Ubuntu release/devel, Windows release, and macOS release all passed for the merged package source.
+
+Interpretation:
+
+- The merged source has a frozen, platform-clean technical candidate. This is not an upload or CRAN-acceptance claim: final `Authors@R` ordering remains for Dan and author approval before submission.

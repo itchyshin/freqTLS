@@ -1,12 +1,14 @@
 ## Test environments
 
 - local macOS Tahoe 26.5.2, R 4.6.0 (aarch64)
-- matching Ubuntu, Windows, and macOS checks: pending on the frozen candidate
+- GitHub Actions run `29543780687` passed Ubuntu release/devel, Windows release,
+  and macOS release on PR head `99da90b`, whose package source tree was merged
+  unchanged as `562cb027ced270e6ef32aaee265094f2d760b580`
 
 ## R CMD check results
 
-The exact local integration tarball (SHA-256
-`97a0684653c07ec064ebbd2eec885cd006ca7cfd3cbe31e85f818d28ec7cbbbd`)
+The exact post-merge local tarball (SHA-256
+`0b97a520a7dff05d859fa36a30fa7ea7cd304159e9dcf91d9679567ed1f0a5aa`)
 produced:
 
 ```
@@ -16,8 +18,8 @@ produced:
 The NOTE is the expected incoming-check message: "New submission". There are no
 downstream dependencies.
 
-This is local candidate evidence only. Matching Windows, Ubuntu, and macOS
-checks must run on the frozen candidate before upload.
+This is technical-candidate evidence only. Before upload, Dan must finalise the
+author order and the authors must approve the resulting `Authors@R` metadata.
 
 ## Resubmission
 
