@@ -20,7 +20,7 @@ pkg_path <- if (length(args) >= 1) args[[1]] else "."
 
 # Examples on the reference and article pages must execute against this exact
 # checkout. A version-only comparison is unsafe for development releases:
-# several source revisions can all be `0.2.0.9000`. Always let pkgdown install
+# several source revisions can share a release version. Always let pkgdown install
 # the current source into its build library before rendering.
 install_pkg <- TRUE
 # Start from an empty generated site. Incremental pkgdown builds can otherwise

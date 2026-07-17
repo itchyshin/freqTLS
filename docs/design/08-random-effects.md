@@ -1,8 +1,8 @@
-# Random effects: random intercepts on CTmax, log_z, and the shapes (v0.2–v0.3)
+# Random effects: limited random intercepts on direct coordinates and shapes
 
 ## Scope
 
-freqTLS supports a single **random intercept** on `CTmax` (v0.2), `log_z`
+freqTLS supports a single **random intercept** on `CTmax`, `log_z`
 (v0.3, "item 5"), and the shape coordinates `low` and `log_k` (v0.3), written
 `<param> ~ <fixed> + (1 | group)` in the formula interface. The `CTmax` intercept
 matches the `bayesTLS` random-effects-on-the-midpoint configuration (between-group

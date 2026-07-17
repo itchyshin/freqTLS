@@ -84,7 +84,6 @@ interpretation.
 ## Licence boundary
 
 Arnold et al. (2026; doi:10.64898/2026.04.09.717599) release the current source
-under CC BY-NC 4.0. The development package records coauthor authorization for
-the current non-commercial GitHub/pkgdown teaching use. That does not establish
-unrestricted/commercial downstream rights: CRAN remains blocked until the
-broader written grant is archived. See `inst/COPYRIGHTS` and the licence ledger.
+under CC BY-NC 4.0. Pieter A. Arnold, the data holder, authorised its use as
+this package's separately licensed teaching dataset. Retain the source and
+licence notice when reusing it. See `inst/COPYRIGHTS` and the licence ledger.

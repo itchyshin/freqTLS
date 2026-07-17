@@ -2,7 +2,7 @@
 
 ## Purpose and boundary
 
-The active comparator cache cross-checks the experimental freqTLS v0.2
+The active comparator cache cross-checks the experimental freqTLS 0.1.0
 empirical examples against the bayesTLS supplement rendered on 2026-07-14 and
 pinned at commit `76510412e06c594c96894a1baba1f0e1a34a5aea`. It is a
 specification and discrepancy check, not a requirement that maximum-likelihood
@@ -81,7 +81,7 @@ diagnostics before copying the exact bytes to
 
 The published 2026-07-16 cache has SHA-256
 `3b04bb161250abb1628e3018ff25648984b7c6a4131272e6e9c0557b15c3b2f0`. It was
-built with bayesTLS 1.0.0 at the pinned commit, freqTLS 0.2.0.9000 at
+built with bayesTLS 1.0.0 at the pinned commit, the pre-release freqTLS implementation at
 `b32c86001a7e88dd419f1a5a92e81c54b3b2b67c`, CmdStan 2.39.0, R 4.5.3, four
 bounded cores, and `OPENBLAS_NUM_THREADS=1`. All six cases passed the recorded
 diagnostic gates: maximum R-hat was 1.0019, there were zero divergences and zero

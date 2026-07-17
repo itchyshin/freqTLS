@@ -41,9 +41,9 @@ introduced by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in the
 and `CTmax` are theirs; freqTLS contributes the TMB likelihood, the direct
 `CTmax`/`log_z` reparameterisation, and the profile-likelihood machinery.
 
-### Experimental v0.2 boundary
+### Experimental 0.1.0 release boundary
 
-Version `0.2.0.9000` retains the Beta family, formula interface, limited
+Version `0.1.0` ships the Beta family, formula interface, limited
 independent random intercepts, shape formulas, deterministic heat-injury
 prediction, bootstrap intervals, and Confidence Eyes. All remain experimental.
 
@@ -58,7 +58,7 @@ These capabilities are not implemented and must not be described as available:
   coordinate; any random effect on `up`.
 - Universal profile support for `up`, variance components, or general
   continuous shape slopes.
-- CRAN submission or release hardening.
+- Submission remains subject to the exact-candidate checks and rights ledger.
 
 General distributional regression belongs to `drmTMB`. The full Bayesian
 workflow, heat-injury models, and posterior inference belong to `bayesTLS`.
@@ -107,10 +107,10 @@ Keep these stable across code, docs, tests, equations, and issues:
    package, document the source file, license, and adaptation in
    `inst/COPYRIGHTS` before treating the change as complete. Record each data
    component's source-specific licence in the data ledger and attribution files.
-   Snow-gum source material is CC BY-NC 4.0. Its current processed development
-   object may be used on GitHub/pkgdown under the archived coauthor attestation;
-   CRAN, commercial downstream use, and adaptations remain blocked until a
-   broader compatible written grant is recorded.
+   Snow-gum source material is CC BY-NC 4.0 and ships as a separately licensed
+   component with attribution, source URL, transformation record, and Pieter A.
+   Arnold's recorded holder authorization. Do not imply that its licence applies
+   to the package code or other datasets.
 10. Keep public capability synchronized in one commit: when a capability is
     added or removed, update `README.Rmd`, `ROADMAP.md`, `NEWS.md`,
     `docs/dev-log/known-limitations.md`, `docs/design/46-capability-matrix.md`,
@@ -206,7 +206,7 @@ vignette, pkgdown, after-task, release, or paper-oriented text.
 Codex and Claude Code may both contribute to this repository. All agent work
 must follow the same project rules:
 
-- preserve the experimental v0.2 single-stage 4PL scope, including the tested
+- preserve the experimental 0.1.0 single-stage 4PL scope, including the tested
   count and Beta families, while respecting every unsupported boundary above;
 - avoid unreviewed likelihood or parameterisation changes;
 - update design docs when the model, likelihood, profile algorithm, or benchmark

@@ -2671,3 +2671,71 @@ Interpretation:
   tree, and records current-main CI, deployment, and live-route evidence. The
   experimental, non-CRAN, unsupported-model, and Snow-gum rights boundaries are
   unchanged.
+
+## 2026-07-16 -- 0.1.0 release-lane integration baseline
+
+Goal:
+
+- Reconcile the approved experimental 0.1.0 CRAN-remediation scope with the
+  newer `main` implementation before producing a replacement source candidate.
+
+Checks and evidence:
+
+- `git merge-base origin/main build/freqtls` -> `e1a817e`; API comparison of
+  `NAMESPACE` exports between `origin/main` and `build/freqtls` -> no delta.
+- CRAN Repository Policy, source-package clauses (accessed 2026-07-16) ->
+  copyright/IP of every component must be clear and unambiguous; the maintainer
+  warrants agreement to use credited authors' material; CRAN must have a
+  perpetual distribution right.
+- Shinichi confirmed that all coauthors authorise package use, and that Pieter
+  A. Arnold is the Snow-gum data holder who authorised use of that dataset.
+- `Rscript -e 'devtools::document()'` -> regenerated `man/snowgum_psii.Rd`.
+- `Rscript -e 'devtools::build_readme()'` -> regenerated `README.md`; local
+  dependency freshness notices only (`MASS`, `Rcpp`, `rlang`).
+
+Interpretation:
+
+- The old frozen tarball and current-main 0.2 closure record are not evidence
+  for this integration candidate. The candidate must be rebuilt from this branch
+  after the full source, reference, pkgdown, and tarball audits complete.
+
+## 2026-07-16 -- Rendered pkgdown audit on the 0.1.0 integration branch
+
+Evidence:
+
+- `Rscript tools/build-site.R .` -> complete; post-build cleanup removed
+  `AGENTS`, `CLAUDE`, and `SPEC` HTML/Markdown artifacts and filled reference
+  example alt text.
+- Built-site inventory -> 103 HTML pages, 15 articles, and 82 reference pages.
+- Rendered HTML stale scan for `0.2.0.9000`, experimental v0.2, and superseded
+  Snow-gum-block language -> 0 hits.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- Export/Rd scan -> 47 `NAMESPACE` exports and 0 exports without a generated
+  Rd alias; `devtools::check_man()` -> clean.
+
+Interpretation:
+
+- The generated public surface is coherent with the current 0.1.0 source
+  boundary. It is intermediate evidence only: any installed-byte change requires
+  a fresh site build and a new exact-candidate ledger entry.
+
+## 2026-07-16 -- Exact local 0.1.0 integration artifact
+
+Evidence:
+
+- `R CMD build --no-resave-data --no-manual` ->
+  `/tmp/freqtls-candidate-90efecb/freqTLS_0.1.0.tar.gz`.
+- `shasum -a 256` ->
+  `97a0684653c07ec064ebbd2eec885cd006ca7cfd3cbe31e85f818d28ec7cbbbd`.
+- Tarball -> 1,191,852 bytes and 226 entries. Forbidden-path scan for
+  maintainer outputs, governance/docs, Git metadata, source scripts, and
+  internal contract files -> 0 entries. Snow-gum dataset/cache entries -> 3.
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` -> 0 errors,
+  0 warnings, 1 ordinary `New submission` NOTE. Installed tests, examples,
+  `donttest` examples, and vignette rebuild all passed.
+
+Interpretation:
+
+- This is the current macOS technical artifact. It does not establish a
+  cross-platform or upload claim: matching platform evidence, final author
+  order, and reviewer verdicts still apply to this exact candidate identity.

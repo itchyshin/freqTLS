@@ -99,6 +99,6 @@ plot_survival_curves(coma_fit$fit)
 
 The individual `t_coma` values form a censored time-to-event outcome, and
 `prod` requires a hurdle model for zero reproduction plus positive clutch size.
-freqTLS 0.2.0.9000 implements neither. Use the corresponding bayesTLS Case 4.2
+freqTLS 0.1.0 implements neither. Use the corresponding bayesTLS Case 4.2
 sections for those analyses rather than treating the count model above as a
 replacement.
