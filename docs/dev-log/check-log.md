@@ -2718,3 +2718,24 @@ Interpretation:
 - The generated public surface is coherent with the current 0.1.0 source
   boundary. It is intermediate evidence only: any installed-byte change requires
   a fresh site build and a new exact-candidate ledger entry.
+
+## 2026-07-16 -- Exact local 0.1.0 integration artifact
+
+Evidence:
+
+- `R CMD build --no-resave-data --no-manual` ->
+  `/tmp/freqtls-candidate-90efecb/freqTLS_0.1.0.tar.gz`.
+- `shasum -a 256` ->
+  `97a0684653c07ec064ebbd2eec885cd006ca7cfd3cbe31e85f818d28ec7cbbbd`.
+- Tarball -> 1,191,852 bytes and 226 entries. Forbidden-path scan for
+  maintainer outputs, governance/docs, Git metadata, source scripts, and
+  internal contract files -> 0 entries. Snow-gum dataset/cache entries -> 3.
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` -> 0 errors,
+  0 warnings, 1 ordinary `New submission` NOTE. Installed tests, examples,
+  `donttest` examples, and vignette rebuild all passed.
+
+Interpretation:
+
+- This is the current macOS technical artifact. It does not establish a
+  cross-platform or upload claim: matching platform evidence, final author
+  order, and reviewer verdicts still apply to this exact candidate identity.
