@@ -45,9 +45,11 @@ follow bayesTLS: \code{z_median/z_lower/z_upper} for z; \code{temp_median/temp_l
 The frequentist analogue of \code{bayesTLS::extract_tdt()}. Runs a parametric bootstrap
 (via the freqTLS engine), derives the thermal-death-time quantities on each
 replicate, and returns the same nested \verb{$z} / \verb{$CTmax} / \verb{$T_crit} structure
-(each a list of \code{draws} + \code{summary}). The per-replicate tables are the
-frequentist analogue of posterior draws; \verb{*_median} is the maximum-likelihood
-point estimate and \verb{*_lower} / \verb{*_upper} are bootstrap percentiles.
+(each a list of \code{draws} + \code{summary}). Each row of a per-replicate table is a
+derived estimate from one parametric-bootstrap refit: it is a resampled
+frequentist estimate, not a posterior draw. \verb{*_median} is the
+maximum-likelihood point estimate and \verb{*_lower} / \verb{*_upper} are bootstrap
+percentiles.
 }
 \examples{
 \donttest{

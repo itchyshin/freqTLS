@@ -24,8 +24,9 @@ is a likelihood curve, never a posterior. A non-closing side is
 annotated rather than drawn as a closed bound.
 }
 \details{
-This is the per-parameter profile curve; the full Confidence-Eye interval
-displays are added in Phase 4.
+This plot diagnoses one parameter's likelihood profile. Use
+\code{\link[=plot_confidence_eye]{plot_confidence_eye()}} to summarize the resulting confidence interval across
+one or more headline parameters.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

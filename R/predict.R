@@ -3,6 +3,13 @@
 #' `predict()` evaluates the fitted four-parameter logistic (4PL) thermal-load-
 #' sensitivity model at new temperature-by-duration cells, using exactly the
 #' same forward map as the TMB engine in `src/profile_tls.cpp`:
+#'
+#' Here `CTmax` is the critical thermal maximum at the reference duration
+#' `tref`; `z` is thermal sensitivity in degrees per decade of duration;
+#' `low` and `up` are the fitted lower and upper survival asymptotes; and `k`
+#' controls the curve's steepness. The model fits `log_z = log(z)` internally,
+#' then reports positive natural-scale `z` values.
+#'
 #' \deqn{mid = \log_{10}(t_{ref}) - (temp - CTmax_g) / z_g}
 #' \deqn{p = low + (up - low)\,\mathrm{plogis}(-k(\log_{10}(duration) - mid)).}
 #'
@@ -511,10 +518,9 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #'
 #' `derive_lt()` solves the fitted 4PL for the duration at which survival
 #' crosses a target probability `p` at a given temperature (an "LT" / lethal-
-#' time-style quantity, e.g. `p = 0.5` gives the median survival time). Because
-#' the threshold is interpreted *relative to the asymptotes*, the default
-#' `p = 0.5` returns the curve's midpoint duration, where
-#' `log10(duration) = mid` exactly.
+#' time-style quantity, e.g. `p = 0.5` gives the absolute 50% survival time).
+#' To obtain the curve's relative midpoint, use `p = (low + up) / 2`; that
+#' crossing has `log10(duration) = mid` exactly.
 #'
 #' @details
 #' Survival follows
@@ -528,7 +534,7 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #' not add a group BLUP.
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
-#' @param p Target survival probability in `(low, up)` (default `0.5`).
+#' @param p Absolute target survival probability in `(low, up)` (default `0.5`).
 #' @param temp Numeric temperature(s) at which to solve.
 #' @param group Optional single group level (grouped fits only). Required when
 #'   the fit is grouped.
@@ -540,7 +546,7 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
 #'                family = "binomial", tref = 1)
-#' # Median survival duration at 36 C:
+#' # Absolute 50% survival duration at 36 C:
 #' derive_lt(fit, p = 0.5, temp = 36)
 #'
 #' @export

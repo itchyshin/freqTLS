@@ -95,6 +95,22 @@ test_that("derive_lt(p = 0.5) sits at the 4PL midpoint (log10(duration) = mid)",
   expect_equal(log10(lt), mid, tolerance = 1e-8)
 })
 
+test_that("plot_tdt_curve defaults to each fitted relative midpoint", {
+  fit <- fit_binom()
+  shape <- fit$estimates
+  low <- shape$estimate[shape$parameter == "low"]
+  up <- shape$estimate[shape$parameter == "up"]
+  pmid <- (low + up) / 2
+
+  relative <- plot_tdt_curve(fit, temps = 36)
+  absolute <- plot_tdt_curve(fit, p = 0.5, temps = 36)
+
+  expect_equal(relative$data$lt, derive_lt(fit, p = pmid, temp = 36), tolerance = 1e-8)
+  expect_equal(absolute$data$lt, derive_lt(fit, p = 0.5, temp = 36), tolerance = 1e-8)
+  expect_match(relative$labels$caption, "relative midpoint")
+  expect_match(absolute$labels$caption, "absolute threshold")
+})
+
 test_that("derive_lt aborts when the target is outside the asymptotes", {
   fit <- fit_binom()
   # low ~ 0.02, up ~ 0.98 for this DGP; 0.999 is above up.

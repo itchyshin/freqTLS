@@ -954,8 +954,9 @@ print.profile_tls_profile <- function(x, digits = 4, ...) {
 #' is a likelihood curve, never a posterior. A non-closing side is
 #' annotated rather than drawn as a closed bound.
 #'
-#' This is the per-parameter profile curve; the full Confidence-Eye interval
-#' displays are added in Phase 4.
+#' This plot diagnoses one parameter's likelihood profile. Use
+#' [plot_confidence_eye()] to summarize the resulting confidence interval across
+#' one or more headline parameters.
 #'
 #' @param x A `"profile_tls_profile"` object from [profile.profile_tls()].
 #' @param ... Reserved; must be empty.

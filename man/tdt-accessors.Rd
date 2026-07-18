@@ -30,8 +30,10 @@ A tibble (see \code{\link[=extract_tdt]{extract_tdt()}} for the column contract)
 }
 \description{
 Analogues of the bayesTLS \verb{get_*_summary} / \verb{get_*_draws} accessors. \verb{*_summary}
-returns the median + interval tibble; \verb{*_draws} returns the per-replicate
-(bootstrap) tibble — the frequentist analogue of posterior draws.
+returns the maximum-likelihood point estimate (in the compatibility-named
+\verb{*_median} column) and its bootstrap-percentile interval. \verb{*_draws} returns
+one derived estimate from each parametric-bootstrap refit; these are resampled
+frequentist estimates, not posterior draws.
 }
 \examples{
 \donttest{

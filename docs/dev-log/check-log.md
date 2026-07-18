@@ -2755,3 +2755,29 @@ Evidence:
 Interpretation:
 
 - The merged source has a frozen, platform-clean technical candidate. This is not an upload or CRAN-acceptance claim: final `Authors@R` ordering remains for Dan and author approval before submission.
+
+## 2026-07-18 -- Human-validation remediation (#15--#24)
+
+Goal:
+
+- Resolve the documentation, reference-page, Confidence-Eye, threshold-semantics,
+  and tracker findings recorded from @itchyshin's assigned human-validation
+  slice.
+
+Checks and evidence:
+
+- `Rscript --vanilla -e 'devtools::document(); devtools::build_readme(); devtools::check_man(); devtools::test(filter = "profile|predict")'` -> 110 passing tests, 0 failures, 0 warnings, 0 skips. This includes the new default-relative-midpoint test for `plot_tdt_curve()` and the existing non-closing-profile display test.
+- `Rscript --vanilla -e 'devtools::test()'` -> 1,046 passing tests, 0 failures, 0 warnings, 0 skips (128.4 seconds) on the final source.
+- `Rscript tools/build-site.R .` -> completed; internal `AGENTS`, `CLAUDE`, and `SPEC` files removed from the public site, and alt text filled for six reference example figures.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found.`
+- `rg -n -i 'posterior draws|full Confidence-Eye interval.*Phase 4|prose never uses "posterior"|Comment when your slice is complete' R README.Rmd README.md man pkgdown-site --glob '!pkgdown-site/search.json'` -> only deliberate Bayesian-comparison or historical-news references remain; the accessor reference now explicitly identifies bootstrap refits as frequentist estimates.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- The public reference and rendered-site surfaces now distinguish frequentist
+  bootstrap refits from posterior draws, define direct model terms, state the
+  relative default used by `plot_tdt_curve()`, label Confidence-Eye scales, and
+  visibly identify open profile intervals. The tracker-only shrimp and
+  completion-comment items were corrected and closed without a package-source
+  change.

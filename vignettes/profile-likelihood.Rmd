@@ -195,7 +195,7 @@ The Confidence Eye follows the same contract. With its default `fallback = TRUE`
 successful bootstrap recovery draws a bootstrap lens. For the strict diagnostic below,
 `fallback = FALSE` preserves the open profile and draws a **hollow point with no lens**.
 
-```{r non-closing-eye, fig.alt = "Confidence Eye for a weakly identified fit: a hollow point estimate with no confidence lens, signalling that the profile did not close."}
+```{r non-closing-eye, fig.alt = "Confidence Eye for a weakly identified fit: an enlarged hollow point estimate with no confidence lens and a direct open-profile annotation, signalling that no finite confidence interval is available."}
 # fallback = FALSE so the eye refuses to draw a lens when the profile does not
 # close (a hollow point only), matching the honest non-closing contract above.
 suppressWarnings(plot_confidence_eye(sparse_fit, parm = "CTmax", method = "profile",
