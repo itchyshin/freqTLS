@@ -40,7 +40,7 @@ otherwise have to infer it from context.
 8. Use "confidence" or "compatibility" interval language. **Never** call a
    freqTLS interval a "posterior" or "credible" interval; that is the
    `bayesTLS` path. The default uncertainty visual is the Confidence Eye.
-9. Credit the `bayesTLS` framework (Noble, Arnold & Pottier) as the origin of
+9. Credit the `bayesTLS` framework (Noble, Arnold, Nakagawa & Pottier) as the origin of
    the modelling idea wherever the model is introduced.
 10. Support factual, statistical, or literature claims with citations, local
     evidence, check outputs, or a clear "design assumption" label.

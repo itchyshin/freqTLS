@@ -33,9 +33,9 @@ both packages agree.
 \section{Credit and origins}{
 
 The thermal-load-sensitivity modelling framework and the direct mapping from
-the 4PL midpoint slope to \code{z} and \code{CTmax} are due to Noble, Arnold and Pottier
-(the \code{bayesTLS} package). \code{freqTLS} contributes the TMB maximum-likelihood
-likelihood and the
+the 4PL midpoint slope to \code{z} and \code{CTmax} are from Noble, Arnold, Nakagawa
+and Pottier (the \code{bayesTLS} package). \code{freqTLS} contributes the TMB maximum-likelihood
+likelihood, the direct \code{CTmax}/\code{log_z} reparameterisation, and the
 profile-likelihood machinery. Engineering patterns are adapted from \code{drmTMB}
 (GPL-3) with attribution in the relevant source files.
 }
@@ -50,13 +50,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Shinichi Nakagawa \email{itchyshin@gmail.com} (\href{https://orcid.org/0000-0002-7765-5182}{ORCID}) [copyright holder]
+\strong{Maintainer}: Shinichi Nakagawa \email{itchyshin@gmail.com} (\href{https://orcid.org/0000-0002-7765-5182}{ORCID}) (co-author of the bayesTLS framework) [copyright holder]
 
 Authors:
 \itemize{
-  \item Shinichi Nakagawa \email{itchyshin@gmail.com} (\href{https://orcid.org/0000-0002-7765-5182}{ORCID}) [copyright holder]
-  \item Pieter A. Arnold (\href{https://orcid.org/0000-0002-6158-7752}{ORCID}) (co-author of the bayesTLS framework)
+  \item Shinichi Nakagawa \email{itchyshin@gmail.com} (\href{https://orcid.org/0000-0002-7765-5182}{ORCID}) (co-author of the bayesTLS framework) [copyright holder]
   \item Patrice Pottier (\href{https://orcid.org/0000-0003-2106-6597}{ORCID}) (co-author of the bayesTLS framework)
+  \item Pieter A. Arnold (\href{https://orcid.org/0000-0002-6158-7752}{ORCID}) (co-author of the bayesTLS framework)
   \item Daniel W. A. Noble (\href{https://orcid.org/0000-0001-9460-8743}{ORCID}) (senior author of the bayesTLS thermal-load-sensitivity framework)
 }
 

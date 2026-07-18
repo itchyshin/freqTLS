@@ -1,5 +1,14 @@
 # freqTLS 0.1.0 (experimental release candidate)
 
+* Updated citation to the bayesTLS framework preprint. Publications should now
+  cite the paper freqTLS implements — Noble DWA, Arnold PA, Nakagawa S & Pottier P
+  (2026), *A flexible modelling framework for estimating thermal tolerance and
+  sensitivity*, bioRxiv, doi:10.64898/2026.07.16.738378 — rather than a separate
+  freqTLS R-package self-citation. Shinichi Nakagawa is now credited as a
+  co-author of that framework across `DESCRIPTION`, the package documentation,
+  and `inst/CITATION`.
+* Added an `.onAttach` startup message (`R/zzz.R`) that points users to the paper
+  and `citation("freqTLS")`, mirroring `bayesTLS` (without the Stan/brms lines).
 * Rebased the empirical teaching plan on the pinned bayesTLS supplement
   rendered 2026-07-14 (commit `76510412e06c594c96894a1baba1f0e1a34a5aea`).
   Canonical cases are oxygen-gradient zebrafish, cereal aphids, Snow-gum PSII,
