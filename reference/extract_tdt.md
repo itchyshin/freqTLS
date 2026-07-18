@@ -3,10 +3,11 @@
 The frequentist analogue of `bayesTLS::extract_tdt()`. Runs a parametric
 bootstrap (via the freqTLS engine), derives the thermal-death-time
 quantities on each replicate, and returns the same nested `$z` /
-`$CTmax` / `$T_crit` structure (each a list of `draws` + `summary`). The
-per-replicate tables are the frequentist analogue of posterior draws;
-`*_median` is the maximum-likelihood point estimate and `*_lower` /
-`*_upper` are bootstrap percentiles.
+`$CTmax` / `$T_crit` structure (each a list of `draws` + `summary`).
+Each row of a per-replicate table is a derived estimate from one
+parametric-bootstrap refit: it is a resampled frequentist estimate, not
+a posterior draw. `*_median` is the maximum-likelihood point estimate
+and `*_lower` / `*_upper` are bootstrap percentiles.
 
 ## Usage
 

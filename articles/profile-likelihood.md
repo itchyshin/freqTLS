@@ -256,9 +256,10 @@ suppressWarnings(plot_confidence_eye(sparse_fit, parm = "CTmax", method = "profi
                                      fallback = FALSE))
 ```
 
-![Confidence Eye for a weakly identified fit: a hollow point estimate
-with no confidence lens, signalling that the profile did not
-close.](profile-likelihood_files/figure-html/non-closing-eye-1.png)
+![Confidence Eye for a weakly identified fit: an enlarged hollow point
+estimate with no confidence lens and a direct open-profile annotation,
+signalling that no finite confidence interval is
+available.](profile-likelihood_files/figure-html/non-closing-eye-1.png)
 
 ## Calibration: how well do the intervals cover?
 

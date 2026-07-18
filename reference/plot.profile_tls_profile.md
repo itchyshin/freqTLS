@@ -33,8 +33,10 @@ A `ggplot` object (invisibly when printed for its side effect).
 
 ## Details
 
-This is the per-parameter profile curve; the full Confidence-Eye
-interval displays are added in Phase 4.
+This plot diagnoses one parameter's likelihood profile. Use
+[`plot_confidence_eye()`](https://itchyshin.github.io/freqTLS/reference/plot_confidence_eye.md)
+to summarize the resulting confidence interval across one or more
+headline parameters.
 
 ## Examples
 

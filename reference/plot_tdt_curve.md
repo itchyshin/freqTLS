@@ -1,17 +1,18 @@
 # Plot the thermal death-time (TDT) curve: survival-threshold time vs temperature
 
 `plot_tdt_curve()` draws the duration at which survival crosses a target
-probability `p` (default the relative midpoint, `p = 0.5`) against
-temperature – the classic thermal-death-time line, here read directly
-off the fitted 4PL via
+probability `p` against temperature – the classic thermal-death-time
+line, here read directly off the fitted 4PL via
 [`derive_lt()`](https://itchyshin.github.io/freqTLS/reference/derive_lt.md).
-Time is shown on a log10 axis. For a grouped fit a line is drawn per
-group.
+With the default `p = NULL`, each line uses its fitted relative midpoint
+`(low + up) / 2`, not necessarily absolute 50% survival. Supply a
+numeric `p` for an absolute survival threshold. Time is shown on a log10
+axis. For a grouped fit a line is drawn per group.
 
 ## Usage
 
 ``` r
-plot_tdt_curve(fit, p = 0.5, temps = NULL, ...)
+plot_tdt_curve(fit, p = NULL, temps = NULL, ...)
 ```
 
 ## Arguments
@@ -23,7 +24,8 @@ plot_tdt_curve(fit, p = 0.5, temps = NULL, ...)
 
 - p:
 
-  Target survival probability for the threshold (default `0.5`).
+  `NULL` (default) for the fitted relative midpoint, or an absolute
+  target survival probability in `(0, 1)`.
 
 - temps:
 

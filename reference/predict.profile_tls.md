@@ -3,9 +3,7 @@
 [`predict()`](https://rdrr.io/r/stats/predict.html) evaluates the fitted
 four-parameter logistic (4PL) thermal-load- sensitivity model at new
 temperature-by-duration cells, using exactly the same forward map as the
-TMB engine in `src/profile_tls.cpp`: \$\$mid = \log\_{10}(t\_{ref}) -
-(temp - CTmax_g) / z_g\$\$ \$\$p = low + (up -
-low)\\\mathrm{plogis}(-k(\log\_{10}(duration) - mid)).\$\$
+TMB engine in `src/profile_tls.cpp`:
 
 ## Usage
 
@@ -71,6 +69,15 @@ numeric vector with one element per row; survival values lie in
 `(0, 1)`.
 
 ## Details
+
+Here `CTmax` is the critical thermal maximum at the reference duration
+`tref`; `z` is thermal sensitivity in degrees per decade of duration;
+`low` and `up` are the fitted lower and upper survival asymptotes; and
+`k` controls the curve's steepness. The model fits `log_z = log(z)`
+internally, then reports positive natural-scale `z` values.
+
+\$\$mid = \log\_{10}(t\_{ref}) - (temp - CTmax_g) / z_g\$\$ \$\$p =
+low + (up - low)\\\mathrm{plogis}(-k(\log\_{10}(duration) - mid)).\$\$
 
 Four response types are available:
 

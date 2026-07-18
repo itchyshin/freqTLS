@@ -2,10 +2,9 @@
 
 `derive_lt()` solves the fitted 4PL for the duration at which survival
 crosses a target probability `p` at a given temperature (an "LT" /
-lethal- time-style quantity, e.g. `p = 0.5` gives the median survival
-time). Because the threshold is interpreted *relative to the
-asymptotes*, the default `p = 0.5` returns the curve's midpoint
-duration, where `log10(duration) = mid` exactly.
+lethal- time-style quantity, e.g. `p = 0.5` gives the absolute 50%
+survival time). To obtain the curve's relative midpoint, use
+`p = (low + up) / 2`; that crossing has `log10(duration) = mid` exactly.
 
 ## Usage
 
@@ -22,7 +21,7 @@ derive_lt(object, p = 0.5, temp, group = NULL)
 
 - p:
 
-  Target survival probability in `(low, up)` (default `0.5`).
+  Absolute target survival probability in `(low, up)` (default `0.5`).
 
 - temp:
 
@@ -56,7 +55,7 @@ population-level derived quantity; it does not add a group BLUP.
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
                family = "binomial", tref = 1)
-# Median survival duration at 36 C:
+# Absolute 50% survival duration at 36 C:
 derive_lt(fit, p = 0.5, temp = 36)
 #> [1] 0.9555978
 ```

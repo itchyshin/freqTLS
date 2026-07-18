@@ -28,14 +28,15 @@ responses in `(0, 1)` via the beta family.
 Its signature display is the **Confidence Eye**: a pale horizontal lens
 spanning the likelihood interval, with a hollow point estimate. These
 are likelihood *confidence* intervals, not posteriors, so the visual
-deliberately avoids posterior-density iconography, and the prose never
-uses “posterior” or “credible” language.
+deliberately avoids posterior-density iconography. freqTLS intervals are
+never described as “posterior” or “credible” intervals.
 
-![Hero figure: a horizontal Confidence Eye for CTmax and z. Each
-parameter is a pale, shallow lens spanning its 95% profile-likelihood
-confidence interval, with a hollow point estimate at the
-maximum-likelihood value. The lens shape reads as an interval, not a
-probability density.](reference/figures/README-readme-eye-1.png)
+![Hero figure: horizontal Confidence Eyes for CTmax on the temperature
+scale and z in degrees per decade of duration. Each parameter is a pale,
+shallow lens spanning its 95% profile-likelihood confidence interval,
+with a hollow point estimate at the maximum-likelihood value. The lens
+shape reads as an interval, not a probability
+density.](reference/figures/README-readme-eye-1.png)
 
 ## What freqTLS does
 

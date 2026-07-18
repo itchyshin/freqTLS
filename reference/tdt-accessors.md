@@ -1,9 +1,11 @@
 # Accessors for an extract_tdt() result
 
 Analogues of the bayesTLS `get_*_summary` / `get_*_draws` accessors.
-`*_summary` returns the median + interval tibble; `*_draws` returns the
-per-replicate (bootstrap) tibble — the frequentist analogue of posterior
-draws.
+`*_summary` returns the maximum-likelihood point estimate (in the
+compatibility-named `*_median` column) and its bootstrap-percentile
+interval. `*_draws` returns one derived estimate from each
+parametric-bootstrap refit; these are resampled frequentist estimates,
+not posterior draws.
 
 ## Usage
 
