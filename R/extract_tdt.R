@@ -11,9 +11,11 @@
 #' The frequentist analogue of `bayesTLS::extract_tdt()`. Runs a parametric bootstrap
 #' (via the freqTLS engine), derives the thermal-death-time quantities on each
 #' replicate, and returns the same nested `$z` / `$CTmax` / `$T_crit` structure
-#' (each a list of `draws` + `summary`). The per-replicate tables are the
-#' frequentist analogue of posterior draws; `*_median` is the maximum-likelihood
-#' point estimate and `*_lower` / `*_upper` are bootstrap percentiles.
+#' (each a list of `draws` + `summary`). Each row of a per-replicate table is a
+#' derived estimate from one parametric-bootstrap refit: it is a resampled
+#' frequentist estimate, not a posterior draw. `*_median` is the
+#' maximum-likelihood point estimate and `*_lower` / `*_upper` are bootstrap
+#' percentiles.
 #'
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
 #' @param target_surv `"relative"` (curve midpoint, default), `"absolute"`
@@ -170,8 +172,10 @@ stop_if_not_freq_tdt <- function(et) {
 #' Accessors for an extract_tdt() result
 #'
 #' Analogues of the bayesTLS `get_*_summary` / `get_*_draws` accessors. `*_summary`
-#' returns the median + interval tibble; `*_draws` returns the per-replicate
-#' (bootstrap) tibble — the frequentist analogue of posterior draws.
+#' returns the maximum-likelihood point estimate (in the compatibility-named
+#' `*_median` column) and its bootstrap-percentile interval. `*_draws` returns
+#' one derived estimate from each parametric-bootstrap refit; these are resampled
+#' frequentist estimates, not posterior draws.
 #'
 #' @param et An [extract_tdt()] result.
 #' @return A tibble (see [extract_tdt()] for the column contract).

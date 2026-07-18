@@ -4,12 +4,13 @@
 \alias{plot_tdt_curve}
 \title{Plot the thermal death-time (TDT) curve: survival-threshold time vs temperature}
 \usage{
-plot_tdt_curve(fit, p = 0.5, temps = NULL, ...)
+plot_tdt_curve(fit, p = NULL, temps = NULL, ...)
 }
 \arguments{
 \item{fit}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
 
-\item{p}{Target survival probability for the threshold (default \code{0.5}).}
+\item{p}{\code{NULL} (default) for the fitted relative midpoint, or an absolute
+target survival probability in \verb{(0, 1)}.}
 
 \item{temps}{Numeric vector of temperatures. Defaults to a sequence over the
 observed temperature range.}
@@ -21,10 +22,12 @@ A \code{ggplot} object.
 }
 \description{
 \code{plot_tdt_curve()} draws the duration at which survival crosses a target
-probability \code{p} (default the relative midpoint, \code{p = 0.5}) against
+probability \code{p} against
 temperature -- the classic thermal-death-time line, here read directly off the
-fitted 4PL via \code{\link[=derive_lt]{derive_lt()}}. Time is shown on a log10 axis. For a grouped fit
-a line is drawn per group.
+fitted 4PL via \code{\link[=derive_lt]{derive_lt()}}. With the default \code{p = NULL}, each line uses its
+fitted relative midpoint \code{(low + up) / 2}, not necessarily absolute 50\%
+survival. Supply a numeric \code{p} for an absolute survival threshold. Time is
+shown on a log10 axis. For a grouped fit a line is drawn per group.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

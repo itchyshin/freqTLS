@@ -210,7 +210,13 @@ diagnose_tdt_fit <- function(object) {
 #'
 #' Returns the fitted 4PL parameters (`low`, `up`, `k`, `CTmax`, `z`, and `phi`
 #' for over-dispersed families) as point estimates with confidence intervals, in
-#' bayesTLS's `parameter / [group] / median / lower / upper` shape.
+#' bayesTLS's `parameter / [group] / median / lower / upper` shape. `low` and
+#' `up` are the fitted survival asymptotes, `k` is curve steepness, `CTmax` is
+#' the critical thermal maximum at the reference time, `z` is thermal sensitivity
+#' in degrees per decade of duration, and `phi` is beta/beta-binomial precision
+#' or overdispersion. The `median` name is retained for table compatibility; for
+#' frequentist Wald or profile output it contains the maximum-likelihood point
+#' estimate, not a posterior median.
 #'
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
 #' @param method Interval method: `"wald"` (default) or `"profile"`.

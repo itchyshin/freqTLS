@@ -266,10 +266,12 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   }
 
   # Hollow point estimate on top (white interior, coloured stroke), every row.
+  # Make an all-open fallback immediately visible without inventing a lens.
+  point_size <- if (none_drawable) 4.5 else 3
   g <- g +
     ggplot2::geom_point(
       ggplot2::aes(colour = .data$.reliability),
-      shape = 21, fill = "white", size = 3, stroke = 1
+      shape = 21, fill = "white", size = point_size, stroke = 1
     ) +
     ggplot2::scale_fill_manual(values = fill_pal, name = NULL, drop = TRUE,
                                guide = "none") +
@@ -299,13 +301,22 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   } else {
     ""
   }
+  scale_lab <- vapply(levels(ci$.facet), function(parm_name) {
+    switch(parm_name,
+      CTmax = "CTmax = temperature scale",
+      z = "z = degrees per decade of duration",
+      log_z = "log_z = log thermal sensitivity",
+      paste0(parm_name, " = native parameter scale")
+    )
+  }, character(1))
   caption <- sprintf(
-    "%d%% confidence intervals (%s). %s; hollow point = estimate%s.",
-    round(100 * level), src_lab, shape_lab, rug_lab
+    "%d%% confidence intervals (%s). Scale: %s. %s; hollow point = estimate%s.",
+    round(100 * level), src_lab, paste(scale_lab, collapse = "; "),
+    shape_lab, rug_lab
   )
   caption <- paste(strwrap(caption, width = 88L), collapse = "\n")
   subtitle <- if (none_drawable) {
-    "No interval closed; hollow points only (see `?confint.profile_tls`)."
+    "Profile open: no finite interval; hollow points only."
   } else if (any_open) {
     "Open intervals shown as hollow points without a lens (weakly identified)."
   } else if (re_wald) {
@@ -447,13 +458,16 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
 #' Plot the thermal death-time (TDT) curve: survival-threshold time vs temperature
 #'
 #' `plot_tdt_curve()` draws the duration at which survival crosses a target
-#' probability `p` (default the relative midpoint, `p = 0.5`) against
+#' probability `p` against
 #' temperature -- the classic thermal-death-time line, here read directly off the
-#' fitted 4PL via [derive_lt()]. Time is shown on a log10 axis. For a grouped fit
-#' a line is drawn per group.
+#' fitted 4PL via [derive_lt()]. With the default `p = NULL`, each line uses its
+#' fitted relative midpoint `(low + up) / 2`, not necessarily absolute 50%
+#' survival. Supply a numeric `p` for an absolute survival threshold. Time is
+#' shown on a log10 axis. For a grouped fit a line is drawn per group.
 #'
 #' @param fit A `profile_tls` fit from [fit_tls()].
-#' @param p Target survival probability for the threshold (default `0.5`).
+#' @param p `NULL` (default) for the fitted relative midpoint, or an absolute
+#'   target survival probability in `(0, 1)`.
 #' @param temps Numeric vector of temperatures. Defaults to a sequence over the
 #'   observed temperature range.
 #' @param ... Reserved; must be empty.
@@ -467,7 +481,7 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
 #' plot_tdt_curve(fit)
 #'
 #' @export
-plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
+plot_tdt_curve <- function(fit, p = NULL, temps = NULL, ...) {
   dots <- list(...)
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
@@ -479,6 +493,10 @@ plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     cli::cli_abort("{.pkg ggplot2} is required for {.fn plot_tdt_curve}.")
   }
+  if (!is.null(p) && (!is.numeric(p) || length(p) != 1L || !is.finite(p) ||
+                      p <= 0 || p >= 1)) {
+    cli::cli_abort("{.arg p} must be {.code NULL} or one absolute survival probability in (0, 1).")
+  }
   ds <- fit$data_summary
   if (is.null(temps)) {
     temps <- seq(ds$temp_range[1L], ds$temp_range[2L], length.out = 60L)
@@ -489,9 +507,17 @@ plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
 
   build_line <- function(lev) {
     grp <- if (grouped) lev else NULL
+    target_p <- p
+    if (is.null(target_p)) {
+      nd <- data.frame(temp = temps[1L])
+      if (grouped) nd$group <- grp
+      pars <- tls_predict_pars(fit, nd)
+      target_p <- (pars$low[1L] + pars$up[1L]) / 2
+    }
     data.frame(
       temp = temps,
-      lt = derive_lt(fit, p = p, temp = temps, group = grp),
+      lt = derive_lt(fit, p = target_p, temp = temps, group = grp),
+      target_p = target_p,
       group = if (grouped) lev else NA_character_,
       stringsAsFactors = FALSE
     )
@@ -502,7 +528,7 @@ plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
     build_line(NA_character_)
   }
 
-  pct <- round(100 * p)
+  relative_default <- is.null(p)
   aes_line <- if (grouped) {
     ggplot2::aes(x = .data$temp, y = .data$lt, colour = .data$group)
   } else {
@@ -515,12 +541,19 @@ plot_tdt_curve <- function(fit, p = 0.5, temps = NULL, ...) {
     ggplot2::theme_minimal() +
     ggplot2::labs(
       x = "Temperature (\u00b0C)",
-      y = sprintf("Duration to %d%% survival (log scale)", pct),
+      y = if (relative_default) {
+        "Duration to relative midpoint (log scale)"
+      } else {
+        sprintf("Duration to %d%% survival (log scale)", round(100 * p))
+      },
       title = "Thermal death-time curve",
-      caption = paste(strwrap(sprintf(
-        "Duration at which fitted survival crosses %.2f (relative threshold), read off the 4PL midpoint at tref = %s.",
-        p, format(fit$tref)
-      ), width = 88L), collapse = "\n")
+      caption = paste(strwrap(if (relative_default) {
+        sprintf("Duration at each fitted relative midpoint (low + up) / 2, read off the 4PL midpoint at tref = %s.",
+                format(fit$tref))
+      } else {
+        sprintf("Duration at which fitted survival crosses %.2f (absolute threshold) at tref = %s.",
+                p, format(fit$tref))
+      }, width = 88L), collapse = "\n")
     ) +
     ggplot2::theme(
       plot.caption = ggplot2::element_text(hjust = 0),

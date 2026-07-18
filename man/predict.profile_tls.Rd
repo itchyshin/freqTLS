@@ -51,10 +51,17 @@ numeric vector with one element per row; survival values lie in \verb{(0, 1)}.
 \code{predict()} evaluates the fitted four-parameter logistic (4PL) thermal-load-
 sensitivity model at new temperature-by-duration cells, using exactly the
 same forward map as the TMB engine in \code{src/profile_tls.cpp}:
-\deqn{mid = \log_{10}(t_{ref}) - (temp - CTmax_g) / z_g}
-\deqn{p = low + (up - low)\,\mathrm{plogis}(-k(\log_{10}(duration) - mid)).}
 }
 \details{
+Here \code{CTmax} is the critical thermal maximum at the reference duration
+\code{tref}; \code{z} is thermal sensitivity in degrees per decade of duration;
+\code{low} and \code{up} are the fitted lower and upper survival asymptotes; and \code{k}
+controls the curve's steepness. The model fits \code{log_z = log(z)} internally,
+then reports positive natural-scale \code{z} values.
+
+\deqn{mid = \log_{10}(t_{ref}) - (temp - CTmax_g) / z_g}
+\deqn{p = low + (up - low)\,\mathrm{plogis}(-k(\log_{10}(duration) - mid)).}
+
 Four response types are available:
 \itemize{
 \item \code{"survival"} (default) returns the fitted survival probability in \verb{(0, 1)}.
