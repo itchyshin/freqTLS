@@ -9,7 +9,7 @@
 #' Extract z, CTmax and (optionally) T_crit with bootstrap confidence intervals
 #'
 #' The frequentist analogue of `bayesTLS::extract_tdt()`. Runs a parametric bootstrap
-#' (via the freqTLS engine), derives the thermal-death-time quantities on each
+#' (via the freqTLS engine), derives the thermal-load sensitivity quantities on each
 #' replicate, and returns the same nested `$z` / `$CTmax` / `$T_crit` structure
 #' (each a list of `draws` + `summary`). Each row of a per-replicate table is a
 #' derived estimate from one parametric-bootstrap refit: it is a resampled
@@ -102,7 +102,7 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
   up_mle  <- est$estimate[est$parameter == "up"][1L]
   k_mle   <- est$estimate[est$parameter == "k"][1L]
 
-  # Grouped iff coefficients are level-tagged ("CTmax:lvl"); an ungrouped fit's
+  # Grouped if coefficients are level-tagged ("CTmax:lvl"); an ungrouped fit's
   # single "all"/intercept level is not surfaced as a group column.
   grouped <- any(grepl(":", ct_rows$parameter))
   z_d <- z_s <- c_d <- c_s <- t_d <- t_s <- vector("list", nrow(ct_rows))

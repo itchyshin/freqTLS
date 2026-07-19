@@ -43,7 +43,7 @@ follow bayesTLS: \code{z_median/z_lower/z_upper} for z; \code{temp_median/temp_l
 }
 \description{
 The frequentist analogue of \code{bayesTLS::extract_tdt()}. Runs a parametric bootstrap
-(via the freqTLS engine), derives the thermal-death-time quantities on each
+(via the freqTLS engine), derives the thermal-load sensitivity quantities on each
 replicate, and returns the same nested \verb{$z} / \verb{$CTmax} / \verb{$T_crit} structure
 (each a list of \code{draws} + \code{summary}). Each row of a per-replicate table is a
 derived estimate from one parametric-bootstrap refit: it is a resampled
