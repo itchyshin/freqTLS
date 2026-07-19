@@ -22,13 +22,10 @@ knitr::opts_chunk$set(
 `CTmax` and `z`** (thermal sensitivity — the temperature rise that cuts the tolerated
 exposure roughly tenfold), and returns prior-free **frequentist** confidence
 intervals — Wald, profile-likelihood (asymmetry-respecting, the default), and bootstrap. It is the likelihood complement to the
-Bayesian [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package; the modelling
-framework is theirs (see `vignette("comparing-to-bayesTLS")` for the relationship and
-credit).
+Bayesian [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package.
 
 This vignette walks through the core loop: simulate → fit → confidence intervals →
-plot. It runs end to end with a small simulation and needs no Stan, no MCMC, and no
-internet.
+plot. It runs end to end with a small simulation.
 
 ```{r setup}
 library(freqTLS)
@@ -36,7 +33,7 @@ library(freqTLS)
 
 ## Simulate a dataset
 
-`simulate_tls()` draws survival counts from the locked data-generating process: a
+`simulate_tls()` draws survival counts from the known data-generating process: a
 factorial grid of assay temperatures and exposure durations, with the 4PL evaluated at
 the supplied true `CTmax`, `z`, and shape parameters. We use the overdispersed
 beta-binomial family here; `phi` is its precision parameter — larger `phi` means
@@ -71,8 +68,7 @@ attr(dat, "truth")[c("CTmax", "z", "phi")]
 `freqTLS` mirrors the `bayesTLS` workflow. First `standardize_data()` names the
 temperature, duration, and survival-count columns and records the data contract;
 then `fit_4pl()` fits the 4PL by maximum likelihood and returns a `freq_tls`
-workflow object. `t_ref` is the reference time at which `CTmax` is defined: the
-shared-name facade `fit_4pl()` uses the `bayesTLS` spelling `t_ref` (default 60), while
+workflow object. `t_ref` is the reference time at which `CTmax` is defined. `fit_4pl()` uses the `bayesTLS` spelling `t_ref` (default 60), while
 the lower-level engine `fit_tls()` (below) uses `tref` (default 1) — the same
 quantity, in the data's duration unit. The simulated durations here are already in
 reference units, so we pass `1`.
@@ -135,8 +131,8 @@ get_z(fit)
 
 ## Profile-likelihood confidence intervals
 
-The reason for the direct `CTmax`/`z` parameterisation is that both headline quantities
-are model *coordinates*, so they can be profiled directly. `confint()` with
+The reason for the direct `CTmax`/`z` parameterisation is that both become
+model *coordinates*, so they can be profiled directly. `confint()` with
 `method = "profile"` (the default) inverts the likelihood-ratio test: the interval is
 the set of values whose deviance from the maximum stays below the profile-$t$ cutoff (a
 squared Student-$t$ quantile on the residual degrees of freedom, not $\chi^2_1$; see
