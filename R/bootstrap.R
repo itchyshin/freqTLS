@@ -18,13 +18,25 @@
 ## profile is: the z interval equals exp() of the log_z interval.
 ## User-facing behaviour is documented in vignette("profile-likelihood").
 
-#' Parametric bootstrap replicates of the natural-scale parameters
+# Fixed varying shapes are valid bootstrap refits. Downstream derived quantities
+# decide separately whether their mathematical transform can handle them.
+tls_bootstrap_varying_shapes <- function(fit) {
+  shape_mats <- list(
+    low = fit$tmb_inputs$data$X_low,
+    up = fit$tmb_inputs$data$X_up,
+    log_k = fit$tmb_inputs$data$X_logk
+  )
+  names(shape_mats)[vapply(shape_mats, ncol, integer(1)) > 1L]
+}
+
+#' Parametric bootstrap replicates matching the fitted parameter table
 #'
 #' Regenerates `y` at the observed design from the fitted survival probabilities
 #' (`p_fitted` from the compiled model) under the fit's family, refits each
 #' replicate via the retained TMB inputs (warm-started at the MLE), and collects
-#' the natural-scale parameter estimates. Non-converged replicates are recorded
-#' as `NA` and excluded downstream rather than silently dropped.
+#' estimates on the same scale and with the same names as `fit$estimates`.
+#' Non-converged replicates are recorded as `NA` and excluded downstream rather
+#' than silently dropped.
 #'
 #' @param fit A `profile_tls` fit from [fit_tls()].
 #' @param nboot Number of bootstrap replicates (default `1000`).
@@ -130,12 +142,20 @@ tls_bootstrap_replicates <- function(fit, nboot = 1000L, seed = NULL,
   ng <- length(glevels)
   ct_names <- if (ng == 1L) "CTmax" else paste0("CTmax:", glevels)
   z_names <- if (ng == 1L) "z" else paste0("z:", glevels)
-  # Shapes are shared (one coefficient) or grouped (one per CTmax level).
-  n_shape <- length(rep0$low)
-  shape_names <- function(base) if (n_shape == 1L) base else paste0(base, ":", glevels)
+  # Each shape owns its design. The public estimate names are the bootstrap
+  # column contract; a continuous design is retained on its link scale, while a
+  # shared/one-hot design is retained on its natural scale, exactly as
+  # tls_estimates() reports it.
+  shape_names <- function(base) {
+    param_names[param_names == base | startsWith(param_names, paste0(base, ":"))]
+  }
   low_names <- shape_names("low")
   up_names <- shape_names("up")
   k_names <- shape_names("k")
+  shape_values <- function(report_values, beta_name, X, opt) {
+    if (ncol(X) == 1L || tls_is_onehot(X)) return(as.numeric(report_values))
+    as.numeric(opt$par[names(opt$par) == beta_name])
+  }
 
   out <- matrix(NA_real_, nrow = nboot, ncol = length(param_names),
                 dimnames = list(NULL, param_names))
@@ -209,9 +229,9 @@ tls_bootstrap_replicates <- function(fit, nboot = 1000L, seed = NULL,
       rp <- inner$report(opt$par)
     }
     vals <- stats::setNames(rep(NA_real_, length(param_names)), param_names)
-    vals[low_names] <- as.numeric(rp$low)
-    vals[up_names] <- as.numeric(rp$up)
-    vals[k_names] <- as.numeric(rp$k)
+    vals[low_names] <- shape_values(rp$low, "beta_low", base_data$X_low, opt)
+    vals[up_names] <- shape_values(rp$up, "beta_up", base_data$X_up, opt)
+    vals[k_names] <- shape_values(rp$k, "beta_logk", base_data$X_logk, opt)
     if (fam_code >= 1L && "phi" %in% param_names) vals["phi"] <- rp$phi
     vals[ct_names] <- as.numeric(rp$beta_CT)
     vals[z_names] <- as.numeric(rp$z_group)

@@ -115,12 +115,11 @@ standardize_data <- function(data,
               proportion, tdt_random_effect_variables(random_effects))
   tdt_check_columns(data, needed, "input columns")
 
-  # Warn if standardising will clobber a pre-existing column whose name is a
-  # transform-output name but which is NOT the source for that slot -- e.g. a
-  # categorical column literally named `temp`, or a `temp_c`/`logd` that means
-  # something else. (The count/response columns n_surv/n_dead/survival are
-  # intentionally excluded: they are routinely present in count data and are
-  # recomputed to consistent values, so warning on them is just noise.)
+  # Warn when standardized columns would overwrite an input column that was not
+  # supplied as its source. For example, a raw `temp_c` or `logd` column may
+  # mean something different from the standardized transform. The count and
+  # response columns are intentionally excluded because they are routinely
+  # supplied as sources and are recomputed to a consistent representation.
   reserved  <- c("temp", "duration", "logd", "temp_c")
   sources   <- unlist(list(temp, duration, n_total, n_surv, n_dead, survival,
                            mortality, proportion))

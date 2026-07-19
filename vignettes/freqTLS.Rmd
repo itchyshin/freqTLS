@@ -19,12 +19,14 @@ knitr::opts_chunk$set(
 
 `freqTLS` fits single-stage four-parameter logistic (4PL) thermal-load-sensitivity
 (TLS) / thermal death-time models by maximum likelihood, parameterised **directly in
-`CTmax` and `z`** (thermal sensitivity — the temperature rise that cuts the tolerated
-exposure roughly tenfold), and returns prior-free **frequentist** confidence
+`CTmax`** (the critical thermal maximum at the reference time `tref`) **and `z`**
+(thermal sensitivity, degrees Celsius per decade of exposure duration). It returns
+prior-free **frequentist** confidence
 intervals — Wald, profile-likelihood (asymmetry-respecting, the default), and bootstrap. It is the likelihood complement to the
-Bayesian [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package; the modelling
-framework is theirs (see `vignette("comparing-to-bayesTLS")` for the relationship and
-credit).
+Bayesian [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package. The
+thermal-load-sensitivity modelling framework was introduced by Daniel W. A. Noble,
+Pieter A. Arnold, and Patrice Pottier; see
+`vignette("comparing-to-bayesTLS")` for the comparison boundary.
 
 This vignette walks through the core loop: simulate → fit → confidence intervals →
 plot. It runs end to end with a small simulation and needs no Stan, no MCMC, and no
@@ -71,11 +73,11 @@ attr(dat, "truth")[c("CTmax", "z", "phi")]
 `freqTLS` mirrors the `bayesTLS` workflow. First `standardize_data()` names the
 temperature, duration, and survival-count columns and records the data contract;
 then `fit_4pl()` fits the 4PL by maximum likelihood and returns a `freq_tls`
-workflow object. `t_ref` is the reference time at which `CTmax` is defined: the
-shared-name facade `fit_4pl()` uses the `bayesTLS` spelling `t_ref` (default 60), while
-the lower-level engine `fit_tls()` (below) uses `tref` (default 1) — the same
-quantity, in the data's duration unit. The simulated durations here are already in
-reference units, so we pass `1`.
+workflow object. `t_ref` is the reference time at which `CTmax` is defined, in
+the same unit as `duration`; it does not convert units. The `fit_4pl()` facade
+uses the `bayesTLS` spelling `t_ref` (default 60), while the lower-level
+`fit_tls()` engine uses `tref` (default 1). We declare the simulated durations
+to be hours in `standardize_data()`, so `t_ref = 1` defines CTmax at one hour.
 
 ```{r standardize}
 std <- standardize_data(
@@ -83,7 +85,8 @@ std <- standardize_data(
   temp     = "temp",
   duration = "duration",
   n_total  = "total",
-  n_surv   = "survived"
+  n_surv   = "survived",
+  duration_unit = "hours"
 )
 ```
 
@@ -94,13 +97,12 @@ fit
 
 ### Formula interface
 
-For the supported moderators, `fit_4pl()` takes a **similar direct interface** to `bayesTLS` —
-`ctmax =`, `z =`, or the `by =` shorthand (e.g. `by = "population"` for a grouped
-fit). Under the hood the engine also exposes a `brms`/`drmTMB`-style grammar via
-`tls_bf()` — the left-hand side names the survival counts (`successes |
-trials(total)`), the right-hand side tags the two axes with the `time()` and
-`temp()` markers — which feeds the same likelihood, so the two fits are
-numerically identical:
+For the supported moderators, `fit_4pl()` takes a **similar direct interface** to
+`bayesTLS` — `ctmax =`, `z =`, or the `by =` shorthand (for example,
+`by = "population"`). The engine also exposes the explicit 4PL formula grammar
+through `tls_bf()`: the response is survival counts, `time()` identifies duration,
+and `temp()` identifies assay temperature. The following formula still fits the
+single-stage 4PL, not an ordinary linear model; it matches the preceding fit:
 
 ```{r fit-formula}
 fit_f <- fit_tls(
@@ -124,8 +126,8 @@ adds standard errors and the log-likelihood:
 summary(fit)
 ```
 
-A tidy, broom-style table of all natural-scale parameters is available with
-`tidy_parameters()`, and the headline quantities have dedicated extractors:
+A tidy, broom-style table first shows all natural-scale 4PL parameters. Dedicated
+extractors are useful when a later analysis needs only the headline quantities:
 
 ```{r tidy}
 tidy_parameters(fit)
@@ -136,7 +138,7 @@ get_z(fit)
 ## Profile-likelihood confidence intervals
 
 The reason for the direct `CTmax`/`z` parameterisation is that both headline quantities
-are model *coordinates*, so they can be profiled directly. `confint()` with
+are model parameters, so they can be profiled directly. `confint()` with
 `method = "profile"` (the default) inverts the likelihood-ratio test: the interval is
 the set of values whose deviance from the maximum stays below the profile-$t$ cutoff (a
 squared Student-$t$ quantile on the residual degrees of freedom, not $\chi^2_1$; see
@@ -171,9 +173,9 @@ The default uncertainty display is the **Confidence Eye**: a pale confidence len
 with a hollow point estimate. It is freqTLS's visual identity and deliberately avoids
 posterior-density iconography, because these are likelihood intervals. Read the lens
 **width** as the confidence interval and the **hollow circle** as the
-maximum-likelihood estimate; two eyes that clearly fail to overlap are
-distinguishable at the confidence level, and a hollow point with *no* lens flags a
-profile that did not close (a weakly identified parameter).
+maximum-likelihood estimate. Do not use overlap as a hypothesis test; inspect the
+reported contrast or confidence interval for that question. A hollow point with
+*no* lens flags a profile that did not close (a weakly identified parameter).
 
 ```{r confidence-eye, fig.alt = "Confidence Eye plot: a pale lens spanning the profile-likelihood interval with a hollow point estimate, for CTmax and z."}
 plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
@@ -209,6 +211,7 @@ fit_grp <- fit_tls(
   ),
   data = dat_grp, family = "beta_binomial", tref = 1
 )
+tidy_parameters(fit_grp)
 confint(fit_grp, c("CTmax:cool", "CTmax:warm", "z:cool", "z:warm"),
         method = "profile")
 ```
@@ -249,10 +252,12 @@ biased low when fewer than about eight groups are sampled).
 
 ## The core workflow at a glance
 
-`freqTLS` deliberately mirrors the `bayesTLS` workflow, so the same
-**standardise → fit → quantities → plot** path runs by maximum likelihood.
-The map below shows the main workflow and how each box corresponds to a `bayesTLS`
-function. The
+`freqTLS` deliberately follows the **standardise → fit → quantities → plot**
+workflow used in `bayesTLS`, while keeping its own maximum-likelihood API. The
+map below shows the main freqTLS workflow and selected analogous roles, not a
+one-to-one map of current `bayesTLS` functions. `extract_tdt()` remains an
+optional compatibility-oriented bootstrap bundle; `tls()` is the primary
+quantity extractor in this package. The
 **"freqTLS extras"** box (gold, upper right) is the frequentist-only addition —
 Wald / profile / bootstrap intervals and the Confidence Eye — and the dashed
 **"trace & repair helpers — planned"** box is the one piece not yet ported.

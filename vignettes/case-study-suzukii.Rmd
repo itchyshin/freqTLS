@@ -141,6 +141,7 @@ for the independently regularized absolute-LT50 interval.
 plot_survival_curves(mort_fit$fit)
 ```
 
-The pinned bayesTLS supplement also teaches the equivalent midpoint-coordinate
-formulation. freqTLS keeps the direct `CTmax`/`z` coordinates because they are
-profile-able. It does not report `Tcrit` as a Case 4 result.
+The pinned bayesTLS comparison uses its recorded specification; current bayesTLS
+also supports direct `CTmax`/`z` parameterisation. freqTLS keeps direct `CTmax`/
+`z` parameters so likelihood profiles can target them directly. It does not
+report `Tcrit` as a Case 4 result.

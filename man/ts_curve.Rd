@@ -4,14 +4,15 @@
 \alias{ts_curve}
 \title{Median LT-vs-temperature line from a two-stage fit}
 \usage{
-ts_curve(stage2, temp_grid, time_multiplier = 1)
+ts_curve(stage2, temp_grid, time_multiplier = NULL)
 }
 \arguments{
 \item{stage2}{Output of \code{\link[=ts_stage2]{ts_stage2()}}.}
 
 \item{temp_grid}{Temperatures (°C) to evaluate.}
 
-\item{time_multiplier}{Multiplier to minutes. Default 1.}
+\item{time_multiplier}{Optional explicit check against the setting recorded by
+\code{\link[=ts_stage2]{ts_stage2()}}. By default the Stage-2 setting is inherited.}
 }
 \value{
 A tibble with \code{temp} and \code{duration_median} (minutes).
@@ -20,10 +21,12 @@ A tibble with \code{temp} and \code{duration_median} (minutes).
 Median LT-vs-temperature line from a two-stage fit
 }
 \examples{
-d <- data.frame(
-  temp = rep(c(30, 34, 38), each = 12),
-  dur  = rep(c(1, 5, 15, 45), times = 9),
-  surv = rbinom(36, 20, 0.4), tot = 20)
-ts_curve(ts_stage2(ts_stage1(d, "temp", "dur", "surv", "tot")),
-         temp_grid = seq(30, 38, 1))
+d <- simulate_tls(
+  family = "binomial", temps = seq(30, 42, by = 2),
+  times = c(0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100),
+  reps = 4, n = 50, CTmax = 36, z = 4, seed = 42
+)
+s2 <- ts_stage2(ts_stage1(d, "temp", "duration", "survived", "total"),
+                t_ref = 60, time_multiplier = 60)
+ts_curve(s2, temp_grid = seq(30, 42, 1))
 }

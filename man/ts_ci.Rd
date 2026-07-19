@@ -8,9 +8,9 @@ ts_ci(
   stage2,
   method = c("delta", "mvn"),
   level = 0.95,
-  t_ref = 60,
-  time_multiplier = 1,
-  TC_rate_range = c(0.1, 1),
+  t_ref = NULL,
+  time_multiplier = NULL,
+  TC_rate_range = NULL,
   temp_grid = NULL,
   n_sim = 1000,
   seed = 123
@@ -23,7 +23,10 @@ ts_ci(
 
 \item{level}{Confidence level. Default 0.95.}
 
-\item{t_ref, time_multiplier, TC_rate_range}{As in \code{\link[=ts_stage2]{ts_stage2()}}.}
+\item{t_ref, time_multiplier, TC_rate_range}{Optional explicit checks against
+the settings recorded by \code{\link[=ts_stage2]{ts_stage2()}}. By default they are inherited. A
+value that disagrees with the Stage-2 fit errors rather than silently
+changing the CTmax convention.}
 
 \item{temp_grid}{Temperatures for the line band (\code{"mvn"} only).}
 
@@ -32,8 +35,11 @@ ts_ci(
 \item{seed}{RNG seed (\code{"mvn"} only). Default 123.}
 }
 \value{
-For \code{"delta"}, a list with \code{z} and \code{CTmax_1hr}, each
+For \code{"delta"}, a list with \code{z} and \code{CTmax}, each
 \code{list(point, lower, upper, lower_t, upper_t, se)}, plus \code{df_resid}.
+When the recorded \code{t_ref} is exactly 60 minutes, the list also contains the
+compatibility alias \code{CTmax_1hr}, identical to \code{CTmax}; it is absent for
+other reference durations.
 For \code{"mvn"}, a list with \code{summary_ci} (z/CTmax/T_crit bounds) and
 \code{curve_ci} (per-\code{temp_grid} line band).
 }
@@ -51,10 +57,12 @@ line over \code{temp_grid}. This is the method the case studies report.
 }
 }
 \examples{
-d <- data.frame(
-  temp = rep(c(30, 32, 34, 36, 38), each = 12),
-  dur  = rep(c(1, 5, 15, 45, 135, 405), times = 10),
-  surv = rbinom(60, 20, 0.4), tot = 20)
-s2 <- ts_stage2(ts_stage1(d, "temp", "dur", "surv", "tot"))
+d <- simulate_tls(
+  family = "binomial", temps = seq(30, 42, by = 2),
+  times = c(0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100),
+  reps = 4, n = 50, CTmax = 36, z = 4, seed = 42
+)
+s2 <- ts_stage2(ts_stage1(d, "temp", "duration", "survived", "total"),
+                t_ref = 60, time_multiplier = 60)
 ts_ci(s2, method = "delta")$z
 }

@@ -28,8 +28,10 @@ fit_4pl(
 \item{data}{Output of \code{\link[=standardize_data]{standardize_data()}}.}
 
 \item{ctmax, z, up, low, k, by}{Direct-mode formula interface; see
-\code{\link[=make_4pl_formula]{make_4pl_formula()}}. Supplying \code{ctmax}/\code{z} (or \code{by}) fits per-group CTmax/z;
-the two headline formulas must produce the same fixed-effect columns.}
+\code{\link[=make_4pl_formula]{make_4pl_formula()}}. \code{by} gives fixed cell means for both \code{ctmax} and \code{z}.
+When \code{ctmax} and \code{z} are both supplied, their fixed-effect right-hand sides
+must produce the same model-matrix columns; their optional random-intercept
+terms may differ.}
 
 \item{threshold}{\code{"relative"} (default; CTmax/z at the curve midpoint) or
 \code{"absolute"} (at the \code{p}-survival level). The fitting backbone currently
@@ -38,8 +40,11 @@ with \code{\link[=extract_tdt]{extract_tdt()}} and \code{target_surv = "absolute
 
 \item{p}{Survival level for the absolute threshold (default 0.5).}
 
-\item{t_ref}{Reference exposure time (in the data's \code{duration_unit}) at which
-CTmax is reported. Default 60 (e.g. minutes); use \code{t_ref = 1} for hours.}
+\item{t_ref}{Positive reference exposure time at which CTmax is reported,
+expressed in exactly the same unit as the standardised \code{duration} column.
+The default \code{60} means 60 duration units. It is one hour only when
+\code{duration_unit = "minutes"}; \code{t_ref = 1} is one hour only when durations are
+measured in hours.}
 
 \item{bounds}{Asymptote range. Only \code{c(0, 1)} is currently accepted. Supply
 survival as a probability in \verb{[0, 1]} and let the model estimate \code{low} and
@@ -60,7 +65,7 @@ family, grouped, moderators, method).
 }
 \description{
 The frequentist analogue of \code{bayesTLS::fit_4pl()}. Consumes \code{\link[=standardize_data]{standardize_data()}}
-output and fits the single-stage 4PL thermal death-time model, parameterised
+output and fits the single-stage 4PL thermal-load-sensitivity model, parameterised
 directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 Returns a \code{freq_tls} workflow object; uncertainty (Wald / profile / bootstrap)
 is computed on demand by the quantity analogues (\code{\link[=tls]{tls()}}, \code{confint()}).
@@ -79,9 +84,9 @@ make both packages agree.
 
 \section{Before interpretation}{
 
-Before interpreting the fit, run \code{\link[=check_tls]{check_tls()}}. Its help page gives a recovery
-action for each data-adequacy warning; \code{vignette("profile-likelihood")} explains
-strict open profiles and the default bootstrap fallback.
+Run \code{\link[=check_tls]{check_tls()}} before interpreting the fit. It gives a concrete recovery
+action for each data-adequacy warning; \code{vignette("profile-likelihood")}
+explains open profiles and the bootstrap fallback.
 }
 
 \examples{

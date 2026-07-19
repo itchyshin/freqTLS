@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 880" font-family="Helvetica, Arial, sans-serif" width="100%" role="img" aria-labelledby="ftls-map-title ftls-map-desc">
   <title id="ftls-map-title">freqTLS function map</title>
-  <desc id="ftls-map-desc">Maximum-likelihood analogue of the bayesTLS workflow. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls, with tls_z, tls_ctmax and tls_tcrit, plus extract_tdt and the derive_lt, derive_ctmax and derive_tcrit primitives); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury, with make_temperature_scenarios and repair_rate_schoolfield marked not yet ported); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists the freqTLS-only extras: Wald, profile and bootstrap confidence intervals with profile-t calibration, the Confidence Eye, and twelve identifiability warnings.</desc>
+  <desc id="ftls-map-desc">Maximum-likelihood workflow informed by bayesTLS, not a one-to-one API map. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls as the primary quantity extractor, with tls_z, tls_ctmax and tls_tcrit; extract_tdt is an optional compatibility-oriented bootstrap bundle); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury, with make_temperature_scenarios and repair_rate_schoolfield marked not yet ported); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists freqTLS interval and diagnostic features.</desc>
   <defs>
     <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="#555"/>
@@ -10,7 +10,7 @@
 
   <!-- Title -->
   <text x="40" y="46" font-size="26" font-weight="bold" fill="#333">freqTLS function map</text>
-  <text x="42" y="72" font-size="13" fill="#777">Maximum-likelihood analogue of the bayesTLS workflow. Core user workflow; report/access and prediction are parallel downstream uses.</text>
+  <text x="42" y="72" font-size="13" fill="#777">Maximum-likelihood workflow informed by bayesTLS; not a one-to-one API map. Report/access and prediction are parallel downstream uses.</text>
 
   <!-- Column header chips -->
   <g font-size="12" font-weight="bold" text-anchor="middle">
@@ -27,7 +27,7 @@
     <path d="M128 335 L148 335" marker-end="url(#arr)"/>            <!-- raw -> standardize -->
     <path d="M415 246 L415 286" marker-end="url(#arr)"/>            <!-- model spec -> fit -->
     <path d="M635 172 L635 210" marker-end="url(#arr)"/>            <!-- manual fit -> tls -->
-    <path d="M635 408 L635 460" marker-end="url(#arr)"/>            <!-- extract -> advanced -->
+    <path d="M635 408 L635 472" marker-end="url(#arr)"/>            <!-- extract -> advanced -->
     <path d="M917 688 L917 668" marker-end="url(#arr)"/>            <!-- helpers -> heat injury -->
     <path d="M410 809 L468 809" marker-end="url(#arr)"/>            <!-- ts1 -> ts2 -->
     <path d="M630 809 L688 809" marker-end="url(#arr)"/>            <!-- ts2 -> ts_ci -->
@@ -105,15 +105,15 @@
   <g text-anchor="middle">
     <rect x="545" y="322" width="180" height="86" rx="7" fill="#d9ead3" stroke="#93c47d"/>
     <text x="635" y="356" font-size="15" font-weight="bold" fill="#274e13">extract_tdt()</text>
-    <text x="635" y="377" font-size="9.5" fill="#666">bundle z, CTmax,</text>
-    <text x="635" y="390" font-size="9.5" fill="#666">T_crit, LT curve</text>
+    <text x="635" y="377" font-size="9.5" fill="#666">optional compatibility</text>
+    <text x="635" y="390" font-size="9.5" fill="#666">bootstrap bundle</text>
   </g>
   <!-- advanced primitives -->
   <g text-anchor="middle">
-    <rect x="535" y="462" width="200" height="72" rx="7" fill="#efefef" stroke="#b7b7b7" stroke-dasharray="5,4"/>
-    <text x="635" y="484" font-size="11.5" font-weight="bold" fill="#555">advanced primitives</text>
-    <text x="635" y="502" font-size="9.5" fill="#777">derive_lt(); derive_ctmax();</text>
-    <text x="635" y="515" font-size="9.5" fill="#777">derive_tcrit()</text>
+    <rect x="535" y="474" width="200" height="72" rx="7" fill="#efefef" stroke="#b7b7b7" stroke-dasharray="5,4"/>
+    <text x="635" y="496" font-size="11.5" font-weight="bold" fill="#555">advanced primitives</text>
+    <text x="635" y="514" font-size="9.5" fill="#777">derive_lt(); derive_ctmax();</text>
+    <text x="635" y="527" font-size="9.5" fill="#777">derive_tcrit()</text>
   </g>
   <!-- get_ctmax / get_z / get_shape (= get_tls_est) -->
   <g text-anchor="middle">
@@ -162,7 +162,7 @@
   <g text-anchor="middle">
     <rect x="1180" y="150" width="240" height="120" rx="7" fill="#fff2cc" stroke="#e0b94e" stroke-dasharray="5,4"/>
     <text x="1300" y="176" font-size="12.5" font-weight="bold" fill="#7f6000">freqTLS extras</text>
-    <text x="1300" y="190" font-size="9.5" fill="#998200">(no direct bayesTLS analogue)</text>
+    <text x="1300" y="190" font-size="9.5" fill="#998200">(freqTLS interval / diagnostic tools)</text>
     <text x="1300" y="212" font-size="10" fill="#666">Wald · profile · bootstrap CIs</text>
     <text x="1300" y="226" font-size="10" fill="#666">(profile-t calibrated)</text>
     <text x="1300" y="244" font-size="10" fill="#666">the Confidence Eye;</text>

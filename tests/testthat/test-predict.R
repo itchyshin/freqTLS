@@ -86,7 +86,7 @@ test_that("derive_lt(p = 0.5) sits at the 4PL midpoint (log10(duration) = mid)",
   fit <- fit_binom()
   shape <- fit$estimates
   # At the relative midpoint p = (low + up)/2 the crossing is exactly at the
-  # midpoint duration; p = 0.5 is the default relative target.
+  # midpoint duration. A numeric p is always an absolute probability.
   low <- shape$estimate[shape$parameter == "low"]
   up <- shape$estimate[shape$parameter == "up"]
   pmid <- (low + up) / 2

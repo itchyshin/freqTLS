@@ -22,7 +22,10 @@ predict_survival_curves(
 \item{durations}{Exposure durations (default: 100 points log-spaced over the
 observed range, in the data's duration unit).}
 
-\item{nboot}{Number of bootstrap replicates for the bands (default 500).}
+\item{nboot}{Number of bootstrap replicates for the bands (default 500).
+Bootstrap bands currently require shared fixed-effect shape formulas
+(\code{low = up = log_k = ~ 1}). For varying shapes, use \code{\link[=predict]{predict()}} for the
+fitted surface; a design-aware bootstrap surface is not yet available.}
 
 \item{level}{Confidence level (default 0.95).}
 

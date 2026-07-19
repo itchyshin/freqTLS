@@ -18,7 +18,10 @@ get_f <- function(q) tf$median[tf$quantity == q]
 
 ## --- classical two-stage --------------------------------------------------
 st2 <- freqTLS::ts_stage2(freqTLS::ts_stage1(std_f, family = "binomial"),
-                          t_ref = 1, time_multiplier = 1)
+                          # The input duration is in hours. The two-stage
+                          # convention reports CTmax at 60 minutes, so convert
+                          # the Stage-1 intercept and use t_ref = 60 minutes.
+                          t_ref = 60, time_multiplier = 60)
 
 ## --- bayesTLS (Stan / MCMC) ----------------------------------------------
 std_b <- do.call(bayesTLS::standardize_data, c(list(data = d), args))
@@ -31,7 +34,7 @@ cmp <- data.frame(
   quantity = c("CTmax", "z"),
   freqTLS  = c(get_f("CTmax"), get_f("z")),
   bayesTLS = c(get_b("CTmax"), get_b("z")),
-  two_stage = c(st2$summary$CTmax_1hr, st2$summary$z)
+  two_stage = c(st2$summary$CTmax, st2$summary$z)
 )
 cmp$freq_vs_bayes_diff <- cmp$freqTLS - cmp$bayesTLS
 print(cmp, row.names = FALSE, digits = 4)

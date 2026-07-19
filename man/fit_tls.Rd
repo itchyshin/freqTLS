@@ -85,11 +85,14 @@ optimiser \code{opt}, and \code{sdreport}.
 }
 \description{
 \code{fit_tls()} fits the descending four-parameter logistic (4PL) thermal
-death-time model to survival-count data, parameterised \strong{directly in \code{CTmax}
-and \code{z}} (thermal sensitivity) so that both headline quantities can be
-profiled. Survival is modelled as a function of \code{log10(duration)}; the
-midpoint moves with temperature through \code{CTmax} and \code{z} (see
-\code{vignette("model-math")}).
+death-time model to survival-count data, parameterised **directly in \code{CTmax}
+(the critical thermal maximum at the reference time \code{tref}) and \code{z} (thermal
+sensitivity, degrees Celsius per decade of duration) so that both headline
+quantities can be profiled. Survival is modelled as a function of
+\code{log10(duration)}; the midpoint moves with temperature through \code{CTmax} and \code{z}
+(see \code{vignette("model-math")}). The thermal-load-sensitivity modelling framework
+was introduced by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in
+\href{https://daniel1noble.github.io/bayesTLS/}{bayesTLS}.
 }
 \details{
 There are two equivalent interfaces. In the \strong{column interface}, columns are

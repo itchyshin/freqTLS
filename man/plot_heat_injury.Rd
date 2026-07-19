@@ -33,7 +33,10 @@ fit is grouped).}
 \item{target_surv}{Optional absolute survival threshold defining one lethal
 dose: a single probability strictly between the fitted lower and upper
 asymptotes. \code{NULL} (default) uses the project-default relative threshold (the
-curve midpoint \code{(low + up) / 2}), matching \code{\link[=derive_ctmax]{derive_ctmax()}} and \code{\link[=derive_lt]{derive_lt()}}.}
+curve midpoint \code{(low + up) / 2}), matching \code{\link[=derive_ctmax]{derive_ctmax()}} and \code{\link[=derive_lt]{derive_lt()}}.
+For a bootstrap envelope the target must also be attainable in every
+converged bootstrap refit; otherwise the function aborts rather than clipping
+an invalid refit's threshold.}
 
 \item{t_c}{Optional damage-cutoff temperature (degrees C): at or below it the
 damage rate is zero. \code{NULL} (default) applies no cutoff.}

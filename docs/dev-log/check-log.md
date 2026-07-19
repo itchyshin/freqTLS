@@ -2781,3 +2781,30 @@ Interpretation:
   visibly identify open profile intervals. The tracker-only shrimp and
   completion-comment items were corrected and closed without a package-source
   change.
+
+## 2026-07-19 -- Daniel Noble review: generalized unit, threshold, and reader-surface remediation (#27, #29, #31, #34, #35, #37, #38, #39)
+
+Goal:
+
+- Treat the related review findings as one contract: duration is always in the
+  caller's native unit; `t_ref` uses that same unit; `CTmax` is defined at that
+  reference time; and relative and absolute targets have distinct meanings.
+
+Checks and evidence:
+
+- `Rscript --vanilla -e 'devtools::document(); devtools::build_readme(); devtools::check_man(); devtools::test()'` -> 1,076 passing tests, 0 failures, 0 warnings, 0 skips (132.2 seconds). The command regenerated roxygen output and README figures before testing.
+- `Rscript tools/build-site.R .` -> completed; removed internal `AGENTS`, `CLAUDE`, and `SPEC` artifacts and filled alt text on six reference figures.
+- `Rscript --vanilla -e 'pkgdown::check_pkgdown()'` -> `No problems found.`
+- `git diff --check` -> clean.
+- `rg -n -i 'CTmax_1hr|use `t_ref = 1` for hours|duration.*reference units|model \*coordinates\*|same likelihood-defined curve|Brown shrimp and life-stage zebrafish|frequentist analogue of posterior draws|p = 0.5.*relative' README.Rmd README.md R vignettes pkgdown-site --glob '!pkgdown-site/search.json' --glob '!pkgdown-site/news/**' --glob '!vignettes/case-study-shrimp.Rmd'` -> only the documented `CTmax_1hr` compatibility alias in `ts_stage2()`/`ts_ci()` (available only for `t_ref = 60`) and historical ROADMAP language remained.
+- `find pkgdown-site -type f \( -name 'AGENTS.html' -o -name 'CLAUDE.html' -o -name 'SPEC.html' \)` -> no matches.
+
+Interpretation:
+
+- The public and programmatic surfaces now agree that no hidden conversion is
+  applied: `t_ref = 1` means one hour only when duration is supplied in hours.
+  Two-stage output labels, reference pages, plotted axes/captions, benchmark
+  scripts, examples, and articles use that same rule. Bootstrap refits preserve
+  every supported shape coefficient, while derived routes that cannot evaluate
+  a varying shape at an unknown temperature reject the request before producing
+  misleading output.
