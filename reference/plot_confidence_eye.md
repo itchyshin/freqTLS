@@ -1,16 +1,14 @@
 # Confidence-Eye (or line) display of headline confidence intervals
 
 `plot_confidence_eye()` draws the freqTLS Confidence Eye for one or more
-headline parameters (`CTmax`, `z`, or any other
+parameters (`CTmax`, `z`, or any other
 [`confint.profile_tls()`](https://itchyshin.github.io/freqTLS/reference/confint.profile_tls.md)
-target, including grouped names). It is a HORIZONTAL forest display:
+target, including grouped names). It is a horizontal forest display:
 each parameter (and group level) is a row, the parameter value runs
 along the x-axis, and the confidence interval is a short, wide pale lens
 with a hollow point estimate. The shallow horizontal lens reads as a
-confidence *interval*, never a posterior density – freqTLS intervals are
-likelihood confidence intervals, so the wording is "confidence", never
-"posterior". The layout follows the gllvmTMB / drmTMB Confidence-Eye
-contract.
+confidence *interval*. The layout follows the gllvmTMB / drmTMB
+Confidence-Eye contract.
 
 ## Usage
 
@@ -40,8 +38,7 @@ plot_confidence_eye(
 - parm:
 
   Character vector of target parameter names. Defaults to
-  `c("CTmax", "z")` (the headline quantities). Grouped names (e.g.
-  `"CTmax:larva"`) are accepted.
+  `c("CTmax", "z")`. Grouped names (e.g. `"CTmax:larva"`) are accepted.
 
 - method:
 

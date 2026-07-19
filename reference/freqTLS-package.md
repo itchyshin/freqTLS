@@ -4,14 +4,13 @@
 Bayesian `bayesTLS` package. It fits single-stage four-parameter
 logistic (4PL) thermal-load-sensitivity (thermal death-time) models via
 Template Model Builder (`TMB`), parameterised directly in `CTmax` and
-`z` (thermal sensitivity), so that both headline quantities can be
-profiled. It returns prior-free Wald, profile-likelihood, or
-parametric-bootstrap confidence intervals for binomial and beta-binomial
-survival counts and the experimental Beta continuous-proportion family.
-Formula shape effects, limited random intercepts, and deterministic
-heat-injury prediction are also experimental; censored-time,
-hurdle-productivity, posterior, and fitted repair models remain outside
-freqTLS.
+`z` (thermal sensitivity), so that both quantities can be profiled. It
+returns prior-free Wald, profile-likelihood, or parametric-bootstrap
+confidence intervals for binomial and beta-binomial survival counts and
+the experimental Beta continuous-proportion family. Formula shape
+effects, limited random intercepts, and deterministic heat-injury
+prediction are also experimental; censored-time, hurdle-productivity,
+posterior, and fitted repair models remain outside freqTLS.
 
 ## Experimental software
 
@@ -30,10 +29,9 @@ make both packages agree.
 The thermal-load-sensitivity modelling framework and the direct mapping
 from the 4PL midpoint slope to `z` and `CTmax` are due to Noble, Arnold
 and Pottier (the `bayesTLS` package). `freqTLS` contributes the TMB
-maximum-likelihood likelihood, the direct `CTmax`/`log_z`
-reparameterisation, and the profile-likelihood machinery. Engineering
-patterns are adapted from `drmTMB` (GPL-3) with attribution in the
-relevant source files.
+maximum-likelihood likelihood and the profile-likelihood machinery.
+Engineering patterns are adapted from `drmTMB` (GPL-3) with attribution
+in the relevant source files.
 
 ## See also
 
