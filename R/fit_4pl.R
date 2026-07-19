@@ -1,4 +1,4 @@
-# The bayesTLS-analogue fitting facade. fit_4pl() shares bayesTLS::fit_4pl()'s
+# The bayesTLS-analogue fitting function. fit_4pl() shares bayesTLS::fit_4pl()'s
 # user-facing API (the direct CTmax/z formula interface, `by`, `threshold`,
 # `t_ref`, `bounds`, `family`) but fits by maximum likelihood through the freqTLS
 # TMB engine (fit_tls) and returns a `freq_tls` workflow object that the quantity
@@ -73,7 +73,7 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 
 #' Fit the 4PL thermal-load-sensitivity model by maximum likelihood (TMB)
 #'
-#' The frequentist analogue of `bayesTLS::fit_4pl()`. Consumes [standardize_data()]
+#' The frequentist analogue of `bayesTLS::fit_4pl()`. Uses [standardize_data()]
 #' output and fits the single-stage 4PL thermal death-time model, parameterised
 #' directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 #' Returns a `freq_tls` workflow object; uncertainty (Wald / profile / bootstrap)

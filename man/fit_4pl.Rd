@@ -59,7 +59,7 @@ A \code{freq_tls} object: a list with \verb{$fit} (the engine fit), \verb{$data}
 family, grouped, moderators, method).
 }
 \description{
-The frequentist analogue of \code{bayesTLS::fit_4pl()}. Consumes \code{\link[=standardize_data]{standardize_data()}}
+The frequentist analogue of \code{bayesTLS::fit_4pl()}. Uses \code{\link[=standardize_data]{standardize_data()}}
 output and fits the single-stage 4PL thermal death-time model, parameterised
 directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 Returns a \code{freq_tls} workflow object; uncertainty (Wald / profile / bootstrap)
