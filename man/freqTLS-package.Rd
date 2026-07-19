@@ -10,7 +10,7 @@
 Bayesian \code{bayesTLS} package. It fits single-stage four-parameter logistic
 (4PL) thermal-load-sensitivity (thermal death-time) models via Template Model
 Builder (\code{TMB}), parameterised directly in \code{CTmax} and \code{z}
-(thermal sensitivity), so that both headline quantities can be profiled. It
+(thermal sensitivity), so that both quantities can be profiled. It
 returns prior-free Wald, profile-likelihood, or parametric-bootstrap
 confidence intervals for binomial and beta-binomial survival counts and the
 experimental Beta continuous-proportion family. Formula shape effects,
@@ -35,7 +35,7 @@ both packages agree.
 The thermal-load-sensitivity modelling framework and the direct mapping from
 the 4PL midpoint slope to \code{z} and \code{CTmax} are due to Noble, Arnold and Pottier
 (the \code{bayesTLS} package). \code{freqTLS} contributes the TMB maximum-likelihood
-likelihood, the direct \code{CTmax}/\code{log_z} reparameterisation, and the
+likelihood and the
 profile-likelihood machinery. Engineering patterns are adapted from \code{drmTMB}
 (GPL-3) with attribution in the relevant source files.
 }
