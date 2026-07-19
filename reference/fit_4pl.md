@@ -2,7 +2,7 @@
 
 The frequentist analogue of `bayesTLS::fit_4pl()`. Consumes
 [`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md)
-output and fits the single-stage 4PL thermal death-time model,
+output and fits the single-stage 4PL thermal-load-sensitivity model,
 parameterised directly in CTmax and thermal sensitivity (z), via the
 freqTLS TMB engine. Returns a `freq_tls` workflow object; uncertainty
 (Wald / profile / bootstrap) is computed on demand by the quantity
@@ -45,8 +45,10 @@ fit_4pl(
 
   Direct-mode formula interface; see
   [`make_4pl_formula()`](https://itchyshin.github.io/freqTLS/reference/make_4pl_formula.md).
-  Supplying `ctmax`/`z` (or `by`) fits per-group CTmax/z; the two
-  headline formulas must produce the same fixed-effect columns.
+  `by` gives fixed cell means for both `ctmax` and `z`. When `ctmax` and
+  `z` are both supplied, their fixed-effect right-hand sides must
+  produce the same model-matrix columns; their optional random-intercept
+  terms may differ.
 
 - threshold:
 
@@ -62,8 +64,11 @@ fit_4pl(
 
 - t_ref:
 
-  Reference exposure time (in the data's `duration_unit`) at which CTmax
-  is reported. Default 60 (e.g. minutes); use `t_ref = 1` for hours.
+  Positive reference exposure time at which CTmax is reported, expressed
+  in exactly the same unit as the standardised `duration` column. The
+  default `60` means 60 duration units. It is one hour only when
+  `duration_unit = "minutes"`; `t_ref = 1` is one hour only when
+  durations are measured in hours.
 
 - bounds:
 
@@ -105,11 +110,12 @@ model errors can make both packages agree.
 
 ## Before interpretation
 
-Before interpreting the fit, run
-[`check_tls()`](https://itchyshin.github.io/freqTLS/reference/check_tls.md).
-Its help page gives a recovery action for each data-adequacy warning;
+Run
+[`check_tls()`](https://itchyshin.github.io/freqTLS/reference/check_tls.md)
+before interpreting the fit. It gives a concrete recovery action for
+each data-adequacy warning;
 [`vignette("profile-likelihood")`](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md)
-explains strict open profiles and the default bootstrap fallback.
+explains open profiles and the bootstrap fallback.
 
 ## See also
 

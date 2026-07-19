@@ -51,15 +51,20 @@ padded by 0.5 on the log10 scale). `stage1_ok` is their conjunction.
 ## Examples
 
 ``` r
-d <- data.frame(
-  temp = rep(c(30, 34, 38), each = 12),
-  dur  = rep(rep(c(1, 5, 15, 45), 3), times = 3),
-  surv = rbinom(36, 20, 0.5), tot = 20)
-ts_stage1(d, "temp", "dur", "surv", "tot", family = "binomial")
-#> # A tibble: 3 × 8
-#>    temp log10_lt50 se_log10_lt50  slope   phi finite_ok bracket_ok stage1_ok
-#>   <dbl>      <dbl>         <dbl>  <dbl> <dbl> <lgl>     <lgl>      <lgl>    
-#> 1    30      0.186          1.63 -0.120    NA TRUE      TRUE       TRUE     
-#> 2    34      1.87           1.22 -0.203    NA TRUE      TRUE       TRUE     
-#> 3    38      0.302          1.03 -0.173    NA TRUE      TRUE       TRUE     
+d <- simulate_tls(
+  family = "binomial", temps = seq(30, 42, by = 2),
+  times = c(0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100),
+  reps = 4, n = 50, CTmax = 36, z = 4, seed = 42
+)
+ts_stage1(d, "temp", "duration", "survived", "total", family = "binomial")
+#> # A tibble: 7 × 8
+#>    temp log10_lt50 se_log10_lt50 slope   phi finite_ok bracket_ok stage1_ok
+#>   <dbl>      <dbl>         <dbl> <dbl> <dbl> <lgl>     <lgl>      <lgl>    
+#> 1    30     1.52          0.0373 -2.37    NA TRUE      TRUE       TRUE     
+#> 2    32     0.956         0.0307 -2.74    NA TRUE      TRUE       TRUE     
+#> 3    34     0.476         0.0277 -3.27    NA TRUE      TRUE       TRUE     
+#> 4    36     0.0266        0.0290 -2.99    NA TRUE      TRUE       TRUE     
+#> 5    38    -0.468         0.0289 -3.01    NA TRUE      TRUE       TRUE     
+#> 6    40    -0.974         0.0302 -2.83    NA TRUE      TRUE       TRUE     
+#> 7    42    -1.45          0.0378 -2.24    NA TRUE      TRUE       TRUE     
 ```

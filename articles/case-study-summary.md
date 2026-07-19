@@ -64,6 +64,4 @@ columns above.
 freqTLS adds Confidence Eyes, profile/Wald/bootstrap confidence
 intervals, likelihood contrasts, and explicit identifiability
 diagnostics. Those are frequentist extensions to the shared scientific
-examples, not substitute case studies. Brown shrimp and life-stage
-zebrafish remain unpublished benchmark-only fixtures and are absent from
-this active summary.
+examples, not substitute case studies.

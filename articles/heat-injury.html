@@ -97,6 +97,8 @@ estimate a repair process.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"beta_binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                    phi <span class="op">=</span> <span class="fl">50</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
+<span><span class="co"># In this synthetic example, duration and trace time are both hours. No unit</span></span>
+<span><span class="co"># conversion occurs inside fit_tls() or predict_heat_injury().</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">sim</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
 <span>               family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/diagnose_tdt_fit.html">diagnose_tdt_fit</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
@@ -110,6 +112,10 @@ estimate a repair process.</p>
 <span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">96</span>, by <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">trace</span><span class="op">$</span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fl">27</span> <span class="op">+</span> <span class="fl">6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="va">trace</span><span class="op">$</span><span class="va">time</span> <span class="op">-</span> <span class="fl">6</span><span class="op">)</span> <span class="op">/</span> <span class="fl">24</span><span class="op">)</span></span></code></pre></div>
+<p>Here <code>tref = 1</code> is one hour, and <code>trace$time</code>
+is also in hours. The trace time, fitted duration, and reference time
+must use the same unit because heat-injury damage is accumulated per
+time unit.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">injury</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_heat_injury.html">predict_heat_injury</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">trace</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">injury</span><span class="op">)</span></span>
@@ -128,7 +134,8 @@ and the user-supplied trace. <code><a href="../reference/heat_injury_envelope.ht
 parametric-bootstrap uncertainty from refitted curves. A repair rate
 supplied by the user remains an illustrative scenario: freqTLS has not
 fitted that rate from damage/recovery data. Use bayesTLS for its broader
-Bayesian heat-injury and repair workflow.</p>
+Bayesian heat-injury and repair workflow; its posterior intervals are
+distinct from freqTLS confidence intervals.</p>
   </main>
 </div>
 

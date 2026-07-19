@@ -94,27 +94,29 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette is for a thermal biologist deciding
 <strong>how</strong> to fit a thermal-load- sensitivity (TLS) model, not
-just <strong>which package</strong>. <code>freqTLS</code> (maximum
-likelihood, profile-likelihood intervals) and <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>
-(Bayesian, posterior intervals) fit the <em>same</em> four-parameter
-logistic thermal-death-time model. They are complementary lenses on one
-model, and the choice between them is really a choice between two ways
-of handling the same hard realities: weak data, weak identifiability,
-and non-convergence. The aim here is an honest account of the trade-offs
-— including the uncomfortable fact, developed at the end, that the
-“prior-free” frequentist path quietly uses prior-like machinery of its
-own.</p>
+just <strong>which package</strong>. The modelling framework was
+introduced by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier
+in <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>.
+<code>freqTLS</code> uses maximum likelihood and profile-likelihood
+confidence intervals; <code>bayesTLS</code> uses Bayesian posterior
+inference. For a matched 4PL specification, they can describe the same
+curve, but they are not interchangeable interfaces. The aim here is an
+honest account of trade-offs under weak data, weak identification, and
+non-convergence.</p>
 <p>It builds <strong>without Stan</strong>: the <code>freqTLS</code>
 fits run live, while the Bayesian comparison and the coverage evidence
 are read from cached simulations rather than recomputed.</p>
 <div class="section level2">
 <h2 id="one-model-two-inferential-philosophies">One model, two inferential philosophies<a class="anchor" aria-label="anchor" href="#one-model-two-inferential-philosophies"></a>
 </h2>
-<p>Both packages fit survival as a 4PL curve in
-<code>log10(duration)</code> whose midpoint moves with temperature
-through <code>CTmax</code> (the critical thermal maximum) and
-<code>z</code> (thermal sensitivity). They differ only in <strong>how
-they turn data into a statement about the parameters</strong>:</p>
+<p>In the matched relative, constant-shape configuration, both packages
+fit survival as a 4PL curve in <code>log10(duration)</code> whose
+midpoint moves with temperature through <code>CTmax</code> (the critical
+thermal maximum at <code>tref</code>) and <code>z</code> (thermal
+sensitivity, degrees Celsius per decade of duration). Current
+<code>bayesTLS</code> also offers direct CTmax/z parameterisation and
+richer shape models. The packages differ in <strong>how they turn data
+into a statement about the parameters</strong>:</p>
 <ul>
 <li>
 <strong><code>freqTLS</code> (likelihood).</strong> It maximises the
@@ -130,8 +132,9 @@ interval</strong> — a probability statement about the parameter,
 conditional on the prior.</li>
 </ul>
 <p>On strong synthetic data these often agree closely. The canonical
-paired comparison first locks the same data, formulas, threshold, and
-resolved reference time, then reports the actual difference; see
+paired comparison first locks the same data, response family, formulas,
+bounds, grouping structure, threshold, and resolved reference time, then
+reports the actual difference; see
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>. They can diverge exactly
 where the data are weak and the prior starts to do the work — which is
 precisely where you most need to know what is data and what is

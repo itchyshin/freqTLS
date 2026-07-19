@@ -55,6 +55,9 @@ plot_heat_injury(
   [`derive_ctmax()`](https://itchyshin.github.io/freqTLS/reference/derive_ctmax.md)
   and
   [`derive_lt()`](https://itchyshin.github.io/freqTLS/reference/derive_lt.md).
+  For a bootstrap envelope the target must also be attainable in every
+  converged bootstrap refit; otherwise the function aborts rather than
+  clipping an invalid refit's threshold.
 
 - t_c:
 

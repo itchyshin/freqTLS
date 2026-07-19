@@ -3,13 +3,14 @@
 This vignette is the mathematical reference for `freqTLS`: the
 four-parameter logistic (4PL) thermal death-time curve, the direct
 `CTmax`/`z` parameterisation, the disjoint-bounds asymptote transform,
-the relative-versus-absolute survival threshold, and the exact algebraic
+the relative-versus-absolute survival threshold, and the algebraic
 bridge to [`bayesTLS`](https://github.com/daniel1noble/bayesTLS). The
-package’s implementation contract is tested against these equations;
-this vignette mirrors it and checks the bridge identities numerically
-(no Stan required). If you already trust that freqTLS and bayesTLS
-target the same fitted curve, you can skip straight to the worked
-examples in
+thermal-load-sensitivity framework was introduced by Daniel W. A. Noble,
+Pieter A. Arnold, and Patrice Pottier in `bayesTLS`. The package’s
+implementation contract is tested against these equations; this vignette
+mirrors it and checks the bridge identities numerically (no Stan
+required). If you already understand the matched-configuration bridge to
+bayesTLS, you can skip straight to the worked examples in
 [`vignette("freqTLS")`](https://itchyshin.github.io/freqTLS/articles/freqTLS.md)
 and
 [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md).
@@ -26,12 +27,13 @@ Survival probability follows the descending four-parameter logistic
 
 ``` math
 p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10} d - \mathrm{mid})\big)},
-\qquad k = \exp(\log k).
+\qquad k = \exp(\ln k).
 ```
 
 - $`\mathrm{low}`$ is the lower asymptote (survival at long exposures),
 - $`\mathrm{up}`$ is the upper asymptote (survival at short exposures),
-- $`k > 0`$ is the steepness, and
+- $`k > 0`$ is the steepness; its internal coordinate is the natural
+  logarithm $`\ln k`$, and
 - $`\mathrm{mid}`$ is the midpoint on the $`\log_{10} d`$ axis.
 
 Survival is high at short durations and falls toward $`\mathrm{low}`$ at
@@ -47,7 +49,8 @@ $`\mathrm{CTmax}_i`$ a function of the design,
 \mathrm{mid}_i = \log_{10}(t_\mathrm{ref}) - \frac{T_i - \mathrm{CTmax}_i}{z_i}.
 ```
 
-Two properties make this the right coordinate system for profiling:
+This parameterisation makes the two biological quantities direct model
+parameters, so profile likelihood can constrain them directly:
 
 - At $`T_i = \mathrm{CTmax}_i`$, the midpoint is exactly
   $`\log_{10}(t_\mathrm{ref})`$ — i.e. `CTmax` is the temperature at
@@ -58,7 +61,7 @@ Two properties make this the right coordinate system for profiling:
   temperature per decade ($`\log_{10}`$ unit) of exposure duration — the
   thermal sensitivity (degrees Celsius per decade).
 
-Because `CTmax` and `z` are model coordinates (not derived afterwards),
+Because `CTmax` and `z` are model parameters (not derived afterwards),
 each can be profiled directly. We can check the two properties on a
 fitted model:
 
@@ -106,19 +109,18 @@ unconstrained and smooth, which keeps the optimiser and the profiles
 well-behaved, and it matches bayesTLS exactly so the two packages share
 the asymptote contract.
 
-Under this parameterisation `up` has its own coordinate
-$`\beta_\mathrm{up}`$, just like `low`. `freqTLS` nonetheless reports
-`up` with the delta-method Wald interval: its profile path is not yet
-wired for $`\beta_\mathrm{up}`$ (the work is symmetric with `low`,
-simply not yet implemented), and it says so. Every other parameter is
-profiled on its single coordinate. The full table of coordinates and
-links:
+Under this parameterisation `up` is fitted through its own coordinate
+$`\beta_\mathrm{up}`$, just as `low` is fitted through
+$`\beta_\mathrm{low}`$. The limitation concerns interval computation,
+not fitting: freqTLS does not yet profile $`\beta_\mathrm{up}`$, so it
+reports a delta-method Wald interval for `up` (or a bootstrap interval
+when requested). The full table of parameters and links:
 
 | Natural parameter     | Internal coordinate | Link                             |
 |-----------------------|---------------------|----------------------------------|
 | `low`                 | `beta_low`          | logit (onto the lower half-band) |
 | `up`                  | `beta_up`           | logit (onto the upper half-band) |
-| `k`                   | `beta_logk`         | log                              |
+| `k`                   | `beta_logk`         | natural log (`ln`)               |
 | `CTmax` (per group)   | `beta_CT[g]`        | identity                         |
 | `z` (per group)       | `beta_logz[g]`      | log                              |
 | `phi` (beta-binomial) | `log_phi`           | log                              |
@@ -126,11 +128,14 @@ links:
 ## Relative versus absolute thresholds
 
 A “lethal time” such as the LT$`_{50}`$ is the duration at which
-survival crosses a target probability. There are two conventions:
+survival crosses a target probability. There are two conventions. A
+**relative threshold** is a position between the fitted asymptotes; an
+**absolute threshold** is a fixed survival probability on the response
+scale:
 
 - **Relative** (the `freqTLS` default): the target is interpreted
-  relative to the fitted asymptotes, so $`p = 0.5`$ means halfway
-  between `low` and `up` — which is exactly the 4PL midpoint
+  relative to the fitted asymptotes, so relative fraction $`0.5`$ means
+  halfway between `low` and `up` — which is exactly the 4PL midpoint
   $`\mathrm{mid}`$. This is the configuration that matches the
   `bayesTLS` `target_surv = "relative"` setting and is what the
   benchmark uses (see
@@ -139,10 +144,12 @@ survival crosses a target probability. There are two conventions:
   requiring $`p`$ to lie strictly between `low` and `up`.
 
 [`derive_lt()`](https://itchyshin.github.io/freqTLS/reference/derive_lt.md)
-solves the 4PL for the crossing duration at a temperature, and
+solves the 4PL for the duration at which survival reaches its numeric
+absolute probability `p`, which must lie strictly between `low` and
+`up`. At the relative midpoint, use `p = (low + up) / 2`;
 [`plot_tdt_curve()`](https://itchyshin.github.io/freqTLS/reference/plot_tdt_curve.md)
-plots the relative midpoint crossing against temperature. On the
-$`\log_{10} d`$ axis the relative-threshold crossing is the line
+uses that midpoint by default and can plot another valid absolute `p`.
+On the $`\log_{10} d`$ axis the relative-threshold crossing is the line
 $`\log_{10} d = \mathrm{mid}(T) = \log_{10}(t_\mathrm{ref}) - (T - \mathrm{CTmax})/z`$,
 whose slope is $`-1/z`$ — the classic log-linear thermal death-time
 line.
@@ -156,9 +163,9 @@ derive_lt(fit, p = 0.5, temp = c(35, 36, 37))
 
 ## The bridge to bayesTLS
 
-`bayesTLS` fits the same 4PL but, in its constant-shape configuration
-(`temp_effects = "mid"`), parameterises the midpoint as a line in
-temperature,
+For the matched constant-shape midpoint configuration
+(`temp_effects = "mid"`), `bayesTLS` parameterises the midpoint as a
+line in temperature,
 
 ``` math
 \mathrm{mid}(T) = b_{\mathrm{mid,Intercept}} + b_{\mathrm{mid},T_c}\,(T - \bar T),
@@ -188,13 +195,15 @@ z = -\frac{1}{\beta_1}, \qquad
 \mathrm{CTmax} = \bar T + \frac{\log_{10}(t_\mathrm{ref}) - \beta_0}{\beta_1}.
 ```
 
-These are exactly the `bayesTLS` identities. The reparameterisation
-shares `(low, up, k)` and is smooth and invertible (the Jacobian is
-nonsingular while `z` is finite), so the two models have the **same
-likelihood, the same fitted curve, and the same maximum-likelihood
-estimate** under the matched constant-shape, relative-threshold
-configuration. The only difference is that `CTmax` and `z` are
-coordinates in `freqTLS`, hence directly profile-able.
+These are the midpoint-line identities used by `bayesTLS`. The
+reparameterisation shares `(low, up, k)` and is smooth and invertible
+while `z` is finite. Therefore a matched constant-shape,
+relative-threshold likelihood has the same fitted curve under either
+coordinate system. Current `bayesTLS` also offers direct CTmax/z
+parameterisation and an absolute-threshold option; numerical comparisons
+must still match data, formulas, bounds, threshold, and random-effect
+structure. freqTLS’s distinct contribution is maximum-likelihood fitting
+with direct profile-likelihood targets.
 
 We can verify the bridge numerically without `bayesTLS`. Fit the
 midpoint line directly from the model’s own predicted midpoints (linear

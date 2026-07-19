@@ -2,9 +2,9 @@
 
 The frequentist analogue of `bayesTLS::tls()`. Reads a
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
-(`freq_tls`) fit and returns the headline thermal-death-time quantities
-— thermal sensitivity `z` and `CTmax` — as point estimates with
-confidence intervals, one row per group when the fit is grouped.
+(`freq_tls`) fit and returns the headline thermal-load-sensitivity
+quantities — thermal sensitivity `z` and `CTmax` — as point estimates
+with confidence intervals, one row per group when the fit is grouped.
 Uncertainty uses the engine's profile-likelihood intervals by default
 (or Wald / bootstrap via `method`).
 
@@ -47,14 +47,20 @@ tls_tcrit(object, ...)
 
 - params:
 
-  `"all"` (z and CTmax, the default), `"z"`, or `"ctmax"`.
+  `"all"` (z and CTmax, the default), `"z"`, or `"ctmax"`. This selects
+  only the returned headline quantities; use
+  [`tdt_parameter_table()`](https://itchyshin.github.io/freqTLS/reference/tdt_parameter_table.md)
+  or
+  [`get_shape()`](https://itchyshin.github.io/freqTLS/reference/get_shape.md)
+  for `low`, `up`, and `k`.
 
 - target_surv:
 
   Survival threshold for CTmax: `"relative"` (the curve midpoint, the
   default), `"absolute"` (50% survival), or a number in `(0, 1)` for an
-  LTx. Non-relative thresholds and `lethal` are derived per bootstrap
-  replicate via
+  LTx. An absolute target must lie strictly between the fitted
+  asymptotes for every reported group. Non-relative thresholds and
+  `lethal` are derived per bootstrap replicate via
   [`extract_tdt()`](https://itchyshin.github.io/freqTLS/reference/extract_tdt.md).
 
 - lethal:

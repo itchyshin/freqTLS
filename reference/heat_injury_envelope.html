@@ -128,7 +128,10 @@ fit is grouped).</p></dd>
 <dd><p>Optional absolute survival threshold defining one lethal
 dose: a single probability strictly between the fitted lower and upper
 asymptotes. <code>NULL</code> (default) uses the project-default relative threshold (the
-curve midpoint <code>(low + up) / 2</code>), matching <code><a href="derive_ctmax.html">derive_ctmax()</a></code> and <code><a href="derive_lt.html">derive_lt()</a></code>.</p></dd>
+curve midpoint <code>(low + up) / 2</code>), matching <code><a href="derive_ctmax.html">derive_ctmax()</a></code> and <code><a href="derive_lt.html">derive_lt()</a></code>.
+For a bootstrap envelope the target must also be attainable in every
+converged bootstrap refit; otherwise the function aborts rather than clipping
+an invalid refit's threshold.</p></dd>
 
 
 <dt id="arg-t-c">t_c<a class="anchor" aria-label="anchor" href="#arg-t-c"></a></dt>

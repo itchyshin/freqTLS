@@ -14,7 +14,7 @@ interpretation. Independently refit important analyses with
 cross-check, not proof of correctness; shared mistakes can make both
 packages agree.
 
-## Fair-comparison contract
+## Comparison scope
 
 A numerical difference is interpretable only when all of the following
 are identical:
@@ -26,18 +26,17 @@ are identical:
 5.  resolved reference-time unit;
 6.  relative or absolute threshold and reported estimand.
 
-The pinned baseline is the [`bayesTLS`
+The comparison uses the pinned [`bayesTLS`
 supplement](https://daniel1noble.github.io/bayesTLS/) rendered
 2026-07-14 from commit
 [`76510412`](https://github.com/daniel1noble/bayesTLS/tree/76510412e06c594c96894a1baba1f0e1a34a5aea).
 
-## Pinned comparator evidence
+## Reproducibility record
 
-The curated cache was built on Totoro with four chains per fit, bounded
-parallelism, and `OPENBLAS_NUM_THREADS=1`. Raw posterior fits remain
-outside the repository. The cache records exact analysis hashes,
-formulas, filters, thresholds, reference times, seeds, package versions,
-both source commits, and sampler diagnostics.
+The curated cache records the exact analysis hashes, formulas, filters,
+thresholds, reference times, source versions, and sampler diagnostics.
+The full rebuild and publication procedure is in
+`docs/design/48-canonical-comparator-cache.md`.
 
 ``` r
 
@@ -199,8 +198,11 @@ All displayed ML fits converged with a positive-definite Hessian and
 passed the package’s raw-gradient gate. The interval method for the
 direct-coordinate rows below is Wald; the all-age aphid cell values and
 mortality absolute-LT50 values are point predictions and are labelled
-accordingly. Shape-identification warnings remain visible in the
-organism-specific articles.
+accordingly. The organism-specific articles show the
+shape-identification warnings: temperature-varying `low`, `up`, or `k`
+can be weakly identified, so readers should inspect
+[`check_tls()`](https://itchyshin.github.io/freqTLS/reference/check_tls.md)
+before interpreting a shape effect.
 
 ``` r
 
@@ -233,11 +235,11 @@ rownames(freq_diagnostics) <- NULL
 freq_diagnostics
 #>                case_id converged pd_hessian max_abs_gradient gradient_pass
 #> 1     zebrafish_oxygen      TRUE       TRUE     1.948692e-04          TRUE
-#> 2           aphid_age6      TRUE       TRUE     2.091929e-06          TRUE
-#> 3        aphid_all_age      TRUE       TRUE     9.832409e-06          TRUE
-#> 4         snowgum_psii      TRUE       TRUE     2.898515e-04          TRUE
-#> 5 drosophila_mortality      TRUE       TRUE     7.996796e-05          TRUE
-#> 6     drosophila_awake      TRUE       TRUE     1.204766e-05          TRUE
+#> 2           aphid_age6      TRUE       TRUE     1.076456e-05          TRUE
+#> 3        aphid_all_age      TRUE       TRUE     1.962863e-05          TRUE
+#> 4         snowgum_psii      TRUE       TRUE     2.898513e-04          TRUE
+#> 5 drosophila_mortality      TRUE       TRUE     7.497304e-05          TRUE
+#> 6     drosophila_awake      TRUE       TRUE     1.202229e-05          TRUE
 #>                                     interval_method
 #> 1                      Wald 95% confidence interval
 #> 2                      Wald 95% confidence interval
@@ -249,11 +251,11 @@ freq_diagnostics
 
 ## Actual paired differences
 
-The primary table compares the frequentist point estimate with the
-Bayesian posterior median. Positive values mean the freqTLS estimate is
-larger. The interval columns are shown side by side without pretending
-that a confidence interval and a credible interval have the same
-interpretation.
+The primary table puts the maximum-likelihood estimate and its Wald
+confidence interval beside the Bayesian posterior median and credible
+interval. Interval widths are descriptive, method-specific quantities: a
+confidence-interval width and credible-interval width are not
+interchangeable measures of uncertainty.
 
 ``` r
 
@@ -317,71 +319,49 @@ names(paired)[names(paired) == "lower"] <- "bayes_lower"
 names(paired)[names(paired) == "upper"] <- "bayes_upper"
 names(paired)[names(paired) == "interval_method"] <- "bayes_interval"
 paired$difference_freq_minus_bayes <- paired$freq_estimate - paired$bayes_median
+paired$freq_width <- paired$freq_upper - paired$freq_lower
+paired$bayes_width <- paired$bayes_upper - paired$bayes_lower
 stopifnot(nrow(paired) == 18L)
 
-paired[c(
+paired_display <- paired[c(
   "case_id", "endpoint", "threshold", "t_ref", "group", "parameter",
   "freq_estimate", "freq_lower", "freq_upper", "bayes_median",
-  "bayes_lower", "bayes_upper", "difference_freq_minus_bayes"
+  "bayes_lower", "bayes_upper", "freq_width", "bayes_width",
+  "difference_freq_minus_bayes"
 )]
-#>             case_id                          endpoint threshold t_ref
-#> 1  zebrafish_oxygen                   survival counts  relative    60
-#> 2  zebrafish_oxygen                   survival counts  relative    60
-#> 3  zebrafish_oxygen                   survival counts  relative    60
-#> 4  zebrafish_oxygen                   survival counts  relative    60
-#> 5        aphid_age6                   survival counts  relative    60
-#> 6        aphid_age6                   survival counts  relative    60
-#> 7        aphid_age6                   survival counts  relative    60
-#> 8        aphid_age6                   survival counts  relative    60
-#> 9        aphid_age6                   survival counts  relative    60
-#> 10       aphid_age6                   survival counts  relative    60
-#> 11     snowgum_psii retained PSII function proportion  relative    60
-#> 12     snowgum_psii retained PSII function proportion  relative    60
-#> 13     snowgum_psii retained PSII function proportion  relative    60
-#> 14     snowgum_psii retained PSII function proportion  relative    60
-#> 15 drosophila_awake     awake counts (missing t_coma)  relative    60
-#> 16 drosophila_awake     awake counts (missing t_coma)  relative    60
-#> 17 drosophila_awake     awake counts (missing t_coma)  relative    60
-#> 18 drosophila_awake     awake counts (missing t_coma)  relative    60
-#>         group parameter freq_estimate freq_lower freq_upper bayes_median
-#> 1    normoxia     CTmax     38.739774  38.431850  39.047698    38.889462
-#> 2   hyperoxia     CTmax     39.301410  39.059733  39.543086    39.348350
-#> 3    normoxia         z      6.005753   4.371361   8.251220     5.586819
-#> 4   hyperoxia         z      2.500556   2.139219   2.922927     2.488053
-#> 5  M_dirhodum     CTmax     35.215425  35.025354  35.405496    35.172826
-#> 6    S_avenae     CTmax     36.527458  36.431472  36.623444    36.508723
-#> 7      R_padi     CTmax     37.169857  37.063139  37.276575    37.145179
-#> 8  M_dirhodum         z      4.747335   4.505357   5.002309     4.775438
-#> 9    S_avenae         z      3.609898   3.460681   3.765549     3.623531
-#> 10     R_padi         z      3.965377   3.698215   4.251839     3.958519
-#> 11       Dark     CTmax     45.720851  45.178128  46.263574    45.694884
-#> 12      Light     CTmax     44.075183  43.557764  44.592603    44.053744
-#> 13       Dark         z      4.707002   4.289897   5.164663     4.673517
-#> 14      Light         z      3.640602   3.201761   4.139591     3.624133
-#> 15          F     CTmax     36.497021  36.392973  36.601068    36.480047
-#> 16          M     CTmax     36.295991  36.203030  36.388953    36.269671
-#> 17          F         z      2.432835   2.288082   2.586746     2.413440
-#> 18          M         z      2.393259   2.261891   2.532257     2.404374
-#>    bayes_lower bayes_upper difference_freq_minus_bayes
-#> 1    38.557733   39.374728                 -0.14968745
-#> 2    39.169796   39.499437                 -0.04694048
-#> 3     4.055890    7.754303                  0.41893351
-#> 4     2.048057    2.932714                  0.01250305
-#> 5    34.971922   35.352795                  0.04259915
-#> 6    36.410246   36.599680                  0.01873529
-#> 7    37.043699   37.250706                  0.02467830
-#> 8     4.529840    5.043446                 -0.02810253
-#> 9     3.470673    3.780992                 -0.01363301
-#> 10    3.685519    4.247040                  0.00685783
-#> 11   45.045874   46.290603                  0.02596675
-#> 12   43.433298   44.697975                  0.02143955
-#> 13    4.229605    5.122288                  0.03348486
-#> 14    3.178338    4.105518                  0.01646914
-#> 15   36.362822   36.586969                  0.01697342
-#> 16   36.158873   36.372444                  0.02632053
-#> 17    2.253667    2.581269                  0.01939477
-#> 18    2.259329    2.568861                 -0.01111458
+names(paired_display) <- c(
+  "Case", "Endpoint", "Threshold", "tref", "Group", "Quantity",
+  "ML estimate", "ML CI lower", "ML CI upper", "Bayes median",
+  "Bayes CrI lower", "Bayes CrI upper", "ML CI width", "Bayes CrI width",
+  "ML minus Bayes"
+)
+knitr::kable(paired_display, digits = 3,
+             caption = "Matched quantities: ML Wald confidence intervals and Bayesian credible intervals remain labelled separately.")
 ```
+
+| Case | Endpoint | Threshold | tref | Group | Quantity | ML estimate | ML CI lower | ML CI upper | Bayes median | Bayes CrI lower | Bayes CrI upper | ML CI width | Bayes CrI width | ML minus Bayes |
+|:---|:---|:---|---:|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| zebrafish_oxygen | survival counts | relative | 60 | normoxia | CTmax | 38.740 | 38.432 | 39.048 | 38.889 | 38.558 | 39.375 | 0.616 | 0.817 | -0.150 |
+| zebrafish_oxygen | survival counts | relative | 60 | hyperoxia | CTmax | 39.301 | 39.060 | 39.543 | 39.348 | 39.170 | 39.499 | 0.483 | 0.330 | -0.047 |
+| zebrafish_oxygen | survival counts | relative | 60 | normoxia | z | 6.006 | 4.371 | 8.251 | 5.587 | 4.056 | 7.754 | 3.880 | 3.698 | 0.419 |
+| zebrafish_oxygen | survival counts | relative | 60 | hyperoxia | z | 2.501 | 2.139 | 2.923 | 2.488 | 2.048 | 2.933 | 0.784 | 0.885 | 0.013 |
+| aphid_age6 | survival counts | relative | 60 | M_dirhodum | CTmax | 35.215 | 35.025 | 35.405 | 35.173 | 34.972 | 35.353 | 0.380 | 0.381 | 0.043 |
+| aphid_age6 | survival counts | relative | 60 | S_avenae | CTmax | 36.527 | 36.431 | 36.623 | 36.509 | 36.410 | 36.600 | 0.192 | 0.189 | 0.019 |
+| aphid_age6 | survival counts | relative | 60 | R_padi | CTmax | 37.170 | 37.063 | 37.277 | 37.145 | 37.044 | 37.251 | 0.213 | 0.207 | 0.025 |
+| aphid_age6 | survival counts | relative | 60 | M_dirhodum | z | 4.747 | 4.505 | 5.002 | 4.775 | 4.530 | 5.043 | 0.497 | 0.514 | -0.028 |
+| aphid_age6 | survival counts | relative | 60 | S_avenae | z | 3.610 | 3.461 | 3.766 | 3.624 | 3.471 | 3.781 | 0.305 | 0.310 | -0.014 |
+| aphid_age6 | survival counts | relative | 60 | R_padi | z | 3.965 | 3.698 | 4.252 | 3.959 | 3.686 | 4.247 | 0.554 | 0.562 | 0.007 |
+| snowgum_psii | retained PSII function proportion | relative | 60 | Dark | CTmax | 45.721 | 45.178 | 46.264 | 45.695 | 45.046 | 46.291 | 1.085 | 1.245 | 0.026 |
+| snowgum_psii | retained PSII function proportion | relative | 60 | Light | CTmax | 44.075 | 43.558 | 44.593 | 44.054 | 43.433 | 44.698 | 1.035 | 1.265 | 0.021 |
+| snowgum_psii | retained PSII function proportion | relative | 60 | Dark | z | 4.707 | 4.290 | 5.165 | 4.674 | 4.230 | 5.122 | 0.875 | 0.893 | 0.033 |
+| snowgum_psii | retained PSII function proportion | relative | 60 | Light | z | 3.641 | 3.202 | 4.140 | 3.624 | 3.178 | 4.106 | 0.938 | 0.927 | 0.016 |
+| drosophila_awake | awake counts (missing t_coma) | relative | 60 | F | CTmax | 36.497 | 36.393 | 36.601 | 36.480 | 36.363 | 36.587 | 0.208 | 0.224 | 0.017 |
+| drosophila_awake | awake counts (missing t_coma) | relative | 60 | M | CTmax | 36.296 | 36.203 | 36.389 | 36.270 | 36.159 | 36.372 | 0.186 | 0.214 | 0.026 |
+| drosophila_awake | awake counts (missing t_coma) | relative | 60 | F | z | 2.433 | 2.288 | 2.587 | 2.413 | 2.254 | 2.581 | 0.299 | 0.328 | 0.019 |
+| drosophila_awake | awake counts (missing t_coma) | relative | 60 | M | z | 2.393 | 2.262 | 2.532 | 2.404 | 2.259 | 2.569 | 0.270 | 0.310 | -0.011 |
+
+Matched quantities: ML Wald confidence intervals and Bayesian credible
+intervals remain labelled separately. {.table}
 
 The age-six aphid row is also one cell of the all-age extension, but the
 two fits are intentionally distinct. For all nine species-by-age cells,
@@ -422,21 +402,21 @@ aggregate(
   FUN = max
 )
 #>   parameter abs(difference_freq_minus_bayes)
-#> 1     CTmax                       0.02725888
-#> 2         z                       0.02246847
+#> 1     CTmax                       0.02725904
+#> 2         z                       0.02246866
 ```
 
 Snow-gum is a paired refit of the locked shared-shape analogue. It is
 not a claim that freqTLS reproduces the richer recovery-by-temperature
 shape model displayed in the pinned supplement.
 
-### Drosophila mortality: do not mix estimands
+### Drosophila mortality: match the reported estimand
 
-The pinned mortality summary uses the absolute 50% threshold. The direct
-freqTLS `CTmax` and `z` coordinates are relative-midpoint quantities, so
-they must not be subtracted from the Bayesian absolute values. Only the
-absolute 240-minute LT50 point is comparable without silently changing
-the estimand.
+The pinned mortality summary uses the absolute 50% threshold. freqTLS
+fits the relative direct-coordinate backbone, then can derive the same
+absolute 240-minute LT50 by solving the fitted survival curve. This
+article compares that shared point estimand; it does not relabel
+relative `CTmax` or `z` as absolute quantities.
 
 ``` r
 
@@ -491,11 +471,12 @@ mort_compare
 #> 2                  0.01005650 none: exact-model bootstrap unstable
 ```
 
-The Bayesian cache also contains absolute-threshold `z`. freqTLS does
-not print an allegedly equivalent absolute `z` from this
-temperature-varying shape model; its direct `z` remains the relative
-coordinate. The mortality case article shows that relative result
-explicitly.
+The Bayesian cache also contains absolute-threshold `z`. In this
+temperature- varying-shape model, freqTLS does not return a
+temperature-specific local absolute `z`: its direct `z` is the
+relative-midpoint backbone sensitivity. The mortality case article
+reports that relative `z` explicitly and limits the absolute comparison
+to the four-hour LT50 point.
 
 ## What agreement means
 
@@ -516,7 +497,4 @@ heat-injury scenarios remain separate extension pages with synthetic
 examples.
 
 Censored-time, hurdle-productivity, posterior inference, and fitted
-repair dynamics remain bayesTLS-only. Brown shrimp and life-stage
-zebrafish remain unpublished benchmark-only compatibility fixtures and
-do not enter this comparison, site navigation, search results, sitemap,
-or current summaries.
+repair dynamics remain bayesTLS-only.

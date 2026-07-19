@@ -35,7 +35,9 @@ extract_tdt(
 - target_surv:
 
   `"relative"` (curve midpoint, default), `"absolute"` (50% survival),
-  or a numeric survival level in `(0, 1)` for an LTx CTmax.
+  or a numeric survival level in `(0, 1)` for an LTx CTmax. An absolute
+  target must lie strictly between the fitted asymptotes for every
+  reported group; otherwise no finite crossing exists.
 
 - lethal:
 
@@ -70,7 +72,10 @@ A list with `$z`, `$CTmax`, (`$T_crit` when `lethal`), and `$meta`. Each
 quantity is `list(draws = <tibble>, summary = <tibble>)`. Column names
 follow bayesTLS: `z_median/z_lower/z_upper` for z;
 `temp_median/temp_lower/ temp_upper` for CTmax and T_crit; per-draw
-value columns are `z` / `temp`.
+value columns are `z` / `temp`. `$meta$tref` records the reference time;
+`$meta$duration_unit` is retained when the input is a
+[`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
+workflow.
 
 ## See also
 

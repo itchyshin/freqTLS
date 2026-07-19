@@ -4,8 +4,9 @@ Translates the bayesTLS-style direct-mode arguments (`ctmax`, `z`, `up`,
 `low`, `k`, `by`) into the engine's
 [`tls_bf()`](https://itchyshin.github.io/freqTLS/reference/tls_bf.md)
 `tls_formula` object. Supplying a `ctmax` and/or `z` formula is the
-direct parameterisation; `by` is shorthand for grouping CTmax and z by a
-single moderator (`~ 0 + by`).
+direct parameterisation; `by` is shorthand for fixed cell means of CTmax
+and z by one moderator (`~ 0 + by`); it does not add random effects or
+modify the shape formulas.
 
 ## Usage
 
@@ -33,8 +34,9 @@ make_4pl_formula(
 
 - by:
 
-  Optional single moderator column name; shorthand for
-  `ctmax = z = ~ 0 + by` when those are not given explicitly.
+  Optional single, non-missing moderator column name. It is shorthand
+  for `ctmax = z = ~ 0 + by` when those are not given explicitly; it
+  does not add random effects or modify `low`, `up`, or `k`.
 
 - family:
 

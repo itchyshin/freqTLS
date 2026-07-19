@@ -53,6 +53,9 @@ predict_heat_injury(
   [`derive_ctmax()`](https://itchyshin.github.io/freqTLS/reference/derive_ctmax.md)
   and
   [`derive_lt()`](https://itchyshin.github.io/freqTLS/reference/derive_lt.md).
+  For a bootstrap envelope the target must also be attainable in every
+  converged bootstrap refit; otherwise the function aborts rather than
+  clipping an invalid refit's threshold.
 
 - t_c:
 
@@ -104,7 +107,9 @@ unit** (the damage rate is per that unit). With `irreversible = TRUE`
 (default) survival is monotone non-increasing. A damage cutoff `t_c`
 (for example from
 [`derive_tcrit()`](https://itchyshin.github.io/freqTLS/reference/derive_tcrit.md))
-sets the damage rate to zero at or below `t_c`.
+sets the damage rate to zero at or below `t_c`. Heat-injury prediction
+currently requires shared fixed-effect shape formulas; a varying shape
+would need to be re-evaluated along the temperature trace.
 
 This integrator is forward Euler (left-endpoint, per actual step), not
 the single-`dt` scheme some implementations use; irregular traces are

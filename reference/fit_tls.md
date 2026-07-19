@@ -1,12 +1,16 @@
 # Fit a single-stage 4PL thermal-load-sensitivity model by maximum likelihood
 
 `fit_tls()` fits the descending four-parameter logistic (4PL) thermal
-death-time model to survival-count data, parameterised **directly in
-`CTmax` and `z`** (thermal sensitivity) so that both headline quantities
-can be profiled. Survival is modelled as a function of
-`log10(duration)`; the midpoint moves with temperature through `CTmax`
-and `z` (see
+death-time model to survival-count data, parameterised \*\*directly in
+`CTmax` (the critical thermal maximum at the reference time `tref`) and
+`z` (thermal sensitivity, degrees Celsius per decade of duration) so
+that both headline quantities can be profiled. Survival is modelled as a
+function of `log10(duration)`; the midpoint moves with temperature
+through `CTmax` and `z` (see
 [`vignette("model-math")`](https://itchyshin.github.io/freqTLS/articles/model-math.md)).
+The thermal-load-sensitivity modelling framework was introduced by
+Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in
+[bayesTLS](https://daniel1noble.github.io/bayesTLS/).
 
 ## Usage
 

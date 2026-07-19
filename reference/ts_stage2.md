@@ -1,10 +1,16 @@
 # Stage 2 of the classical two-stage TDT pipeline
 
-Regresses Stage-1 `log10(LT50)` on assay temperature by ordinary least
-squares and derives the classical quantities. `z = -1/slope`;
-`CTmax(t_ref) = (log10(t_ref) - intercept) / slope`; `T_crit` follows
-the rate-multiplier definition,
-`CTmax + z * mean(log10(TC_rate_range/100))`.
+Regresses the valid Stage-1 `log10(LT50)` estimates on assay temperature
+by ordinary least squares and derives the classical quantities.
+`z = -1/slope`; `CTmax(t_ref) = (log10(t_ref) - intercept) / slope`;
+`T_crit` follows the rate-multiplier definition,
+`CTmax + z * mean(log10(TC_rate_range/100))`. `t_ref` is expressed in
+minutes and is recorded in the returned `$settings`. Thus
+`summary$CTmax` is always CTmax at the explicitly recorded reference
+duration, not necessarily CTmax at one hour. Stage 2 retains only rows
+chosen by `rows`; if fewer than three valid Stage-1 temperatures remain,
+it returns a `NULL` fit and an `NA` summary rather than extrapolating a
+TDT line.
 
 ## Usage
 
@@ -46,21 +52,28 @@ ts_stage2(
 
 ## Value
 
-`list(fit, summary)`; `fit` is `NULL` if fewer than 3 valid Stage-1
-estimates remain. `summary` has `intercept`, `slope_T`, `z`,
-`CTmax_1hr`, `T_crit`, `r_squared`, `n_stage1`, `n_excluded`.
+`list(fit, summary, settings)`; `fit` is `NULL` if fewer than 3 valid
+Stage-1 estimates remain. `summary` has `intercept`, `slope_T`, `z`,
+`CTmax`, `T_crit`, `r_squared`, `n_stage1`, `n_excluded`. `$settings`
+records `t_ref`, `time_multiplier`, and `TC_rate_range`; downstream
+[`ts_ci()`](https://itchyshin.github.io/freqTLS/reference/ts_ci.md) and
+[`ts_curve()`](https://itchyshin.github.io/freqTLS/reference/ts_curve.md)
+inherit these settings by default. For compatibility, when `t_ref = 60`
+exactly, `summary` also contains a truthful `CTmax_1hr` alias for
+`CTmax`; it is absent at every other reference duration.
 
 ## Examples
 
 ``` r
-d <- data.frame(
-  temp = rep(c(30, 32, 34, 36, 38), each = 12),
-  dur  = rep(c(1, 5, 15, 45, 135, 405), times = 10),
-  surv = rbinom(60, 20, 0.4), tot = 20)
-s1 <- ts_stage1(d, "temp", "dur", "surv", "tot")
-ts_stage2(s1)$summary
-#> # A tibble: 1 × 8
-#>   intercept slope_T     z CTmax_1hr T_crit r_squared n_stage1 n_excluded
-#>       <dbl>   <dbl> <dbl>     <dbl>  <dbl>     <dbl>    <int>      <int>
-#> 1        NA      NA    NA        NA     NA        NA        0          5
+d <- simulate_tls(
+  family = "binomial", temps = seq(30, 42, by = 2),
+  times = c(0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100),
+  reps = 4, n = 50, CTmax = 36, z = 4, seed = 42
+)
+s1 <- ts_stage1(d, "temp", "duration", "survived", "total")
+ts_stage2(s1, t_ref = 60, time_multiplier = 60)$summary
+#> # A tibble: 1 × 9
+#>   intercept slope_T     z CTmax T_crit r_squared n_stage1 n_excluded CTmax_1hr
+#>       <dbl>   <dbl> <dbl> <dbl>  <dbl>     <dbl>    <int>      <int>     <dbl>
+#> 1      10.6  -0.245  4.08  36.0   25.8     0.999        7          0      36.0
 ```

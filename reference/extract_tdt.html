@@ -110,7 +110,9 @@ percentiles.</p>
 
 <dt id="arg-target-surv">target_surv<a class="anchor" aria-label="anchor" href="#arg-target-surv"></a></dt>
 <dd><p><code>"relative"</code> (curve midpoint, default), <code>"absolute"</code>
-(50% survival), or a numeric survival level in <code>(0, 1)</code> for an LTx CTmax.</p></dd>
+(50% survival), or a numeric survival level in <code>(0, 1)</code> for an LTx CTmax.
+An absolute target must lie strictly between the fitted asymptotes for every
+reported group; otherwise no finite crossing exists.</p></dd>
 
 
 <dt id="arg-lethal">lethal<a class="anchor" aria-label="anchor" href="#arg-lethal"></a></dt>
@@ -144,7 +146,9 @@ for <code>T_crit</code>. Default <code>c(0.1, 1)</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with <code>$z</code>, <code>$CTmax</code>, (<code>$T_crit</code> when <code>lethal</code>), and <code>$meta</code>.
 Each quantity is <code>list(draws = &lt;tibble&gt;, summary = &lt;tibble&gt;)</code>. Column names
-follow bayesTLS: <code>z_median/z_lower/z_upper</code> for z; <code>temp_median/temp_lower/ temp_upper</code> for CTmax and T_crit; per-draw value columns are <code>z</code> / <code>temp</code>.</p>
+follow bayesTLS: <code>z_median/z_lower/z_upper</code> for z; <code>temp_median/temp_lower/ temp_upper</code> for CTmax and T_crit; per-draw value columns are <code>z</code> / <code>temp</code>.
+<code>$meta$tref</code> records the reference time; <code>$meta$duration_unit</code> is retained
+when the input is a <code><a href="fit_4pl.html">fit_4pl()</a></code> workflow.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

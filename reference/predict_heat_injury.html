@@ -125,7 +125,10 @@ fit is grouped).</p></dd>
 <dd><p>Optional absolute survival threshold defining one lethal
 dose: a single probability strictly between the fitted lower and upper
 asymptotes. <code>NULL</code> (default) uses the project-default relative threshold (the
-curve midpoint <code>(low + up) / 2</code>), matching <code><a href="derive_ctmax.html">derive_ctmax()</a></code> and <code><a href="derive_lt.html">derive_lt()</a></code>.</p></dd>
+curve midpoint <code>(low + up) / 2</code>), matching <code><a href="derive_ctmax.html">derive_ctmax()</a></code> and <code><a href="derive_lt.html">derive_lt()</a></code>.
+For a bootstrap envelope the target must also be attainable in every
+converged bootstrap refit; otherwise the function aborts rather than clipping
+an invalid refit's threshold.</p></dd>
 
 
 <dt id="arg-t-c">t_c<a class="anchor" aria-label="anchor" href="#arg-t-c"></a></dt>
@@ -177,7 +180,9 @@ lethal dose) reaches exactly <code>target_surv</code> – the relative midpoint
 <p>The trace <code>time</code> and the fit's duration / <code>tref</code> <strong>must share a time unit</strong>
 (the damage rate is per that unit). With <code>irreversible = TRUE</code> (default)
 survival is monotone non-increasing. A damage cutoff <code>t_c</code> (for example from
-<code><a href="derive_tcrit.html">derive_tcrit()</a></code>) sets the damage rate to zero at or below <code>t_c</code>.</p>
+<code><a href="derive_tcrit.html">derive_tcrit()</a></code>) sets the damage rate to zero at or below <code>t_c</code>.
+Heat-injury prediction currently requires shared fixed-effect shape formulas;
+a varying shape would need to be re-evaluated along the temperature trace.</p>
 <p>This integrator is forward Euler (left-endpoint, per actual step), not the
 single-<code>dt</code> scheme some implementations use; irregular traces are integrated
 with their real increments.</p>

@@ -40,7 +40,11 @@ predict_survival_curves(
 
 - nboot:
 
-  Number of bootstrap replicates for the bands (default 500).
+  Number of bootstrap replicates for the bands (default 500). Bootstrap
+  bands currently require shared fixed-effect shape formulas
+  (`low = up = log_k = ~ 1`). For varying shapes, use
+  [`predict()`](https://rdrr.io/r/stats/predict.html) for the fitted
+  surface; a design-aware bootstrap surface is not yet available.
 
 - level:
 

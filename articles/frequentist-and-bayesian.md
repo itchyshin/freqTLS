@@ -6,17 +6,15 @@ library(freqTLS)
 ```
 
 This vignette is for a thermal biologist deciding **how** to fit a
-thermal-load- sensitivity (TLS) model, not just **which package**.
-`freqTLS` (maximum likelihood, profile-likelihood intervals) and
-[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) (Bayesian,
-posterior intervals) fit the *same* four-parameter logistic
-thermal-death-time model. They are complementary lenses on one model,
-and the choice between them is really a choice between two ways of
-handling the same hard realities: weak data, weak identifiability, and
-non-convergence. The aim here is an honest account of the trade-offs —
-including the uncomfortable fact, developed at the end, that the
-“prior-free” frequentist path quietly uses prior-like machinery of its
-own.
+thermal-load- sensitivity (TLS) model, not just **which package**. The
+modelling framework was introduced by Daniel W. A. Noble, Pieter A.
+Arnold, and Patrice Pottier in
+[`bayesTLS`](https://github.com/daniel1noble/bayesTLS). `freqTLS` uses
+maximum likelihood and profile-likelihood confidence intervals;
+`bayesTLS` uses Bayesian posterior inference. For a matched 4PL
+specification, they can describe the same curve, but they are not
+interchangeable interfaces. The aim here is an honest account of
+trade-offs under weak data, weak identification, and non-convergence.
 
 It builds **without Stan**: the `freqTLS` fits run live, while the
 Bayesian comparison and the coverage evidence are read from cached
@@ -24,10 +22,13 @@ simulations rather than recomputed.
 
 ## One model, two inferential philosophies
 
-Both packages fit survival as a 4PL curve in `log10(duration)` whose
-midpoint moves with temperature through `CTmax` (the critical thermal
-maximum) and `z` (thermal sensitivity). They differ only in **how they
-turn data into a statement about the parameters**:
+In the matched relative, constant-shape configuration, both packages fit
+survival as a 4PL curve in `log10(duration)` whose midpoint moves with
+temperature through `CTmax` (the critical thermal maximum at `tref`) and
+`z` (thermal sensitivity, degrees Celsius per decade of duration).
+Current `bayesTLS` also offers direct CTmax/z parameterisation and
+richer shape models. The packages differ in **how they turn data into a
+statement about the parameters**:
 
 - **`freqTLS` (likelihood).** It maximises the likelihood and inverts
   the likelihood-ratio test to get a **confidence interval** — the set
@@ -38,8 +39,9 @@ turn data into a statement about the parameters**:
   probability statement about the parameter, conditional on the prior.
 
 On strong synthetic data these often agree closely. The canonical paired
-comparison first locks the same data, formulas, threshold, and resolved
-reference time, then reports the actual difference; see
+comparison first locks the same data, response family, formulas, bounds,
+grouping structure, threshold, and resolved reference time, then reports
+the actual difference; see
 [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md).
 They can diverge exactly where the data are weak and the prior starts to
 do the work — which is precisely where you most need to know what is

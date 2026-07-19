@@ -94,12 +94,14 @@
 the four-parameter logistic (4PL) thermal death-time curve, the direct
 <code>CTmax</code>/<code>z</code> parameterisation, the disjoint-bounds
 asymptote transform, the relative-versus-absolute survival threshold,
-and the exact algebraic bridge to <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>.
+and the algebraic bridge to <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>.
+The thermal-load-sensitivity framework was introduced by Daniel W. A.
+Noble, Pieter A. Arnold, and Patrice Pottier in <code>bayesTLS</code>.
 The package’s implementation contract is tested against these equations;
 this vignette mirrors it and checks the bridge identities numerically
-(no Stan required). If you already trust that freqTLS and bayesTLS
-target the same fitted curve, you can skip straight to the worked
-examples in <code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></code> and
+(no Stan required). If you already understand the matched-configuration
+bridge to bayesTLS, you can skip straight to the worked examples in
+<code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></code> and
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span></code></pre></div>
@@ -111,9 +113,9 @@ examples in <code><a href="../articles/freqTLS.html">vignette("freqTLS")</a></co
 be the exposure duration and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>d</mi><mo>=</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mi>d</mi></mrow><annotation encoding="application/x-tex">\log d = \log_{10} d</annotation></semantics></math>.
 Survival probability follows the descending four-parameter logistic</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow><mo>+</mo><mfrac><mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow><mo>−</mo><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>k</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mi>d</mi><mo>−</mo><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>k</mi><mo>=</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow><mo>+</mo><mfrac><mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow><mo>−</mo><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>k</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mi>d</mi><mo>−</mo><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>k</mi><mo>=</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mi>k</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
 p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10} d - \mathrm{mid})\big)},
-\qquad k = \exp(\log k).
+\qquad k = \exp(\ln k).
 </annotation></semantics></math></p>
 <ul>
 <li>
@@ -124,7 +126,9 @@ is the lower asymptote (survival at long exposures),</li>
 is the upper asymptote (survival at short exposures),</li>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">k &gt; 0</annotation></semantics></math>
-is the steepness, and</li>
+is the steepness; its internal coordinate is the natural logarithm
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">ln</mi><mo>⁡</mo></mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">\ln k</annotation></semantics></math>,
+and</li>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><annotation encoding="application/x-tex">\mathrm{mid}</annotation></semantics></math>
 is the midpoint on the
@@ -147,8 +151,8 @@ a function of the design,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mi>i</mi></msub><mo>=</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mfrac><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow><mi>i</mi></msub></mrow><msub><mi>z</mi><mi>i</mi></msub></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
 \mathrm{mid}_i = \log_{10}(t_\mathrm{ref}) - \frac{T_i - \mathrm{CTmax}_i}{z_i}.
 </annotation></semantics></math></p>
-<p>Two properties make this the right coordinate system for
-profiling:</p>
+<p>This parameterisation makes the two biological quantities direct
+model parameters, so profile likelihood can constrain them directly:</p>
 <ul>
 <li>At
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">T_i = \mathrm{CTmax}_i</annotation></semantics></math>,
@@ -164,7 +168,7 @@ so <code>z</code> is the change in temperature per decade
 unit) of exposure duration — the thermal sensitivity (degrees Celsius
 per decade).</li>
 </ul>
-<p>Because <code>CTmax</code> and <code>z</code> are model coordinates
+<p>Because <code>CTmax</code> and <code>z</code> are model parameters
 (not derived afterwards), each can be profiled directly. We can check
 the two properties on a fitted model:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -213,15 +217,17 @@ therefore gives a valid ordered pair
 This is unconstrained and smooth, which keeps the optimiser and the
 profiles well-behaved, and it matches bayesTLS exactly so the two
 packages share the asymptote contract.</p>
-<p>Under this parameterisation <code>up</code> has its own coordinate
+<p>Under this parameterisation <code>up</code> is fitted through its own
+coordinate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><annotation encoding="application/x-tex">\beta_\mathrm{up}</annotation></semantics></math>,
-just like <code>low</code>. <code>freqTLS</code> nonetheless reports
-<code>up</code> with the delta-method Wald interval: its profile path is
-not yet wired for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><annotation encoding="application/x-tex">\beta_\mathrm{up}</annotation></semantics></math>
-(the work is symmetric with <code>low</code>, simply not yet
-implemented), and it says so. Every other parameter is profiled on its
-single coordinate. The full table of coordinates and links:</p>
+just as <code>low</code> is fitted through
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><annotation encoding="application/x-tex">\beta_\mathrm{low}</annotation></semantics></math>.
+The limitation concerns interval computation, not fitting: freqTLS does
+not yet profile
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow></msub><annotation encoding="application/x-tex">\beta_\mathrm{up}</annotation></semantics></math>,
+so it reports a delta-method Wald interval for <code>up</code> (or a
+bootstrap interval when requested). The full table of parameters and
+links:</p>
 <table class="table">
 <thead><tr class="header">
 <th>Natural parameter</th>
@@ -242,7 +248,7 @@ single coordinate. The full table of coordinates and links:</p>
 <tr class="odd">
 <td><code>k</code></td>
 <td><code>beta_logk</code></td>
-<td>log</td>
+<td>natural log (<code>ln</code>)</td>
 </tr>
 <tr class="even">
 <td>
@@ -271,12 +277,15 @@ single coordinate. The full table of coordinates and links:</p>
 <p>A “lethal time” such as the
 LT<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi></mi><mn>50</mn></msub><annotation encoding="application/x-tex">_{50}</annotation></semantics></math>
 is the duration at which survival crosses a target probability. There
-are two conventions:</p>
+are two conventions. A <strong>relative threshold</strong> is a position
+between the fitted asymptotes; an <strong>absolute threshold</strong> is
+a fixed survival probability on the response scale:</p>
 <ul>
 <li>
 <strong>Relative</strong> (the <code>freqTLS</code> default): the
-target is interpreted relative to the fitted asymptotes, so
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">p = 0.5</annotation></semantics></math>
+target is interpreted relative to the fitted asymptotes, so relative
+fraction
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
 means halfway between <code>low</code> and <code>up</code> — which is
 exactly the 4PL midpoint
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><annotation encoding="application/x-tex">\mathrm{mid}</annotation></semantics></math>.
@@ -289,9 +298,12 @@ probability, requiring
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
 to lie strictly between <code>low</code> and <code>up</code>.</li>
 </ul>
-<p><code><a href="../reference/derive_lt.html">derive_lt()</a></code> solves the 4PL for the crossing duration at
-a temperature, and <code><a href="../reference/plot_tdt_curve.html">plot_tdt_curve()</a></code> plots the relative
-midpoint crossing against temperature. On the
+<p><code><a href="../reference/derive_lt.html">derive_lt()</a></code> solves the 4PL for the duration at which
+survival reaches its numeric absolute probability <code>p</code>, which
+must lie strictly between <code>low</code> and <code>up</code>. At the
+relative midpoint, use <code>p = (low + up) / 2</code>;
+<code><a href="../reference/plot_tdt_curve.html">plot_tdt_curve()</a></code> uses that midpoint by default and can plot
+another valid absolute <code>p</code>. On the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mi>d</mi></mrow><annotation encoding="application/x-tex">\log_{10} d</annotation></semantics></math>
 axis the relative-threshold crossing is the line
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mi>d</mi><mo>=</mo><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo>−</mo><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">\log_{10} d = \mathrm{mid}(T) = \log_{10}(t_\mathrm{ref}) - (T - \mathrm{CTmax})/z</annotation></semantics></math>,
@@ -306,9 +318,9 @@ whose slope is
 <div class="section level2">
 <h2 id="the-bridge-to-bayestls">The bridge to bayesTLS<a class="anchor" aria-label="anchor" href="#the-bridge-to-bayestls"></a>
 </h2>
-<p><code>bayesTLS</code> fits the same 4PL but, in its constant-shape
-configuration (<code>temp_effects = "mid"</code>), parameterises the
-midpoint as a line in temperature,</p>
+<p>For the matched constant-shape midpoint configuration
+(<code>temp_effects = "mid"</code>), <code>bayesTLS</code> parameterises
+the midpoint as a line in temperature,</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>b</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi><mo mathvariant="normal">,</mo><mi mathvariant="normal">I</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>+</mo><msub><mi>b</mi><mrow><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo>,</mo><msub><mi>T</mi><mi>c</mi></msub></mrow></msub><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo>−</mo><mover><mi>T</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
 \mathrm{mid}(T) = b_{\mathrm{mid,Intercept}} + b_{\mathrm{mid},T_c}\,(T - \bar T),
 </annotation></semantics></math></p>
@@ -331,14 +343,16 @@ gives the inverse map:</p>
 z = -\frac{1}{\beta_1}, \qquad
 \mathrm{CTmax} = \bar T + \frac{\log_{10}(t_\mathrm{ref}) - \beta_0}{\beta_1}.
 </annotation></semantics></math></p>
-<p>These are exactly the <code>bayesTLS</code> identities. The
-reparameterisation shares <code>(low, up, k)</code> and is smooth and
-invertible (the Jacobian is nonsingular while <code>z</code> is finite),
-so the two models have the <strong>same likelihood, the same fitted
-curve, and the same maximum-likelihood estimate</strong> under the
-matched constant-shape, relative-threshold configuration. The only
-difference is that <code>CTmax</code> and <code>z</code> are coordinates
-in <code>freqTLS</code>, hence directly profile-able.</p>
+<p>These are the midpoint-line identities used by <code>bayesTLS</code>.
+The reparameterisation shares <code>(low, up, k)</code> and is smooth
+and invertible while <code>z</code> is finite. Therefore a matched
+constant-shape, relative-threshold likelihood has the same fitted curve
+under either coordinate system. Current <code>bayesTLS</code> also
+offers direct CTmax/z parameterisation and an absolute-threshold option;
+numerical comparisons must still match data, formulas, bounds,
+threshold, and random-effect structure. freqTLS’s distinct contribution
+is maximum-likelihood fitting with direct profile-likelihood
+targets.</p>
 <p>We can verify the bridge numerically without <code>bayesTLS</code>.
 Fit the midpoint line directly from the model’s own predicted midpoints
 (linear in

@@ -102,7 +102,7 @@ and interpretation. Independently refit important analyses with <a href="https:/
 Agreement is a cross-check, not proof of correctness; shared mistakes
 can make both packages agree.</p>
 <div class="section level2">
-<h2 id="fair-comparison-contract">Fair-comparison contract<a class="anchor" aria-label="anchor" href="#fair-comparison-contract"></a>
+<h2 id="comparison-scope">Comparison scope<a class="anchor" aria-label="anchor" href="#comparison-scope"></a>
 </h2>
 <p>A numerical difference is interpretable only when all of the
 following are identical:</p>
@@ -115,17 +115,16 @@ following are identical:</p>
 <li>resolved reference-time unit;</li>
 <li>relative or absolute threshold and reported estimand.</li>
 </ol>
-<p>The pinned baseline is the <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code>
+<p>The comparison uses the pinned <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code>
 supplement</a> rendered 2026-07-14 from commit <a href="https://github.com/daniel1noble/bayesTLS/tree/76510412e06c594c96894a1baba1f0e1a34a5aea" class="external-link"><code>76510412</code></a>.</p>
 </div>
 <div class="section level2">
-<h2 id="pinned-comparator-evidence">Pinned comparator evidence<a class="anchor" aria-label="anchor" href="#pinned-comparator-evidence"></a>
+<h2 id="reproducibility-record">Reproducibility record<a class="anchor" aria-label="anchor" href="#reproducibility-record"></a>
 </h2>
-<p>The curated cache was built on Totoro with four chains per fit,
-bounded parallelism, and <code>OPENBLAS_NUM_THREADS=1</code>. Raw
-posterior fits remain outside the repository. The cache records exact
-analysis hashes, formulas, filters, thresholds, reference times, seeds,
-package versions, both source commits, and sampler diagnostics.</p>
+<p>The curated cache records the exact analysis hashes, formulas,
+filters, thresholds, reference times, source versions, and sampler
+diagnostics. The full rebuild and publication procedure is in
+<code>docs/design/48-canonical-comparator-cache.md</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  item <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -278,8 +277,11 @@ steps.</p>
 passed the package’s raw-gradient gate. The interval method for the
 direct-coordinate rows below is Wald; the all-age aphid cell values and
 mortality absolute-LT50 values are point predictions and are labelled
-accordingly. Shape-identification warnings remain visible in the
-organism-specific articles.</p>
+accordingly. The organism-specific articles show the
+shape-identification warnings: temperature-varying <code>low</code>,
+<code>up</code>, or <code>k</code> can be weakly identified, so readers
+should inspect <code><a href="../reference/check_tls.html">check_tls()</a></code> before interpreting a shape
+effect.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  zebrafish_oxygen <span class="op">=</span> <span class="va">zf_fit</span>,</span>
@@ -310,11 +312,11 @@ organism-specific articles.</p>
 <span><span class="va">freq_diagnostics</span></span>
 <span><span class="co">#&gt;                case_id converged pd_hessian max_abs_gradient gradient_pass</span></span>
 <span><span class="co">#&gt; 1     zebrafish_oxygen      TRUE       TRUE     1.948692e-04          TRUE</span></span>
-<span><span class="co">#&gt; 2           aphid_age6      TRUE       TRUE     2.091929e-06          TRUE</span></span>
-<span><span class="co">#&gt; 3        aphid_all_age      TRUE       TRUE     9.832409e-06          TRUE</span></span>
-<span><span class="co">#&gt; 4         snowgum_psii      TRUE       TRUE     2.898515e-04          TRUE</span></span>
-<span><span class="co">#&gt; 5 drosophila_mortality      TRUE       TRUE     7.996796e-05          TRUE</span></span>
-<span><span class="co">#&gt; 6     drosophila_awake      TRUE       TRUE     1.204766e-05          TRUE</span></span>
+<span><span class="co">#&gt; 2           aphid_age6      TRUE       TRUE     1.076456e-05          TRUE</span></span>
+<span><span class="co">#&gt; 3        aphid_all_age      TRUE       TRUE     1.962863e-05          TRUE</span></span>
+<span><span class="co">#&gt; 4         snowgum_psii      TRUE       TRUE     2.898513e-04          TRUE</span></span>
+<span><span class="co">#&gt; 5 drosophila_mortality      TRUE       TRUE     7.497304e-05          TRUE</span></span>
+<span><span class="co">#&gt; 6     drosophila_awake      TRUE       TRUE     1.202229e-05          TRUE</span></span>
 <span><span class="co">#&gt;                                     interval_method</span></span>
 <span><span class="co">#&gt; 1                      Wald 95% confidence interval</span></span>
 <span><span class="co">#&gt; 2                      Wald 95% confidence interval</span></span>
@@ -326,11 +328,11 @@ organism-specific articles.</p>
 <div class="section level2">
 <h2 id="actual-paired-differences">Actual paired differences<a class="anchor" aria-label="anchor" href="#actual-paired-differences"></a>
 </h2>
-<p>The primary table compares the frequentist point estimate with the
-Bayesian posterior median. Positive values mean the freqTLS estimate is
-larger. The interval columns are shown side by side without pretending
-that a confidence interval and a credible interval have the same
-interpretation.</p>
+<p>The primary table puts the maximum-likelihood estimate and its Wald
+confidence interval beside the Bayesian posterior median and credible
+interval. Interval widths are descriptive, method-specific quantities: a
+confidence-interval width and credible-interval width are not
+interchangeable measures of uncertainty.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">as_freq_rows</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fit</span>, <span class="va">case_id</span>, <span class="va">by</span>, <span class="va">endpoint</span>, <span class="va">t_ref</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">fit</span>, by <span class="op">=</span> <span class="va">by</span>, lethal <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span>
@@ -392,70 +394,370 @@ interpretation.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="st">"upper"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_upper"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="st">"interval_method"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"bayes_interval"</span></span>
 <span><span class="va">paired</span><span class="op">$</span><span class="va">difference_freq_minus_bayes</span> <span class="op">&lt;-</span> <span class="va">paired</span><span class="op">$</span><span class="va">freq_estimate</span> <span class="op">-</span> <span class="va">paired</span><span class="op">$</span><span class="va">bayes_median</span></span>
+<span><span class="va">paired</span><span class="op">$</span><span class="va">freq_width</span> <span class="op">&lt;-</span> <span class="va">paired</span><span class="op">$</span><span class="va">freq_upper</span> <span class="op">-</span> <span class="va">paired</span><span class="op">$</span><span class="va">freq_lower</span></span>
+<span><span class="va">paired</span><span class="op">$</span><span class="va">bayes_width</span> <span class="op">&lt;-</span> <span class="va">paired</span><span class="op">$</span><span class="va">bayes_upper</span> <span class="op">-</span> <span class="va">paired</span><span class="op">$</span><span class="va">bayes_lower</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">paired</span><span class="op">)</span> <span class="op">==</span> <span class="fl">18L</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">paired</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span><span class="va">paired_display</span> <span class="op">&lt;-</span> <span class="va">paired</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"case_id"</span>, <span class="st">"endpoint"</span>, <span class="st">"threshold"</span>, <span class="st">"t_ref"</span>, <span class="st">"group"</span>, <span class="st">"parameter"</span>,</span>
 <span>  <span class="st">"freq_estimate"</span>, <span class="st">"freq_lower"</span>, <span class="st">"freq_upper"</span>, <span class="st">"bayes_median"</span>,</span>
-<span>  <span class="st">"bayes_lower"</span>, <span class="st">"bayes_upper"</span>, <span class="st">"difference_freq_minus_bayes"</span></span>
+<span>  <span class="st">"bayes_lower"</span>, <span class="st">"bayes_upper"</span>, <span class="st">"freq_width"</span>, <span class="st">"bayes_width"</span>,</span>
+<span>  <span class="st">"difference_freq_minus_bayes"</span></span>
 <span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;             case_id                          endpoint threshold t_ref</span></span>
-<span><span class="co">#&gt; 1  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 2  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 3  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 4  zebrafish_oxygen                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 5        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 6        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 7        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 8        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 9        aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 10       aphid_age6                   survival counts  relative    60</span></span>
-<span><span class="co">#&gt; 11     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 12     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 13     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 14     snowgum_psii retained PSII function proportion  relative    60</span></span>
-<span><span class="co">#&gt; 15 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt; 16 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt; 17 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt; 18 drosophila_awake     awake counts (missing t_coma)  relative    60</span></span>
-<span><span class="co">#&gt;         group parameter freq_estimate freq_lower freq_upper bayes_median</span></span>
-<span><span class="co">#&gt; 1    normoxia     CTmax     38.739774  38.431850  39.047698    38.889462</span></span>
-<span><span class="co">#&gt; 2   hyperoxia     CTmax     39.301410  39.059733  39.543086    39.348350</span></span>
-<span><span class="co">#&gt; 3    normoxia         z      6.005753   4.371361   8.251220     5.586819</span></span>
-<span><span class="co">#&gt; 4   hyperoxia         z      2.500556   2.139219   2.922927     2.488053</span></span>
-<span><span class="co">#&gt; 5  M_dirhodum     CTmax     35.215425  35.025354  35.405496    35.172826</span></span>
-<span><span class="co">#&gt; 6    S_avenae     CTmax     36.527458  36.431472  36.623444    36.508723</span></span>
-<span><span class="co">#&gt; 7      R_padi     CTmax     37.169857  37.063139  37.276575    37.145179</span></span>
-<span><span class="co">#&gt; 8  M_dirhodum         z      4.747335   4.505357   5.002309     4.775438</span></span>
-<span><span class="co">#&gt; 9    S_avenae         z      3.609898   3.460681   3.765549     3.623531</span></span>
-<span><span class="co">#&gt; 10     R_padi         z      3.965377   3.698215   4.251839     3.958519</span></span>
-<span><span class="co">#&gt; 11       Dark     CTmax     45.720851  45.178128  46.263574    45.694884</span></span>
-<span><span class="co">#&gt; 12      Light     CTmax     44.075183  43.557764  44.592603    44.053744</span></span>
-<span><span class="co">#&gt; 13       Dark         z      4.707002   4.289897   5.164663     4.673517</span></span>
-<span><span class="co">#&gt; 14      Light         z      3.640602   3.201761   4.139591     3.624133</span></span>
-<span><span class="co">#&gt; 15          F     CTmax     36.497021  36.392973  36.601068    36.480047</span></span>
-<span><span class="co">#&gt; 16          M     CTmax     36.295991  36.203030  36.388953    36.269671</span></span>
-<span><span class="co">#&gt; 17          F         z      2.432835   2.288082   2.586746     2.413440</span></span>
-<span><span class="co">#&gt; 18          M         z      2.393259   2.261891   2.532257     2.404374</span></span>
-<span><span class="co">#&gt;    bayes_lower bayes_upper difference_freq_minus_bayes</span></span>
-<span><span class="co">#&gt; 1    38.557733   39.374728                 -0.14968745</span></span>
-<span><span class="co">#&gt; 2    39.169796   39.499437                 -0.04694048</span></span>
-<span><span class="co">#&gt; 3     4.055890    7.754303                  0.41893351</span></span>
-<span><span class="co">#&gt; 4     2.048057    2.932714                  0.01250305</span></span>
-<span><span class="co">#&gt; 5    34.971922   35.352795                  0.04259915</span></span>
-<span><span class="co">#&gt; 6    36.410246   36.599680                  0.01873529</span></span>
-<span><span class="co">#&gt; 7    37.043699   37.250706                  0.02467830</span></span>
-<span><span class="co">#&gt; 8     4.529840    5.043446                 -0.02810253</span></span>
-<span><span class="co">#&gt; 9     3.470673    3.780992                 -0.01363301</span></span>
-<span><span class="co">#&gt; 10    3.685519    4.247040                  0.00685783</span></span>
-<span><span class="co">#&gt; 11   45.045874   46.290603                  0.02596675</span></span>
-<span><span class="co">#&gt; 12   43.433298   44.697975                  0.02143955</span></span>
-<span><span class="co">#&gt; 13    4.229605    5.122288                  0.03348486</span></span>
-<span><span class="co">#&gt; 14    3.178338    4.105518                  0.01646914</span></span>
-<span><span class="co">#&gt; 15   36.362822   36.586969                  0.01697342</span></span>
-<span><span class="co">#&gt; 16   36.158873   36.372444                  0.02632053</span></span>
-<span><span class="co">#&gt; 17    2.253667    2.581269                  0.01939477</span></span>
-<span><span class="co">#&gt; 18    2.259329    2.568861                 -0.01111458</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">paired_display</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Case"</span>, <span class="st">"Endpoint"</span>, <span class="st">"Threshold"</span>, <span class="st">"tref"</span>, <span class="st">"Group"</span>, <span class="st">"Quantity"</span>,</span>
+<span>  <span class="st">"ML estimate"</span>, <span class="st">"ML CI lower"</span>, <span class="st">"ML CI upper"</span>, <span class="st">"Bayes median"</span>,</span>
+<span>  <span class="st">"Bayes CrI lower"</span>, <span class="st">"Bayes CrI upper"</span>, <span class="st">"ML CI width"</span>, <span class="st">"Bayes CrI width"</span>,</span>
+<span>  <span class="st">"ML minus Bayes"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">paired_display</span>, digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>             caption <span class="op">=</span> <span class="st">"Matched quantities: ML Wald confidence intervals and Bayesian credible intervals remain labelled separately."</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Matched quantities: ML Wald confidence intervals and Bayesian
+credible intervals remain labelled separately.</caption>
+<colgroup>
+<col width="8%">
+<col width="16%">
+<col width="4%">
+<col width="2%">
+<col width="5%">
+<col width="4%">
+<col width="5%">
+<col width="5%">
+<col width="5%">
+<col width="6%">
+<col width="7%">
+<col width="7%">
+<col width="5%">
+<col width="7%">
+<col width="7%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Case</th>
+<th align="left">Endpoint</th>
+<th align="left">Threshold</th>
+<th align="right">tref</th>
+<th align="left">Group</th>
+<th align="left">Quantity</th>
+<th align="right">ML estimate</th>
+<th align="right">ML CI lower</th>
+<th align="right">ML CI upper</th>
+<th align="right">Bayes median</th>
+<th align="right">Bayes CrI lower</th>
+<th align="right">Bayes CrI upper</th>
+<th align="right">ML CI width</th>
+<th align="right">Bayes CrI width</th>
+<th align="right">ML minus Bayes</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">zebrafish_oxygen</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">normoxia</td>
+<td align="left">CTmax</td>
+<td align="right">38.740</td>
+<td align="right">38.432</td>
+<td align="right">39.048</td>
+<td align="right">38.889</td>
+<td align="right">38.558</td>
+<td align="right">39.375</td>
+<td align="right">0.616</td>
+<td align="right">0.817</td>
+<td align="right">-0.150</td>
+</tr>
+<tr class="even">
+<td align="left">zebrafish_oxygen</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">hyperoxia</td>
+<td align="left">CTmax</td>
+<td align="right">39.301</td>
+<td align="right">39.060</td>
+<td align="right">39.543</td>
+<td align="right">39.348</td>
+<td align="right">39.170</td>
+<td align="right">39.499</td>
+<td align="right">0.483</td>
+<td align="right">0.330</td>
+<td align="right">-0.047</td>
+</tr>
+<tr class="odd">
+<td align="left">zebrafish_oxygen</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">normoxia</td>
+<td align="left">z</td>
+<td align="right">6.006</td>
+<td align="right">4.371</td>
+<td align="right">8.251</td>
+<td align="right">5.587</td>
+<td align="right">4.056</td>
+<td align="right">7.754</td>
+<td align="right">3.880</td>
+<td align="right">3.698</td>
+<td align="right">0.419</td>
+</tr>
+<tr class="even">
+<td align="left">zebrafish_oxygen</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">hyperoxia</td>
+<td align="left">z</td>
+<td align="right">2.501</td>
+<td align="right">2.139</td>
+<td align="right">2.923</td>
+<td align="right">2.488</td>
+<td align="right">2.048</td>
+<td align="right">2.933</td>
+<td align="right">0.784</td>
+<td align="right">0.885</td>
+<td align="right">0.013</td>
+</tr>
+<tr class="odd">
+<td align="left">aphid_age6</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">M_dirhodum</td>
+<td align="left">CTmax</td>
+<td align="right">35.215</td>
+<td align="right">35.025</td>
+<td align="right">35.405</td>
+<td align="right">35.173</td>
+<td align="right">34.972</td>
+<td align="right">35.353</td>
+<td align="right">0.380</td>
+<td align="right">0.381</td>
+<td align="right">0.043</td>
+</tr>
+<tr class="even">
+<td align="left">aphid_age6</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">S_avenae</td>
+<td align="left">CTmax</td>
+<td align="right">36.527</td>
+<td align="right">36.431</td>
+<td align="right">36.623</td>
+<td align="right">36.509</td>
+<td align="right">36.410</td>
+<td align="right">36.600</td>
+<td align="right">0.192</td>
+<td align="right">0.189</td>
+<td align="right">0.019</td>
+</tr>
+<tr class="odd">
+<td align="left">aphid_age6</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">R_padi</td>
+<td align="left">CTmax</td>
+<td align="right">37.170</td>
+<td align="right">37.063</td>
+<td align="right">37.277</td>
+<td align="right">37.145</td>
+<td align="right">37.044</td>
+<td align="right">37.251</td>
+<td align="right">0.213</td>
+<td align="right">0.207</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="even">
+<td align="left">aphid_age6</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">M_dirhodum</td>
+<td align="left">z</td>
+<td align="right">4.747</td>
+<td align="right">4.505</td>
+<td align="right">5.002</td>
+<td align="right">4.775</td>
+<td align="right">4.530</td>
+<td align="right">5.043</td>
+<td align="right">0.497</td>
+<td align="right">0.514</td>
+<td align="right">-0.028</td>
+</tr>
+<tr class="odd">
+<td align="left">aphid_age6</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">S_avenae</td>
+<td align="left">z</td>
+<td align="right">3.610</td>
+<td align="right">3.461</td>
+<td align="right">3.766</td>
+<td align="right">3.624</td>
+<td align="right">3.471</td>
+<td align="right">3.781</td>
+<td align="right">0.305</td>
+<td align="right">0.310</td>
+<td align="right">-0.014</td>
+</tr>
+<tr class="even">
+<td align="left">aphid_age6</td>
+<td align="left">survival counts</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">R_padi</td>
+<td align="left">z</td>
+<td align="right">3.965</td>
+<td align="right">3.698</td>
+<td align="right">4.252</td>
+<td align="right">3.959</td>
+<td align="right">3.686</td>
+<td align="right">4.247</td>
+<td align="right">0.554</td>
+<td align="right">0.562</td>
+<td align="right">0.007</td>
+</tr>
+<tr class="odd">
+<td align="left">snowgum_psii</td>
+<td align="left">retained PSII function proportion</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">Dark</td>
+<td align="left">CTmax</td>
+<td align="right">45.721</td>
+<td align="right">45.178</td>
+<td align="right">46.264</td>
+<td align="right">45.695</td>
+<td align="right">45.046</td>
+<td align="right">46.291</td>
+<td align="right">1.085</td>
+<td align="right">1.245</td>
+<td align="right">0.026</td>
+</tr>
+<tr class="even">
+<td align="left">snowgum_psii</td>
+<td align="left">retained PSII function proportion</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">Light</td>
+<td align="left">CTmax</td>
+<td align="right">44.075</td>
+<td align="right">43.558</td>
+<td align="right">44.593</td>
+<td align="right">44.054</td>
+<td align="right">43.433</td>
+<td align="right">44.698</td>
+<td align="right">1.035</td>
+<td align="right">1.265</td>
+<td align="right">0.021</td>
+</tr>
+<tr class="odd">
+<td align="left">snowgum_psii</td>
+<td align="left">retained PSII function proportion</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">Dark</td>
+<td align="left">z</td>
+<td align="right">4.707</td>
+<td align="right">4.290</td>
+<td align="right">5.165</td>
+<td align="right">4.674</td>
+<td align="right">4.230</td>
+<td align="right">5.122</td>
+<td align="right">0.875</td>
+<td align="right">0.893</td>
+<td align="right">0.033</td>
+</tr>
+<tr class="even">
+<td align="left">snowgum_psii</td>
+<td align="left">retained PSII function proportion</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">Light</td>
+<td align="left">z</td>
+<td align="right">3.641</td>
+<td align="right">3.202</td>
+<td align="right">4.140</td>
+<td align="right">3.624</td>
+<td align="right">3.178</td>
+<td align="right">4.106</td>
+<td align="right">0.938</td>
+<td align="right">0.927</td>
+<td align="right">0.016</td>
+</tr>
+<tr class="odd">
+<td align="left">drosophila_awake</td>
+<td align="left">awake counts (missing t_coma)</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">F</td>
+<td align="left">CTmax</td>
+<td align="right">36.497</td>
+<td align="right">36.393</td>
+<td align="right">36.601</td>
+<td align="right">36.480</td>
+<td align="right">36.363</td>
+<td align="right">36.587</td>
+<td align="right">0.208</td>
+<td align="right">0.224</td>
+<td align="right">0.017</td>
+</tr>
+<tr class="even">
+<td align="left">drosophila_awake</td>
+<td align="left">awake counts (missing t_coma)</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">M</td>
+<td align="left">CTmax</td>
+<td align="right">36.296</td>
+<td align="right">36.203</td>
+<td align="right">36.389</td>
+<td align="right">36.270</td>
+<td align="right">36.159</td>
+<td align="right">36.372</td>
+<td align="right">0.186</td>
+<td align="right">0.214</td>
+<td align="right">0.026</td>
+</tr>
+<tr class="odd">
+<td align="left">drosophila_awake</td>
+<td align="left">awake counts (missing t_coma)</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">F</td>
+<td align="left">z</td>
+<td align="right">2.433</td>
+<td align="right">2.288</td>
+<td align="right">2.587</td>
+<td align="right">2.413</td>
+<td align="right">2.254</td>
+<td align="right">2.581</td>
+<td align="right">0.299</td>
+<td align="right">0.328</td>
+<td align="right">0.019</td>
+</tr>
+<tr class="even">
+<td align="left">drosophila_awake</td>
+<td align="left">awake counts (missing t_coma)</td>
+<td align="left">relative</td>
+<td align="right">60</td>
+<td align="left">M</td>
+<td align="left">z</td>
+<td align="right">2.393</td>
+<td align="right">2.262</td>
+<td align="right">2.532</td>
+<td align="right">2.404</td>
+<td align="right">2.259</td>
+<td align="right">2.569</td>
+<td align="right">0.270</td>
+<td align="right">0.310</td>
+<td align="right">-0.011</td>
+</tr>
+</tbody>
+</table>
 <p>The age-six aphid row is also one cell of the all-age extension, but
 the two fits are intentionally distinct. For all nine species-by-age
 cells, the largest absolute freqTLS-minus-bayesTLS point difference is
@@ -493,19 +795,20 @@ reported separately rather than printing another 18-row table.</p>
 <span>  FUN <span class="op">=</span> <span class="va">max</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   parameter abs(difference_freq_minus_bayes)</span></span>
-<span><span class="co">#&gt; 1     CTmax                       0.02725888</span></span>
-<span><span class="co">#&gt; 2         z                       0.02246847</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     CTmax                       0.02725904</span></span>
+<span><span class="co">#&gt; 2         z                       0.02246866</span></span></code></pre></div>
 <p>Snow-gum is a paired refit of the locked shared-shape analogue. It is
 not a claim that freqTLS reproduces the richer recovery-by-temperature
 shape model displayed in the pinned supplement.</p>
 <div class="section level3">
-<h3 id="drosophila-mortality-do-not-mix-estimands">Drosophila mortality: do not mix estimands<a class="anchor" aria-label="anchor" href="#drosophila-mortality-do-not-mix-estimands"></a>
+<h3 id="drosophila-mortality-match-the-reported-estimand">Drosophila mortality: match the reported estimand<a class="anchor" aria-label="anchor" href="#drosophila-mortality-match-the-reported-estimand"></a>
 </h3>
-<p>The pinned mortality summary uses the absolute 50% threshold. The
-direct freqTLS <code>CTmax</code> and <code>z</code> coordinates are
-relative-midpoint quantities, so they must not be subtracted from the
-Bayesian absolute values. Only the absolute 240-minute LT50 point is
-comparable without silently changing the estimand.</p>
+<p>The pinned mortality summary uses the absolute 50% threshold. freqTLS
+fits the relative direct-coordinate backbone, then can derive the same
+absolute 240-minute LT50 by solving the fitted survival curve. This
+article compares that shared point estimand; it does not relabel
+relative <code>CTmax</code> or <code>z</code> as absolute
+quantities.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mort_lt50</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  group <span class="op">=</span> <span class="va">mort_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">group_levels</span>,</span>
@@ -557,10 +860,11 @@ comparable without silently changing the estimand.</p>
 <span><span class="co">#&gt; 1                  0.02031098 none: exact-model bootstrap unstable</span></span>
 <span><span class="co">#&gt; 2                  0.01005650 none: exact-model bootstrap unstable</span></span></code></pre></div>
 <p>The Bayesian cache also contains absolute-threshold <code>z</code>.
-freqTLS does not print an allegedly equivalent absolute <code>z</code>
-from this temperature-varying shape model; its direct <code>z</code>
-remains the relative coordinate. The mortality case article shows that
-relative result explicitly.</p>
+In this temperature- varying-shape model, freqTLS does not return a
+temperature-specific local absolute <code>z</code>: its direct
+<code>z</code> is the relative-midpoint backbone sensitivity. The
+mortality case article reports that relative <code>z</code> explicitly
+and limits the absolute comparison to the four-hour LT50 point.</p>
 </div>
 </div>
 <div class="section level2">
@@ -583,10 +887,7 @@ survival surfaces, limited random intercepts, and deterministic
 heat-injury scenarios remain separate extension pages with synthetic
 examples.</p>
 <p>Censored-time, hurdle-productivity, posterior inference, and fitted
-repair dynamics remain bayesTLS-only. Brown shrimp and life-stage
-zebrafish remain unpublished benchmark-only compatibility fixtures and
-do not enter this comparison, site navigation, search results, sitemap,
-or current summaries.</p>
+repair dynamics remain bayesTLS-only.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
