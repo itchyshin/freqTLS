@@ -7,7 +7,7 @@
 #' Thermal-load-sensitivity quantities (z, CTmax) with confidence intervals
 #'
 #' The frequentist analogue of `bayesTLS::tls()`. Reads a [fit_4pl()] (`freq_tls`)
-#' fit and returns the headline thermal-death-time quantities — thermal
+#' fit and returns the headline thermal-load-sensitivity quantities — thermal
 #' sensitivity `z` and `CTmax` — as point estimates with confidence intervals,
 #' one row per group when the fit is grouped. Uncertainty uses the engine's
 #' profile-likelihood intervals by default (or Wald / bootstrap via `method`).
@@ -17,10 +17,13 @@
 #' @param by Optional name for the grouping column in `$summary`; defaults to the
 #'   fit's moderator (e.g. the `ctmax`/`z`/`by` factor).
 #' @param params `"all"` (z and CTmax, the default), `"z"`, or `"ctmax"`.
+#'   This selects only the returned headline quantities; use
+#'   [tdt_parameter_table()] or [get_shape()] for `low`, `up`, and `k`.
 #' @param target_surv Survival threshold for CTmax: `"relative"` (the curve
 #'   midpoint, the default), `"absolute"` (50% survival), or a number in `(0, 1)`
-#'   for an LTx. Non-relative thresholds and `lethal` are derived per bootstrap
-#'   replicate via [extract_tdt()].
+#'   for an LTx. An absolute target must lie strictly between the fitted
+#'   asymptotes for every reported group. Non-relative thresholds and `lethal`
+#'   are derived per bootstrap replicate via [extract_tdt()].
 #' @param lethal If `TRUE`, also report `T_crit` (the damage-rate-floor critical
 #'   temperature); uses the bootstrap path.
 #' @param method Interval method for the relative path: `"profile"` (default,
@@ -73,7 +76,10 @@ tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
       summary = summ,
       meta = list(params = c(qsel, if (isTRUE(lethal)) "Tcrit"),
                   mode = et$meta$target_surv, method = "bootstrap", level = level,
-                  by = et$meta$by, t_ref = meta$t_ref, temp_mean = meta$temp_mean)
+                  by = et$meta$by, tref = fit$tref,
+                  t_ref = meta$t_ref %||% fit$tref,
+                  duration_unit = et$meta$duration_unit %||% meta$duration_unit,
+                  temp_mean = meta$temp_mean)
     )
     class(out) <- c("tls", "list")
     return(out)
@@ -113,7 +119,9 @@ tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
     summary = summ,
     meta = list(params = qsel, mode = target_surv, method = method,
                 level = level, by = if (grouped) by_name else NULL,
-                t_ref = meta$t_ref, temp_mean = meta$temp_mean)
+                tref = fit$tref, t_ref = meta$t_ref %||% fit$tref,
+                duration_unit = meta$duration_unit %||% NULL,
+                temp_mean = meta$temp_mean)
   )
   class(out) <- c("tls", "list")
   out

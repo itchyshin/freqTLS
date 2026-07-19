@@ -19,6 +19,8 @@ It is not a replacement empirical case and does not estimate a repair process.
 library(freqTLS)
 sim <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4,
                     phi = 50, seed = 42)
+# In this synthetic example, duration and trace time are both hours. No unit
+# conversion occurs inside fit_tls() or predict_heat_injury().
 fit <- fit_tls(sim, y = survived, n = total, time = duration, temp = temp,
                family = "beta_binomial", tref = 1, quiet = TRUE)
 diagnose_tdt_fit(fit)
@@ -30,6 +32,10 @@ trace <- data.frame(
 )
 trace$temp <- 27 + 6 * sin(2 * pi * (trace$time - 6) / 24)
 ```
+
+Here `tref = 1` is one hour, and `trace$time` is also in hours. The trace time,
+fitted duration, and reference time must use the same unit because heat-injury
+damage is accumulated per time unit.
 
 ```{r prediction}
 injury <- predict_heat_injury(fit, trace)
@@ -44,4 +50,5 @@ The trajectory is a deterministic transformation of the fitted 4PL and the
 user-supplied trace. `heat_injury_envelope()` can add parametric-bootstrap
 uncertainty from refitted curves. A repair rate supplied by the user remains an
 illustrative scenario: freqTLS has not fitted that rate from damage/recovery
-data. Use bayesTLS for its broader Bayesian heat-injury and repair workflow.
+data. Use bayesTLS for its broader Bayesian heat-injury and repair workflow; its
+posterior intervals are distinct from freqTLS confidence intervals.

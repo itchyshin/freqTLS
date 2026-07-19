@@ -20,6 +20,8 @@
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
 #' @param target_surv `"relative"` (curve midpoint, default), `"absolute"`
 #'   (50% survival), or a numeric survival level in `(0, 1)` for an LTx CTmax.
+#'   An absolute target must lie strictly between the fitted asymptotes for every
+#'   reported group; otherwise no finite crossing exists.
 #' @param lethal If `TRUE`, also derive `T_crit` (the damage-rate-floor critical
 #'   temperature, `CTmax + z * log10(rate / 100)`, `rate` log-uniform over
 #'   `TC_rate_range`), anchored at the fit's reference time.
@@ -33,6 +35,8 @@
 #'   Each quantity is `list(draws = <tibble>, summary = <tibble>)`. Column names
 #'   follow bayesTLS: `z_median/z_lower/z_upper` for z; `temp_median/temp_lower/
 #'   temp_upper` for CTmax and T_crit; per-draw value columns are `z` / `temp`.
+#'   `$meta$tref` records the reference time; `$meta$duration_unit` is retained
+#'   when the input is a [fit_4pl()] workflow.
 #' @seealso [fit_4pl()], [tls()], [get_z_summary()], [get_ctmax_summary()]
 #' @examples
 #' \donttest{
@@ -62,17 +66,11 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
     mode <- target_surv
     p <- if (identical(mode, "absolute")) 0.5 else NA_real_
   } else if (is.numeric(target_surv) && length(target_surv) == 1L &&
-             target_surv > 0 && target_surv < 1) {
+             is.finite(target_surv) && target_surv > 0 && target_surv < 1) {
     mode <- "absolute"; p <- as.numeric(target_surv)
   } else {
     cli::cli_abort('{.arg target_surv} must be "relative", "absolute", or a number in (0, 1).')
   }
-
-  alpha <- (1 - level) / 2; qs <- c(alpha, 1 - alpha)
-  boot <- tls_bootstrap_replicates(fit, nboot = nboot, seed = seed)
-  R <- boot$replicates[boot$converged, , drop = FALSE]
-  if (nrow(R) < 2L)
-    cli::cli_abort("Too few converged bootstrap replicates ({nrow(R)}); increase {.arg nboot}.")
 
   est <- fit$estimates
   by_name <- (by %||% meta$moderators %||% "group")[1L]
@@ -80,6 +78,9 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
     if (is.na(g)) return(NA_character_)
     if (startsWith(g, by_name)) sub(paste0("^", by_name), "", g) else g
   }
+  ct_rows <- est[grepl("^CTmax(:|$)", est$parameter), , drop = FALSE]
+  z_rows  <- est[grepl("^z(:|$)",   est$parameter), , drop = FALSE]
+  grouped <- any(grepl(":", ct_rows$parameter))
   mk_draws <- function(gl, v, value_name, extra = NULL) {
     cols <- list()
     if (!is.na(gl)) cols[[by_name]] <- gl
@@ -95,16 +96,48 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
     as.data.frame(cols, stringsAsFactors = FALSE)
   }
 
-  ct_rows <- est[grepl("^CTmax(:|$)", est$parameter), , drop = FALSE]
-  z_rows  <- est[grepl("^z(:|$)",   est$parameter), , drop = FALSE]
-  low_v <- R[, "low"]; up_v <- R[, "up"]; k_v <- R[, "k"]
-  low_mle <- est$estimate[est$parameter == "low"][1L]
-  up_mle  <- est$estimate[est$parameter == "up"][1L]
-  k_mle   <- est$estimate[est$parameter == "k"][1L]
+  varying_shapes <- tls_bootstrap_varying_shapes(fit)
+  if (identical(mode, "absolute") && length(varying_shapes)) {
+    cli::cli_abort(c(
+      "Absolute-threshold extraction is not available when {.val {varying_shapes}} has a varying fixed-effect shape design.",
+      i = "The absolute CTmax transform needs asymptotes evaluated at the unknown target temperature.",
+      i = 'Use {.code target_surv = "relative"}, or fit shared shapes for this derived quantity.'
+    ))
+  }
+
+  if (identical(mode, "absolute")) {
+    low_mle <- est$estimate[est$parameter == "low"][1L]
+    up_mle  <- est$estimate[est$parameter == "up"][1L]
+    k_mle   <- est$estimate[est$parameter == "k"][1L]
+    if (!(p > low_mle && p < up_mle)) {
+      groups <- if (grouped) vapply(ct_rows$group, clean, character(1)) else "all"
+      ranges <- paste0(groups, ": (", round(low_mle, 4), ", ", round(up_mle, 4), ")")
+      cli::cli_abort(c(
+        "The absolute {.arg target_surv} {.val {p}} is not attainable in the fitted curve.",
+        i = "Target survival must lie strictly between the fitted asymptotes.",
+        i = "Fitted survival range by group: {.val {ranges}}."
+      ))
+    }
+  }
+
+  alpha <- (1 - level) / 2; qs <- c(alpha, 1 - alpha)
+  boot <- tls_bootstrap_replicates(fit, nboot = nboot, seed = seed)
+  R <- boot$replicates[boot$converged, , drop = FALSE]
+  if (nrow(R) < 2L)
+    cli::cli_abort("Too few converged bootstrap replicates ({nrow(R)}); increase {.arg nboot}.")
+  if (identical(mode, "absolute")) {
+    low_v <- R[, "low"]; up_v <- R[, "up"]; k_v <- R[, "k"]
+    valid_target <- is.finite(low_v) & is.finite(up_v) & p > low_v & p < up_v
+    if (!all(valid_target)) {
+      cli::cli_abort(c(
+        "The absolute {.arg target_surv} {.val {p}} is not attainable in {sum(!valid_target)} of {nrow(R)} converged bootstrap refits.",
+        i = "Choose a target farther from the fitted asymptotes, or use the relative midpoint threshold."
+      ))
+    }
+  }
 
   # Grouped iff coefficients are level-tagged ("CTmax:lvl"); an ungrouped fit's
   # single "all"/intercept level is not surfaced as a group column.
-  grouped <- any(grepl(":", ct_rows$parameter))
   z_d <- z_s <- c_d <- c_s <- t_d <- t_s <- vector("list", nrow(ct_rows))
   for (i in seq_len(nrow(ct_rows))) {
     g  <- ct_rows$group[i]; gl <- if (grouped) clean(g) else NA_character_
@@ -146,7 +179,8 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
       target_surv = if (identical(mode, "relative")) "relative" else sprintf("p=%.3f", p),
       mode = mode, p = p, lethal = lethal, TC_rate_range = TC_rate_range,
       by = if (grouped) by_name else NULL,
-      nboot = nrow(R), level = level
+      nboot = nrow(R), level = level, tref = fit$tref,
+      duration_unit = meta$duration_unit %||% NULL
     )
   )
   class(out) <- c("freq_tdt", "list")
@@ -155,8 +189,10 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
 
 #' @export
 print.freq_tdt <- function(x, ...) {
-  cat(sprintf("<freq_tdt> %s threshold; %d bootstrap replicates%s\n",
+  unit <- x$meta$duration_unit %||% "time units"
+  cat(sprintf("<freq_tdt> %s threshold; %d bootstrap replicates; CTmax at tref = %g %s%s\n",
               x$meta$target_surv, x$meta$nboot,
+              x$meta$tref, unit,
               if (isTRUE(x$meta$lethal)) "; T_crit included" else ""))
   cat("  $z, $CTmax", if (!is.null(x$T_crit)) ", $T_crit" else "", " (each $draws + $summary)\n", sep = "")
   invisible(x)

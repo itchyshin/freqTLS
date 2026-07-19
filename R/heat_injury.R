@@ -35,6 +35,8 @@
 #' (the damage rate is per that unit). With `irreversible = TRUE` (default)
 #' survival is monotone non-increasing. A damage cutoff `t_c` (for example from
 #' [derive_tcrit()]) sets the damage rate to zero at or below `t_c`.
+#' Heat-injury prediction currently requires shared fixed-effect shape formulas;
+#' a varying shape would need to be re-evaluated along the temperature trace.
 #'
 #' This integrator is forward Euler (left-endpoint, per actual step), not the
 #' single-`dt` scheme some implementations use; irregular traces are integrated
@@ -59,6 +61,9 @@
 #'   dose: a single probability strictly between the fitted lower and upper
 #'   asymptotes. `NULL` (default) uses the project-default relative threshold (the
 #'   curve midpoint `(low + up) / 2`), matching [derive_ctmax()] and [derive_lt()].
+#'   For a bootstrap envelope the target must also be attainable in every
+#'   converged bootstrap refit; otherwise the function aborts rather than clipping
+#'   an invalid refit's threshold.
 #' @param t_c Optional damage-cutoff temperature (degrees C): at or below it the
 #'   damage rate is zero. `NULL` (default) applies no cutoff.
 #' @param repair Optional named list of Sharpe-Schoolfield repair parameters (see
@@ -85,6 +90,13 @@ predict_heat_injury <- function(object, trace, group = NULL, target_surv = NULL,
   if (inherits(object, "freq_tls")) object <- object$fit
   if (!inherits(object, "profile_tls")) {
     cli::cli_abort("{.arg object} must be a {.cls profile_tls} fit from {.fn fit_tls} (or a {.cls freq_tls} workflow from {.fn fit_4pl}).")
+  }
+  varying_shapes <- tls_bootstrap_varying_shapes(object)
+  if (length(varying_shapes)) {
+    cli::cli_abort(c(
+      "Heat-injury prediction is not available when {.val {varying_shapes}} has a varying fixed-effect shape design.",
+      i = "This deterministic trajectory currently requires one low, up, and k value over the trace."
+    ))
   }
   if (!is.data.frame(trace)) {
     cli::cli_abort("{.arg trace} must be a data frame with columns {.code time} and {.code temp}.")
@@ -320,6 +332,19 @@ heat_injury_envelope <- function(object, trace, group = NULL, target_surv = NULL
   }
   cc <- vapply(c("low", "up", "k", "CTmax", "z"), col_for, character(1))
 
+  if (!is.null(target_surv)) {
+    lo <- reps[, cc[["low"]]]
+    hi <- reps[, cc[["up"]]]
+    valid_target <- is.finite(lo) & is.finite(hi) &
+      target_surv > lo & target_surv < hi
+    if (!all(valid_target)) {
+      cli::cli_abort(c(
+        "The absolute {.arg target_surv} {.val {target_surv}} is not attainable in {sum(!valid_target)} of {nrow(reps)} converged bootstrap refits.",
+        i = "Choose a target farther from the fitted asymptotes, or use the relative midpoint threshold."
+      ))
+    }
+  }
+
   # Re-integrate the survival trajectory for each converged draw.
   mat <- vapply(seq_len(nrow(reps)), function(i) {
     p <- reps[i, ]
@@ -328,7 +353,7 @@ heat_injury_envelope <- function(object, trace, group = NULL, target_surv = NULL
       0
     } else {
       r <- (target_surv - lo_i) / (up_i - lo_i)
-      stats::qlogis(min(max(r, 1e-9), 1 - 1e-9))
+      stats::qlogis(r)
     }
     tls_injury_traj(lo_i, up_i, p[[cc[["k"]]]], p[[cc[["CTmax"]]]], p[[cc[["z"]]]],
                     object$tref, time, temp, q_b, t_c, rep_rate, irreversible)$survival

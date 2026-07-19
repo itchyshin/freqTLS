@@ -19,7 +19,9 @@ extract_tdt(
 \item{object}{A \code{freq_tls} fit from \code{\link[=fit_4pl]{fit_4pl()}} (or a \code{profile_tls} fit).}
 
 \item{target_surv}{\code{"relative"} (curve midpoint, default), \code{"absolute"}
-(50\% survival), or a numeric survival level in \verb{(0, 1)} for an LTx CTmax.}
+(50\% survival), or a numeric survival level in \verb{(0, 1)} for an LTx CTmax.
+An absolute target must lie strictly between the fitted asymptotes for every
+reported group; otherwise no finite crossing exists.}
 
 \item{lethal}{If \code{TRUE}, also derive \code{T_crit} (the damage-rate-floor critical
 temperature, \code{CTmax + z * log10(rate / 100)}, \code{rate} log-uniform over
@@ -40,6 +42,8 @@ for \code{T_crit}. Default \code{c(0.1, 1)}.}
 A list with \verb{$z}, \verb{$CTmax}, (\verb{$T_crit} when \code{lethal}), and \verb{$meta}.
 Each quantity is \verb{list(draws = <tibble>, summary = <tibble>)}. Column names
 follow bayesTLS: \code{z_median/z_lower/z_upper} for z; \code{temp_median/temp_lower/ temp_upper} for CTmax and T_crit; per-draw value columns are \code{z} / \code{temp}.
+\verb{$meta$tref} records the reference time; \verb{$meta$duration_unit} is retained
+when the input is a \code{\link[=fit_4pl]{fit_4pl()}} workflow.
 }
 \description{
 The frequentist analogue of \code{bayesTLS::extract_tdt()}. Runs a parametric bootstrap

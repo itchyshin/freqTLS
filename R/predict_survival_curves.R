@@ -1,7 +1,7 @@
 # The bayesTLS-analogue survival-surface predictor. predict_survival_curves() returns
 # the fitted survival probability over a temperature x duration grid with
 # confidence bands, in bayesTLS's $summary shape (survival_lower/median/upper).
-# Bands come from the parametric bootstrap (the freq analogue of posterior draws);
+# Bands come from the parametric bootstrap;
 # the per-cell survival is the forward 4PL evaluated at each replicate's natural
 # parameters, matching the engine's predict()/src/profile_tls.cpp forward map.
 
@@ -18,6 +18,9 @@
 #' @param durations Exposure durations (default: 100 points log-spaced over the
 #'   observed range, in the data's duration unit).
 #' @param nboot Number of bootstrap replicates for the bands (default 500).
+#'   Bootstrap bands currently require shared fixed-effect shape formulas
+#'   (`low = up = log_k = ~ 1`). For varying shapes, use [predict()] for the
+#'   fitted surface; a design-aware bootstrap surface is not yet available.
 #' @param level Confidence level (default 0.95).
 #' @param seed Optional RNG seed.
 #' @param by Optional name for the grouping column.
@@ -63,6 +66,14 @@ predict_survival_curves <- function(object, temps = NULL, durations = NULL,
   by_name <- (by %||% meta$moderators %||% "group")[1L]
   grouped <- any(grepl("^CTmax:", est$parameter))
 
+  varying_shapes <- tls_bootstrap_varying_shapes(fit)
+  if (length(varying_shapes)) {
+    cli::cli_abort(c(
+      "Bootstrap survival-curve bands are not available when {.val {varying_shapes}} has a varying fixed-effect shape design.",
+      i = "Use {.fn predict} for the fitted surface, or refit with shared shapes for bootstrap bands."
+    ))
+  }
+
   boot <- tls_bootstrap_replicates(fit, nboot = nboot, seed = seed)
   R <- boot$replicates[boot$converged, , drop = FALSE]
   if (nrow(R) < 2L)
@@ -99,7 +110,8 @@ predict_survival_curves <- function(object, temps = NULL, durations = NULL,
   out <- list(
     summary = tibble::as_tibble(do.call(rbind, parts)),
     meta = list(nboot = nrow(R), level = level,
-                by = if (grouped) by_name else NULL)
+                by = if (grouped) by_name else NULL, tref = fit$tref,
+                duration_unit = meta$duration_unit %||% NULL)
   )
   class(out) <- c("freq_surv_curves", "list")
   out

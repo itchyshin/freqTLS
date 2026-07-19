@@ -27,7 +27,10 @@ fit is grouped).}
 \item{target_surv}{Optional absolute survival threshold defining one lethal
 dose: a single probability strictly between the fitted lower and upper
 asymptotes. \code{NULL} (default) uses the project-default relative threshold (the
-curve midpoint \code{(low + up) / 2}), matching \code{\link[=derive_ctmax]{derive_ctmax()}} and \code{\link[=derive_lt]{derive_lt()}}.}
+curve midpoint \code{(low + up) / 2}), matching \code{\link[=derive_ctmax]{derive_ctmax()}} and \code{\link[=derive_lt]{derive_lt()}}.
+For a bootstrap envelope the target must also be attainable in every
+converged bootstrap refit; otherwise the function aborts rather than clipping
+an invalid refit's threshold.}
 
 \item{t_c}{Optional damage-cutoff temperature (degrees C): at or below it the
 damage rate is zero. \code{NULL} (default) applies no cutoff.}
@@ -80,6 +83,8 @@ The trace \code{time} and the fit's duration / \code{tref} \strong{must share a 
 (the damage rate is per that unit). With \code{irreversible = TRUE} (default)
 survival is monotone non-increasing. A damage cutoff \code{t_c} (for example from
 \code{\link[=derive_tcrit]{derive_tcrit()}}) sets the damage rate to zero at or below \code{t_c}.
+Heat-injury prediction currently requires shared fixed-effect shape formulas;
+a varying shape would need to be re-evaluated along the temperature trace.
 
 This integrator is forward Euler (left-endpoint, per actual step), not the
 single-\code{dt} scheme some implementations use; irregular traces are integrated

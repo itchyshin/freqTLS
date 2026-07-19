@@ -32,17 +32,19 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 `freqTLS` fits the single-stage four-parameter logistic (4PL) thermal
 death-time model by maximum likelihood via
 [TMB](https://github.com/kaskr/adcomp), parameterised **directly** in
-`CTmax` (critical thermal maximum) and `z` (thermal sensitivity). It
-then returns prior-free **frequentist confidence intervals** — Wald,
-profile-likelihood (asymmetry-respecting), and bootstrap — for binomial
-and beta-binomial survival counts, and for continuous **proportion**
-responses in `(0, 1)` via the beta family.
+`CTmax` (the critical thermal maximum at the reference time `tref`) and
+`z` (thermal sensitivity, in degrees Celsius per decade of exposure
+duration). It then returns prior-free **frequentist confidence
+intervals** — Wald, profile-likelihood (asymmetry-respecting), and
+bootstrap — for binomial and beta-binomial survival counts, and for
+continuous **proportion** responses in `(0, 1)` via the beta family.
 
 Its signature display is the **Confidence Eye**: a pale horizontal lens
-spanning the likelihood interval, with a hollow point estimate. These
-are likelihood *confidence* intervals, not posteriors, so the visual
-deliberately avoids posterior-density iconography. freqTLS intervals are
-never described as “posterior” or “credible” intervals.
+spanning the selected confidence interval, with a hollow point estimate.
+The profile- likelihood interval is the default where it is supported;
+Wald and bootstrap intervals can also be shown. These are
+likelihood-based *confidence* intervals, not posterior distributions, so
+the visual deliberately avoids posterior-density iconography.
 
 <img src="man/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per decade of duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%" />
 
@@ -91,10 +93,12 @@ whole design and flags weakly identified parameters.
 
 `freqTLS` follows the empirical workflow in the [`bayesTLS`
 supplement](https://daniel1noble.github.io/bayesTLS/) while using a
-different inference engine. When the data, response family, formulas,
-threshold, reference time, and estimand are identical, the packages
-target the same likelihood-defined curve. Their APIs and uncertainty
-objects are **not** drop-in replacements.
+different inference engine. A numerical comparison is meaningful only
+after the data, response family, formulas, asymptote bounds, threshold,
+reference time, estimand, and grouping structure have been matched.
+Under a matched 4PL specification, the packages can represent the same
+fitted curve; their APIs and uncertainty objects are **not** drop-in
+replacements.
 
 |  | `bayesTLS` | `freqTLS` |
 |----|----|----|
@@ -111,7 +115,8 @@ close it can fall back to a parametric bootstrap; if too few stable
 refits remain, the result stays unavailable rather than reporting a
 fabricated bound. Use `bayesTLS` when you want a full Bayesian workflow,
 prior information, or the heat-injury and repair sub-models. The two are
-complementary lenses on the same model, not competitors.
+complementary approaches to the same thermal-load-sensitivity framework,
+not competitors.
 
 ## Installation
 
@@ -146,7 +151,8 @@ library(freqTLS)
 # 1. Standardize raw survival counts (the shared bayesTLS entry point)
 dat <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4, phi = 50, seed = 1)
 std <- standardize_data(dat, temp = "temp", duration = "duration",
-                        n_total = "total", n_surv = "survived")
+                        n_total = "total", n_surv = "survived",
+                        duration_unit = "hours")
 
 # 2. Fit the 4PL by maximum likelihood, directly in CTmax and z
 fit <- fit_4pl(std, t_ref = 1)
@@ -344,10 +350,12 @@ $$
 
 `CTmax` is the critical thermal maximum at the reference time `tref`,
 and `z` is the thermal sensitivity (degrees Celsius per decade of
-exposure duration). The temperature effect runs through the midpoint
-only (shared `low`, `up`, `k`), matching the `bayesTLS` constant-shape
-configuration. Because `CTmax` and `z` are direct model coordinates,
-both can be profiled directly.
+exposure duration). The In the default constant-shape configuration, the
+temperature effect runs through the midpoint only (shared `low`, `up`,
+`k`). Explicit formula terms can instead model `low`, `up`, or `log_k`;
+these extensions change the interpretation of an absolute-threshold
+curve and do not create local `z` estimates. Because `CTmax` and `z` are
+direct model parameters, both can be profiled directly.
 
 See `vignette("freqTLS")` for the full walkthrough,
 `vignette("model-math")` for the exact bridge to `bayesTLS`, and
@@ -362,11 +370,10 @@ Pottier** in the [`bayesTLS`](https://github.com/daniel1noble/bayesTLS)
 package. The model and the mapping from the 4PL midpoint slope to `z`
 and `CTmax` are theirs. `freqTLS` is a likelihood implementation of that
 framework. Please cite `bayesTLS` alongside `freqTLS` when you use this
-package. `freqTLS` contributes a TMB maximum-likelihood likelihood, the
-direct `CTmax`/`z` reparameterisation that makes both quantities
-directly profile-able, and profile-likelihood confidence intervals — a
-likelihood complement to the Bayesian path (no priors, no MCMC, no
-Stan).
+package. `freqTLS` contributes a TMB maximum-likelihood likelihood,
+direct `CTmax`/`z` parameters that make both quantities directly
+profile-able, and profile-likelihood confidence intervals — a likelihood
+complement to the Bayesian path (no priors, no MCMC, no Stan).
 
 ## Data credits
 

@@ -33,7 +33,7 @@ refit important analyses with
 cross-check, not proof of correctness; shared mistakes can make both packages
 agree.
 
-## Fair-comparison contract
+## Comparison scope
 
 A numerical difference is interpretable only when all of the following are
 identical:
@@ -45,18 +45,17 @@ identical:
 5. resolved reference-time unit;
 6. relative or absolute threshold and reported estimand.
 
-The pinned baseline is the
+The comparison uses the pinned
 [`bayesTLS` supplement](https://daniel1noble.github.io/bayesTLS/) rendered
 2026-07-14 from commit
 [`76510412`](https://github.com/daniel1noble/bayesTLS/tree/76510412e06c594c96894a1baba1f0e1a34a5aea).
 
-## Pinned comparator evidence
+## Reproducibility record
 
-The curated cache was built on Totoro with four chains per fit, bounded
-parallelism, and `OPENBLAS_NUM_THREADS=1`. Raw posterior fits remain outside the
-repository. The cache records exact analysis hashes, formulas, filters,
-thresholds, reference times, seeds, package versions, both source commits, and
-sampler diagnostics.
+The curated cache records the exact analysis hashes, formulas, filters,
+thresholds, reference times, source versions, and sampler diagnostics. The full
+rebuild and publication procedure is in
+`docs/design/48-canonical-comparator-cache.md`.
 
 ```{r provenance}
 data.frame(
@@ -192,8 +191,10 @@ coma_fit <- fit_4pl(
 All displayed ML fits converged with a positive-definite Hessian and passed the
 package's raw-gradient gate. The interval method for the direct-coordinate rows
 below is Wald; the all-age aphid cell values and mortality absolute-LT50 values
-are point predictions and are labelled accordingly. Shape-identification
-warnings remain visible in the organism-specific articles.
+are point predictions and are labelled accordingly. The organism-specific
+articles show the shape-identification warnings: temperature-varying `low`,
+`up`, or `k` can be weakly identified, so readers should inspect `check_tls()`
+before interpreting a shape effect.
 
 ```{r freq-diagnostics}
 fit_list <- list(
@@ -227,10 +228,10 @@ freq_diagnostics
 
 ## Actual paired differences
 
-The primary table compares the frequentist point estimate with the Bayesian
-posterior median. Positive values mean the freqTLS estimate is larger. The
-interval columns are shown side by side without pretending that a confidence
-interval and a credible interval have the same interpretation.
+The primary table puts the maximum-likelihood estimate and its Wald confidence
+interval beside the Bayesian posterior median and credible interval. Interval
+widths are descriptive, method-specific quantities: a confidence-interval width
+and credible-interval width are not interchangeable measures of uncertainty.
 
 ```{r paired-table}
 as_freq_rows <- function(fit, case_id, by, endpoint, t_ref) {
@@ -293,13 +294,24 @@ names(paired)[names(paired) == "lower"] <- "bayes_lower"
 names(paired)[names(paired) == "upper"] <- "bayes_upper"
 names(paired)[names(paired) == "interval_method"] <- "bayes_interval"
 paired$difference_freq_minus_bayes <- paired$freq_estimate - paired$bayes_median
+paired$freq_width <- paired$freq_upper - paired$freq_lower
+paired$bayes_width <- paired$bayes_upper - paired$bayes_lower
 stopifnot(nrow(paired) == 18L)
 
-paired[c(
+paired_display <- paired[c(
   "case_id", "endpoint", "threshold", "t_ref", "group", "parameter",
   "freq_estimate", "freq_lower", "freq_upper", "bayes_median",
-  "bayes_lower", "bayes_upper", "difference_freq_minus_bayes"
+  "bayes_lower", "bayes_upper", "freq_width", "bayes_width",
+  "difference_freq_minus_bayes"
 )]
+names(paired_display) <- c(
+  "Case", "Endpoint", "Threshold", "tref", "Group", "Quantity",
+  "ML estimate", "ML CI lower", "ML CI upper", "Bayes median",
+  "Bayes CrI lower", "Bayes CrI upper", "ML CI width", "Bayes CrI width",
+  "ML minus Bayes"
+)
+knitr::kable(paired_display, digits = 3,
+             caption = "Matched quantities: ML Wald confidence intervals and Bayesian credible intervals remain labelled separately.")
 ```
 
 The age-six aphid row is also one cell of the all-age extension, but the two
@@ -345,12 +357,12 @@ Snow-gum is a paired refit of the locked shared-shape analogue. It is not a
 claim that freqTLS reproduces the richer recovery-by-temperature shape model
 displayed in the pinned supplement.
 
-### Drosophila mortality: do not mix estimands
+### Drosophila mortality: match the reported estimand
 
-The pinned mortality summary uses the absolute 50% threshold. The direct
-freqTLS `CTmax` and `z` coordinates are relative-midpoint quantities, so they
-must not be subtracted from the Bayesian absolute values. Only the absolute
-240-minute LT50 point is comparable without silently changing the estimand.
+The pinned mortality summary uses the absolute 50% threshold. freqTLS fits the
+relative direct-coordinate backbone, then can derive the same absolute 240-minute
+LT50 by solving the fitted survival curve. This article compares that shared point
+estimand; it does not relabel relative `CTmax` or `z` as absolute quantities.
 
 ```{r mortality-absolute}
 mort_lt50 <- data.frame(
@@ -398,10 +410,11 @@ stopifnot(nrow(mort_compare) == 2L)
 mort_compare
 ```
 
-The Bayesian cache also contains absolute-threshold `z`. freqTLS does not print
-an allegedly equivalent absolute `z` from this temperature-varying shape model;
-its direct `z` remains the relative coordinate. The mortality case article
-shows that relative result explicitly.
+The Bayesian cache also contains absolute-threshold `z`. In this temperature-
+varying-shape model, freqTLS does not return a temperature-specific local absolute
+`z`: its direct `z` is the relative-midpoint backbone sensitivity. The mortality
+case article reports that relative `z` explicitly and limits the absolute
+comparison to the four-hour LT50 point.
 
 ## What agreement means
 
@@ -420,6 +433,4 @@ intercepts, and deterministic heat-injury scenarios remain separate extension
 pages with synthetic examples.
 
 Censored-time, hurdle-productivity, posterior inference, and fitted repair
-dynamics remain bayesTLS-only. Brown shrimp and life-stage zebrafish remain
-unpublished benchmark-only compatibility fixtures and do not enter this
-comparison, site navigation, search results, sitemap, or current summaries.
+dynamics remain bayesTLS-only.

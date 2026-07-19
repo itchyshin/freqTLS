@@ -23,6 +23,14 @@ test_that("make_4pl_formula builds the engine tls_formula from direct args", {
   expect_match(deparse1(fby$sub_formulas$CTmax), "0 \\+ sex")
 })
 
+test_that("make_4pl_formula requires one explicit by moderator", {
+  expect_error(
+    make_4pl_formula(by = c("sex", "population")),
+    "one non-missing column name"
+  )
+  expect_error(make_4pl_formula(by = NA_character_), "one non-missing column name")
+})
+
 test_that("fit_4pl recovers the simulating truth (ungrouped) and returns freq_tls", {
   s <- std_sim(seed = 1, CTmax = 36, z = 4)
   f <- fit_4pl(s, t_ref = 1, family = "binomial", quiet = TRUE)
@@ -37,6 +45,23 @@ test_that("fit_4pl recovers the simulating truth (ungrouped) and returns freq_tl
   expect_identical(f$meta$t_ref, 1)
   expect_equal(f$meta$temp_mean, attr(s, "tdt_meta")$temp_mean)
   expect_false(f$meta$grouped)
+})
+
+test_that("t_ref follows the duration unit under a common time rescaling", {
+  d_hours <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 17)
+  d_minutes <- d_hours
+  d_minutes$duration <- 60 * d_minutes$duration
+  h <- standardize_data(d_hours, temp = "temp", duration = "duration",
+                        n_total = "total", n_surv = "survived",
+                        duration_unit = "hours")
+  m <- standardize_data(d_minutes, temp = "temp", duration = "duration",
+                        n_total = "total", n_surv = "survived",
+                        duration_unit = "minutes")
+  fh <- suppressWarnings(fit_4pl(h, t_ref = 1, family = "binomial", quiet = TRUE))
+  fm <- suppressWarnings(fit_4pl(m, t_ref = 60, family = "binomial", quiet = TRUE))
+  expect_equal(as.numeric(logLik(fh)), as.numeric(logLik(fm)), tolerance = 1e-8)
+  expect_equal(get_ctmax(fh)$estimate, get_ctmax(fm)$estimate, tolerance = 1e-8)
+  expect_equal(get_z(fh)$estimate, get_z(fm)$estimate, tolerance = 1e-8)
 })
 
 test_that("fit_4pl direct grouping equals the engine column-interface grouped fit", {
@@ -77,8 +102,15 @@ test_that("the freq_tls workflow is accepted by the plots and extractors", {
   f <- fit_4pl(std_sim(seed = 1), t_ref = 1, family = "binomial", quiet = TRUE)
   # plots (incl. the Confidence Eye) and extractors take the workflow, not just $fit
   expect_s3_class(plot_confidence_eye(f), "ggplot")
-  expect_s3_class(plot_survival_curves(f), "ggplot")
-  expect_s3_class(plot_tdt_curve(f), "ggplot")
+  curves <- plot_survival_curves(f)
+  tdt <- plot_tdt_curve(f)
+  surface <- plot_survival_surface(f)
+  expect_s3_class(curves, "ggplot")
+  expect_s3_class(tdt, "ggplot")
+  expect_s3_class(surface, "ggplot")
+  expect_match(curves$labels$x, "hours")
+  expect_match(tdt$labels$y, "hours")
+  expect_match(surface$labels$y, "hours")
   expect_s3_class(tidy_parameters(f), "tbl_df")
   expect_s3_class(get_ctmax(f), "data.frame")
   expect_type(derive_ctmax(f), "double")

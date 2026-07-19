@@ -118,6 +118,38 @@ test_that("bootstrap works per group on a grouped fit", {
             ci$estimate[ci$parameter == "CTmax:B"])
 })
 
+test_that("bootstrap retains every varying fixed-effect shape coefficient", {
+  d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 71)
+  d$temp_c <- d$temp - mean(d$temp)
+  fit <- suppressWarnings(fit_tls(
+    tls_bf(
+      survived | trials(total) ~ time(duration) + temp(temp),
+      low ~ temp_c, up ~ temp_c, log_k ~ temp_c
+    ),
+    data = d, family = "binomial", tref = 1
+  ))
+  boot <- tls_bootstrap_replicates(fit, nboot = 12, seed = 1)
+  expect_gt(boot$n_converged, 1L)
+  expect_true(all(c("low:temp_c", "up:temp_c", "k:temp_c") %in%
+                  colnames(boot$replicates)))
+  expect_true(all(is.finite(boot$replicates[boot$converged, "low:temp_c"])))
+})
+
+test_that("bootstrap retains grouped shape coefficients independently of CTmax", {
+  d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 72)
+  d$shape_group <- rep(c("A", "B"), length.out = nrow(d))
+  fit <- suppressWarnings(fit_tls(
+    tls_bf(
+      survived | trials(total) ~ time(duration) + temp(temp),
+      low ~ 0 + shape_group, up ~ 0 + shape_group, log_k ~ 0 + shape_group
+    ),
+    data = d, family = "binomial", tref = 1
+  ))
+  boot <- tls_bootstrap_replicates(fit, nboot = 12, seed = 1)
+  expect_gt(boot$n_converged, 1L)
+  expect_true(all(c("low:A", "up:B", "k:A") %in% colnames(boot$replicates)))
+})
+
 test_that("beta-binomial bootstrap draws and refits without error", {
   d <- simulate_tls(family = "beta_binomial", phi = 50, CTmax = 36, z = 4,
                     seed = 13)

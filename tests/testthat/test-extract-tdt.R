@@ -24,6 +24,8 @@ test_that("extract_tdt returns nested z/CTmax with the bayesTLS column contract"
   expect_equal(s$temp_median, 36, tolerance = 0.3)
   expect_true(s$temp_lower < s$temp_median && s$temp_median < s$temp_upper)
   expect_equal(nrow(get_z_draws(et)), et$meta$nboot)
+  expect_identical(et$meta$tref, 1)
+  expect_identical(et$meta$duration_unit, "hours")
 })
 
 test_that("extract_tdt groups and adds T_crit (below CTmax) when lethal", {
@@ -53,4 +55,13 @@ test_that("get_tcrit errors without lethal; absolute ~= relative for symmetric d
   expect_equal(get_ctmax_summary(eta)$temp_median,
                get_ctmax_summary(et)$temp_median, tolerance = 0.2)
   expect_match(eta$meta$target_surv, "p=0.500")
+})
+
+test_that("absolute extraction rejects a target outside the fitted asymptotes", {
+  f <- fit_4pl(std_sim(2, CTmax = 36, z = 4), t_ref = 1,
+               family = "binomial", quiet = TRUE)
+  expect_error(
+    extract_tdt(f, target_surv = 0.999, nboot = 2, seed = 1),
+    "not attainable in the fitted curve"
+  )
 })

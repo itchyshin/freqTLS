@@ -365,7 +365,11 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
-  if (inherits(fit, "freq_tls")) fit <- fit$fit
+  duration_unit <- NULL
+  if (inherits(fit, "freq_tls")) {
+    duration_unit <- fit$meta$duration_unit
+    fit <- fit$fit
+  }
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -440,12 +444,12 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
                                     end = 0.9) +
     ggplot2::theme_minimal() +
     ggplot2::labs(
-      x = "Exposure duration (log scale)",
+      x = sprintf("Exposure duration (%s; log scale)", duration_unit %||% "input units"),
       y = "Survival probability",
       title = "Fitted survival vs duration",
       caption = sprintf(
-        "Fitted 4PL survival; points are observed proportions. CTmax defined at tref = %s.",
-        format(fit$tref)
+        "Fitted 4PL survival; points are observed proportions. CTmax defined at tref = %s %s.",
+        format(fit$tref), duration_unit %||% "input units"
       )
     )
 
@@ -486,7 +490,11 @@ plot_tdt_curve <- function(fit, p = NULL, temps = NULL, ...) {
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
-  if (inherits(fit, "freq_tls")) fit <- fit$fit
+  duration_unit <- NULL
+  if (inherits(fit, "freq_tls")) {
+    duration_unit <- fit$meta$duration_unit
+    fit <- fit$fit
+  }
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -542,17 +550,18 @@ plot_tdt_curve <- function(fit, p = NULL, temps = NULL, ...) {
     ggplot2::labs(
       x = "Temperature (\u00b0C)",
       y = if (relative_default) {
-        "Duration to relative midpoint (log scale)"
+        sprintf("Duration to relative midpoint (%s; log scale)", duration_unit %||% "input units")
       } else {
-        sprintf("Duration to %d%% survival (log scale)", round(100 * p))
+        sprintf("Duration to %d%% survival (%s; log scale)", round(100 * p),
+                duration_unit %||% "input units")
       },
       title = "Thermal death-time curve",
       caption = paste(strwrap(if (relative_default) {
-        sprintf("Duration at each fitted relative midpoint (low + up) / 2, read off the 4PL midpoint at tref = %s.",
-                format(fit$tref))
+        sprintf("Duration at each fitted relative midpoint (low + up) / 2, read off the 4PL midpoint at tref = %s %s.",
+                format(fit$tref), duration_unit %||% "input units")
       } else {
-        sprintf("Duration at which fitted survival crosses %.2f (absolute threshold) at tref = %s.",
-                p, format(fit$tref))
+        sprintf("Duration at which fitted survival crosses %.2f (absolute threshold) at tref = %s %s.",
+                p, format(fit$tref), duration_unit %||% "input units")
       }, width = 88L), collapse = "\n")
     ) +
     ggplot2::theme(
@@ -594,7 +603,11 @@ plot_survival_surface <- function(fit, temps = NULL, times = NULL,
   if (length(dots) > 0L) {
     cli::cli_abort("{.arg ...} is reserved; pass only documented arguments.")
   }
-  if (inherits(fit, "freq_tls")) fit <- fit$fit
+  duration_unit <- NULL
+  if (inherits(fit, "freq_tls")) {
+    duration_unit <- fit$meta$duration_unit
+    fit <- fit$fit
+  }
   if (!inherits(fit, "profile_tls")) {
     cli::cli_abort("{.arg fit} must be a {.cls profile_tls} fit from {.fn fit_tls}.")
   }
@@ -617,10 +630,10 @@ plot_survival_surface <- function(fit, temps = NULL, times = NULL,
     ggplot2::theme_minimal() +
     ggplot2::labs(
       x = "Temperature (\u00b0C)",
-      y = "Exposure duration (log scale)",
+      y = sprintf("Exposure duration (%s; log scale)", duration_unit %||% "input units"),
       title = "Fitted survival surface",
-      caption = sprintf("Fitted 4PL survival probability. CTmax defined at tref = %s.",
-                        format(fit$tref))
+      caption = sprintf("Fitted 4PL survival probability. CTmax defined at tref = %s %s.",
+                        format(fit$tref), duration_unit %||% "input units")
     )
 
   if (isTRUE(contour)) {

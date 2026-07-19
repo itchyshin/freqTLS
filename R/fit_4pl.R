@@ -10,7 +10,8 @@
 #' Translates the bayesTLS-style direct-mode arguments (`ctmax`, `z`, `up`,
 #' `low`, `k`, `by`) into the engine's [tls_bf()] `tls_formula` object. Supplying
 #' a `ctmax` and/or `z` formula is the direct parameterisation; `by` is shorthand
-#' for grouping CTmax and z by a single moderator (`~ 0 + by`).
+#' for fixed cell means of CTmax and z by one moderator (`~ 0 + by`); it does
+#' not add random effects or modify the shape formulas.
 #'
 #' Following the freqTLS constant-shape invariant, the asymptotes and steepness
 #' (`up`, `low`, `k`) default to **shared** (`~ 1`) so the temperature effect runs
@@ -25,8 +26,9 @@
 #'   CTmax / thermal-sensitivity structure and must have the same fixed-effect
 #'   model-matrix columns; `up`/`low`/`k` set the 4PL shape. Random intercepts
 #'   are supported on `ctmax`, `z`, `low`, and `k`, but not `up`.
-#' @param by Optional single moderator column name; shorthand for
-#'   `ctmax = z = ~ 0 + by` when those are not given explicitly.
+#' @param by Optional single, non-missing moderator column name. It is shorthand
+#'   for `ctmax = z = ~ 0 + by` when those are not given explicitly; it does not
+#'   add random effects or modify `low`, `up`, or `k`.
 #' @param family `"beta_binomial"`, `"binomial"`, or `"beta"` (selects the
 #'   response idiom: `n_surv | trials(n_total)` for counts, bare `survival` for
 #'   the continuous-proportion beta family).
@@ -38,6 +40,13 @@
 #' @export
 make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
                              k = NULL, by = NULL, family = "beta_binomial") {
+  if (!is.null(by) && (!is.character(by) || length(by) != 1L || is.na(by) ||
+                      !nzchar(by))) {
+    cli::cli_abort(c(
+      "{.arg by} must be one non-missing column name or {.code NULL}.",
+      i = "For an interaction, create one moderator column in {.arg data} first."
+    ))
+  }
   fam_name <- if (is.character(family)) family[1L] else family$family
   rhs <- function(f, default = "1") {
     if (is.null(f)) return(default)
@@ -74,7 +83,7 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #' Fit the 4PL thermal-load-sensitivity model by maximum likelihood (TMB)
 #'
 #' The frequentist analogue of `bayesTLS::fit_4pl()`. Consumes [standardize_data()]
-#' output and fits the single-stage 4PL thermal death-time model, parameterised
+#' output and fits the single-stage 4PL thermal-load-sensitivity model, parameterised
 #' directly in CTmax and thermal sensitivity (z), via the freqTLS TMB engine.
 #' Returns a `freq_tls` workflow object; uncertainty (Wald / profile / bootstrap)
 #' is computed on demand by the quantity analogues ([tls()], `confint()`).
@@ -91,15 +100,20 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #'
 #' @param data Output of [standardize_data()].
 #' @param ctmax,z,up,low,k,by Direct-mode formula interface; see
-#'   [make_4pl_formula()]. Supplying `ctmax`/`z` (or `by`) fits per-group CTmax/z;
-#'   the two headline formulas must produce the same fixed-effect columns.
+#'   [make_4pl_formula()]. `by` gives fixed cell means for both `ctmax` and `z`.
+#'   When `ctmax` and `z` are both supplied, their fixed-effect right-hand sides
+#'   must produce the same model-matrix columns; their optional random-intercept
+#'   terms may differ.
 #' @param threshold `"relative"` (default; CTmax/z at the curve midpoint) or
 #'   `"absolute"` (at the `p`-survival level). The fitting backbone currently
 #'   accepts only `"relative"`; obtain absolute-threshold quantities post fit
 #'   with [extract_tdt()] and `target_surv = "absolute"`.
 #' @param p Survival level for the absolute threshold (default 0.5).
-#' @param t_ref Reference exposure time (in the data's `duration_unit`) at which
-#'   CTmax is reported. Default 60 (e.g. minutes); use `t_ref = 1` for hours.
+#' @param t_ref Positive reference exposure time at which CTmax is reported,
+#'   expressed in exactly the same unit as the standardised `duration` column.
+#'   The default `60` means 60 duration units. It is one hour only when
+#'   `duration_unit = "minutes"`; `t_ref = 1` is one hour only when durations are
+#'   measured in hours.
 #' @param bounds Asymptote range. Only `c(0, 1)` is currently accepted. Supply
 #'   survival as a probability in `[0, 1]` and let the model estimate `low` and
 #'   `up` within that range; non-default bounds stop with an error.
@@ -112,9 +126,9 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #'   `$formula`, and `$meta` (threshold, t_ref, bounds, temp_mean, response_type,
 #'   family, grouped, moderators, method).
 #' @section Before interpretation:
-#' Before interpreting the fit, run [check_tls()]. Its help page gives a recovery
-#' action for each data-adequacy warning; `vignette("profile-likelihood")` explains
-#' strict open profiles and the default bootstrap fallback.
+#' Run [check_tls()] before interpreting the fit. It gives a concrete recovery
+#' action for each data-adequacy warning; `vignette("profile-likelihood")`
+#' explains open profiles and the bootstrap fallback.
 #'
 #' @seealso [standardize_data()], [make_4pl_formula()], [fit_tls()], [check_tls()]
 #' @examples

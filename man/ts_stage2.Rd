@@ -27,21 +27,32 @@ the case-study default) or \code{"finite_ok"} (finite/negative slope only, the
 simulation's looser rule).}
 }
 \value{
-\code{list(fit, summary)}; \code{fit} is \code{NULL} if fewer than 3 valid Stage-1
-estimates remain. \code{summary} has \code{intercept}, \code{slope_T}, \code{z}, \code{CTmax_1hr},
-\code{T_crit}, \code{r_squared}, \code{n_stage1}, \code{n_excluded}.
+\code{list(fit, summary, settings)}; \code{fit} is \code{NULL} if fewer than 3 valid
+Stage-1 estimates remain. \code{summary} has \code{intercept}, \code{slope_T}, \code{z},
+\code{CTmax}, \code{T_crit}, \code{r_squared}, \code{n_stage1}, \code{n_excluded}. \verb{$settings}
+records \code{t_ref}, \code{time_multiplier}, and \code{TC_rate_range}; downstream
+\code{\link[=ts_ci]{ts_ci()}} and \code{\link[=ts_curve]{ts_curve()}} inherit these settings by default.
+For compatibility, when \code{t_ref = 60} exactly, \code{summary} also contains a
+truthful \code{CTmax_1hr} alias for \code{CTmax}; it is absent at every other
+reference duration.
 }
 \description{
-Regresses Stage-1 \code{log10(LT50)} on assay temperature by ordinary least
-squares and derives the classical quantities. \code{z = -1/slope};
+Regresses the valid Stage-1 \code{log10(LT50)} estimates on assay temperature by
+ordinary least squares and derives the classical quantities. \code{z = -1/slope};
 \code{CTmax(t_ref) = (log10(t_ref) - intercept) / slope}; \code{T_crit} follows the
 rate-multiplier definition, \code{CTmax + z * mean(log10(TC_rate_range/100))}.
+\code{t_ref} is expressed in minutes and is recorded in the returned \verb{$settings}.
+Thus \code{summary$CTmax} is always CTmax at the explicitly recorded reference
+duration, not necessarily CTmax at one hour. Stage 2 retains only rows chosen
+by \code{rows}; if fewer than three valid Stage-1 temperatures remain, it returns
+a \code{NULL} fit and an \code{NA} summary rather than extrapolating a TDT line.
 }
 \examples{
-d <- data.frame(
-  temp = rep(c(30, 32, 34, 36, 38), each = 12),
-  dur  = rep(c(1, 5, 15, 45, 135, 405), times = 10),
-  surv = rbinom(60, 20, 0.4), tot = 20)
-s1 <- ts_stage1(d, "temp", "dur", "surv", "tot")
-ts_stage2(s1)$summary
+d <- simulate_tls(
+  family = "binomial", temps = seq(30, 42, by = 2),
+  times = c(0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100),
+  reps = 4, n = 50, CTmax = 36, z = 4, seed = 42
+)
+s1 <- ts_stage1(d, "temp", "duration", "survived", "total")
+ts_stage2(s1, t_ref = 60, time_multiplier = 60)$summary
 }

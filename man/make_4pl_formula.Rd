@@ -20,8 +20,9 @@ CTmax / thermal-sensitivity structure and must have the same fixed-effect
 model-matrix columns; \code{up}/\code{low}/\code{k} set the 4PL shape. Random intercepts
 are supported on \code{ctmax}, \code{z}, \code{low}, and \code{k}, but not \code{up}.}
 
-\item{by}{Optional single moderator column name; shorthand for
-\code{ctmax = z = ~ 0 + by} when those are not given explicitly.}
+\item{by}{Optional single, non-missing moderator column name. It is shorthand
+for \code{ctmax = z = ~ 0 + by} when those are not given explicitly; it does not
+add random effects or modify \code{low}, \code{up}, or \code{k}.}
 
 \item{family}{\code{"beta_binomial"}, \code{"binomial"}, or \code{"beta"} (selects the
 response idiom: \code{n_surv | trials(n_total)} for counts, bare \code{survival} for
@@ -34,7 +35,8 @@ A \code{tls_formula} object (as built by \code{\link[=tls_bf]{tls_bf()}}).
 Translates the bayesTLS-style direct-mode arguments (\code{ctmax}, \code{z}, \code{up},
 \code{low}, \code{k}, \code{by}) into the engine's \code{\link[=tls_bf]{tls_bf()}} \code{tls_formula} object. Supplying
 a \code{ctmax} and/or \code{z} formula is the direct parameterisation; \code{by} is shorthand
-for grouping CTmax and z by a single moderator (\code{~ 0 + by}).
+for fixed cell means of CTmax and z by one moderator (\code{~ 0 + by}); it does
+not add random effects or modify the shape formulas.
 }
 \details{
 Following the freqTLS constant-shape invariant, the asymptotes and steepness

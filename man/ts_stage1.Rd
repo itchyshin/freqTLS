@@ -39,9 +39,10 @@ Two validity flags are returned so callers can choose their own success rule:
 log10 scale). \code{stage1_ok} is their conjunction.
 }
 \examples{
-d <- data.frame(
-  temp = rep(c(30, 34, 38), each = 12),
-  dur  = rep(rep(c(1, 5, 15, 45), 3), times = 3),
-  surv = rbinom(36, 20, 0.5), tot = 20)
-ts_stage1(d, "temp", "dur", "surv", "tot", family = "binomial")
+d <- simulate_tls(
+  family = "binomial", temps = seq(30, 42, by = 2),
+  times = c(0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100),
+  reps = 4, n = 50, CTmax = 36, z = 4, seed = 42
+)
+ts_stage1(d, "temp", "duration", "survived", "total", family = "binomial")
 }
