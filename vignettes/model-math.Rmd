@@ -21,10 +21,8 @@ This vignette is the mathematical reference for `freqTLS`: the four-parameter
 logistic (4PL) thermal death-time curve, the direct `CTmax`/`z` parameterisation, the
 disjoint-bounds asymptote transform, the relative-versus-absolute survival threshold, and the
 exact algebraic bridge to [`bayesTLS`](https://github.com/daniel1noble/bayesTLS).
-The package's implementation contract is tested against these equations; this vignette
-mirrors it and checks the bridge identities numerically (no Stan required). If you
-already trust that freqTLS and bayesTLS target the same fitted curve, you can skip
-straight to the worked examples in `vignette("freqTLS")` and
+The package's implementation is tested against these equations. This vignette
+mirrors it and checks that they match numerically (no Stan required). To move to the worked examples see `vignette("freqTLS")` and
 `vignette("comparing-to-bayesTLS")`.
 
 ```{r setup}
@@ -50,9 +48,7 @@ Survival is high at short durations and falls toward $\mathrm{low}$ at long dura
 
 ## The direct `CTmax`/`z` parameterisation
 
-`freqTLS` lets temperature enter the midpoint directly through the two headline
-quantities. With $z_i = \exp(\eta_{\log z, i})$ and $\mathrm{CTmax}_i$ a function of the
-design,
+`freqTLS` lets temperature enter the midpoint directly to calculate $z$ and $\mathrm{CTmax}_i$. With $z_i = \exp(\eta_{\log z, i})$ and $\mathrm{CTmax}_i$ entering the midpoint function:
 
 $$
 \mathrm{mid}_i = \log_{10}(t_\mathrm{ref}) - \frac{T_i - \mathrm{CTmax}_i}{z_i}.
@@ -67,7 +63,7 @@ Two properties make this the right coordinate system for profiling:
   so `z` is the change in temperature per decade ($\log_{10}$ unit) of exposure
   duration — the thermal sensitivity (degrees Celsius per decade).
 
-Because `CTmax` and `z` are model coordinates (not derived afterwards), each can be
+Because `CTmax` and `z` are model parameters (not derived afterwards), each can be
 profiled directly. We can check the two properties on a fitted model:
 
 ```{r ctmax-z-properties}
@@ -104,7 +100,7 @@ upper half-band $[u_{\min}, u_{\max}]$ (the bands meet, with a tiny separating g
 the midpoint). Any $(\beta_\mathrm{low}, \beta_\mathrm{up})$ therefore gives a valid
 ordered pair $\ell < \mathrm{low} < \mathrm{up} < u$. This is unconstrained and smooth,
 which keeps the optimiser and the profiles well-behaved, and it matches bayesTLS exactly
-so the two packages share the asymptote contract.
+so the two packages share the asymptote constraints.
 
 Under this parameterisation `up` has its own coordinate $\beta_\mathrm{up}$, just like
 `low`. `freqTLS` nonetheless reports `up` with the delta-method Wald interval: its
