@@ -20,30 +20,29 @@ bayes_cache <- readRDS(cache_path)
 stopifnot(isTRUE(bayes_cache$meta$diagnostic_all_pass))
 ```
 
-The packages teach the same canonical empirical examples but answer them with
+The packages use the same canonical empirical examples but answer them with
 different inference engines. `bayesTLS` uses posterior sampling; `freqTLS` uses
 maximum likelihood with profile, Wald, or bootstrap confidence intervals.
-Neither package's uncertainty object is a drop-in replacement for the other.
 
-**Experimental-software warning:** this comparison does not validate freqTLS.
+**Experimental-software warning:** this comparison does not validate `freqTLS`.
 Users remain responsible for checking the data, design, model specification,
 convergence, identifiability, diagnostics, and interpretation. Independently
 refit important analyses with
 [`bayesTLS`](https://daniel1noble.github.io/bayesTLS/). Agreement is a
-cross-check, not proof of correctness; shared mistakes can make both packages
+cross-check, but not proof of correctness. Shared mistakes can make both packages
 agree.
 
-## Fair-comparison contract
+## Comparison scope
 
 A numerical difference is interpretable only when all of the following are
 identical:
 
 1. exact dataset bytes and filter;
-2. response endpoint and family;
-3. every `ctmax`, `z`, `low`, `up`, and `k` formula;
-4. grouping and random-effect structure;
-5. resolved reference-time unit;
-6. relative or absolute threshold and reported estimand.
+2. response endpoint and family are the same;
+3. every `ctmax`, `z`, `low`, `up`, and `k` formula is identical;
+4. grouping and random-effect structure is the same;
+5. resolved reference-time unit is the same;
+6. relative or absolute threshold and reported estimand is the same.
 
 The pinned baseline is the
 [`bayesTLS` supplement](https://daniel1noble.github.io/bayesTLS/) rendered
@@ -91,10 +90,10 @@ bayes_cache$diagnostics[c(
 
 ## Refit the same frequentist specifications
 
-The code below refits the exact current freqTLS specifications from the
+The code below refits the exact `freqTLS` specifications from the
 installed datasets. The fitting output is suppressed because the diagnostic
 table follows, but the code remains visible and copyable. The five case
-articles explain each preparation and fit in smaller steps.
+study articles explain each preparation and fit in smaller steps.
 
 ```{r freq-fits, results='hide', message=FALSE, warning=FALSE}
 data(zebrafish_o2)
@@ -190,7 +189,7 @@ coma_fit <- fit_4pl(
 ```
 
 All displayed ML fits converged with a positive-definite Hessian and passed the
-package's raw-gradient gate. The interval method for the direct-coordinate rows
+package's tests. The interval method for the direct-coordinate rows
 below is Wald; the all-age aphid cell values and mortality absolute-LT50 values
 are point predictions and are labelled accordingly. Shape-identification
 warnings remain visible in the organism-specific articles.
@@ -228,8 +227,8 @@ freq_diagnostics
 ## Actual paired differences
 
 The primary table compares the frequentist point estimate with the Bayesian
-posterior median. Positive values mean the freqTLS estimate is larger. The
-interval columns are shown side by side without pretending that a confidence
+posterior median. Positive values mean the `freqTLS` estimate is larger. The
+interval columns are shown side-by-side without pretending that a confidence
 interval and a credible interval have the same interpretation.
 
 ```{r paired-table}
@@ -398,7 +397,7 @@ stopifnot(nrow(mort_compare) == 2L)
 mort_compare
 ```
 
-The Bayesian cache also contains absolute-threshold `z`. freqTLS does not print
+The Bayesian cache also contains absolute-threshold `z`. `freqTLS` does not print
 an allegedly equivalent absolute `z` from this temperature-varying shape model;
 its direct `z` remains the relative coordinate. The mortality case article
 shows that relative result explicitly.
@@ -414,12 +413,12 @@ never averages estimates or hides a discrepancy.
 ## Frequentist extensions and unsupported analyses
 
 Confidence Eyes, open-profile status, likelihood contrasts, bootstrap failure
-provenance, and explicit convergence/Hessian/gradient diagnostics are freqTLS
+provenance, and explicit convergence/Hessian/gradient diagnostics are `freqTLS`
 distinctions. Simulations, profile theory, survival surfaces, limited random
 intercepts, and deterministic heat-injury scenarios remain separate extension
 pages with synthetic examples.
 
 Censored-time, hurdle-productivity, posterior inference, and fitted repair
-dynamics remain bayesTLS-only. Brown shrimp and life-stage zebrafish remain
+dynamics remain `bayesTLS`-only. Brown shrimp and life-stage zebrafish remain
 unpublished benchmark-only compatibility fixtures and do not enter this
 comparison, site navigation, search results, sitemap, or current summaries.
