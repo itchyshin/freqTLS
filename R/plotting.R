@@ -3,7 +3,7 @@
 ## The Confidence Eye is freqTLS's default uncertainty display
 ## It replaces posterior-density visuals: freqTLS
 ## intervals are likelihood *confidence* intervals, so all wording is
-## "confidence", never "posterior"/"credible". The lens
+## "confidence". The lens
 ## geometry adapts gllvmTMB's `.eye_polygon_df()` and
 ## `plot_loadings_confidence_eye()` (GPL-3; provenance in inst/COPYRIGHTS),
 ## including the honest fallback that refuses to draw a lens when no finite
@@ -71,14 +71,12 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #' Confidence-Eye (or line) display of headline confidence intervals
 #'
 #' `plot_confidence_eye()` draws the freqTLS Confidence Eye for one or more
-#' headline parameters (`CTmax`, `z`, or any other [confint.profile_tls()]
-#' target, including grouped names). It is a HORIZONTAL forest display: each
+#' parameters (`CTmax`, `z`, or any other [confint.profile_tls()]
+#' target, including grouped names). It is a horizontal forest display: each
 #' parameter (and group level) is a row, the parameter value runs along the
 #' x-axis, and the confidence interval is a short, wide pale lens with a
 #' hollow point estimate. The shallow horizontal lens reads as a confidence
-#' *interval*, never a posterior density -- freqTLS intervals are likelihood
-#' confidence intervals, so the wording is "confidence", never
-#' "posterior". The layout follows the gllvmTMB / drmTMB
+#' *interval*. The layout follows the gllvmTMB / drmTMB
 #' Confidence-Eye contract.
 #'
 #' @details
@@ -100,7 +98,7 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #'
 #' @param fit A `profile_tls` fit from [fit_tls()].
 #' @param parm Character vector of target parameter names. Defaults to
-#'   `c("CTmax", "z")` (the headline quantities). Grouped names (e.g.
+#'   `c("CTmax", "z")`. Grouped names (e.g.
 #'   `"CTmax:larva"`) are accepted.
 #' @param method One of `"profile"` (default), `"wald"`, or `"bootstrap"`;
 #'   forwarded to [confint.profile_tls()].
