@@ -22,7 +22,7 @@ plot_confidence_eye(
 \item{fit}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
 
 \item{parm}{Character vector of target parameter names. Defaults to
-\code{c("CTmax", "z")} (the headline quantities). Grouped names (e.g.
+\code{c("CTmax", "z")}. Grouped names (e.g.
 \code{"CTmax:larva"}) are accepted.}
 
 \item{method}{One of \code{"profile"} (default), \code{"wald"}, or \code{"bootstrap"};
@@ -49,14 +49,12 @@ A \code{ggplot} object.
 }
 \description{
 \code{plot_confidence_eye()} draws the freqTLS Confidence Eye for one or more
-headline parameters (\code{CTmax}, \code{z}, or any other \code{\link[=confint.profile_tls]{confint.profile_tls()}}
-target, including grouped names). It is a HORIZONTAL forest display: each
+parameters (\code{CTmax}, \code{z}, or any other \code{\link[=confint.profile_tls]{confint.profile_tls()}}
+target, including grouped names). It is a horizontal forest display: each
 parameter (and group level) is a row, the parameter value runs along the
 x-axis, and the confidence interval is a short, wide pale lens with a
 hollow point estimate. The shallow horizontal lens reads as a confidence
-\emph{interval}, never a posterior density -- freqTLS intervals are likelihood
-confidence intervals, so the wording is "confidence", never
-"posterior". The layout follows the gllvmTMB / drmTMB
+\emph{interval}. The layout follows the gllvmTMB / drmTMB
 Confidence-Eye contract.
 }
 \details{
