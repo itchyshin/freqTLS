@@ -37,7 +37,7 @@ fit's moderator (e.g. the \code{ctmax}/\code{z}/\code{by} factor).}
 
 \item{target_surv}{Survival threshold for CTmax: \code{"relative"} (the curve
 midpoint, the default), \code{"absolute"} (50\% survival), or a number in \verb{(0, 1)}
-for an LTx. Non-relative thresholds and \code{lethal} are derived per bootstrap
+for a specific survival probability. Non-relative thresholds and \code{lethal} are derived per bootstrap
 replicate via \code{\link[=extract_tdt]{extract_tdt()}}.}
 
 \item{lethal}{If \code{TRUE}, also report \code{T_crit} (the damage-rate-floor critical
@@ -60,9 +60,9 @@ A \code{tls} object: a list with \verb{$summary} (a tibble of
 }
 \description{
 The frequentist analogue of \code{bayesTLS::tls()}. Reads a \code{\link[=fit_4pl]{fit_4pl()}} (\code{freq_tls})
-fit and returns the headline thermal-death-time quantities — thermal
+fit and returns the thermal-load sensitivity quantities — thermal
 sensitivity \code{z} and \code{CTmax} — as point estimates with confidence intervals,
-one row per group when the fit is grouped. Uncertainty uses the engine's
+one row per group when the fit is grouped. Uncertainty bounds are computed using
 profile-likelihood intervals by default (or Wald / bootstrap via \code{method}).
 }
 \examples{

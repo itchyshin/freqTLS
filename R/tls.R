@@ -7,9 +7,9 @@
 #' Thermal-load-sensitivity quantities (z, CTmax) with confidence intervals
 #'
 #' The frequentist analogue of `bayesTLS::tls()`. Reads a [fit_4pl()] (`freq_tls`)
-#' fit and returns the headline thermal-death-time quantities — thermal
+#' fit and returns the thermal-load sensitivity quantities — thermal
 #' sensitivity `z` and `CTmax` — as point estimates with confidence intervals,
-#' one row per group when the fit is grouped. Uncertainty uses the engine's
+#' one row per group when the fit is grouped. Uncertainty bounds are computed using
 #' profile-likelihood intervals by default (or Wald / bootstrap via `method`).
 #'
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a bare `profile_tls` fit
@@ -19,7 +19,7 @@
 #' @param params `"all"` (z and CTmax, the default), `"z"`, or `"ctmax"`.
 #' @param target_surv Survival threshold for CTmax: `"relative"` (the curve
 #'   midpoint, the default), `"absolute"` (50% survival), or a number in `(0, 1)`
-#'   for an LTx. Non-relative thresholds and `lethal` are derived per bootstrap
+#'   for a specific survival probability. Non-relative thresholds and `lethal` are derived per bootstrap
 #'   replicate via [extract_tdt()].
 #' @param lethal If `TRUE`, also report `T_crit` (the damage-rate-floor critical
 #'   temperature); uses the bootstrap path.
@@ -89,7 +89,7 @@ tls <- function(object, by = NULL, params = c("all", "z", "ctmax"),
   quantity <- sub(":.*$", "", rows$parameter)
   by_name <- by %||% meta$moderators %||% "group"
   by_name <- by_name[1L]
-  # A fit is grouped iff its quantity coefficients are level-tagged ("CTmax:lvl").
+  # A fit is grouped if its quantity coefficients are level-tagged ("CTmax:lvl").
   # An ungrouped fit's single "all"/intercept level is NOT surfaced as a column.
   grouped <- any(grepl(":", rows$parameter))
   if (grouped) {
