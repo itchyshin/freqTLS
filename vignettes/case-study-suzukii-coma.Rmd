@@ -88,8 +88,8 @@ names(coma_table)[names(coma_table) == "median"] <- "estimate"
 coma_table
 ```
 
-Only `CTmax` and `z` are reported; `Tcrit` is not. Large shape-coefficient
-standard errors or warnings are part of the result, not material to hide.
+Only `CTmax` and `z` are reported; `Tcrit` is not. The output returns large
+shape-coefficient standard errors and warnings for transparency.
 
 ```{r fitted-curves, fig.alt="Observed awake proportions and fitted Drosophila suzukii awake-coma curves, separated by sex and assay temperature."}
 plot_survival_curves(coma_fit$fit)

@@ -1,7 +1,7 @@
 #' Fit a single-stage 4PL thermal-load-sensitivity model by maximum likelihood
 #'
 #' `fit_tls()` fits the descending four-parameter logistic (4PL) thermal
-#' death-time model to survival-count data, parameterised **directly in `CTmax`
+#' death-time model to survival-count data, parameterised directly in `CTmax`
 #' (the critical thermal maximum at the reference time `tref`) and `z` (thermal
 #' sensitivity, degrees Celsius per decade of duration) so that both headline
 #' quantities can be profiled. Survival is modelled as a function of
