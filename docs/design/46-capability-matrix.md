@@ -72,6 +72,12 @@ claims.
 
 Both interfaces map to the same engine and produce numerically identical fits:
 
+For standardized data with a recognised duration unit, an omitted `tref` /
+`t_ref` resolves to one physical hour in that unit. An explicit numeric reference
+is preserved, including benchmark-specific 60-minute and 240-minute estimands.
+Bare data retain the historical one-native-unit fallback with a warning rather
+than silently implying an hour.
+
 | Interface | Status | Notes |
 | --- | --- | --- |
 | column (tidy-eval `y`/`n`/`time`/`temp`/`group`) | fitted (P1-P2) | the original interface; unchanged |

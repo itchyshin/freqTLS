@@ -221,7 +221,8 @@ diagnose_tdt_fit <- function(object) {
 #' bayesTLS's `parameter / [group] / median / lower / upper` shape. `low` and
 #' `up` are the fitted survival asymptotes, `k` is curve steepness, `CTmax` is
 #' the critical thermal maximum at the reference time, `z` is thermal sensitivity
-#' in degrees per decade of duration, and `phi` is beta/beta-binomial precision
+#' in degrees per order-of-magnitude change in duration, and `phi` is
+#' beta/beta-binomial precision
 #' or overdispersion. The `median` name is retained for table compatibility; for
 #' frequentist Wald or profile output it contains the maximum-likelihood point
 #' estimate, not a posterior median.

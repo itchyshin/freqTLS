@@ -12,7 +12,7 @@ fit_tls(
   temp,
   group = NULL,
   family = c("beta_binomial", "binomial", "beta"),
-  tref = 1,
+  tref = NULL,
   start = NULL,
   control = list(),
   trace = FALSE,
@@ -51,7 +51,11 @@ ungrouped fit).}
 \code{\link[=beta_binomial_tls]{beta_binomial_tls()}} / \code{\link[=binomial_tls]{binomial_tls()}} / \code{\link[=beta_tls]{beta_tls()}}.}
 
 \item{tref}{Reference time at which \code{CTmax} is defined, in the same unit as
-\code{time} (default \code{1}, i.e. CTmax at one time unit).}
+\code{time}. When \code{NULL} (the default), standardized data with a recognised
+\code{duration_unit} use one physical hour (for example, \code{60} minutes or \code{1}
+hour). For bare data without metadata, the historical fallback is \code{1}
+native time unit with a warning; supply \code{tref} explicitly to avoid an
+ambiguous reference.}
 
 \item{start}{Optional named list of starting values on the internal
 (unconstrained) scale, overriding the defaults. Names must match the
@@ -85,9 +89,10 @@ optimiser \code{opt}, and \code{sdreport}.
 }
 \description{
 \code{fit_tls()} fits the descending four-parameter logistic (4PL) thermal
-death-time model to survival-count data, parameterised **directly in \code{CTmax}
+death-time model to survival-count data, parameterised directly in \code{CTmax}
 (the critical thermal maximum at the reference time \code{tref}) and \code{z} (thermal
-sensitivity, degrees Celsius per decade of duration) so that both headline
+sensitivity, degrees Celsius per order-of-magnitude change in tolerated
+duration) so that both headline
 quantities can be profiled. Survival is modelled as a function of
 \code{log10(duration)}; the midpoint moves with temperature through \code{CTmax} and \code{z}
 (see \code{vignette("model-math")}). The thermal-load-sensitivity modelling framework

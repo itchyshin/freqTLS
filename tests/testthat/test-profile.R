@@ -145,6 +145,17 @@ test_that("tidy_parameters(method = 'profile') fills the 8-column shape", {
   }
 })
 
+test_that("parameter getters pass profile intervals through without changing rows", {
+  fit <- fit_binom()
+  ct <- suppressMessages(suppressWarnings(get_ctmax(fit, method = "profile")))
+  zz <- suppressMessages(suppressWarnings(get_z(fit, method = "profile")))
+  sh <- suppressMessages(suppressWarnings(get_shape(fit, method = "profile")))
+  expect_true(all(ct$interval_type == "profile"))
+  expect_true(all(zz$interval_type == "profile"))
+  expect_true(all(sh$parameter %in% c("low", "up", "k", "phi")))
+  expect_identical(sh$interval_type[sh$parameter == "up"], "wald")
+})
+
 test_that("check_tls fires data-adequacy warnings on a sparse fit", {
   ds <- simulate_tls(family = "binomial", temps = c(35, 36), times = c(1, 2),
                      reps = 2, n = 10, CTmax = 36, z = 4, seed = 9)

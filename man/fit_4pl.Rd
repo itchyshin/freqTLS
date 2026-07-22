@@ -14,7 +14,7 @@ fit_4pl(
   by = NULL,
   threshold = c("relative", "absolute"),
   p = 0.5,
-  t_ref = 60,
+  t_ref = NULL,
   bounds = c(0, 1),
   family = NULL,
   method = c("profile", "wald", "bootstrap"),
@@ -42,9 +42,9 @@ with \code{\link[=extract_tdt]{extract_tdt()}} and \code{target_surv = "absolute
 
 \item{t_ref}{Positive reference exposure time at which CTmax is reported,
 expressed in exactly the same unit as the standardised \code{duration} column.
-The default \code{60} means 60 duration units. It is one hour only when
-\code{duration_unit = "minutes"}; \code{t_ref = 1} is one hour only when durations are
-measured in hours.}
+When \code{NULL} (the default), it resolves to one physical hour from
+\code{duration_unit} (for example, \code{60} minutes or \code{1} hour). Supply a numeric
+value to retain a non-hour reference such as \code{240} minutes.}
 
 \item{bounds}{Asymptote range. Only \code{c(0, 1)} is currently accepted. Supply
 survival as a probability in \verb{[0, 1]} and let the model estimate \code{low} and

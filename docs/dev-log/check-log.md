@@ -2831,3 +2831,30 @@ Interpretation:
   thermal maximum (CTmax)`. This is a source correction for a future update;
   it does not alter the tarball already submitted to CRAN and must not be
   resubmitted as version 0.1.0.
+## 2026-07-21 -- Patrice Pottier review remediation (#46, #48--#54)
+
+Goal:
+
+- Remove the silent CTmax reference-time trap while preserving every explicit
+  estimand, then complete Patrice's compatible terminology, getter, article,
+  and reference-example repairs.
+
+Checks and evidence:
+
+- `Rscript -e 'devtools::document(); devtools::check_man(); devtools::load_all(quiet = TRUE); rmarkdown::render("README.Rmd", output_file = "README.md", quiet = TRUE); devtools::test(filter = "reference-time|fit-beta|profile")'` -> 98 passing checks, 0 failures, warnings, or skips. The renderer issued only external-badge fetch warnings under the sandbox; it wrote `README.md` successfully.
+- `Rscript -e 'devtools::test()'` -> 1,096 passing tests, 0 failures, warnings, or skips (135.1 seconds). New tests prove physical one-hour equivalence for seconds/minutes/hours/days, column and formula `fit_tls()` resolution, explicit 1-minute and 240-minute preservation, bare-data warning, unknown-metadata error, and non-finite reference rejection.
+- `Rscript -e 'pkgdown::build_reference(".")'`, `Rscript -e 'pkgdown::build_article("comparing-to-bayesTLS", ".", new_process = FALSE)'`, `Rscript -e 'pkgdown::build_article("case-study-summary", ".", new_process = FALSE)'`, then the post-build portion of `tools/build-site.R` -> rendered pages show one-hour resolution, explicit `character(0)` diagnostics, biology-first awake/coma wording, and the zero-duration rationale; no internal AGENTS/CLAUDE/SPEC pages remain.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `rg -n -i 'per decade|per-decade' R man README.Rmd README.md vignettes docs/design docs/dev-log/known-limitations.md ROADMAP.md NEWS.md -g '!docs/design/10-after-task-protocol.md'` and the same scan of rendered HTML -> 0 active reader-surface hits.
+- `R CMD build --no-resave-data --no-manual --keep-empty-dirs .` -> `freqTLS_0.1.0.tar.gz`, 1,225,575 bytes, 228 entries, SHA-256 `3565f9c8164de017188063216d2589b964939744a3a4793f8fdf54c56347e4ea`.
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` -> 0 errors; the sole warning is CRAN incoming feasibility reporting that submitted/existing version `0.1.0` already exists, which is expected while the prior submission is in flight. Installed tests, examples, `donttest` examples, and vignette rebuild all passed.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- Omission is now safe only when metadata identifies a physical unit: it means
+  one hour. A numeric reference is never converted, so `t_ref = 1` on minute
+  data remains CTmax at one minute. Bare data retain the backwards-compatible
+  one-native-unit result but now warn; unknown labelled units fail until the
+  user supplies a reference. The code/documentation changes are source work
+  after the submitted tarball and do not amend that artifact.

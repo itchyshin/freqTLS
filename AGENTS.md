@@ -191,7 +191,8 @@ developers and R package contributors.
 - Support factual, statistical, or literature claims with a citation, local
   evidence, or a clear note that the statement is a design assumption.
 - Define `CTmax` (the critical thermal maximum at the reference time `tref`),
-  `z` (the thermal sensitivity, degrees per decade of duration), and the
+  `z` (the thermal sensitivity, degrees per order-of-magnitude change in
+  duration), and the
   relative-vs-absolute threshold at first use.
 - For tutorials and error-message docs, tell the reader what to try next when a
   model or design is weakly identified (the warnings in

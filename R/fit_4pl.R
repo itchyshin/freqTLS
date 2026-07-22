@@ -111,9 +111,9 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #' @param p Survival level for the absolute threshold (default 0.5).
 #' @param t_ref Positive reference exposure time at which CTmax is reported,
 #'   expressed in exactly the same unit as the standardised `duration` column.
-#'   The default `60` means 60 duration units. It is one hour only when
-#'   `duration_unit = "minutes"`; `t_ref = 1` is one hour only when durations are
-#'   measured in hours.
+#'   When `NULL` (the default), it resolves to one physical hour from
+#'   `duration_unit` (for example, `60` minutes or `1` hour). Supply a numeric
+#'   value to retain a non-hour reference such as `240` minutes.
 #' @param bounds Asymptote range. Only `c(0, 1)` is currently accepted. Supply
 #'   survival as a probability in `[0, 1]` and let the model estimate `low` and
 #'   `up` within that range; non-default bounds stop with an error.
@@ -146,7 +146,7 @@ fit_4pl <- function(data,
                     ctmax = NULL, z = NULL, up = NULL, low = NULL, k = NULL,
                     by = NULL,
                     threshold = c("relative", "absolute"),
-                    p = 0.5, t_ref = 60, bounds = c(0, 1),
+                    p = 0.5, t_ref = NULL, bounds = c(0, 1),
                     family = NULL,
                     method = c("profile", "wald", "bootstrap"),
                     start = NULL, control = list(), trace = FALSE,
@@ -160,6 +160,8 @@ fit_4pl <- function(data,
       "{.arg data} must be the output of {.fn standardize_data}.",
       i = "Call {.code fit_4pl(standardize_data(raw, ...), ...)}."
     ))
+
+  t_ref <- tls_resolve_tref(t_ref, meta_in)
 
   if (is.null(family))
     family <- if (identical(meta_in$response_type, "proportion"))

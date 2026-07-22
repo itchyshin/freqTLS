@@ -51,7 +51,10 @@
 #'                       columns are converted to factors and stored in
 #'                       metadata for the fitter to read.
 #' @param duration_unit  Label for the unit of `duration`, stored in metadata.
-#'                       Default `"hours"`.
+#'                       A recognised value (`"seconds"`, `"minutes"`,
+#'                       `"hours"`, or `"days"`, with common abbreviations)
+#'                       lets [fit_tls()] and [fit_4pl()] resolve an omitted
+#'                       reference time to one physical hour. Default `"hours"`.
 #' @param temp_mean      Value to subtract from `temp` to form `temp_c`.
 #'                       `NULL` (default) uses `mean(temp)`. Supply a fixed
 #'                       value to align multiple datasets to a common centre.
