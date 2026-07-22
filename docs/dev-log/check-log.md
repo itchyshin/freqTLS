@@ -2809,6 +2809,28 @@ Interpretation:
   a varying shape at an unknown temperature reject the request before producing
   misleading output.
 
+## 2026-07-21 -- CRAN DESCRIPTION quotation follow-up
+
+Evidence:
+
+- Konstanze Lauseker's CRAN acknowledgement (2026-07-21) requested that the
+  next source update omit single quotation marks around terms that are not
+  package or software names.
+- `R CMD build --no-resave-data --no-manual .` -> built
+  `freqTLS_0.1.0.tar.gz`; DESCRIPTION metadata passed.
+- `R CMD check --as-cran --no-manual freqTLS_0.1.0.tar.gz` -> package checks,
+  examples, tests, and vignette rebuild all passed. Its sole WARNING was
+  `Insufficient package version (submitted: 0.1.0, existing: 0.1.0)` and
+  `Days since last update: 0`, expected because 0.1.0 is already in CRAN's
+  incoming process.
+
+Interpretation:
+
+- DESCRIPTION now retains quotes for the package names `bayesTLS` and
+  `freqTLS`, but uses plain `Template Model Builder (TMB)` and `critical
+  thermal maximum (CTmax)`. This is a source correction for a future update;
+  it does not alter the tarball already submitted to CRAN and must not be
+  resubmitted as version 0.1.0.
 ## 2026-07-21 -- Patrice Pottier review remediation (#46, #48--#54)
 
 Goal:
