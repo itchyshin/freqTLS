@@ -10,6 +10,13 @@ extension: it does not estimate injury kinetics or a repair process.
 ``` r
 
 library(freqTLS)
+#> freqTLS 0.1.0
+#> Please cite: Noble DWA, Arnold PA, Nakagawa S & Pottier P (2026) A flexible
+#>   modelling framework for estimating thermal tolerance and sensitivity.
+#>   bioRxiv. doi:10.64898/2026.07.16.738378
+#> Run  citation("freqTLS")  for all entries.
+#> 
+#> Tutorial & online vignette: https://itchyshin.github.io/freqTLS/
 data("zebrafish_o2")
 zebrafish_normoxia <- subset(
   zebrafish_o2,

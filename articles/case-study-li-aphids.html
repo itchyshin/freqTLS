@@ -95,6 +95,13 @@ supplement</a>: the heat branch, 6-day-old aphids for the main analysis,
 then the all-age heat extension.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; freqTLS 0.1.0</span></span>
+<span><span class="co">#&gt; Please cite: Noble DWA, Arnold PA, Nakagawa S &amp; Pottier P (2026) A flexible</span></span>
+<span><span class="co">#&gt;   modelling framework for estimating thermal tolerance and sensitivity.</span></span>
+<span><span class="co">#&gt;   bioRxiv. doi:10.64898/2026.07.16.738378</span></span>
+<span><span class="co">#&gt; Run  citation("freqTLS")  for all entries.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Tutorial &amp; online vignette: https://itchyshin.github.io/freqTLS/</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">aphid_tdt</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="main-analysis-heat-branch-at-age-6">Main analysis: heat branch at age 6<a class="anchor" aria-label="anchor" href="#main-analysis-heat-branch-at-age-6"></a>
@@ -133,7 +140,7 @@ unit is minutes.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
 <span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer  logLik n_params</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">029</span>3 TRUE          nloptr_TN…  -<span style="color: #BB0000;">760.</span>       11</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">032</span>8 TRUE          nloptr_TN…  -<span style="color: #BB0000;">760.</span>       11</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aphid6_tls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tls.html">tls</a></span><span class="op">(</span><span class="va">aphid6_fit</span>, by <span class="op">=</span> <span class="st">"species"</span>, lethal <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span>
@@ -197,7 +204,7 @@ substitute empirical case.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
 <span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer  logLik n_params</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">016</span>5 TRUE          nloptr_TN… -<span style="color: #BB0000; text-decoration: underline;">2</span><span style="color: #BB0000;">303.</span>       23</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">010</span>5 TRUE          nloptr_TN… -<span style="color: #BB0000; text-decoration: underline;">2</span><span style="color: #BB0000;">303.</span>       23</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span></code></pre></div>
 <p>The interacted formula coefficients are not themselves species-by-age
 values. The parameter prediction below evaluates the fitted direct
@@ -268,7 +275,7 @@ bayesTLS.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Shinichi Nakagawa, Pieter A. Arnold, Patrice Pottier, Daniel W. A. Noble.</p>
+  <p>Developed by Shinichi Nakagawa, Patrice Pottier, Pieter A. Arnold, Daniel W. A. Noble.</p>
 </div>
 
 <div class="pkgdown-footer-right">

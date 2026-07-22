@@ -7,6 +7,13 @@ supplement](https://daniel1noble.github.io/bayesTLS/): the heat branch,
 ``` r
 
 library(freqTLS)
+#> freqTLS 0.1.0
+#> Please cite: Noble DWA, Arnold PA, Nakagawa S & Pottier P (2026) A flexible
+#>   modelling framework for estimating thermal tolerance and sensitivity.
+#>   bioRxiv. doi:10.64898/2026.07.16.738378
+#> Run  citation("freqTLS")  for all entries.
+#> 
+#> Tutorial & online vignette: https://itchyshin.github.io/freqTLS/
 data(aphid_tdt)
 ```
 
@@ -50,7 +57,7 @@ diagnose_tdt_fit(aphid6_fit)
 #> # A tibble: 1 × 9
 #>   converged pd_hessian max_abs_gradient gradient_pass optimizer  logLik n_params
 #>   <lgl>     <lgl>                 <dbl> <lgl>         <chr>       <dbl>    <int>
-#> 1 TRUE      TRUE              0.0000293 TRUE          nloptr_TN…  -760.       11
+#> 1 TRUE      TRUE              0.0000328 TRUE          nloptr_TN…  -760.       11
 #> # ℹ 2 more variables: AIC <dbl>, all_pass <lgl>
 ```
 
@@ -124,7 +131,7 @@ diagnose_tdt_fit(aphid_all_fit)
 #> # A tibble: 1 × 9
 #>   converged pd_hessian max_abs_gradient gradient_pass optimizer  logLik n_params
 #>   <lgl>     <lgl>                 <dbl> <lgl>         <chr>       <dbl>    <int>
-#> 1 TRUE      TRUE              0.0000165 TRUE          nloptr_TN… -2303.       23
+#> 1 TRUE      TRUE              0.0000105 TRUE          nloptr_TN… -2303.       23
 #> # ℹ 2 more variables: AIC <dbl>, all_pass <lgl>
 ```
 

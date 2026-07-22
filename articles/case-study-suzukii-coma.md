@@ -9,6 +9,13 @@ different endpoint.
 ``` r
 
 library(freqTLS)
+#> freqTLS 0.1.0
+#> Please cite: Noble DWA, Arnold PA, Nakagawa S & Pottier P (2026) A flexible
+#>   modelling framework for estimating thermal tolerance and sensitivity.
+#>   bioRxiv. doi:10.64898/2026.07.16.738378
+#> Run  citation("freqTLS")  for all entries.
+#> 
+#> Tutorial & online vignette: https://itchyshin.github.io/freqTLS/
 data(dsuzukii)
 ```
 
@@ -82,8 +89,8 @@ coma_shape <- subset(
 )
 coma_shape
 #>         parameter    estimate    std.error
-#> 1 low:(Intercept) -44.2946407 1.782289e+04
-#> 2      low:temp_c -20.2788616 8.461372e+03
+#> 1 low:(Intercept) -44.2916768 1.781037e+04
+#> 2      low:temp_c -20.2774545 8.455428e+03
 #> 3  up:(Intercept)   2.6835505 8.010875e-01
 #> 4       up:temp_c   0.4135033 4.957870e-01
 #> 5   k:(Intercept)   2.7540874 1.471270e-01

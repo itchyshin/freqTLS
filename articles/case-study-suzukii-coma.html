@@ -96,6 +96,13 @@ awake/coma count arm. It does not replace the censored time-to-coma or
 hurdle-productivity models with a different endpoint.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; freqTLS 0.1.0</span></span>
+<span><span class="co">#&gt; Please cite: Noble DWA, Arnold PA, Nakagawa S &amp; Pottier P (2026) A flexible</span></span>
+<span><span class="co">#&gt;   modelling framework for estimating thermal tolerance and sensitivity.</span></span>
+<span><span class="co">#&gt;   bioRxiv. doi:10.64898/2026.07.16.738378</span></span>
+<span><span class="co">#&gt; Run  citation("freqTLS")  for all entries.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Tutorial &amp; online vignette: https://itchyshin.github.io/freqTLS/</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="exact-awake-count-aggregation">Exact awake-count aggregation<a class="anchor" aria-label="anchor" href="#exact-awake-count-aggregation"></a>
@@ -162,8 +169,8 @@ estimates and standard errors make that limitation visible.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">coma_shape</span></span>
 <span><span class="co">#&gt;         parameter    estimate    std.error</span></span>
-<span><span class="co">#&gt; 1 low:(Intercept) -44.2946407 1.782289e+04</span></span>
-<span><span class="co">#&gt; 2      low:temp_c -20.2788616 8.461372e+03</span></span>
+<span><span class="co">#&gt; 1 low:(Intercept) -44.2916768 1.781037e+04</span></span>
+<span><span class="co">#&gt; 2      low:temp_c -20.2774545 8.455428e+03</span></span>
 <span><span class="co">#&gt; 3  up:(Intercept)   2.6835505 8.010875e-01</span></span>
 <span><span class="co">#&gt; 4       up:temp_c   0.4135033 4.957870e-01</span></span>
 <span><span class="co">#&gt; 5   k:(Intercept)   2.7540874 1.471270e-01</span></span>
@@ -203,7 +210,7 @@ replacement.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Shinichi Nakagawa, Pieter A. Arnold, Patrice Pottier, Daniel W. A. Noble.</p>
+  <p>Developed by Shinichi Nakagawa, Patrice Pottier, Pieter A. Arnold, Daniel W. A. Noble.</p>
 </div>
 
 <div class="pkgdown-footer-right">

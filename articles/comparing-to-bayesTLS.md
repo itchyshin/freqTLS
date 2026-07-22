@@ -240,11 +240,11 @@ rownames(freq_diagnostics) <- NULL
 freq_diagnostics
 #>                case_id converged pd_hessian max_abs_gradient gradient_pass
 #> 1     zebrafish_oxygen      TRUE       TRUE     1.948692e-04          TRUE
-#> 2           aphid_age6      TRUE       TRUE     1.076456e-05          TRUE
-#> 3        aphid_all_age      TRUE       TRUE     1.962863e-05          TRUE
-#> 4         snowgum_psii      TRUE       TRUE     2.898513e-04          TRUE
-#> 5 drosophila_mortality      TRUE       TRUE     7.497304e-05          TRUE
-#> 6     drosophila_awake      TRUE       TRUE     1.202229e-05          TRUE
+#> 2           aphid_age6      TRUE       TRUE     2.091929e-06          TRUE
+#> 3        aphid_all_age      TRUE       TRUE     9.832409e-06          TRUE
+#> 4         snowgum_psii      TRUE       TRUE     2.898515e-04          TRUE
+#> 5 drosophila_mortality      TRUE       TRUE     7.996796e-05          TRUE
+#> 6     drosophila_awake      TRUE       TRUE     1.204766e-05          TRUE
 #>                                     interval_method
 #> 1                      Wald 95% confidence interval
 #> 2                      Wald 95% confidence interval
@@ -412,8 +412,8 @@ aggregate(
   FUN = max
 )
 #>   parameter abs(difference_freq_minus_bayes)
-#> 1     CTmax                       0.02725904
-#> 2         z                       0.02246866
+#> 1     CTmax                       0.02725888
+#> 2         z                       0.02246847
 ```
 
 Snow-gum is a paired refit of the locked shared-shape analogue. It is

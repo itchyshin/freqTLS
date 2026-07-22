@@ -21,6 +21,13 @@ no Stan, no MCMC, and no internet.
 ``` r
 
 library(freqTLS)
+#> freqTLS 0.1.0
+#> Please cite: Noble DWA, Arnold PA, Nakagawa S & Pottier P (2026) A flexible
+#>   modelling framework for estimating thermal tolerance and sensitivity.
+#>   bioRxiv. doi:10.64898/2026.07.16.738378
+#> Run  citation("freqTLS")  for all entries.
+#> 
+#> Tutorial & online vignette: https://itchyshin.github.io/freqTLS/
 ```
 
 ## Simulate a dataset
@@ -383,7 +390,7 @@ fit_re
 #>  sigma_CTmax        0.98690  0.223500
 #> Optimiser: nloptr_TNEWTON | code 0 | pdHess TRUE | converged (pdHess)
 #> Message: Refined stationary point accepted by the freqTLS objective/gradient
-#> contract (NLopt status 4); max|gradient| = 0.0002115
+#> contract (NLopt status 4); max|gradient| = 9.862e-06
 #> logLik -967.4 | df 7 | AIC 1949
 head(ranef(fit_re))
 #> # A tibble: 6 × 4

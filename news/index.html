@@ -62,7 +62,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-experimental-release-candidate">freqTLS 0.1.0 (experimental release candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-experimental-release-candidate"></a></h2><p class="text-muted">CRAN release: 2026-07-21</p>
-<ul><li>Rebased the empirical teaching plan on the pinned bayesTLS supplement rendered 2026-07-14 (commit <code>76510412e06c594c96894a1baba1f0e1a34a5aea</code>). Canonical cases are oxygen-gradient zebrafish, cereal aphids, Snow-gum PSII, and the mortality and awake/coma <em>Drosophila suzukii</em> endpoints.</li>
+<ul><li>Updated citation to the bayesTLS framework preprint. Publications should now cite the paper freqTLS implements — Noble DWA, Arnold PA, Nakagawa S &amp; Pottier P (2026), <em>A flexible modelling framework for estimating thermal tolerance and sensitivity</em>, bioRxiv, <a href="doi:10.64898/2026.07.16.738378" class="uri">doi:10.64898/2026.07.16.738378</a> — rather than a separate freqTLS R-package self-citation. Shinichi Nakagawa is now credited as a co-author of that framework across <code>DESCRIPTION</code>, the package documentation, and <code>inst/CITATION</code>.</li>
+<li>Added an <code>.onAttach</code> startup message (<code>R/zzz.R</code>) that points users to the paper and <code>citation("freqTLS")</code>, mirroring <code>bayesTLS</code> (without the Stan/brms lines).</li>
+<li>Rebased the empirical teaching plan on the pinned bayesTLS supplement rendered 2026-07-14 (commit <code>76510412e06c594c96894a1baba1f0e1a34a5aea</code>). Canonical cases are oxygen-gradient zebrafish, cereal aphids, Snow-gum PSII, and the mortality and awake/coma <em>Drosophila suzukii</em> endpoints.</li>
 <li>Brown shrimp and life-stage zebrafish remain installed benchmark-only legacy fixtures but are removed from active examples, navigation, and current comparison surfaces.</li>
 <li>Retained Beta responses, limited random intercepts, shape formulas, deterministic heat-injury prediction, the formula interface, and the frequentist interval/diagnostic displays as explicitly experimental.</li>
 <li>Censored-time, hurdle-productivity, fitted repair dynamics, and CRAN submission remain out of scope.</li>
@@ -137,7 +139,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Shinichi Nakagawa, Pieter A. Arnold, Patrice Pottier, Daniel W. A. Noble.</p>
+  <p>Developed by Shinichi Nakagawa, Patrice Pottier, Pieter A. Arnold, Daniel W. A. Noble.</p>
 </div>
 
 <div class="pkgdown-footer-right">
