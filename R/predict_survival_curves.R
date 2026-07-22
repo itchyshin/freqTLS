@@ -11,7 +11,8 @@
 #' fitted 4PL survival probability over a temperature-by-duration grid and adds
 #' parametric-bootstrap confidence bands. For random-effects fits the curves are
 #' population-level: random intercepts are integrated during bootstrap refits,
-#' but no fitted group BLUP is added to the reported curve.
+#' but no fitted group BLUP (best linear unbiased predictor; see [ranef()]) is
+#' added to the reported curve.
 #'
 #' @param object A `freq_tls` fit from [fit_4pl()] (or a `profile_tls` fit).
 #' @param temps Temperatures to predict at (default: the observed assay temps).

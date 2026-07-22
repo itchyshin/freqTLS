@@ -43,7 +43,8 @@ The frequentist analogue of \code{bayesTLS::predict_survival_curves()}. Evaluate
 fitted 4PL survival probability over a temperature-by-duration grid and adds
 parametric-bootstrap confidence bands. For random-effects fits the curves are
 population-level: random intercepts are integrated during bootstrap refits,
-but no fitted group BLUP is added to the reported curve.
+but no fitted group BLUP (best linear unbiased predictor; see \code{\link[=ranef]{ranef()}}) is
+added to the reported curve.
 }
 \examples{
 \donttest{

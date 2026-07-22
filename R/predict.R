@@ -532,7 +532,7 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #' otherwise the survival curve never reaches `p` and `derive_lt()` aborts with
 #' an explanatory message (confidence-language, never silent).
 #' For a random-effects fit this is a population-level derived quantity; it does
-#' not add a group BLUP.
+#' not add a group BLUP (best linear unbiased predictor; see [ranef()]).
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param p Absolute target survival probability in `(low, up)` (default `0.5`).
@@ -613,7 +613,7 @@ derive_lt <- function(object, p = 0.5, temp, group = NULL) {
 #'   \mathrm{qlogis}\!\big(\tfrac{surv - low}{up - low}\big) / k\Big).}
 #' The target `surv` must lie strictly between `low` and `up`.
 #' For a random-effects fit this is a population-level derived quantity; it does
-#' not add a group BLUP.
+#' not add a group BLUP (best linear unbiased predictor; see [ranef()]).
 #'
 #' @param object A `profile_tls` fit from [fit_tls()].
 #' @param surv Target survival probability in `(low, up)`. `NULL` (default) uses
@@ -687,10 +687,12 @@ derive_ctmax <- function(object, surv = NULL, duration = NULL, group = NULL) {
 #' per hour**; `bayesTLS` brackets observed breakpoints with a default range of
 #' `0.1`--`1` %/hour. Unlike the Bayesian path, which samples `rate` to fold an
 #' operational choice into the posterior, freqTLS treats `rate` as a fixed
-#' input and returns the deterministic transform of the fitted `CTmax` and `z`
-#' (combine their confidence intervals if you need to propagate uncertainty).
+#' input and returns the deterministic transform of the fitted `CTmax` and `z`.
+#' To propagate uncertainty, apply the delta method to the joint `vcov()` of
+#' `CTmax` and `z`; the separate `CTmax` and `z` confidence intervals do not
+#' combine into a valid interval for `T_crit`.
 #' For a random-effects fit this is a population-level derived quantity; it does
-#' not add a group BLUP.
+#' not add a group BLUP (best linear unbiased predictor; see [ranef()]).
 #'
 #' `T_crit` assumes a **lethal endpoint**: it is a damage-accumulation concept, so
 #' for sublethal endpoints (knockdown, photosynthetic failure) the steeper `z`
