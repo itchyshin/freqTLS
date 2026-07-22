@@ -139,12 +139,12 @@ random-intercept structures described below; more general Bayesian
 models remain in `bayesTLS`. The engine is maximum likelihood (no Stan,
 no MCMC, no internet); uncertainty is a frequentist trio (Wald, profile,
 bootstrap) instead of a posterior. The deliberate differences are
-documented in `vignette("comparing-to-bayesTLS")`: the absolute
-(p-survival) threshold and non-default asymptote `bounds` are not yet
-wired through the ML backbone (fit on the relative midpoint, then
-convert with `extract_tdt()`); uncertainty comes as bootstrap replicates
-rather than posterior draws; and the temperature effect defaults to the
-constant-shape configuration.
+documented in `vignette("comparing-to-bayesTLS")`: fitting always targets
+the relative midpoint; `extract_tdt()` can then derive an absolute
+(p-survival) threshold, whereas a fit-time absolute-threshold mode and
+non-default asymptote `bounds` are not supported. Uncertainty comes as
+bootstrap replicates rather than posterior draws; and the temperature
+effect defaults to the constant-shape configuration.
 
 ``` r
 library(freqTLS)

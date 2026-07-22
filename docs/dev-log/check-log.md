@@ -2948,3 +2948,48 @@ Interpretation:
   KaTeX assets in a future build. The home page directs readers to canonical
   examples while `inst/CITATION` and `inst/COPYRIGHTS` retain the complete
   legacy-fixture attribution trail.
+
+## 2026-07-22 -- final function-document and pkgdown reader-surface audit
+
+Goal:
+
+- Re-audit every exported function, reference placement, public pkgdown page,
+  rendered link/asset, and reader-facing capability statement after the human
+  validation repairs.
+
+Checks and evidence:
+
+- `Rscript -e 'devtools::document(); devtools::check_man()'` -> generated
+  documentation was current and `check_man()` was clean.
+- `Rscript -e 'devtools::test(filter = "^(benchmark-sanity|beta-binomial-phi|bootstrap|calibration|canonical-case-specifications|canonical-comparator-cache|case-study-summary-cache|data-contract|data|doc-consistency|experimental-warning|extract-tdt)$")'` -> 395 passing, 0 failures, warnings, or skips.
+- The remaining `fit-*`, formula, prediction, profile, random-effects, shape,
+  reference-time, simulation, standardisation, shared-API, two-stage, and
+  `tls` test files were rerun in bounded filter batches -> 0 failures,
+  warnings, or skips; representative completed receipts were 205 and 61
+  passing checks.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found.`
+- `Rscript tools/build-site.R .` (completed incrementally in this constrained
+  terminal), followed by the post-build guard in `tools/build-site.R` -> the
+  complete site was rendered; internal pages and discovery entries were absent,
+  example alt text was present, KaTeX, experimental-warning, legacy-discovery,
+  and SVG guards passed.
+- A source-derived `NAMESPACE`/Rd/`_pkgdown.yml` audit -> 47 exports, 81 Rd
+  aliases, 57 Rd topics, 82 rendered reference pages, and 0 missing export
+  aliases, reference pages, or intended placements.
+- A rendered HTML `xml2` link/asset audit -> 103 HTML pages, 3,074 local
+  targets checked, 0 missing; expected home, 404, article, news, reference,
+  author, and roadmap pages present.
+- Rendered-site scans for stale release claims, Bayesian terminology, minute
+  reference-time wording, heat-injury fitting claims, and random-effect scope
+  found two repairable inaccuracies: the home page called post-fit absolute
+  extraction unwired, and the SVG advertised non-existent planned helpers.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- Every export has an intended, generated, and rendered documentation path.
+  The site build has no broken local targets or governance-page leak. The home
+  page and function map now state the actual scope: relative-midpoint fitting,
+  supported post-fit absolute extraction, and user-supplied but not fitted
+  repair scenarios. This is reader-surface evidence only; it is not an
+  unqualified CRAN-readiness claim.

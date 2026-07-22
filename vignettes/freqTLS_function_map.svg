@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 880" font-family="Helvetica, Arial, sans-serif" width="100%" role="img" aria-labelledby="ftls-map-title ftls-map-desc">
   <title id="ftls-map-title">freqTLS function map</title>
-  <desc id="ftls-map-desc">Maximum-likelihood workflow informed by bayesTLS, not a one-to-one API map. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls as the primary quantity extractor, with tls_z, tls_ctmax and tls_tcrit; extract_tdt is an optional compatibility-oriented bootstrap bundle); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury, with make_temperature_scenarios and repair_rate_schoolfield marked not yet ported); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists freqTLS interval and diagnostic features.</desc>
+  <desc id="ftls-map-desc">Maximum-likelihood workflow informed by bayesTLS, not a one-to-one API map. Columns: DATA (standardize_data); FIT (fit_4pl, with make_4pl_formula, tidy_parameters and tdt_parameter_table, and diagnose_tdt_fit and check_tls); DERIVE (tls as the primary quantity extractor, with tls_z, tls_ctmax and tls_tcrit; extract_tdt is an optional compatibility-oriented bootstrap bundle); REPORT and ACCESS (get_ctmax, get_z and get_shape, and the get_*_summary and get_*_draws accessors); PREDICT (predict_survival_curves and predict_heat_injury; temperature traces and any repair scenario are user supplied, not helper APIs or fitted sub-models); and PLOT (the plot_* family, including plot_confidence_eye). A separate two-stage comparison path runs ts_stage1 to ts_stage2 to ts_ci and ts_curve. A highlighted box lists freqTLS interval and diagnostic features.</desc>
   <defs>
     <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="#555"/>
@@ -143,12 +143,12 @@
     <text x="917" y="638" font-size="9.5" fill="#666">dynamic traces</text>
     <text x="917" y="651" font-size="9.5" fill="#666">(+ heat_injury_envelope)</text>
   </g>
-  <!-- trace & repair helpers (planned) -->
+  <!-- user-supplied trace and repair scenario; not a public helper API -->
   <g text-anchor="middle">
     <rect x="800" y="688" width="235" height="56" rx="7" fill="#f4f4f4" stroke="#cc8888" stroke-dasharray="5,4"/>
-    <text x="917" y="708" font-size="11" font-weight="bold" fill="#a04545">trace &amp; repair helpers — planned</text>
-    <text x="917" y="725" font-size="9.5" fill="#999">make_temperature_scenarios()</text>
-    <text x="917" y="737" font-size="9.5" fill="#999">repair_rate_schoolfield()</text>
+    <text x="917" y="708" font-size="11" font-weight="bold" fill="#a04545">user-supplied trace &amp; repair scenario</text>
+    <text x="917" y="725" font-size="9.5" fill="#999">no public helper API</text>
+    <text x="917" y="737" font-size="9.5" fill="#999">repair is not fitted from data</text>
   </g>
   <!-- plot_*() family -->
   <g text-anchor="middle">
