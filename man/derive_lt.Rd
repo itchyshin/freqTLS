@@ -36,7 +36,7 @@ The target must lie strictly between \code{low} and \code{up} for a finite cross
 otherwise the survival curve never reaches \code{p} and \code{derive_lt()} aborts with
 an explanatory message (confidence-language, never silent).
 For a random-effects fit this is a population-level derived quantity; it does
-not add a group BLUP.
+not add a group BLUP (best linear unbiased predictor; see \code{\link[=ranef]{ranef()}}).
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

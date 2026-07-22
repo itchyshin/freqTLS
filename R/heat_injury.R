@@ -8,7 +8,7 @@
 #' repair dynamics remains a `bayesTLS` concern (the complementary boundary);
 #' `predict_heat_injury()` only predicts injury from the already-fitted survival
 #' curve. For a random-effects fit it uses the population curve and does not add
-#' a fitted group BLUP.
+#' a fitted group BLUP (best linear unbiased predictor; see [ranef()]).
 #'
 #' @details
 #' ## Dose-accumulation model
@@ -373,8 +373,7 @@ heat_injury_envelope <- function(object, trace, group = NULL, target_surv = NULL
 #' `plot_heat_injury()` draws the point-estimate survival trajectory from
 #' [predict_heat_injury()] inside the pointwise parametric-bootstrap confidence
 #' band from [heat_injury_envelope()]. The band is prior-free -- a confidence
-#' band, never a posterior / credible band (the project's honest-uncertainty
-#' contract).
+#' band, never a posterior or credible band.
 #'
 #' @inheritParams heat_injury_envelope
 #' @param time_div Optional positive divisor applied to `time` on the x-axis (for

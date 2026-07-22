@@ -66,8 +66,7 @@ A \code{ggplot} object.
 \code{plot_heat_injury()} draws the point-estimate survival trajectory from
 \code{\link[=predict_heat_injury]{predict_heat_injury()}} inside the pointwise parametric-bootstrap confidence
 band from \code{\link[=heat_injury_envelope]{heat_injury_envelope()}}. The band is prior-free -- a confidence
-band, never a posterior / credible band (the project's honest-uncertainty
-contract).
+band, never a posterior or credible band.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

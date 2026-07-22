@@ -35,10 +35,12 @@ negligible (the temperature cutoff a heat-injury accumulation model treats as
 per hour}; \code{bayesTLS} brackets observed breakpoints with a default range of
 \code{0.1}--\code{1} \%/hour. Unlike the Bayesian path, which samples \code{rate} to fold an
 operational choice into the posterior, freqTLS treats \code{rate} as a fixed
-input and returns the deterministic transform of the fitted \code{CTmax} and \code{z}
-(combine their confidence intervals if you need to propagate uncertainty).
+input and returns the deterministic transform of the fitted \code{CTmax} and \code{z}.
+To propagate uncertainty, apply the delta method to the joint \code{vcov()} of
+\code{CTmax} and \code{z}; the separate \code{CTmax} and \code{z} confidence intervals do not
+combine into a valid interval for \code{T_crit}.
 For a random-effects fit this is a population-level derived quantity; it does
-not add a group BLUP.
+not add a group BLUP (best linear unbiased predictor; see \code{\link[=ranef]{ranef()}}).
 
 \code{T_crit} assumes a \strong{lethal endpoint}: it is a damage-accumulation concept, so
 for sublethal endpoints (knockdown, photosynthetic failure) the steeper \code{z}

@@ -37,7 +37,7 @@ Solving \code{surv = low + (up - low) * plogis(-k (log10(duration) - mid))} with
   \mathrm{qlogis}\!\big(\tfrac{surv - low}{up - low}\big) / k\Big).}
 The target \code{surv} must lie strictly between \code{low} and \code{up}.
 For a random-effects fit this is a population-level derived quantity; it does
-not add a group BLUP.
+not add a group BLUP (best linear unbiased predictor; see \code{\link[=ranef]{ranef()}}).
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
