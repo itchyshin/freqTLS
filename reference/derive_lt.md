@@ -47,7 +47,9 @@ low}{up - low}\right) / k.\$\$ The target must lie strictly between
 `low` and `up` for a finite crossing; otherwise the survival curve never
 reaches `p` and `derive_lt()` aborts with an explanatory message
 (confidence-language, never silent). For a random-effects fit this is a
-population-level derived quantity; it does not add a group BLUP.
+population-level derived quantity; it does not add a group BLUP (best
+linear unbiased predictor; see
+[`ranef()`](https://itchyshin.github.io/freqTLS/reference/ranef.md)).
 
 ## Examples
 

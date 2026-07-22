@@ -5,7 +5,9 @@ Evaluates the fitted 4PL survival probability over a
 temperature-by-duration grid and adds parametric-bootstrap confidence
 bands. For random-effects fits the curves are population-level: random
 intercepts are integrated during bootstrap refits, but no fitted group
-BLUP is added to the reported curve.
+BLUP (best linear unbiased predictor; see
+[`ranef()`](https://itchyshin.github.io/freqTLS/reference/ranef.md)) is
+added to the reported curve.
 
 ## Usage
 

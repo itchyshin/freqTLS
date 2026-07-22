@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>freqTLS — frequentist inference for thermal death-time models • freqTLS</title>
-<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="katex-auto.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -311,11 +312,11 @@
 <h2 id="the-model">The model<a class="anchor" aria-label="anchor" href="#the-model"></a>
 </h2>
 <p>For exposure duration <code>d</code> (with <code>logd = log10(d)</code>) and assay temperature <code>T</code>, survival follows the descending four-parameter logistic</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow><mo>+</mo><mfrac><mrow><mrow><mi mathvariant="normal">u</mi><mi mathvariant="normal">p</mi></mrow><mo>−</mo><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mspace width="-0.167em"></mspace><mo minsize="120%" maxsize="120%" stretchy="true" form="prefix">(</mo><mi>k</mi><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mi>d</mi><mo>−</mo><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false" form="postfix">)</mo><mo minsize="120%" maxsize="120%" stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi></mrow><mo>=</mo><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>t</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mfrac><mrow><mi>T</mi><mo>−</mo><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></mrow><mi>z</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+<p><span class="math display">
 p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10} d - \mathrm{mid})\big)},
 \qquad
 \mathrm{mid} = \log_{10}(t_\mathrm{ref}) - \frac{T - \mathrm{CTmax}}{z}.
-</annotation></semantics></math></p>
+</span></p>
 <p><code>CTmax</code> is the critical thermal maximum at the reference time <code>tref</code>, and <code>z</code> is the thermal sensitivity (degrees Celsius per order-of-magnitude change in exposure duration). The In the default constant-shape configuration, the temperature effect runs through the midpoint only (shared <code>low</code>, <code>up</code>, <code>k</code>). Explicit formula terms can instead model <code>low</code>, <code>up</code>, or <code>log_k</code>; these extensions change the interpretation of an absolute-threshold curve and do not create local <code>z</code> estimates. Because <code>CTmax</code> and <code>z</code> are direct model parameters, both can be profiled directly.</p>
 <p>See <code><a href="articles/freqTLS.html">vignette("freqTLS")</a></code> for the full walkthrough, <code><a href="articles/model-math.html">vignette("model-math")</a></code> for the exact bridge to <code>bayesTLS</code>, and <code><a href="articles/profile-likelihood.html">vignette("profile-likelihood")</a></code> for what the profile is doing and the honest non-closing fallback.</p>
 </div>
@@ -328,7 +329,7 @@ p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10
 <h2 id="data-credits">Data credits<a class="anchor" aria-label="anchor" href="#data-credits"></a>
 </h2>
 <p>The active teaching cases use <code>zebrafish_o2</code> (oxygen-gradient zebrafish), <code>aphid_tdt</code> (cereal aphids), <code>snowgum_psii</code> (Snow-gum PSII), and <code>dsuzukii</code> (mortality and awake/coma endpoints). Their original sources and component licences are recorded in <code>inst/CITATION</code>, <code>inst/COPYRIGHTS</code>, and the repository licence ledger. Snow-gum remains CC BY-NC 4.0 in this development version; do not assume the package’s GPL licence removes that restriction.</p>
-<p><code>shrimp_lethal</code>, <code>shrimp_sublethal</code>, and <code>zebrafish_lethal</code> are retained only as unpublished compatibility/benchmark fixtures. They are not current teaching examples and must not be used as substitutes for the canonical cases. Please cite <code>bayesTLS</code> and each original data source when using any bundled data.</p>
+<p>Legacy compatibility/benchmark fixtures remain fully attributed in <code>inst/CITATION</code> and <code>inst/COPYRIGHTS</code>, but are intentionally absent from public examples and pkgdown discovery. Please cite <code>bayesTLS</code> and each original data source when using any bundled data.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

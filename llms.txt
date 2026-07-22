@@ -375,11 +375,9 @@ overlaid.](reference/figures/README-grouped-shape-curves-1.png)
 For exposure duration `d` (with `logd = log10(d)`) and assay temperature
 `T`, survival follows the descending four-parameter logistic
 
-``` math
-p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10} d - \mathrm{mid})\big)},
-\qquad
-\mathrm{mid} = \log_{10}(t_\mathrm{ref}) - \frac{T - \mathrm{CTmax}}{z}.
-```
+p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 +
+\exp\\\big(k\\(\log\_{10} d - \mathrm{mid})\big)}, \qquad \mathrm{mid} =
+\log\_{10}(t\_\mathrm{ref}) - \frac{T - \mathrm{CTmax}}{z}.
 
 `CTmax` is the critical thermal maximum at the reference time `tref`,
 and `z` is the thermal sensitivity (degrees Celsius per
@@ -425,10 +423,10 @@ sources and component licences are recorded in `inst/CITATION`,
 CC BY-NC 4.0 in this development version; do not assume the package’s
 GPL licence removes that restriction.
 
-only as unpublished compatibility/benchmark fixtures. They are not
-current teaching examples and must not be used as substitutes for the
-canonical cases. Please cite `bayesTLS` and each original data source
-when using any bundled data.
+Legacy compatibility/benchmark fixtures remain fully attributed in
+`inst/CITATION` and `inst/COPYRIGHTS`, but are intentionally absent from
+public examples and pkgdown discovery. Please cite `bayesTLS` and each
+original data source when using any bundled data.
 
 # Package index
 

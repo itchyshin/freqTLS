@@ -4,8 +4,8 @@
 [`predict_heat_injury()`](https://itchyshin.github.io/freqTLS/reference/predict_heat_injury.md)
 inside the pointwise parametric-bootstrap confidence band from
 [`heat_injury_envelope()`](https://itchyshin.github.io/freqTLS/reference/heat_injury_envelope.md).
-The band is prior-free – a confidence band, never a posterior / credible
-band (the project's honest-uncertainty contract).
+The band is prior-free – a confidence band, never a posterior or
+credible band.
 
 ## Usage
 

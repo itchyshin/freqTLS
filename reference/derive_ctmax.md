@@ -50,7 +50,8 @@ with `mid = log10(tref) - (temp - CTmax) / z` for the temperature gives
 \mathrm{qlogis}\\\big(\tfrac{surv - low}{up - low}\big) / k\Big).\$\$
 The target `surv` must lie strictly between `low` and `up`. For a
 random-effects fit this is a population-level derived quantity; it does
-not add a group BLUP.
+not add a group BLUP (best linear unbiased predictor; see
+[`ranef()`](https://itchyshin.github.io/freqTLS/reference/ranef.md)).
 
 ## Examples
 

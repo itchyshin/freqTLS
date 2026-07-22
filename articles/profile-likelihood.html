@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Profile-likelihood intervals • freqTLS</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -112,42 +113,26 @@ data-adequacy warning to a concrete design or analysis response.</p>
 <div class="section level2">
 <h2 id="what-the-profile-does">What the profile does<a class="anchor" aria-label="anchor" href="#what-the-profile-does"></a>
 </h2>
-<p>For a scalar target
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ψ</mi><annotation encoding="application/x-tex">\psi</annotation></semantics></math>
-(say <code>CTmax</code>):</p>
+<p>For a scalar target <span class="math inline">\psi</span> (say
+<code>CTmax</code>):</p>
 <ol style="list-style-type: decimal">
-<li>Fit the maximum-likelihood estimate, obtaining
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>,</mo><mover><mi>ℓ</mi><mo accent="true">̂</mo></mover><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\hat\theta, \hat\ell)</annotation></semantics></math>.</li>
-<li>Fix the internal coordinate that maps to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ψ</mi><annotation encoding="application/x-tex">\psi</annotation></semantics></math>
-at a candidate value and re-optimise all the other coordinates, giving
-the profile log-likelihood
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℓ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\ell_p(\psi)</annotation></semantics></math>.</li>
-<li>Form the deviance
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>2</mn><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><mover><mi>ℓ</mi><mo accent="true">̂</mo></mover><mo>−</mo><msub><mi>ℓ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">D(\psi) = 2\,(\hat\ell - \ell_p(\psi))</annotation></semantics></math>.</li>
-<li>The confidence interval is the set
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mi>ψ</mi><mo>:</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>ψ</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msubsup><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mi>/</mi><mn>2</mn><mo>,</mo><mspace width="0.167em"></mspace><mi>ν</mi></mrow><mn>2</mn></msubsup><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{\psi : D(\psi) \le t^2_{1-\alpha/2,\,\nu}\}</annotation></semantics></math>,
-found by root-finding on each side of the MLE.</li>
+<li>Fit the maximum-likelihood estimate, obtaining <span class="math inline">(\hat\theta, \hat\ell)</span>.</li>
+<li>Fix the internal coordinate that maps to <span class="math inline">\psi</span> at a candidate value and re-optimise all
+the other coordinates, giving the profile log-likelihood <span class="math inline">\ell_p(\psi)</span>.</li>
+<li>Form the deviance <span class="math inline">D(\psi) = 2\,(\hat\ell -
+\ell_p(\psi))</span>.</li>
+<li>The confidence interval is the set <span class="math inline">\{\psi
+: D(\psi) \le t^2_{1-\alpha/2,\,\nu}\}</span>, found by root-finding on
+each side of the MLE.</li>
 </ol>
 <p>At the MLE the deviance is (numerically) zero. The cutoff is the
-<strong>squared
-Student-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-quantile</strong>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>t</mi><mrow><mn>1</mn><mo>−</mo><mi>α</mi><mi>/</mi><mn>2</mn><mo>,</mo><mspace width="0.167em"></mspace><mi>ν</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">t^2_{1-\alpha/2,\,\nu}</annotation></semantics></math>
-on
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>=</mo><mi>n</mi><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">\nu = n - p</annotation></semantics></math>
-residual degrees of freedom (data rows minus free fixed-effect
-coordinates), not the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\chi^2_1</annotation></semantics></math>
-quantile: this is the Bates–Watts
-profile-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-calibration, which is less optimistic at small
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-and converges to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>χ</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\chi^2_1</annotation></semantics></math>
-as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\nu \to \infty</annotation></semantics></math>
-(see <code><a href="../articles/frequentist-and-bayesian.html">vignette("frequentist-and-bayesian")</a></code>).
+<strong>squared Student-<span class="math inline">t</span>
+quantile</strong> <span class="math inline">t^2_{1-\alpha/2,\,\nu}</span> on <span class="math inline">\nu = n - p</span> residual degrees of freedom (data
+rows minus free fixed-effect coordinates), not the <span class="math inline">\chi^2_1</span> quantile: this is the Bates–Watts
+profile-<span class="math inline">t</span> calibration, which is less
+optimistic at small <span class="math inline">n</span> and converges to
+<span class="math inline">\chi^2_1</span> as <span class="math inline">\nu \to \infty</span> (see
+<code><a href="../articles/frequentist-and-bayesian.html">vignette("frequentist-and-bayesian")</a></code>).
 <code><a href="https://rdrr.io/r/stats/profile.html" class="external-link">profile()</a></code> returns the whole deviance curve plus the
 interval:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -162,9 +147,8 @@ interval:</p>
 <span><span class="co">#&gt;     estimate     conf.low    conf.high       cutoff min_deviance </span></span>
 <span><span class="co">#&gt;    29.067705    28.326499    29.802223     3.937117     0.000000</span></span></code></pre></div>
 <p>The deviance minimum sits essentially at zero, at the estimate.
-Plotting the profile shows the deviance curve, the
-profile-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-cutoff line, and the interval where the curve dips below it:</p>
+Plotting the profile shows the deviance curve, the profile-<span class="math inline">t</span> cutoff line, and the interval where the
+curve dips below it:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pc</span><span class="op">)</span></span></code></pre></div>
 <p><img src="profile-likelihood_files/figure-html/profile-plot-1.png" class="r-plt" alt="Profile-likelihood deviance curve for CTmax: a U-shaped curve with a horizontal profile-t cutoff line; the confidence interval is where the curve lies below the cutoff." width="576"></p>
@@ -174,14 +158,12 @@ cutoff line, and the interval where the curve dips below it:</p>
 </h2>
 <p>A profile interval need not be symmetric about the estimate, and
 <code>freqTLS</code> preserves the asymmetry rather than forcing a
-symmetric
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>±</mi><annotation encoding="application/x-tex">\pm</annotation></semantics></math>
-band. For a parameter on a log scale, such as <code>z</code>, the
-profile is taken on the internal <code>log_z</code> coordinate and the
-endpoints are exponentiated. This makes the interval
-<strong>equivariant</strong>: the <code>z</code> interval is exactly
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">exp</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\exp()</annotation></semantics></math>
-of the internal <code>log_z</code> interval.</p>
+symmetric <span class="math inline">\pm</span> band. For a parameter on
+a log scale, such as <code>z</code>, the profile is taken on the
+internal <code>log_z</code> coordinate and the endpoints are
+exponentiated. This makes the interval <strong>equivariant</strong>: the
+<code>z</code> interval is exactly <span class="math inline">\exp()</span> of the internal <code>log_z</code>
+interval.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ci_z</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"z"</span>,     method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
 <span><span class="va">ci_log_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"log_z"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>
@@ -203,14 +185,13 @@ of the internal <code>log_z</code> interval.</p>
 <div class="section level2">
 <h2 id="profile-versus-wald">Profile versus Wald<a class="anchor" aria-label="anchor" href="#profile-versus-wald"></a>
 </h2>
-<p>The Wald interval is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>ψ</mi><mo accent="true">̂</mo></mover><mo>±</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow></msub><mspace width="0.167em"></mspace><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">e</mi></mrow></mrow><annotation encoding="application/x-tex">\hat\psi \pm z_{\alpha/2}\,\mathrm{se}</annotation></semantics></math>
-computed on the internal (link) scale and back-transformed. It is fast
-and first-order, but symmetric on the link scale and blind to the
-curvature of the likelihood. The profile interval inverts the
-likelihood-ratio test directly. On well-identified data the two agree
-closely; they diverge when the likelihood is skewed or the estimate
-approaches a boundary.</p>
+<p>The Wald interval is <span class="math inline">\hat\psi \pm
+z_{\alpha/2}\,\mathrm{se}</span> computed on the internal (link) scale
+and back-transformed. It is fast and first-order, but symmetric on the
+link scale and blind to the curvature of the likelihood. The profile
+interval inverts the likelihood-ratio test directly. On well-identified
+data the two agree closely; they diverge when the likelihood is skewed
+or the estimate approaches a boundary.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>  profile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"CTmax"</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"conf.low"</span>, <span class="st">"conf.high"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>

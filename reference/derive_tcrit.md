@@ -46,9 +46,13 @@ dose per hour**; `bayesTLS` brackets observed breakpoints with a default
 range of `0.1`–`1` %/hour. Unlike the Bayesian path, which samples
 `rate` to fold an operational choice into the posterior, freqTLS treats
 `rate` as a fixed input and returns the deterministic transform of the
-fitted `CTmax` and `z` (combine their confidence intervals if you need
-to propagate uncertainty). For a random-effects fit this is a
-population-level derived quantity; it does not add a group BLUP.
+fitted `CTmax` and `z`. To propagate uncertainty, apply the delta method
+to the joint [`vcov()`](https://rdrr.io/r/stats/vcov.html) of `CTmax`
+and `z`; the separate `CTmax` and `z` confidence intervals do not
+combine into a valid interval for `T_crit`. For a random-effects fit
+this is a population-level derived quantity; it does not add a group
+BLUP (best linear unbiased predictor; see
+[`ranef()`](https://itchyshin.github.io/freqTLS/reference/ranef.md)).
 
 `T_crit` assumes a **lethal endpoint**: it is a damage-accumulation
 concept, so for sublethal endpoints (knockdown, photosynthetic failure)

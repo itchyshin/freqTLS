@@ -211,8 +211,8 @@ headline quantities are model parameters, so they can be profiled
 directly. [`confint()`](https://rdrr.io/r/stats/confint.html) with
 `method = "profile"` (the default) inverts the likelihood-ratio test:
 the interval is the set of values whose deviance from the maximum stays
-below the profile-$`t`$ cutoff (a squared Student-$`t`$ quantile on the
-residual degrees of freedom, not $`\chi^2_1`$; see
+below the profile-t cutoff (a squared Student-t quantile on the residual
+degrees of freedom, not \chi^2_1; see
 [`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)),
 found by root-finding on each side of the MLE.
 

@@ -9,7 +9,8 @@ injury or repair model – fitting injury / repair dynamics remains a
 `bayesTLS` concern (the complementary boundary); `predict_heat_injury()`
 only predicts injury from the already-fitted survival curve. For a
 random-effects fit it uses the population curve and does not add a
-fitted group BLUP.
+fitted group BLUP (best linear unbiased predictor; see
+[`ranef()`](https://itchyshin.github.io/freqTLS/reference/ranef.md)).
 
 ## Usage
 

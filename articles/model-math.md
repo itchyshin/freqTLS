@@ -29,43 +29,40 @@ library(freqTLS)
 
 ## The 4PL thermal death-time curve
 
-Let $`d`$ be the exposure duration and $`\log d = \log_{10} d`$.
-Survival probability follows the descending four-parameter logistic
+Let d be the exposure duration and \log d = \log\_{10} d. Survival
+probability follows the descending four-parameter logistic
 
-``` math
-p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10} d - \mathrm{mid})\big)},
-\qquad k = \exp(\ln k).
-```
+p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 +
+\exp\\\big(k\\(\log\_{10} d - \mathrm{mid})\big)}, \qquad k = \exp(\ln
+k).
 
-- $`\mathrm{low}`$ is the lower asymptote (survival at long exposures),
-- $`\mathrm{up}`$ is the upper asymptote (survival at short exposures),
-- $`k > 0`$ is the steepness; its internal coordinate is the natural
-  logarithm $`\ln k`$, and
-- $`\mathrm{mid}`$ is the midpoint on the $`\log_{10} d`$ axis.
+- \mathrm{low} is the lower asymptote (survival at long exposures),
+- \mathrm{up} is the upper asymptote (survival at short exposures),
+- k \> 0 is the steepness; its internal coordinate is the natural
+  logarithm \ln k, and
+- \mathrm{mid} is the midpoint on the \log\_{10} d axis.
 
-Survival is high at short durations and falls toward $`\mathrm{low}`$ at
+Survival is high at short durations and falls toward \mathrm{low} at
 long durations.
 
 ## The direct `CTmax`/`z` parameterisation
 
 `freqTLS` lets temperature enter the midpoint directly through the two
-headline quantities. With $`z_i = \exp(\eta_{\log z, i})`$ and
-$`\mathrm{CTmax}_i`$ a function of the design,
+headline quantities. With z_i = \exp(\eta\_{\log z, i}) and
+\mathrm{CTmax}\_i a function of the design,
 
-``` math
-\mathrm{mid}_i = \log_{10}(t_\mathrm{ref}) - \frac{T_i - \mathrm{CTmax}_i}{z_i}.
-```
+\mathrm{mid}\_i = \log\_{10}(t\_\mathrm{ref}) - \frac{T_i -
+\mathrm{CTmax}\_i}{z_i}.
 
 This parameterisation makes the two biological quantities direct model
 parameters, so profile likelihood can constrain them directly:
 
-- At $`T_i = \mathrm{CTmax}_i`$, the midpoint is exactly
-  $`\log_{10}(t_\mathrm{ref})`$ — i.e. `CTmax` is the temperature at
-  which the threshold crossing occurs at the reference time
-  $`t_\mathrm{ref}`$.
+- At T_i = \mathrm{CTmax}\_i, the midpoint is exactly
+  \log\_{10}(t\_\mathrm{ref}) — i.e. `CTmax` is the temperature at which
+  the threshold crossing occurs at the reference time t\_\mathrm{ref}.
 - The slope of the midpoint in temperature is
-  $`\partial\,\mathrm{mid}/\partial T = -1/z`$, so `z` is the change in
-  temperature per order of magnitude (a one-unit change in $`\log_{10}`$
+  \partial\\\mathrm{mid}/\partial T = -1/z, so `z` is the change in
+  temperature per order of magnitude (a one-unit change in \log\_{10}
   duration) — the thermal sensitivity in degrees Celsius per 10-fold
   change in exposure duration.
 
@@ -97,32 +94,31 @@ c(slope = diff(mids), minus_one_over_z = -1 / zz)
 
 The asymptotes use the bayesTLS
 [`compute_4pl_bounds()`](https://itchyshin.github.io/freqTLS/reference/compute_4pl_bounds.md)
-parameterisation: the feasible band $`[\ell, u]`$ (default $`[0, 1]`$)
-is split at its midpoint, and `low` and `up` each map an unconstrained
-coefficient onto one half, so $`\mathrm{up} > \mathrm{low}`$ holds
+parameterisation: the feasible band \[\ell, u\] (default \[0, 1\]) is
+split at its midpoint, and `low` and `up` each map an unconstrained
+coefficient onto one half, so \mathrm{up} \> \mathrm{low} holds
 automatically:
 
-``` math
-\mathrm{low} = \ell_{\min} + w_\mathrm{low}\,\mathrm{logit}^{-1}(\beta_\mathrm{low}),
-\qquad
-\mathrm{up}  = u_{\min}  + w_\mathrm{up}\,\mathrm{logit}^{-1}(\beta_\mathrm{up}).
-```
+\mathrm{low} = \ell\_{\min} +
+w\_\mathrm{low}\\\mathrm{logit}^{-1}(\beta\_\mathrm{low}), \qquad
+\mathrm{up} = u\_{\min} +
+w\_\mathrm{up}\\\mathrm{logit}^{-1}(\beta\_\mathrm{up}).
 
-`low` is confined to the lower half-band $`[\ell_{\min}, \ell_{\max}]`$
-and `up` to the upper half-band $`[u_{\min}, u_{\max}]`$ (the bands
+`low` is confined to the lower half-band \[\ell\_{\min}, \ell\_{\max}\]
+and `up` to the upper half-band \[u\_{\min}, u\_{\max}\] (the bands
 meet, with a tiny separating gap, at the midpoint). Any
-$`(\beta_\mathrm{low}, \beta_\mathrm{up})`$ therefore gives a valid
-ordered pair $`\ell < \mathrm{low} < \mathrm{up} < u`$. This is
+(\beta\_\mathrm{low}, \beta\_\mathrm{up}) therefore gives a valid
+ordered pair \ell \< \mathrm{low} \< \mathrm{up} \< u. This is
 unconstrained and smooth, which keeps the optimiser and the profiles
 well-behaved, and it matches bayesTLS exactly so the two packages share
 the asymptote contract.
 
 Under this parameterisation `up` is fitted through its own coordinate
-$`\beta_\mathrm{up}`$, just as `low` is fitted through
-$`\beta_\mathrm{low}`$. The limitation concerns interval computation,
-not fitting: freqTLS does not yet profile $`\beta_\mathrm{up}`$, so it
-reports a delta-method Wald interval for `up` (or a bootstrap interval
-when requested). The full table of parameters and links:
+\beta\_\mathrm{up}, just as `low` is fitted through \beta\_\mathrm{low}.
+The limitation concerns interval computation, not fitting: freqTLS does
+not yet profile \beta\_\mathrm{up}, so it reports a delta-method Wald
+interval for `up` (or a bootstrap interval when requested). The full
+table of parameters and links:
 
 | Natural parameter     | Internal coordinate | Link                             |
 |-----------------------|---------------------|----------------------------------|
@@ -135,21 +131,19 @@ when requested). The full table of parameters and links:
 
 ## Relative versus absolute thresholds
 
-A “lethal time” such as the LT$`_{50}`$ is the duration at which
-survival crosses a target probability. There are two conventions. A
-**relative threshold** is a position between the fitted asymptotes; an
-**absolute threshold** is a fixed survival probability on the response
-scale:
+A “lethal time” such as the LT\_{50} is the duration at which survival
+crosses a target probability. There are two conventions. A **relative
+threshold** is a position between the fitted asymptotes; an **absolute
+threshold** is a fixed survival probability on the response scale:
 
 - **Relative** (the `freqTLS` default): the target is interpreted
-  relative to the fitted asymptotes, so relative fraction $`0.5`$ means
+  relative to the fitted asymptotes, so relative fraction 0.5 means
   halfway between `low` and `up` — which is exactly the 4PL midpoint
-  $`\mathrm{mid}`$. This is the configuration that matches the
-  `bayesTLS` `target_surv = "relative"` setting and is what the
-  benchmark uses (see
+  \mathrm{mid}. This is the configuration that matches the `bayesTLS`
+  `target_surv = "relative"` setting and is what the benchmark uses (see
   [`vignette("comparing-to-bayesTLS")`](https://itchyshin.github.io/freqTLS/articles/comparing-to-bayesTLS.md)).
 - **Absolute**: the target is an absolute survival probability,
-  requiring $`p`$ to lie strictly between `low` and `up`.
+  requiring p to lie strictly between `low` and `up`.
 
 [`derive_lt()`](https://itchyshin.github.io/freqTLS/reference/derive_lt.md)
 solves the 4PL for the duration at which survival reaches its numeric
@@ -157,10 +151,10 @@ absolute probability `p`, which must lie strictly between `low` and
 `up`. At the relative midpoint, use `p = (low + up) / 2`;
 [`plot_tdt_curve()`](https://itchyshin.github.io/freqTLS/reference/plot_tdt_curve.md)
 uses that midpoint by default and can plot another valid absolute `p`.
-On the $`\log_{10} d`$ axis the relative-threshold crossing is the line
-$`\log_{10} d = \mathrm{mid}(T) = \log_{10}(t_\mathrm{ref}) - (T - \mathrm{CTmax})/z`$,
-whose slope is $`-1/z`$ — the classic log-linear thermal death-time
-line.
+On the \log\_{10} d axis the relative-threshold crossing is the line
+\log\_{10} d = \mathrm{mid}(T) = \log\_{10}(t\_\mathrm{ref}) - (T -
+\mathrm{CTmax})/z, whose slope is -1/z — the classic log-linear thermal
+death-time line.
 
 ``` r
 
@@ -175,33 +169,26 @@ For the matched constant-shape midpoint configuration
 (`temp_effects = "mid"`), `bayesTLS` parameterises the midpoint as a
 line in temperature,
 
-``` math
-\mathrm{mid}(T) = b_{\mathrm{mid,Intercept}} + b_{\mathrm{mid},T_c}\,(T - \bar T),
-```
+\mathrm{mid}(T) = b\_{\mathrm{mid,Intercept}} +
+b\_{\mathrm{mid},T_c}\\(T - \bar T),
 
 and reads the thermal sensitivity and critical thermal maximum off that
 line:
 
-``` math
-z = -\frac{1}{b_{\mathrm{mid},T_c}},
-\qquad
-\mathrm{CTmax}(t_\mathrm{ref}) = \bar T + \frac{\log_{10}(t_\mathrm{ref}) - b_{\mathrm{mid,Intercept}}}{b_{\mathrm{mid},T_c}}.
-```
+z = -\frac{1}{b\_{\mathrm{mid},T_c}}, \qquad
+\mathrm{CTmax}(t\_\mathrm{ref}) = \bar T +
+\frac{\log\_{10}(t\_\mathrm{ref}) -
+b\_{\mathrm{mid,Intercept}}}{b\_{\mathrm{mid},T_c}}.
 
-Expanding the `freqTLS` midpoint as a line in $`T`$ gives the inverse
-map:
+Expanding the `freqTLS` midpoint as a line in T gives the inverse map:
 
-``` math
-\beta_1 = -\frac{1}{z}, \qquad
-\beta_0 = \log_{10}(t_\mathrm{ref}) + \frac{\mathrm{CTmax} - \bar T}{z},
-```
+\beta_1 = -\frac{1}{z}, \qquad \beta_0 = \log\_{10}(t\_\mathrm{ref}) +
+\frac{\mathrm{CTmax} - \bar T}{z},
 
 so
 
-``` math
-z = -\frac{1}{\beta_1}, \qquad
-\mathrm{CTmax} = \bar T + \frac{\log_{10}(t_\mathrm{ref}) - \beta_0}{\beta_1}.
-```
+z = -\frac{1}{\beta_1}, \qquad \mathrm{CTmax} = \bar T +
+\frac{\log\_{10}(t\_\mathrm{ref}) - \beta_0}{\beta_1}.
 
 These are the midpoint-line identities used by `bayesTLS`. The
 reparameterisation shares `(low, up, k)` and is smooth and invertible
@@ -215,7 +202,7 @@ with direct profile-likelihood targets.
 
 We can verify the bridge numerically without `bayesTLS`. Fit the
 midpoint line directly from the model’s own predicted midpoints (linear
-in $`T`$), then recover `CTmax` and `z` from the slope and intercept:
+in T), then recover `CTmax` and `z` from the slope and intercept:
 
 ``` r
 
@@ -240,5 +227,5 @@ The recovered `CTmax` and `z` match the fitted values to numerical
 precision, confirming that the direct parameterisation and the
 `bayesTLS` line are two coordinate systems for the same curve.
 Equivariance of the profile likelihood under this monotone map is why
-the `z` interval equals $`\exp()`$ of the internal `log_z` interval (see
+the `z` interval equals \exp() of the internal `log_z` interval (see
 [`vignette("profile-likelihood")`](https://itchyshin.github.io/freqTLS/articles/profile-likelihood.md)).

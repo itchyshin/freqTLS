@@ -25,24 +25,24 @@ library(freqTLS)
 
 ## What the profile does
 
-For a scalar target $`\psi`$ (say `CTmax`):
+For a scalar target \psi (say `CTmax`):
 
-1.  Fit the maximum-likelihood estimate, obtaining
-    $`(\hat\theta, \hat\ell)`$.
-2.  Fix the internal coordinate that maps to $`\psi`$ at a candidate
-    value and re-optimise all the other coordinates, giving the profile
-    log-likelihood $`\ell_p(\psi)`$.
-3.  Form the deviance $`D(\psi) = 2\,(\hat\ell - \ell_p(\psi))`$.
-4.  The confidence interval is the set
-    $`\{\psi : D(\psi) \le t^2_{1-\alpha/2,\,\nu}\}`$, found by
-    root-finding on each side of the MLE.
+1.  Fit the maximum-likelihood estimate, obtaining (\hat\theta,
+    \hat\ell).
+2.  Fix the internal coordinate that maps to \psi at a candidate value
+    and re-optimise all the other coordinates, giving the profile
+    log-likelihood \ell_p(\psi).
+3.  Form the deviance D(\psi) = 2\\(\hat\ell - \ell_p(\psi)).
+4.  The confidence interval is the set \\\psi : D(\psi) \le
+    t^2\_{1-\alpha/2,\\\nu}\\, found by root-finding on each side of the
+    MLE.
 
 At the MLE the deviance is (numerically) zero. The cutoff is the
-**squared Student-$`t`$ quantile** $`t^2_{1-\alpha/2,\,\nu}`$ on
-$`\nu = n - p`$ residual degrees of freedom (data rows minus free
-fixed-effect coordinates), not the $`\chi^2_1`$ quantile: this is the
-Bates–Watts profile-$`t`$ calibration, which is less optimistic at small
-$`n`$ and converges to $`\chi^2_1`$ as $`\nu \to \infty`$ (see
+**squared Student-t quantile** t^2\_{1-\alpha/2,\\\nu} on \nu = n - p
+residual degrees of freedom (data rows minus free fixed-effect
+coordinates), not the \chi^2_1 quantile: this is the Bates–Watts
+profile-t calibration, which is less optimistic at small n and converges
+to \chi^2_1 as \nu \to \infty (see
 [`vignette("frequentist-and-bayesian")`](https://itchyshin.github.io/freqTLS/articles/frequentist-and-bayesian.md)).
 [`profile()`](https://rdrr.io/r/stats/profile.html) returns the whole
 deviance curve plus the interval:
@@ -62,8 +62,8 @@ c(estimate = pc$estimate, conf.low = pc$conf.low, conf.high = pc$conf.high,
 ```
 
 The deviance minimum sits essentially at zero, at the estimate. Plotting
-the profile shows the deviance curve, the profile-$`t`$ cutoff line, and
-the interval where the curve dips below it:
+the profile shows the deviance curve, the profile-t cutoff line, and the
+interval where the curve dips below it:
 
 ``` r
 
@@ -78,11 +78,11 @@ cutoff.](profile-likelihood_files/figure-html/profile-plot-1.png)
 ## Asymmetry and equivariance
 
 A profile interval need not be symmetric about the estimate, and
-`freqTLS` preserves the asymmetry rather than forcing a symmetric
-$`\pm`$ band. For a parameter on a log scale, such as `z`, the profile
-is taken on the internal `log_z` coordinate and the endpoints are
-exponentiated. This makes the interval **equivariant**: the `z` interval
-is exactly $`\exp()`$ of the internal `log_z` interval.
+`freqTLS` preserves the asymmetry rather than forcing a symmetric \pm
+band. For a parameter on a log scale, such as `z`, the profile is taken
+on the internal `log_z` coordinate and the endpoints are exponentiated.
+This makes the interval **equivariant**: the `z` interval is exactly
+\exp() of the internal `log_z` interval.
 
 ``` r
 
@@ -106,8 +106,8 @@ with(ci_z, c(lower_gap = estimate - conf.low, upper_gap = conf.high - estimate))
 
 ## Profile versus Wald
 
-The Wald interval is $`\hat\psi \pm z_{\alpha/2}\,\mathrm{se}`$ computed
-on the internal (link) scale and back-transformed. It is fast and
+The Wald interval is \hat\psi \pm z\_{\alpha/2}\\\mathrm{se} computed on
+the internal (link) scale and back-transformed. It is fast and
 first-order, but symmetric on the link scale and blind to the curvature
 of the likelihood. The profile interval inverts the likelihood-ratio
 test directly. On well-identified data the two agree closely; they
