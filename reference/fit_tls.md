@@ -1,12 +1,12 @@
 # Fit a single-stage 4PL thermal-load-sensitivity model by maximum likelihood
 
 `fit_tls()` fits the descending four-parameter logistic (4PL) thermal
-death-time model to survival-count data, parameterised \*\*directly in
+death-time model to survival-count data, parameterised directly in
 `CTmax` (the critical thermal maximum at the reference time `tref`) and
-`z` (thermal sensitivity, degrees Celsius per decade of duration) so
-that both headline quantities can be profiled. Survival is modelled as a
-function of `log10(duration)`; the midpoint moves with temperature
-through `CTmax` and `z` (see
+`z` (thermal sensitivity, degrees Celsius per order-of-magnitude change
+in tolerated duration) so that both headline quantities can be profiled.
+Survival is modelled as a function of `log10(duration)`; the midpoint
+moves with temperature through `CTmax` and `z` (see
 [`vignette("model-math")`](https://itchyshin.github.io/freqTLS/articles/model-math.md)).
 The thermal-load-sensitivity modelling framework was introduced by
 Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier in
@@ -23,7 +23,7 @@ fit_tls(
   temp,
   group = NULL,
   family = c("beta_binomial", "binomial", "beta"),
-  tref = 1,
+  tref = NULL,
   start = NULL,
   control = list(),
   trace = FALSE,
@@ -85,8 +85,12 @@ fit_tls(
 
 - tref:
 
-  Reference time at which `CTmax` is defined, in the same unit as `time`
-  (default `1`, i.e. CTmax at one time unit).
+  Reference time at which `CTmax` is defined, in the same unit as
+  `time`. When `NULL` (the default), standardized data with a recognised
+  `duration_unit` use one physical hour (for example, `60` minutes or
+  `1` hour). For bare data without metadata, the historical fallback is
+  `1` native time unit with a warning; supply `tref` explicitly to avoid
+  an ambiguous reference.
 
 - start:
 

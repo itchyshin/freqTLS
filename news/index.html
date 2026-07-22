@@ -61,7 +61,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-experimental-release-candidate">freqTLS 0.1.0 (experimental release candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-experimental-release-candidate"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-experimental-release-candidate">freqTLS 0.1.0 (experimental release candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-experimental-release-candidate"></a></h2><p class="text-muted">CRAN release: 2026-07-21</p>
 <ul><li>Rebased the empirical teaching plan on the pinned bayesTLS supplement rendered 2026-07-14 (commit <code>76510412e06c594c96894a1baba1f0e1a34a5aea</code>). Canonical cases are oxygen-gradient zebrafish, cereal aphids, Snow-gum PSII, and the mortality and awake/coma <em>Drosophila suzukii</em> endpoints.</li>
 <li>Brown shrimp and life-stage zebrafish remain installed benchmark-only legacy fixtures but are removed from active examples, navigation, and current comparison surfaces.</li>
 <li>Retained Beta responses, limited random intercepts, shape formulas, deterministic heat-injury prediction, the formula interface, and the frequentist interval/diagnostic displays as explicitly experimental.</li>
@@ -71,9 +71,12 @@
 <li>Added the reviewed canonical bayesTLS comparator cache built on Totoro from pinned bayesTLS commit <code>76510412</code>, with exact analysis hashes, sampler diagnostics, source versions, seeds, and a public table of actual freqTLS-minus-bayesTLS differences. The historical shrimp/life-stage cache remains internal legacy evidence only.</li>
 <li>
 <code><a href="../reference/standardize_data.html">standardize_data()</a></code> now warns with the affected count and epsilon whenever a continuous proportion is moved off 0 or 1 for the Beta likelihood. The Snow-gum example makes its 90 adjusted values explicit.</li>
+<li>Omitted <code>tref</code> / <code>t_ref</code> now resolves to one physical hour for standardized data with recognised duration-unit metadata (for example, 60 minutes or 1 hour). Bare data retain the historical one-native-unit fallback with a warning, so an ambiguous CTmax reference is never silent.</li>
+<li>
+<code><a href="../reference/get_ctmax.html">get_ctmax()</a></code>, <code><a href="../reference/get_z.html">get_z()</a></code>, and <code><a href="../reference/get_shape.html">get_shape()</a></code> now pass <code>method = "wald"</code> or <code>"profile"</code> through to <code><a href="../reference/tidy_parameters.html">tidy_parameters()</a></code> and retain per-coordinate interval routing in <code>interval_type</code>.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-unreleased-historical-candidate">freqTLS 0.1.0 (unreleased historical candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-unreleased-historical-candidate"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-unreleased-historical-candidate">freqTLS 0.1.0 (unreleased historical candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-unreleased-historical-candidate"></a></h2><p class="text-muted">CRAN release: 2026-07-21</p>
 <ul><li>Corrected grouped contrast direction so <code>dCTmax:A-B</code>, <code>dlog_z:A-B</code>, and <code>dz:A-B</code> now follow their written meaning: group A minus group B.</li>
 </ul><p>freqTLS is the frequentist counterpart to the Bayesian <strong>bayesTLS</strong> package: it fits the four-parameter logistic thermal-load-sensitivity (thermal death-time) model by maximum likelihood via TMB, parameterised directly in CTmax and thermal sensitivity (z). Under the matched relative-threshold, constant-shape configuration, it targets the same fitted curve as <code>bayesTLS</code>; uncertainty is reported through a frequentist trio — Wald (delta), profile-likelihood, and bootstrap — instead of a posterior. Forked from <strong>profileTLS</strong> (commit <code>6f963a9</code>, v0.3.3), which it supersedes.</p>
 <div class="section level3">

@@ -48,18 +48,19 @@ knitr::kable(cases)
   `z`, then cross-checks the four-hour absolute LT50 as an ML point. Its
   exact-model bootstrap interval is not reported because too few refits
   converged.
-- *D. suzukii* awake/coma uses the first cell duration and drops
-  duration zero; censored time-to-coma and hurdle productivity remain
-  bayesTLS-only.
+- *D. suzukii* awake/coma uses the first cell duration and excludes
+  duration zero because `log10(duration)` cannot represent it; those
+  controls are not evidence against `up`. Censored time-to-coma and
+  hurdle productivity remain bayesTLS-only.
 
 ## Reading estimates across cases
 
-`z` is expressed in degrees per decade of tolerated duration, but
-endpoint and model differences still matter. `CTmax` is explicitly tied
-to `t_ref` and the threshold. In particular, the four-hour mortality
-value must not be ranked against one-hour relative-midpoint values as if
-all rows measured one common trait. Cross-case displays must retain the
-columns above.
+`z` is expressed in degrees per order-of-magnitude change in tolerated
+duration, but endpoint and model differences still matter. `CTmax` is
+explicitly tied to `t_ref` and the threshold. In particular, the
+four-hour mortality value must not be ranked against one-hour
+relative-midpoint values as if all rows measured one common trait.
+Cross-case displays must retain the columns above.
 
 freqTLS adds Confidence Eyes, profile/Wald/bootstrap confidence
 intervals, likelihood contrasts, and explicit identifiability

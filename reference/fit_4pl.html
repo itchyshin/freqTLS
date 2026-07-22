@@ -89,7 +89,7 @@ is computed on demand by the quantity analogues (<code><a href="tls.html">tls()<
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"relative"</span>, <span class="st">"absolute"</span><span class="op">)</span>,</span>
 <span>  p <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  t_ref <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>  t_ref <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  family <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"profile"</span>, <span class="st">"wald"</span>, <span class="st">"bootstrap"</span><span class="op">)</span>,</span>
@@ -130,9 +130,9 @@ with <code><a href="extract_tdt.html">extract_tdt()</a></code> and <code>target_
 <dt id="arg-t-ref">t_ref<a class="anchor" aria-label="anchor" href="#arg-t-ref"></a></dt>
 <dd><p>Positive reference exposure time at which CTmax is reported,
 expressed in exactly the same unit as the standardised <code>duration</code> column.
-The default <code>60</code> means 60 duration units. It is one hour only when
-<code>duration_unit = "minutes"</code>; <code>t_ref = 1</code> is one hour only when durations are
-measured in hours.</p></dd>
+When <code>NULL</code> (the default), it resolves to one physical hour from
+<code>duration_unit</code> (for example, <code>60</code> minutes or <code>1</code> hour). Supply a numeric
+value to retain a non-hour reference such as <code>240</code> minutes.</p></dd>
 
 
 <dt id="arg-bounds">bounds<a class="anchor" aria-label="anchor" href="#arg-bounds"></a></dt>

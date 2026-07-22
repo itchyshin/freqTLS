@@ -14,9 +14,13 @@ data(dsuzukii)
 
 ## Exact awake-count aggregation
 
-Within each temperature x exposure-level x sex cell, `n_awake` is the
-number of individuals with missing `t_coma`. Duration is the first
-recorded `time` in the cell, and duration-zero controls are dropped.
+Within each temperature x exposure-level x sex cell, `n_awake` counts
+individuals that never entered coma (that is, they have no recorded
+`t_coma`). Duration is the first recorded `time` in the cell.
+Duration-zero controls are excluded because the 4PL uses
+`log10(duration)` and cannot represent zero duration; they are not
+evidence against `up`. Short positive exposures or mild treatments are
+the appropriate data for informing that upper asymptote.
 
 ``` r
 
@@ -100,9 +104,8 @@ coma_table
 #> 4 M     z            2.39  2.26  2.53
 ```
 
-Only `CTmax` and `z` are reported; `Tcrit` is not. Large
-shape-coefficient standard errors or warnings are part of the result,
-not material to hide.
+Only `CTmax` and `z` are reported; `Tcrit` is not. The output returns
+large shape-coefficient standard errors and warnings for transparency.
 
 ``` r
 

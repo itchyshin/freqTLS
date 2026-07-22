@@ -95,10 +95,11 @@ thermal-load-sensitivity (TLS) / thermal death-time models by maximum
 likelihood, parameterised <strong>directly in
 <code>CTmax</code></strong> (the critical thermal maximum at the
 reference time <code>tref</code>) <strong>and <code>z</code></strong>
-(thermal sensitivity, degrees Celsius per decade of exposure duration).
-It returns prior-free <strong>frequentist</strong> confidence intervals
-— Wald, profile-likelihood (asymmetry-respecting, the default), and
-bootstrap. It is the likelihood complement to the Bayesian <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>
+(thermal sensitivity, degrees Celsius per order-of-magnitude change in
+exposure duration). It returns prior-free <strong>frequentist</strong>
+confidence intervals — Wald, profile-likelihood (asymmetry-respecting,
+the default), and bootstrap. It is the likelihood complement to the
+Bayesian <a href="https://github.com/daniel1noble/bayesTLS" class="external-link"><code>bayesTLS</code></a>
 package. The thermal-load-sensitivity modelling framework was introduced
 by Daniel W. A. Noble, Pieter A. Arnold, and Patrice Pottier; see
 <code><a href="../articles/comparing-to-bayesTLS.html">vignette("comparing-to-bayesTLS")</a></code> for the comparison
@@ -164,13 +165,15 @@ and survival-count columns and records the data contract; then
 <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> fits the 4PL by maximum likelihood and returns a
 <code>freq_tls</code> workflow object. <code>t_ref</code> is the
 reference time at which <code>CTmax</code> is defined, in the same unit
-as <code>duration</code>; it does not convert units. The
-<code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> facade uses the <code>bayesTLS</code> spelling
-<code>t_ref</code> (default 60), while the lower-level
-<code><a href="../reference/fit_tls.html">fit_tls()</a></code> engine uses <code>tref</code> (default 1). We
-declare the simulated durations to be hours in
-<code><a href="../reference/standardize_data.html">standardize_data()</a></code>, so <code>t_ref = 1</code> defines CTmax
-at one hour.</p>
+as <code>duration</code>; it does not convert the observed durations.
+When omitted, <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> and <code><a href="../reference/fit_tls.html">fit_tls()</a></code> resolve
+it to one physical hour from a recognised <code>duration_unit</code>
+(for example, 60 minutes or 1 hour). Bare data without metadata retain
+the historical one-native-unit fallback with a warning, so use an
+explicit reference if their unit is not recorded. A supplied numeric
+reference is never converted: for minute data, <code>t_ref = 1</code>
+deliberately means CTmax at one minute, whereas the omitted default is
+one hour (<code>t_ref = 60</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
@@ -181,7 +184,7 @@ at one hour.</p>
 <span>  duration_unit <span class="op">=</span> <span class="st">"hours"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, t_ref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span>
 <span><span class="co">#&gt; &lt;freq_tls&gt;</span></span>
 <span><span class="co">#&gt;   Data:    105 rows; 7 temperatures; 5 durations</span></span>

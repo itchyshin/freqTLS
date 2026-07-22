@@ -58,8 +58,9 @@ parameters, so profile likelihood can constrain them directly:
   $`t_\mathrm{ref}`$.
 - The slope of the midpoint in temperature is
   $`\partial\,\mathrm{mid}/\partial T = -1/z`$, so `z` is the change in
-  temperature per decade ($`\log_{10}`$ unit) of exposure duration — the
-  thermal sensitivity (degrees Celsius per decade).
+  temperature per order of magnitude (a one-unit change in $`\log_{10}`$
+  duration) — the thermal sensitivity in degrees Celsius per 10-fold
+  change in exposure duration.
 
 Because `CTmax` and `z` are model parameters (not derived afterwards),
 each can be profiled directly. We can check the two properties on a

@@ -100,6 +100,11 @@ installed datasets. The fitting output is suppressed because the
 diagnostic table follows, but the code remains visible and copyable. The
 five case articles explain each preparation and fit in smaller steps.
 
+For the awake/coma count endpoint, duration-zero controls are excluded
+because the 4PL uses `log10(duration)` and cannot represent zero
+duration—not because they are evidence against `up`. Short positive
+exposures or mild treatments are needed to inform that upper asymptote.
+
 ``` r
 
 data(zebrafish_o2)
@@ -288,11 +293,16 @@ freq_rows <- rbind(
   ),
   as_freq_rows(
     coma_fit, "drosophila_awake", "sex",
-    "awake counts (missing t_coma)", 60
+    "awake counts (no recorded t_coma)", 60
   )
 )
 
 bayes_rows <- bayes_cache$summaries
+# Use the current reader-facing wording before joining the pinned cache to the
+# freshly refitted rows. The cache's older "missing t_coma" label denotes the
+# same awake/coma endpoint.
+bayes_rows$endpoint[bayes_rows$case_id == "drosophila_awake"] <-
+  "awake counts (no recorded t_coma)"
 bayes_rows$group <- ifelse(
   !is.na(bayes_rows$oxygen), as.character(bayes_rows$oxygen),
   ifelse(
@@ -355,10 +365,10 @@ knitr::kable(paired_display, digits = 3,
 | snowgum_psii | retained PSII function proportion | relative | 60 | Light | CTmax | 44.075 | 43.558 | 44.593 | 44.054 | 43.433 | 44.698 | 1.035 | 1.265 | 0.021 |
 | snowgum_psii | retained PSII function proportion | relative | 60 | Dark | z | 4.707 | 4.290 | 5.165 | 4.674 | 4.230 | 5.122 | 0.875 | 0.893 | 0.033 |
 | snowgum_psii | retained PSII function proportion | relative | 60 | Light | z | 3.641 | 3.202 | 4.140 | 3.624 | 3.178 | 4.106 | 0.938 | 0.927 | 0.016 |
-| drosophila_awake | awake counts (missing t_coma) | relative | 60 | F | CTmax | 36.497 | 36.393 | 36.601 | 36.480 | 36.363 | 36.587 | 0.208 | 0.224 | 0.017 |
-| drosophila_awake | awake counts (missing t_coma) | relative | 60 | M | CTmax | 36.296 | 36.203 | 36.389 | 36.270 | 36.159 | 36.372 | 0.186 | 0.214 | 0.026 |
-| drosophila_awake | awake counts (missing t_coma) | relative | 60 | F | z | 2.433 | 2.288 | 2.587 | 2.413 | 2.254 | 2.581 | 0.299 | 0.328 | 0.019 |
-| drosophila_awake | awake counts (missing t_coma) | relative | 60 | M | z | 2.393 | 2.262 | 2.532 | 2.404 | 2.259 | 2.569 | 0.270 | 0.310 | -0.011 |
+| drosophila_awake | awake counts (no recorded t_coma) | relative | 60 | F | CTmax | 36.497 | 36.393 | 36.601 | 36.480 | 36.363 | 36.587 | 0.208 | 0.224 | 0.017 |
+| drosophila_awake | awake counts (no recorded t_coma) | relative | 60 | M | CTmax | 36.296 | 36.203 | 36.389 | 36.270 | 36.159 | 36.372 | 0.186 | 0.214 | 0.026 |
+| drosophila_awake | awake counts (no recorded t_coma) | relative | 60 | F | z | 2.433 | 2.288 | 2.587 | 2.413 | 2.254 | 2.581 | 0.299 | 0.328 | 0.019 |
+| drosophila_awake | awake counts (no recorded t_coma) | relative | 60 | M | z | 2.393 | 2.262 | 2.532 | 2.404 | 2.259 | 2.569 | 0.270 | 0.310 | -0.011 |
 
 Matched quantities: ML Wald confidence intervals and Bayesian credible
 intervals remain labelled separately. {.table}

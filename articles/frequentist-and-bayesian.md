@@ -25,10 +25,10 @@ simulations rather than recomputed.
 In the matched relative, constant-shape configuration, both packages fit
 survival as a 4PL curve in `log10(duration)` whose midpoint moves with
 temperature through `CTmax` (the critical thermal maximum at `tref`) and
-`z` (thermal sensitivity, degrees Celsius per decade of duration).
-Current `bayesTLS` also offers direct CTmax/z parameterisation and
-richer shape models. The packages differ in **how they turn data into a
-statement about the parameters**:
+`z` (thermal sensitivity, degrees Celsius per order-of-magnitude change
+in duration). Current `bayesTLS` also offers direct CTmax/z
+parameterisation and richer shape models. The packages differ in **how
+they turn data into a statement about the parameters**:
 
 - **`freqTLS` (likelihood).** It maximises the likelihood and inverts
   the likelihood-ratio test to get a **confidence interval** — the set

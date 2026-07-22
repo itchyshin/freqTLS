@@ -5,7 +5,7 @@ Extract the thermal-sensitivity (z) estimate(s)
 ## Usage
 
 ``` r
-get_z(fit, conf.int = TRUE, conf.level = 0.95)
+get_z(fit, conf.int = TRUE, conf.level = 0.95, method = c("wald", "profile"))
 ```
 
 ## Arguments
@@ -17,11 +17,15 @@ get_z(fit, conf.int = TRUE, conf.level = 0.95)
 
 - conf.int:
 
-  Logical; include Wald `conf.low` / `conf.high` (default `TRUE`).
+  Logical; include confidence-interval columns (default `TRUE`).
 
 - conf.level:
 
-  Confidence level for the Wald interval (default `0.95`).
+  Confidence level for the interval (default `0.95`).
+
+- method:
+
+  Either `"wald"` (default) or `"profile"`.
 
 ## Value
 

@@ -2,6 +2,8 @@
 
 ## freqTLS 0.1.0 (experimental release candidate)
 
+CRAN release: 2026-07-21
+
 - Rebased the empirical teaching plan on the pinned bayesTLS supplement
   rendered 2026-07-14 (commit
   `76510412e06c594c96894a1baba1f0e1a34a5aea`). Canonical cases are
@@ -31,8 +33,22 @@
   now warns with the affected count and epsilon whenever a continuous
   proportion is moved off 0 or 1 for the Beta likelihood. The Snow-gum
   example makes its 90 adjusted values explicit.
+- Omitted `tref` / `t_ref` now resolves to one physical hour for
+  standardized data with recognised duration-unit metadata (for example,
+  60 minutes or 1 hour). Bare data retain the historical one-native-unit
+  fallback with a warning, so an ambiguous CTmax reference is never
+  silent.
+- [`get_ctmax()`](https://itchyshin.github.io/freqTLS/reference/get_ctmax.md),
+  [`get_z()`](https://itchyshin.github.io/freqTLS/reference/get_z.md),
+  and
+  [`get_shape()`](https://itchyshin.github.io/freqTLS/reference/get_shape.md)
+  now pass `method = "wald"` or `"profile"` through to
+  [`tidy_parameters()`](https://itchyshin.github.io/freqTLS/reference/tidy_parameters.md)
+  and retain per-coordinate interval routing in `interval_type`.
 
 ## freqTLS 0.1.0 (unreleased historical candidate)
+
+CRAN release: 2026-07-21
 
 - Corrected grouped contrast direction so `dCTmax:A-B`, `dlog_z:A-B`,
   and `dz:A-B` now follow their written meaning: group A minus group B.

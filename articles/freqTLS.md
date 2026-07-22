@@ -4,10 +4,10 @@
 thermal-load-sensitivity (TLS) / thermal death-time models by maximum
 likelihood, parameterised **directly in `CTmax`** (the critical thermal
 maximum at the reference time `tref`) **and `z`** (thermal sensitivity,
-degrees Celsius per decade of exposure duration). It returns prior-free
-**frequentist** confidence intervals — Wald, profile-likelihood
-(asymmetry-respecting, the default), and bootstrap. It is the likelihood
-complement to the Bayesian
+degrees Celsius per order-of-magnitude change in exposure duration). It
+returns prior-free **frequentist** confidence intervals — Wald,
+profile-likelihood (asymmetry-respecting, the default), and bootstrap.
+It is the likelihood complement to the Bayesian
 [`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package. The
 thermal-load-sensitivity modelling framework was introduced by Daniel W.
 A. Noble, Pieter A. Arnold, and Patrice Pottier; see
@@ -83,15 +83,17 @@ the data contract; then
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
 fits the 4PL by maximum likelihood and returns a `freq_tls` workflow
 object. `t_ref` is the reference time at which `CTmax` is defined, in
-the same unit as `duration`; it does not convert units. The
+the same unit as `duration`; it does not convert the observed durations.
+When omitted,
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
-facade uses the `bayesTLS` spelling `t_ref` (default 60), while the
-lower-level
+and
 [`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
-engine uses `tref` (default 1). We declare the simulated durations to be
-hours in
-[`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md),
-so `t_ref = 1` defines CTmax at one hour.
+resolve it to one physical hour from a recognised `duration_unit` (for
+example, 60 minutes or 1 hour). Bare data without metadata retain the
+historical one-native-unit fallback with a warning, so use an explicit
+reference if their unit is not recorded. A supplied numeric reference is
+never converted: for minute data, `t_ref = 1` deliberately means CTmax
+at one minute, whereas the omitted default is one hour (`t_ref = 60`).
 
 ``` r
 
@@ -107,7 +109,7 @@ std <- standardize_data(
 
 ``` r
 
-fit <- fit_4pl(std, family = "beta_binomial", t_ref = 1)
+fit <- fit_4pl(std, family = "beta_binomial")
 fit
 #> <freq_tls>
 #>   Data:    105 rows; 7 temperatures; 5 durations

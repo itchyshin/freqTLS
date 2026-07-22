@@ -5,7 +5,12 @@ Extract the shape parameters (low, up, k, and phi)
 ## Usage
 
 ``` r
-get_shape(fit, conf.int = TRUE, conf.level = 0.95)
+get_shape(
+  fit,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  method = c("wald", "profile")
+)
 ```
 
 ## Arguments
@@ -17,11 +22,15 @@ get_shape(fit, conf.int = TRUE, conf.level = 0.95)
 
 - conf.int:
 
-  Logical; include Wald `conf.low` / `conf.high` (default `TRUE`).
+  Logical; include confidence-interval columns (default `TRUE`).
 
 - conf.level:
 
-  Confidence level for the Wald interval (default `0.95`).
+  Confidence level for the interval (default `0.95`).
+
+- method:
+
+  Either `"wald"` (default) or `"profile"`.
 
 ## Value
 
@@ -29,6 +38,14 @@ A [tibble](https://tibble.tidyverse.org/reference/tibble.html) of the
 shape rows (`low`, `up`, `k`, and `phi` for the beta-binomial family)
 from
 [`tidy_parameters()`](https://itchyshin.github.io/freqTLS/reference/tidy_parameters.md).
+
+## Details
+
+With `method = "profile"`, a shape parameter receives a profile interval
+only where
+[`tidy_parameters()`](https://itchyshin.github.io/freqTLS/reference/tidy_parameters.md)
+supports that coordinate; `up` and unsupported shape coordinates retain
+their documented Wald route.
 
 ## Examples
 

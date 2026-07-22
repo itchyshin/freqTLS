@@ -198,15 +198,16 @@ absolute LT50 as an ML point. Its exact-model bootstrap interval is not
 reported because too few refits converged.</li>
 <li>
 <em>D. suzukii</em> awake/coma uses the first cell duration and
-drops duration zero; censored time-to-coma and hurdle productivity
-remain bayesTLS-only.</li>
+excludes duration zero because <code>log10(duration)</code> cannot
+represent it; those controls are not evidence against <code>up</code>.
+Censored time-to-coma and hurdle productivity remain bayesTLS-only.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="reading-estimates-across-cases">Reading estimates across cases<a class="anchor" aria-label="anchor" href="#reading-estimates-across-cases"></a>
 </h2>
-<p><code>z</code> is expressed in degrees per decade of tolerated
-duration, but endpoint and model differences still matter.
+<p><code>z</code> is expressed in degrees per order-of-magnitude change
+in tolerated duration, but endpoint and model differences still matter.
 <code>CTmax</code> is explicitly tied to <code>t_ref</code> and the
 threshold. In particular, the four-hour mortality value must not be
 ranked against one-hour relative-midpoint values as if all rows measured

@@ -85,7 +85,13 @@ standardize_data(
 
 - duration_unit:
 
-  Label for the unit of `duration`, stored in metadata. Default
+  Label for the unit of `duration`, stored in metadata. A recognised
+  value (`"seconds"`, `"minutes"`, `"hours"`, or `"days"`, with common
+  abbreviations) lets
+  [`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
+  and
+  [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
+  resolve an omitted reference time to one physical hour. Default
   `"hours"`.
 
 - temp_mean:

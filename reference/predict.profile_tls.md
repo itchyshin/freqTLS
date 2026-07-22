@@ -71,10 +71,11 @@ numeric vector with one element per row; survival values lie in
 ## Details
 
 Here `CTmax` is the critical thermal maximum at the reference duration
-`tref`; `z` is thermal sensitivity in degrees per decade of duration;
-`low` and `up` are the fitted lower and upper survival asymptotes; and
-`k` controls the curve's steepness. The model fits `log_z = log(z)`
-internally, then reports positive natural-scale `z` values.
+`tref`; `z` is thermal sensitivity in degrees per order-of-magnitude
+change in duration; `low` and `up` are the fitted lower and upper
+survival asymptotes; and `k` controls the curve's steepness. The model
+fits `log_z = log(z)` internally, then reports positive natural-scale
+`z` values.
 
 \$\$mid = \log\_{10}(t\_{ref}) - (temp - CTmax_g) / z_g\$\$ \$\$p =
 low + (up - low)\\\mathrm{plogis}(-k(\log\_{10}(duration) - mid)).\$\$

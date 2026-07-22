@@ -182,6 +182,11 @@ the installed datasets. The fitting output is suppressed because the
 diagnostic table follows, but the code remains visible and copyable. The
 five case articles explain each preparation and fit in smaller
 steps.</p>
+<p>For the awake/coma count endpoint, duration-zero controls are
+excluded because the 4PL uses <code>log10(duration)</code> and cannot
+represent zero duration—not because they are evidence against
+<code>up</code>. Short positive exposures or mild treatments are needed
+to inform that upper asymptote.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">zebrafish_o2</span><span class="op">)</span></span>
 <span><span class="va">zf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
@@ -363,11 +368,16 @@ interchangeable measures of uncertainty.</p>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu">as_freq_rows</span><span class="op">(</span></span>
 <span>    <span class="va">coma_fit</span>, <span class="st">"drosophila_awake"</span>, <span class="st">"sex"</span>,</span>
-<span>    <span class="st">"awake counts (missing t_coma)"</span>, <span class="fl">60</span></span>
+<span>    <span class="st">"awake counts (no recorded t_coma)"</span>, <span class="fl">60</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bayes_rows</span> <span class="op">&lt;-</span> <span class="va">bayes_cache</span><span class="op">$</span><span class="va">summaries</span></span>
+<span><span class="co"># Use the current reader-facing wording before joining the pinned cache to the</span></span>
+<span><span class="co"># freshly refitted rows. The cache's older "missing t_coma" label denotes the</span></span>
+<span><span class="co"># same awake/coma endpoint.</span></span>
+<span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">endpoint</span><span class="op">[</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">case_id</span> <span class="op">==</span> <span class="st">"drosophila_awake"</span><span class="op">]</span> <span class="op">&lt;-</span></span>
+<span>  <span class="st">"awake counts (no recorded t_coma)"</span></span>
 <span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">oxygen</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">bayes_rows</span><span class="op">$</span><span class="va">oxygen</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
@@ -690,7 +700,7 @@ credible intervals remain labelled separately.</caption>
 </tr>
 <tr class="odd">
 <td align="left">drosophila_awake</td>
-<td align="left">awake counts (missing t_coma)</td>
+<td align="left">awake counts (no recorded t_coma)</td>
 <td align="left">relative</td>
 <td align="right">60</td>
 <td align="left">F</td>
@@ -707,7 +717,7 @@ credible intervals remain labelled separately.</caption>
 </tr>
 <tr class="even">
 <td align="left">drosophila_awake</td>
-<td align="left">awake counts (missing t_coma)</td>
+<td align="left">awake counts (no recorded t_coma)</td>
 <td align="left">relative</td>
 <td align="right">60</td>
 <td align="left">M</td>
@@ -724,7 +734,7 @@ credible intervals remain labelled separately.</caption>
 </tr>
 <tr class="odd">
 <td align="left">drosophila_awake</td>
-<td align="left">awake counts (missing t_coma)</td>
+<td align="left">awake counts (no recorded t_coma)</td>
 <td align="left">relative</td>
 <td align="right">60</td>
 <td align="left">F</td>
@@ -741,7 +751,7 @@ credible intervals remain labelled separately.</caption>
 </tr>
 <tr class="even">
 <td align="left">drosophila_awake</td>
-<td align="left">awake counts (missing t_coma)</td>
+<td align="left">awake counts (no recorded t_coma)</td>
 <td align="left">relative</td>
 <td align="right">60</td>
 <td align="left">M</td>

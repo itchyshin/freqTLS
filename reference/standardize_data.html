@@ -158,7 +158,10 @@ metadata for the fitter to read.</p></dd>
 
 <dt id="arg-duration-unit">duration_unit<a class="anchor" aria-label="anchor" href="#arg-duration-unit"></a></dt>
 <dd><p>Label for the unit of <code>duration</code>, stored in metadata.
-Default <code>"hours"</code>.</p></dd>
+A recognised value (<code>"seconds"</code>, <code>"minutes"</code>,
+<code>"hours"</code>, or <code>"days"</code>, with common abbreviations)
+lets <code><a href="fit_tls.html">fit_tls()</a></code> and <code><a href="fit_4pl.html">fit_4pl()</a></code> resolve an omitted
+reference time to one physical hour. Default <code>"hours"</code>.</p></dd>
 
 
 <dt id="arg-temp-mean">temp_mean<a class="anchor" aria-label="anchor" href="#arg-temp-mean"></a></dt>

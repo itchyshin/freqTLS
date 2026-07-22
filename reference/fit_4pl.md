@@ -23,7 +23,7 @@ fit_4pl(
   by = NULL,
   threshold = c("relative", "absolute"),
   p = 0.5,
-  t_ref = 60,
+  t_ref = NULL,
   bounds = c(0, 1),
   family = NULL,
   method = c("profile", "wald", "bootstrap"),
@@ -65,10 +65,10 @@ fit_4pl(
 - t_ref:
 
   Positive reference exposure time at which CTmax is reported, expressed
-  in exactly the same unit as the standardised `duration` column. The
-  default `60` means 60 duration units. It is one hour only when
-  `duration_unit = "minutes"`; `t_ref = 1` is one hour only when
-  durations are measured in hours.
+  in exactly the same unit as the standardised `duration` column. When
+  `NULL` (the default), it resolves to one physical hour from
+  `duration_unit` (for example, `60` minutes or `1` hour). Supply a
+  numeric value to retain a non-hour reference such as `240` minutes.
 
 - bounds:
 

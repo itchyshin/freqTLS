@@ -90,9 +90,9 @@
 <blockquote>
 <p><strong>⚠️ <code>freqTLS</code> is experimental and provided without assurance. Use at your own risk.</strong> Results and APIs may be incorrect or change. You are responsible for checking your data, design, model specification, convergence, identifiability, diagnostics, and interpretation. Important analyses should be independently refitted and cross-checked with the Bayesian sister package <a href="https://daniel1noble.github.io/bayesTLS/" class="external-link"><code>bayesTLS</code></a> (<a href="https://github.com/daniel1noble/bayesTLS" class="external-link">source repository</a>). Agreement is a cross-check, not proof of correctness: shared data or model errors can make both packages agree.</p>
 </blockquote>
-<p><code>freqTLS</code> fits the single-stage four-parameter logistic (4PL) thermal death-time model by maximum likelihood via <a href="https://github.com/kaskr/adcomp" class="external-link">TMB</a>, parameterised <strong>directly</strong> in <code>CTmax</code> (the critical thermal maximum at the reference time <code>tref</code>) and <code>z</code> (thermal sensitivity, in degrees Celsius per decade of exposure duration). It then returns prior-free <strong>frequentist confidence intervals</strong> — Wald, profile-likelihood (asymmetry-respecting), and bootstrap — for binomial and beta-binomial survival counts, and for continuous <strong>proportion</strong> responses in <code>(0, 1)</code> via the beta family.</p>
+<p><code>freqTLS</code> fits the single-stage four-parameter logistic (4PL) thermal death-time model by maximum likelihood via <a href="https://github.com/kaskr/adcomp" class="external-link">TMB</a>, parameterised <strong>directly</strong> in <code>CTmax</code> (the critical thermal maximum at the reference time <code>tref</code>) and <code>z</code> (thermal sensitivity, in degrees Celsius per order-of-magnitude change in exposure duration). It then returns prior-free <strong>frequentist confidence intervals</strong> — Wald, profile-likelihood (asymmetry-respecting), and bootstrap — for binomial and beta-binomial survival counts, and for continuous <strong>proportion</strong> responses in <code>(0, 1)</code> via the beta family.</p>
 <p>Its signature display is the <strong>Confidence Eye</strong>: a pale horizontal lens spanning the selected confidence interval, with a hollow point estimate. The profile- likelihood interval is the default where it is supported; Wald and bootstrap intervals can also be shown. These are likelihood-based <em>confidence</em> intervals, not posterior distributions, so the visual deliberately avoids posterior-density iconography.</p>
-<p><img src="reference/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per decade of duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%"></p>
+<p><img src="reference/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%"></p>
 <div class="section level2">
 <h2 id="what-freqtls-does">What freqTLS does<a class="anchor" aria-label="anchor" href="#what-freqtls-does"></a>
 </h2>
@@ -181,8 +181,10 @@
 <span>                        n_total <span class="op">=</span> <span class="st">"total"</span>, n_surv <span class="op">=</span> <span class="st">"survived"</span>,</span>
 <span>                        duration_unit <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 2. Fit the 4PL by maximum likelihood, directly in CTmax and z</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span>, t_ref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co"># 2. Fit the 4PL by maximum likelihood, directly in CTmax and z.</span></span>
+<span><span class="co"># With duration_unit = "hours", the omitted t_ref resolves to one hour.</span></span>
+<span><span class="co"># Supply t_ref = 1 explicitly if the intended estimand is one minute.</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3. Headline thermal-death-time quantities with profile-likelihood intervals</span></span>
 <span><span class="fu"><a href="reference/tls.html">tls</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
@@ -314,7 +316,7 @@ p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10
 \qquad
 \mathrm{mid} = \log_{10}(t_\mathrm{ref}) - \frac{T - \mathrm{CTmax}}{z}.
 </annotation></semantics></math></p>
-<p><code>CTmax</code> is the critical thermal maximum at the reference time <code>tref</code>, and <code>z</code> is the thermal sensitivity (degrees Celsius per decade of exposure duration). The In the default constant-shape configuration, the temperature effect runs through the midpoint only (shared <code>low</code>, <code>up</code>, <code>k</code>). Explicit formula terms can instead model <code>low</code>, <code>up</code>, or <code>log_k</code>; these extensions change the interpretation of an absolute-threshold curve and do not create local <code>z</code> estimates. Because <code>CTmax</code> and <code>z</code> are direct model parameters, both can be profiled directly.</p>
+<p><code>CTmax</code> is the critical thermal maximum at the reference time <code>tref</code>, and <code>z</code> is the thermal sensitivity (degrees Celsius per order-of-magnitude change in exposure duration). The In the default constant-shape configuration, the temperature effect runs through the midpoint only (shared <code>low</code>, <code>up</code>, <code>k</code>). Explicit formula terms can instead model <code>low</code>, <code>up</code>, or <code>log_k</code>; these extensions change the interpretation of an absolute-threshold curve and do not create local <code>z</code> estimates. Because <code>CTmax</code> and <code>z</code> are direct model parameters, both can be profiled directly.</p>
 <p>See <code><a href="articles/freqTLS.html">vignette("freqTLS")</a></code> for the full walkthrough, <code><a href="articles/model-math.html">vignette("model-math")</a></code> for the exact bridge to <code>bayesTLS</code>, and <code><a href="articles/profile-likelihood.html">vignette("profile-likelihood")</a></code> for what the profile is doing and the honest non-closing fallback.</p>
 </div>
 <div class="section level2">
@@ -332,6 +334,7 @@ p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=freqTLS" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/itchyshin/freqTLS/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/itchyshin/freqTLS/issues" class="external-link">Report a bug</a></li>
 <li><a href="https://github.com/itchyshin/freqTLS" class="external-link">Source code on GitHub</a></li>

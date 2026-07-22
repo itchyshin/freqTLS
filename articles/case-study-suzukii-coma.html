@@ -101,9 +101,13 @@ hurdle-productivity models with a different endpoint.</p>
 <h2 id="exact-awake-count-aggregation">Exact awake-count aggregation<a class="anchor" aria-label="anchor" href="#exact-awake-count-aggregation"></a>
 </h2>
 <p>Within each temperature x exposure-level x sex cell,
-<code>n_awake</code> is the number of individuals with missing
-<code>t_coma</code>. Duration is the first recorded <code>time</code> in
-the cell, and duration-zero controls are dropped.</p>
+<code>n_awake</code> counts individuals that never entered coma (that
+is, they have no recorded <code>t_coma</code>). Duration is the first
+recorded <code>time</code> in the cell. Duration-zero controls are
+excluded because the 4PL uses <code>log10(duration)</code> and cannot
+represent zero duration; they are not evidence against <code>up</code>.
+Short positive exposures or mild treatments are the appropriate data for
+informing that upper asymptote.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">dsuzukii</span><span class="op">$</span><span class="va">temp</span>, <span class="va">dsuzukii</span><span class="op">$</span><span class="va">lvl</span>, <span class="va">dsuzukii</span><span class="op">$</span><span class="va">sex</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">coma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">dsuzukii</span>, <span class="va">cell</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
@@ -176,8 +180,8 @@ estimates and standard errors make that limitation visible.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> F     z            2.43  2.29  2.59</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> M     z            2.39  2.26  2.53</span></span></code></pre></div>
 <p>Only <code>CTmax</code> and <code>z</code> are reported;
-<code>Tcrit</code> is not. Large shape-coefficient standard errors or
-warnings are part of the result, not material to hide.</p>
+<code>Tcrit</code> is not. The output returns large shape-coefficient
+standard errors and warnings for transparency.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_survival_curves.html">plot_survival_curves</a></span><span class="op">(</span><span class="va">coma_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <p><img src="case-study-suzukii-coma_files/figure-html/fitted-curves-1.png" class="r-plt" alt="Observed awake proportions and fitted Drosophila suzukii awake-coma curves, separated by sex and assay temperature." width="672"></p>

@@ -113,10 +113,11 @@ are read from cached simulations rather than recomputed.</p>
 fit survival as a 4PL curve in <code>log10(duration)</code> whose
 midpoint moves with temperature through <code>CTmax</code> (the critical
 thermal maximum at <code>tref</code>) and <code>z</code> (thermal
-sensitivity, degrees Celsius per decade of duration). Current
-<code>bayesTLS</code> also offers direct CTmax/z parameterisation and
-richer shape models. The packages differ in <strong>how they turn data
-into a statement about the parameters</strong>:</p>
+sensitivity, degrees Celsius per order-of-magnitude change in duration).
+Current <code>bayesTLS</code> also offers direct CTmax/z
+parameterisation and richer shape models. The packages differ in
+<strong>how they turn data into a statement about the
+parameters</strong>:</p>
 <ul>
 <li>
 <strong><code>freqTLS</code> (likelihood).</strong> It maximises the
