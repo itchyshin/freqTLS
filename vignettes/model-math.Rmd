@@ -150,7 +150,7 @@ $\log_{10} d = \mathrm{mid}(T) = \log_{10}(t_\mathrm{ref}) - (T - \mathrm{CTmax}
 slope is $-1/z$ — the classic log-linear thermal death-time line.
 
 ```{r derive-lt}
-# LT50 (relative midpoint) at three temperatures, in hours
+# Absolute 50% survival at three temperatures, in hours
 derive_lt(fit, p = 0.5, temp = c(35, 36, 37))
 ```
 

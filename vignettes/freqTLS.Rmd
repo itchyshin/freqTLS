@@ -181,7 +181,7 @@ maximum-likelihood estimate. Do not use overlap as a hypothesis test; inspect th
 reported contrast or confidence interval for that question. A hollow point with
 *no* lens flags a profile that did not close (a weakly identified parameter).
 
-```{r confidence-eye, fig.alt = "Confidence Eye plot: a pale lens spanning the profile-likelihood interval with a hollow point estimate, for CTmax and z."}
+```{r confidence-eye, fig.alt = "Confidence Eye plot: independently scaled pale outlined lenses spanning profile-likelihood intervals, with dark centre marks and hollow point estimates, for CTmax and z."}
 plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
 ```
 

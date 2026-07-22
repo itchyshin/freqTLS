@@ -153,6 +153,9 @@ fit_4pl <- function(data,
                     quiet = FALSE) {
   threshold <- match.arg(threshold)
   method <- match.arg(method)
+  if (!is.numeric(p) || length(p) != 1L || !is.finite(p) || p <= 0 || p >= 1) {
+    cli::cli_abort("{.arg p} must be one finite survival probability strictly between 0 and 1.")
+  }
 
   meta_in <- attr(data, "tdt_meta")
   if (is.null(meta_in))

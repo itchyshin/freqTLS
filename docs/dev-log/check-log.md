@@ -2836,3 +2836,36 @@ Interpretation:
   one-native-unit result but now warn; unknown labelled units fail until the
   user supplies a reference. The code/documentation changes are source work
   after the submitted tarball and do not amend that artifact.
+
+## 2026-07-21 -- Documentation correctness pass (#47, #53 and cross-surface audit)
+
+Goal:
+
+- Make every known reader-facing correction concrete before requesting the
+  remaining human validation, including the Confidence Eye and heat-injury
+  examples formerly deferred from the reference-time repair.
+
+Checks and evidence:
+
+- `Rscript -e 'devtools::test()'` -> 1,116 passing tests, 0 failures, 0
+  warnings, 0 skips (135.9 seconds).
+- `Rscript -e 'devtools::document(); devtools::check_man()'` -> regenerated
+  `plot_confidence_eye.Rd` and `standardize_data.Rd` without documentation
+  problems.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`; final
+  `tools/build-site.R` evidence is recorded in the after-task report.
+- `rg -n -i 'one minute|LT50 \(relative midpoint\)|synthetic examples|heat-injury prediction.*\*\*fitted\*\*|tls_eye_polygon_df|round\(\(1 - mortality\)' README.Rmd README.md R man vignettes docs inst pkgdown-site --glob '!docs/dev-log/check-log.md' --glob '!docs/dev-log/recovery-checkpoints/**'` -> only intentional current explanations or historical records.
+- `rg -n -i 'posterior|credible' R man README.Rmd README.md vignettes docs pkgdown-site --glob '!pkgdown-site/search.json'` -> `bayesTLS` contrasts only; no freqTLS output uses Bayesian interval language.
+- A direct rendered 7 by 3.45 inch Confidence-Eye PNG was inspected after the
+  caption-wrap/margin and centre-mark repairs: the full confidence caption is
+  visible, each parameter has an independent x scale, and the dark centre mark
+  remains visible inside the hollow estimate ring.
+
+Interpretation:
+
+- The default confidence figure now communicates interval scale and source
+  without a legend or misleading `z` rug. The real zebrafish teaching example
+  uses a CC BY 4.0 installed dataset and labels its temperature trace as a
+  hypothetical extrapolation from static assays. `fit_tls()`/`fit_4pl()` and
+  all repaired examples preserve literal time units and distinguish relative
+  midpoint from absolute survival targets.

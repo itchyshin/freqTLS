@@ -97,7 +97,7 @@ than silently implying an hour.
   (continuous) shape coefficient (`k:body_size`) is a link-scale slope with a Wald
   interval (profile routes to Wald); `predict()` rebuilds the design from
   `newdata`. See `docs/dev-log/decisions.md` (2026-06-17).
-- Heat-injury prediction (`predict_heat_injury()`): **fitted** -- the
+- Heat-injury prediction (`predict_heat_injury()`): **implemented deterministic prediction** -- the
   deterministic ML analogue of `bayesTLS::predict_heat_injury()`. Accumulates
   thermal damage from the fitted curve under a temperature trace (forward Euler,
   per-step increments) as a fraction of the lethal dose, reads survival back off
@@ -183,7 +183,7 @@ than silently implying an hour.
 - **Fitting** heat-injury / repair sub-models (estimating injury or repair
   dynamics as part of the likelihood): non-goal (belongs to bayesTLS).
   Deterministic heat-injury **prediction** from the already-fitted curve is
-  fitted in 0.1.0 (`predict_heat_injury()`; see the implementation section).
+  implemented in 0.1.0 (`predict_heat_injury()`; see the implementation section).
 - Grouped effects on `low`, `up`, `log_k`: **fitted** (see the implementation
   section). General continuous covariates on the shapes are **also fitted** (each
   shape carries its own independent design; link-scale coefficients + Wald).

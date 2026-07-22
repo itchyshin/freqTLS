@@ -80,9 +80,35 @@ test_that("an explicit reference is never converted to the one-hour convention",
                                  get_ctmax(one_hour)$estimate)))
 })
 
+test_that("an explicit sub-hour reference retains its literal hour-unit meaning", {
+  hours <- reference_sim("hours", 1)
+  one_hour <- suppressWarnings(fit_4pl(hours, family = "binomial", quiet = TRUE))
+  one_minute <- suppressWarnings(
+    fit_4pl(hours, family = "binomial", t_ref = 1 / 60, quiet = TRUE)
+  )
+  expect_identical(one_hour$meta$t_ref, 1)
+  expect_identical(one_minute$meta$t_ref, 1 / 60)
+  expect_false(isTRUE(all.equal(get_ctmax(one_hour)$estimate,
+                                 get_ctmax(one_minute)$estimate)))
+})
+
 test_that("reference time must be finite when supplied explicitly", {
   expect_error(
     freqTLS:::tls_resolve_tref(Inf),
     "finite positive"
+  )
+})
+
+test_that("column-interface errors identify an unresolved required column", {
+  d <- simulate_tls(family = "binomial", seed = 320)
+  expect_error(
+    fit_tls(d, y = nope, n = total, time = duration, temp = temp,
+            family = "binomial", tref = 1, quiet = TRUE),
+    "y.*nope"
+  )
+  expect_error(
+    fit_tls(d, n = total, time = duration, temp = temp,
+            family = "binomial", tref = 1, quiet = TRUE),
+    "y.*column"
   )
 })

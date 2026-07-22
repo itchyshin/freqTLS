@@ -151,4 +151,7 @@ test_that("fit_4pl rejects non-standardized data and (for now) absolute / custom
   s <- std_sim(seed = 2)
   expect_error(fit_4pl(s, threshold = "absolute", quiet = TRUE), "absolute")
   expect_error(fit_4pl(s, bounds = c(0, 0.9), quiet = TRUE), "bounds")
+  expect_error(fit_4pl(s, p = "banana", quiet = TRUE), "p")
+  expect_error(fit_4pl(s, p = NA_real_, quiet = TRUE), "p")
+  expect_error(fit_4pl(s, p = 1, quiet = TRUE), "p")
 })

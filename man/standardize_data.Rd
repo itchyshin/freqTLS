@@ -42,7 +42,8 @@ via \code{n_surv = n_total - n_dead}.}
 Converted to integer counts via \code{n_total}.}
 
 \item{mortality}{Column name for mortality proportions in \verb{[0, 1]}.
-Converted to \code{n_surv = round((1 - mortality) * n_total)}.}
+Converted by reconstructing \code{n_dead = round(mortality * n_total)}
+then setting \code{n_surv = n_total - n_dead}.}
 
 \item{proportion}{Column name for a continuous proportion response in
 \verb{[0, 1]} with no denominator (modelled with a Beta

@@ -144,7 +144,7 @@ approximation at every grid point for every row. Use `confint(fit, method =
 for random-effects-aware bootstrap intervals. The eye remains a confidence-interval
 display, never a posterior.
 
-```{r eye, fig.alt = "Confidence Eye for the population CTmax of a random-intercept fit: a pale confidence lens with a hollow point estimate near 36 degrees Celsius, drawn with a Wald interval; a freqTLS uncertainty display, not a posterior density."}
+```{r eye, fig.alt = "Confidence Eye for the population CTmax of a random-intercept fit: a pale outlined confidence lens with a dark centre mark and hollow estimate near 36 degrees Celsius, drawn with a Wald interval; a freqTLS uncertainty display, not a posterior density."}
 suppressMessages(plot_confidence_eye(fit, parm = "CTmax"))
 ```
 

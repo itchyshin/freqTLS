@@ -38,7 +38,8 @@
 #' @param survival       Column name for survival proportions in `[0, 1]`.
 #'                       Converted to integer counts via `n_total`.
 #' @param mortality      Column name for mortality proportions in `[0, 1]`.
-#'                       Converted to `n_surv = round((1 - mortality) * n_total)`.
+#'                       Converted by reconstructing `n_dead = round(mortality * n_total)`
+#'                       then setting `n_surv = n_total - n_dead`.
 #' @param proportion     Column name for a continuous proportion response in
 #'                       `[0, 1]` with no denominator (modelled with a Beta
 #'                       likelihood). Mutually exclusive with the count
@@ -188,7 +189,10 @@ standardize_data <- function(data,
         stop("`mortality` has values > 1, which are not proportions. If these are ",
              "death COUNTS, pass them via `n_dead =` instead (with `n_total`).",
              call. = FALSE)
-      out$n_surv <- as.integer(round((1 - pmin(pmax(mv, 0), 1)) * out$n_total))
+      # Reconstruct deaths directly so this count path exactly implements the
+      # published R-SHRIMP rule: deaths = round(mortality * total).
+      n_dead <- as.integer(round(pmin(pmax(mv, 0), 1) * out$n_total))
+      out$n_surv <- out$n_total - n_dead
     }
 
     # Defensive clamp to [0, n_total]. The survival/mortality paths already
@@ -200,7 +204,7 @@ standardize_data <- function(data,
       warning(n_oob, " cell(s) had survivor counts outside [0, n_total] ",
               "(e.g. n_surv > n_total); clamped to the valid range. ",
               "Check for data-entry errors.", call. = FALSE)
-    out$n_surv   <- pmin(pmax(out$n_surv, 0), out$n_total)
+    out$n_surv   <- as.integer(pmin(pmax(out$n_surv, 0), out$n_total))
     out$n_dead   <- out$n_total - out$n_surv
     out$survival <- out$n_surv / out$n_total
     keep <- is.finite(out$n_total) & is.finite(out$n_surv) &

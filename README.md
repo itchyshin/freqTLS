@@ -47,7 +47,7 @@ Wald and bootstrap intervals can also be shown. These are
 likelihood-based *confidence* intervals, not posterior distributions, so
 the visual deliberately avoids posterior-density iconography.
 
-<img src="man/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%" />
+<img src="man/figures/README-readme-eye-1.png" alt="Hero figure: independently scaled horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale outlined lens spanning its 95% profile-likelihood confidence interval, with a dark centre mark and hollow maximum-likelihood estimate. The lens shape reads as an interval, not a probability density." width="100%" />
 
 ## What freqTLS does
 
@@ -157,7 +157,7 @@ std <- standardize_data(dat, temp = "temp", duration = "duration",
 
 # 2. Fit the 4PL by maximum likelihood, directly in CTmax and z.
 # With duration_unit = "hours", the omitted t_ref resolves to one hour.
-# Supply t_ref = 1 explicitly if the intended estimand is one minute.
+# `t_ref = 1` is likewise one hour; for one minute use `t_ref = 1 / 60`.
 fit <- fit_4pl(std)
 
 # 3. Headline thermal-death-time quantities with profile-likelihood intervals

@@ -12,28 +12,41 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7,
                       fig.height = 4.5, dpi = 96)
 ```
 
-This page is a freqTLS-only experimental extension built from synthetic data.
-It is not a replacement empirical case and does not estimate a repair process.
+For diploid zebrafish larvae under normoxia, how would a fitted static-assay
+survival curve translate into predicted survival during a hypothetical
+three-hour staged heat exposure?
+This page uses the package's CC BY 4.0 oxygen-gradient zebrafish assay data and
+a clearly hypothetical exposure scenario. It is a freqTLS-only experimental
+extension: it does not estimate injury kinetics or a repair process.
 
 ```{r fit}
 library(freqTLS)
-sim <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4,
-                    phi = 50, seed = 42)
-# In this synthetic example, duration and trace time are both hours. No unit
-# conversion occurs inside fit_tls() or predict_heat_injury().
-fit <- fit_tls(sim, y = survived, n = total, time = duration, temp = temp,
-               family = "beta_binomial", tref = 1, quiet = TRUE)
+data("zebrafish_o2")
+zebrafish_normoxia <- subset(
+  zebrafish_o2,
+  ploidy == "diploid" & oxygen == "normoxia"
+)
+# The assay duration, reference time, and scenario trace below are all minutes.
+# `tref = 60` therefore defines CTmax at one hour.
+fit <- fit_tls(
+  zebrafish_normoxia,
+  y = n_surv, n = n_total, time = duration_min, temp = temp,
+  family = "beta_binomial", tref = 60, quiet = TRUE
+)
 diagnose_tdt_fit(fit)
 ```
 
 ```{r trace}
 trace <- data.frame(
-  time = seq(0, 96, by = 0.25)
+  time = seq(0, 180, by = 5)
 )
-trace$temp <- 27 + 6 * sin(2 * pi * (trace$time - 6) / 24)
+trace$temp <- ifelse(trace$time <= 60, 38,
+                     ifelse(trace$time <= 120, 39, 40))
 ```
 
-Here `tref = 1` is one hour, and `trace$time` is also in hours. The trace time,
+The staged 38–40 °C heatwave is a user-defined scenario, not an environmental
+trace. Those temperatures and the 20.9–240 minute duration range occur in the
+static assay, but their fluctuating sequence was not observed. The trace time,
 fitted duration, and reference time must use the same unit because heat-injury
 damage is accumulated per time unit.
 
@@ -42,13 +55,23 @@ injury <- predict_heat_injury(fit, trace)
 head(injury)
 ```
 
-```{r plot, fig.alt="Deterministic survival trajectory under a synthetic fluctuating temperature trace."}
-plot_heat_injury(fit, trace, nboot = 50, seed = 42)
+```{r plot, fig.alt="Predicted survival for a hypothetical staged heatwave applied to the fitted diploid-normoxia zebrafish survival curve."}
+plot_heat_injury(fit, trace, nboot = 50, seed = 42, xlab = "Time (minutes)")
 ```
 
+`nboot = 50` keeps this vignette quick to render; use substantially more
+bootstrap replicates before reporting a confidence band.
+
+The default one-dose survival target is the fitted relative midpoint, defined
+from `low` and `up`; it is not an absolute 50% survival threshold. To inspect a
+separate absolute-threshold scenario, use `target_surv = 0.5` only when 0.5 is
+strictly between the fitted asymptotes. That sensitivity analysis is not CTmax.
+
 The trajectory is a deterministic transformation of the fitted 4PL and the
-user-supplied trace. `heat_injury_envelope()` can add parametric-bootstrap
-uncertainty from refitted curves. A repair rate supplied by the user remains an
-illustrative scenario: freqTLS has not fitted that rate from damage/recovery
-data. Use bayesTLS for its broader Bayesian heat-injury and repair workflow; its
+user-supplied trace. `heat_injury_envelope()` adds parametric-bootstrap
+confidence bands from refitted curves. Variable-temperature dose additivity is
+an extrapolation from the static assays, and a repair rate supplied by the user
+remains an illustrative scenario: freqTLS has not fitted injury or repair
+parameters from damage/recovery data. Use bayesTLS when fitted heat-injury or
+repair dynamics, or Bayesian scenario propagation, is the scientific aim; its
 posterior intervals are distinct from freqTLS confidence intervals.

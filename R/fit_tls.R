@@ -177,10 +177,32 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
     temp_q <- rlang::enquo(temp)
     group_q <- rlang::enquo(group)
 
-    y_v <- rlang::eval_tidy(y_q, data)
-    n_v <- if (rlang::quo_is_missing(n_q)) NULL else rlang::eval_tidy(n_q, data)
-    time_v <- rlang::eval_tidy(time_q, data)
-    temp_v <- rlang::eval_tidy(temp_q, data)
+    resolve_column <- function(quo, arg, optional = FALSE) {
+      if (rlang::quo_is_missing(quo)) {
+        if (isTRUE(optional)) return(NULL)
+        example <- names(data)[1L]
+        cli::cli_abort(c(
+          "{.arg {arg}} must name a column in {.arg data}.",
+          i = "Pass a bare column name, for example {.code {arg} = {example}}."
+        ))
+      }
+      label <- rlang::as_label(quo)
+      available <- paste(utils::head(names(data), 8L), collapse = ", ")
+      tryCatch(
+        rlang::eval_tidy(quo, data),
+        error = function(e) {
+          cli::cli_abort(c(
+            "Could not resolve {.arg {arg}} = {.code {label}} in {.arg data}.",
+            i = "Pass a bare data-column name. Available columns include: {.val {available}}."
+          ))
+        }
+      )
+    }
+
+    y_v <- resolve_column(y_q, "y")
+    n_v <- resolve_column(n_q, "n", optional = TRUE)
+    time_v <- resolve_column(time_q, "time")
+    temp_v <- resolve_column(temp_q, "temp")
     group_v <- if (rlang::quo_is_null(group_q)) {
       NULL
     } else {

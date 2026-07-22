@@ -33,6 +33,15 @@
 * `get_ctmax()`, `get_z()`, and `get_shape()` now pass `method = "wald"` or
   `"profile"` through to `tidy_parameters()` and retain per-coordinate interval
   routing in `interval_type`.
+* Refined the Confidence Eye into a minimal default: independently scaled
+  parameter panels, no default rug/legend/title, outlined interval lenses, and
+  an explicit opt-in diagnostic rug for `CTmax`. Open profiles remain visibly
+  hollow-only. The heat-injury article now uses the licensed oxygen-gradient
+  zebrafish assay fit with a clearly hypothetical staged exposure scenario;
+  deterministic prediction remains distinct from fitted injury/repair dynamics.
+* Corrected public unit and threshold examples; validated `fit_4pl(p)`; improved
+  column-interface errors to name an unresolved data column; and added regression
+  coverage for the R-SHRIMP direct death reconstruction rule.
 
 # freqTLS 0.1.0 (unreleased historical candidate)
 
