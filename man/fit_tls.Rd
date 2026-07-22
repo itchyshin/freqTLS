@@ -85,7 +85,7 @@ optimiser \code{opt}, and \code{sdreport}.
 }
 \description{
 \code{fit_tls()} fits the descending four-parameter logistic (4PL) thermal
-death-time model to survival-count data, parameterised **directly in \code{CTmax}
+death-time model to survival-count data, parameterised directly in \code{CTmax}
 (the critical thermal maximum at the reference time \code{tref}) and \code{z} (thermal
 sensitivity, degrees Celsius per decade of duration) so that both headline
 quantities can be profiled. Survival is modelled as a function of
