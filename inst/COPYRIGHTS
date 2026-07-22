@@ -49,7 +49,7 @@ and registration patterns above are adapted.
 Source: https://github.com/JenniNiku/gllvmTMB (or the local sibling package).
 
 - R/plotting.R (Phase 4): the Confidence-Eye lens geometry in the helper
-  tls_eye_polygon_df() adapts gllvmTMB's .eye_polygon_df(width_max = 0.70) from
+  tls_eye_ribbon_df() adapts gllvmTMB's .eye_polygon_df(width_max = 0.70) from
   gllvmTMB/R/loading-uncertainty-helpers.R (the Gaussian-width lens taper and the
   CI-half-width fallback for a missing SE), and plot_confidence_eye() adapts the
   structure of gllvmTMB's plot_loadings_confidence_eye() from

@@ -12,20 +12,20 @@ test_that("a grouped formula fit equals the matching column fit", {
   # goes through standardize_data()).
   zebrafish_lethal$survived <- zebrafish_lethal$n_surv
   zebrafish_lethal$total    <- zebrafish_lethal$n_total
-  zebrafish_lethal$duration <- zebrafish_lethal$duration_h
+  zebrafish_lethal$duration <- 60 * zebrafish_lethal$duration_h
   zebrafish_lethal$temp     <- zebrafish_lethal$assay_temp
 
   f_col <- suppressWarnings(fit_tls(
     zebrafish_lethal,
     y = survived, n = total, time = duration, temp = temp,
-    group = life_stage, family = "beta_binomial", tref = 1
+    group = life_stage, family = "beta_binomial", tref = 60
   ))
   f_frm <- suppressWarnings(fit_tls(
     tls_bf(
       survived | trials(total) ~ time(duration) + temp(temp),
       low ~ 1, up ~ 1, log_k ~ 1, CTmax ~ life_stage, log_z ~ life_stage
     ),
-    data = zebrafish_lethal, family = "beta_binomial", tref = 1
+    data = zebrafish_lethal, family = "beta_binomial", tref = 60
   ))
 
   expect_equal(as.numeric(logLik(f_frm)), as.numeric(logLik(f_col)),
@@ -112,7 +112,7 @@ test_that("random intercepts on CTmax / log_z / low / log_k are parsed; up is re
   # goes through standardize_data()).
   zebrafish_lethal$survived <- zebrafish_lethal$n_surv
   zebrafish_lethal$total    <- zebrafish_lethal$n_total
-  zebrafish_lethal$duration <- zebrafish_lethal$duration_h
+  zebrafish_lethal$duration <- 60 * zebrafish_lethal$duration_h
   zebrafish_lethal$temp     <- zebrafish_lethal$assay_temp
   # `(1 | group)` on CTmax yields a CTmax RE spec ($re).
   spec <- freqTLS:::tls_parse_formula(

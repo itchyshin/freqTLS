@@ -3,7 +3,7 @@
 # This is a guard, not a coverage study: when the maintainer-built bayesTLS
 # benchmark cache is present, it checks that a LIVE freqTLS point estimate
 # lands within a loose tolerance of the cached bayesTLS posterior median for the
-# same dataset and the same (relative-threshold, constant-shape, tref = 1 hour)
+# same dataset and the same (relative-threshold, constant-shape, tref = 60 min)
 # configuration. The tolerances are deliberately wide (CTmax within ~1 C, z
 # within ~25%) -- a likelihood point estimate and a Bayesian posterior median on
 # the same model and data should agree at this level; a larger gap signals a
@@ -19,7 +19,7 @@ cache_path <- system.file("extdata", "bayesTLS_benchmark_cache.rds",
 # Fit freqTLS live on standardised data and return CTmax + z point estimates.
 profile_tls_points <- function(data) {
   fit <- suppressWarnings(
-    fit_4pl(data, family = "beta_binomial", t_ref = 1, quiet = TRUE)
+    fit_4pl(data, family = "beta_binomial", t_ref = 60, quiet = TRUE)
   )
   ct <- get_ctmax(fit, conf.int = FALSE)
   z  <- get_z(fit, conf.int = FALSE)

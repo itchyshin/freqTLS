@@ -10,7 +10,7 @@ design; `profile-ci-review` (Fisher) governs the profile tests.
 
 ```
 simulate_tls(temps, times, reps, n, low, up, k, CTmax, z, phi = NULL,
-             family, group = NULL, tref = 1, seed)
+             family, group = NULL, tref = 60, seed)
 ```
 
 It builds a factorial temperature x duration grid and draws counts from the

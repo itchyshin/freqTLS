@@ -43,7 +43,7 @@
 #'   n_total = "total", n_surv = "survived"
 #' )
 #' fit <- fit_4pl(
-#'   dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+#'   dat, family = "binomial", t_ref = 60, method = "wald", quiet = TRUE
 #' )
 #' tls(fit)
 #' tls_z(fit)
@@ -188,7 +188,7 @@ print.tls <- function(x, ...) {
 #'   raw, temp = "temp", duration = "duration",
 #'   n_total = "total", n_surv = "survived"
 #' )
-#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 #' diagnose_tdt_fit(fit)
 #' @export
 diagnose_tdt_fit <- function(object) {
@@ -238,7 +238,7 @@ diagnose_tdt_fit <- function(object) {
 #'   raw, temp = "temp", duration = "duration",
 #'   n_total = "total", n_surv = "survived"
 #' )
-#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 #' tdt_parameter_table(fit, method = "wald")
 #' @export
 tdt_parameter_table <- function(object, method = NULL, level = 0.95) {

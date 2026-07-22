@@ -123,6 +123,22 @@ test_that("plot.profile_tls_profile returns a ggplot with confidence wording", {
   expect_false(grepl("posterior|credible", tolower(p$labels$caption)))
 })
 
+test_that("the default Confidence Eye is minimal, scaled, and rug-free", {
+  skip_if_not_installed("ggplot2")
+  eye <- suppressWarnings(plot_confidence_eye(fit_binom(), method = "wald"))
+  layer_classes <- vapply(eye$layers, function(layer) class(layer$geom)[1L],
+                          character(1))
+  expect_s3_class(eye, "ggplot")
+  expect_null(eye$labels$title)
+  expect_null(eye$labels$subtitle)
+  expect_false(any(layer_classes == "GeomRug"))
+  expect_true(any(layer_classes == "GeomRibbon"))
+  expect_gte(sum(layer_classes == "GeomPoint"), 2L)
+  expect_identical(eye$facet$params$free$x, TRUE)
+  expect_match(eye$labels$caption, "confidence")
+  expect_false(grepl("posterior|credible", eye$labels$caption, ignore.case = TRUE))
+})
+
 test_that("tidy_parameters(method = 'profile') fills the 8-column shape", {
   fit <- fit_binom()
   # tidy over all params profiles `up` too, which emits an info message.

@@ -35,7 +35,7 @@ individuals). Required for the binomial and beta-binomial families; omit it
 for the \code{beta} family, whose response is already a proportion.}
 
 \item{time}{<\code{\link[rlang:args_data_masking]{data-masked}}> Column of exposure
-durations in the data's native unit (e.g. hours); used as
+durations in minutes; used as
 \code{log10(duration)} internally.}
 
 \item{temp}{<\code{\link[rlang:args_data_masking]{data-masked}}> Column of assay
@@ -50,12 +50,10 @@ ungrouped fit).}
 (a continuous proportion in \verb{(0, 1)}), or a \code{tls_family} object from
 \code{\link[=beta_binomial_tls]{beta_binomial_tls()}} / \code{\link[=binomial_tls]{binomial_tls()}} / \code{\link[=beta_tls]{beta_tls()}}.}
 
-\item{tref}{Reference time at which \code{CTmax} is defined, in the same unit as
-\code{time}. When \code{NULL} (the default), standardized data with a recognised
-\code{duration_unit} use one physical hour (for example, \code{60} minutes or \code{1}
-hour). For bare data without metadata, the historical fallback is \code{1}
-native time unit with a warning; supply \code{tref} explicitly to avoid an
-ambiguous reference.}
+\item{tref}{Reference time at which \code{CTmax} is defined, in minutes. When
+\code{NULL} (the default), it is \code{60} minutes (one hour). Use
+\code{\link[=standardize_data]{standardize_data()}} to convert a raw duration column before fitting;
+bare formula/column data must already use minutes.}
 
 \item{start}{Optional named list of starting values on the internal
 (unconstrained) scale, overriding the defaults. Names must match the
@@ -131,13 +129,13 @@ default bootstrap recovery attempt.
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 fit$estimates
 
 # The same fit through the formula interface:
 fit2 <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
-  data = d, family = "binomial", tref = 1
+  data = d, family = "binomial", tref = 60
 )
 
 }

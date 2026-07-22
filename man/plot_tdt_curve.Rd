@@ -32,7 +32,7 @@ shown on a log10 axis. For a grouped fit a line is drawn per group.
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 plot_tdt_curve(fit)
 
 }

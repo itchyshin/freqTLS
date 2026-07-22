@@ -62,7 +62,7 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 tdt <- extract_tdt(fit, nboot = 10, seed = 1)
 tdt$CTmax$summary
 }

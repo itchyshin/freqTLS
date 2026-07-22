@@ -41,10 +41,9 @@ with \code{\link[=extract_tdt]{extract_tdt()}} and \code{target_surv = "absolute
 \item{p}{Survival level for the absolute threshold (default 0.5).}
 
 \item{t_ref}{Positive reference exposure time at which CTmax is reported,
-expressed in exactly the same unit as the standardised \code{duration} column.
-When \code{NULL} (the default), it resolves to one physical hour from
-\code{duration_unit} (for example, \code{60} minutes or \code{1} hour). Supply a numeric
-value to retain a non-hour reference such as \code{240} minutes.}
+in minutes. When \code{NULL} (the default), it is \code{60} minutes (one hour).
+\code{\link[=standardize_data]{standardize_data()}} converts the input duration to minutes; supply a
+numeric value such as \code{240} for a non-hour reference.}
 
 \item{bounds}{Asymptote range. Only \code{c(0, 1)} is currently accepted. Supply
 survival as a probability in \verb{[0, 1]} and let the model estimate \code{low} and
@@ -96,7 +95,7 @@ dat <- standardize_data(
   n_total = "total", n_surv = "survived"
 )
 fit <- fit_4pl(
-  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+  dat, family = "binomial", t_ref = 60, method = "wald", quiet = TRUE
 )
 coef(fit)
 }

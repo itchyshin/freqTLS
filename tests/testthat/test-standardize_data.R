@@ -10,10 +10,14 @@ raw_count <- data.frame(
 
 test_that("count path builds the standard schema and centres temperature", {
   s <- standardize_data(raw_count, temp = "temperature_C", duration = "exposure_h",
-                        n_total = "n", n_surv = "alive", random_effects = "batch")
+                        n_total = "n", n_surv = "alive", random_effects = "batch",
+                        duration_unit = "hours")
   expect_true(all(c("temp", "duration", "logd", "temp_c", "n_total", "n_surv",
                     "n_dead", "survival") %in% names(s)))
   expect_equal(s$logd, log10(s$duration))
+  expect_equal(s$duration, 60 * raw_count$exposure_h)
+  expect_identical(attr(s, "tdt_meta")$duration_unit, "minutes")
+  expect_identical(attr(s, "tdt_meta")$input_duration_unit, "hours")
   expect_equal(mean(s$temp_c), 0, tolerance = 1e-8)          # centred at mean
   expect_equal(s$n_dead, s$n_total - s$n_surv)
   expect_s3_class(s$batch, "factor")                          # RE -> factor
@@ -23,7 +27,7 @@ test_that("count path builds the standard schema and centres temperature", {
 test_that("mortality and survival proportions convert to counts consistently", {
   rm <- raw_count; rm$mort <- 1 - rm$alive / rm$n
   sm <- standardize_data(rm, temp = "temperature_C", duration = "exposure_h",
-                         n_total = "n", mortality = "mort")
+                         n_total = "n", mortality = "mort", duration_unit = "hours")
   expect_equal(sm$n_surv, raw_count$alive)
 })
 

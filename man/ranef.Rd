@@ -34,6 +34,6 @@ d <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = d, family = "binomial", tref = 1)
+  data = d, family = "binomial", tref = 60)
 ranef(fit)
 }

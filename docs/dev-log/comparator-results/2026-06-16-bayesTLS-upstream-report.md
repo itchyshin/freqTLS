@@ -77,9 +77,8 @@ deaths   <- round(Mortality_after_trial * N_individuals_after_trial)
 survived <- N_individuals_after_trial - deaths
 ```
 
-(equivalently, your `standardize_data(mortality = ...)` path already does
-`n_surv = round((1 - mortality) * n_total)`, so feeding the proportion through
-that route would also be consistent).
+(The current `standardize_data(mortality = ...)` path uses the same direct rule:
+`n_dead = round(mortality * n_total)`, then `n_surv = n_total - n_dead`.)
 
 **Scope.** This looks specific to the shrimp build. The zebrafish object
 (`zebrafish_lethal`) is fine -- `n_surv + n_dead == n_total` holds for every row,

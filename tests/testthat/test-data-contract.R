@@ -58,6 +58,21 @@ test_that("dsuzukii ships a 0/1 mortality indicator", {
   expect_true(all(d$dead %in% c(0L, 1L)))
 })
 
+test_that("R-SHRIMP mortality reconstruction follows the documented death rule", {
+  shrimp <- get("shrimp_lethal", envir = asNamespace("freqTLS"))
+  standardized <- standardize_data(
+    shrimp,
+    temp = "Temperature_assay", duration = "Duration_exposure_hours",
+    n_total = "N_individuals_after_trial", mortality = "Mortality_after_trial",
+    duration_unit = "hours"
+  )
+  expected_dead <- round(shrimp$Mortality_after_trial *
+                           shrimp$N_individuals_after_trial)
+  expect_identical(standardized$n_dead, as.integer(expected_dead))
+  expect_identical(range(standardized$n_dead), c(0L, 11L))
+  expect_identical(sum(standardized$n_dead), 738L)
+})
+
 # The genuine doc-vs-data tripwire: read the @format text in R/data.R and check
 # the stated counts against the actual data. Skipped when R/data.R is absent
 # (e.g. running against an installed package under R CMD check), where the
