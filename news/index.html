@@ -71,9 +71,12 @@
 <li>Added the reviewed canonical bayesTLS comparator cache built on Totoro from pinned bayesTLS commit <code>76510412</code>, with exact analysis hashes, sampler diagnostics, source versions, seeds, and a public table of actual freqTLS-minus-bayesTLS differences. The historical shrimp/life-stage cache remains internal legacy evidence only.</li>
 <li>
 <code><a href="../reference/standardize_data.html">standardize_data()</a></code> now warns with the affected count and epsilon whenever a continuous proportion is moved off 0 or 1 for the Beta likelihood. The Snow-gum example makes its 90 adjusted values explicit.</li>
-<li>Omitted <code>tref</code> / <code>t_ref</code> now resolves to one physical hour for standardized data with recognised duration-unit metadata (for example, 60 minutes or 1 hour). Bare data retain the historical one-native-unit fallback with a warning, so an ambiguous CTmax reference is never silent.</li>
+<li>
+<code><a href="../reference/standardize_data.html">standardize_data()</a></code> now converts recognised duration inputs to minutes, and omitted <code>tref</code> / <code>t_ref</code> therefore resolves to 60 minutes (one physical hour). Bare formula/column data must already use minutes, so an ambiguous CTmax reference is never silent.</li>
 <li>
 <code><a href="../reference/get_ctmax.html">get_ctmax()</a></code>, <code><a href="../reference/get_z.html">get_z()</a></code>, and <code><a href="../reference/get_shape.html">get_shape()</a></code> now pass <code>method = "wald"</code> or <code>"profile"</code> through to <code><a href="../reference/tidy_parameters.html">tidy_parameters()</a></code> and retain per-coordinate interval routing in <code>interval_type</code>.</li>
+<li>Refined the Confidence Eye into a minimal default: independently scaled parameter panels, no default rug/legend/title, outlined interval lenses, and an explicit opt-in diagnostic rug for <code>CTmax</code>. Open profiles remain visibly hollow-only. The heat-injury article now uses the licensed oxygen-gradient zebrafish assay fit with a clearly hypothetical staged exposure scenario; deterministic prediction remains distinct from fitted injury/repair dynamics.</li>
+<li>Corrected public unit and threshold examples; validated <code>fit_4pl(p)</code>; improved column-interface errors to name an unresolved data column; and added regression coverage for the R-SHRIMP direct death reconstruction rule.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="freqtls-010-unreleased-historical-candidate">freqTLS 0.1.0 (unreleased historical candidate)<a class="anchor" aria-label="anchor" href="#freqtls-010-unreleased-historical-candidate"></a></h2><p class="text-muted">CRAN release: 2026-07-21</p>

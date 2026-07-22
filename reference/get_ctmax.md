@@ -43,10 +43,10 @@ A [tibble](https://tibble.tidyverse.org/reference/tibble.html) of the
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 get_ctmax(fit)
 #> # A tibble: 1 × 8
 #>   parameter group estimate std.error conf.low conf.high interval_type scale   
 #>   <chr>     <chr>    <dbl>     <dbl>    <dbl>     <dbl> <chr>         <chr>   
-#> 1 CTmax     all       35.9     0.105     35.7      36.1 wald          identity
+#> 1 CTmax     all       28.8     0.294     28.2      29.4 wald          identity
 ```

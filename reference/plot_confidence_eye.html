@@ -94,7 +94,9 @@ Confidence-Eye contract.</p>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"profile"</span>, <span class="st">"wald"</span>, <span class="st">"bootstrap"</span><span class="op">)</span>,</span>
 <span>  level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eye"</span>, <span class="st">"line"</span><span class="op">)</span>,</span>
-<span>  raw_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  raw_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  annotate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  fallback <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  nboot <span class="op">=</span> <span class="fl">1000L</span>,</span>
 <span>  boot_seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -133,7 +135,17 @@ forwarded to <code><a href="confint.profile_tls.html">confint.profile_tls()</a><
 
 <dt id="arg-raw-data">raw_data<a class="anchor" aria-label="anchor" href="#arg-raw-data"></a></dt>
 <dd><p>Logical; overlay observed assay temperatures as a rug on
-temperature-scale rows (default <code>TRUE</code>).</p></dd>
+temperature-scale rows (default <code>FALSE</code>).</p></dd>
+
+
+<dt id="arg-annotate">annotate<a class="anchor" aria-label="anchor" href="#arg-annotate"></a></dt>
+<dd><p>Logical; add the plot title (default <code>FALSE</code>). Status
+subtitles for open profiles and random-effects Wald routing are always
+retained.</p></dd>
+
+
+<dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
+<dd><p>Logical; show the interval-status legend (default <code>FALSE</code>).</p></dd>
 
 
 <dt id="arg-fallback-nboot-boot-seed-cores">fallback, nboot, boot_seed, cores<a class="anchor" aria-label="anchor" href="#arg-fallback-nboot-boot-seed-cores"></a></dt>
@@ -171,9 +183,10 @@ noted in the caption.</p>
 <h3 id="raw-data">Raw data<a class="anchor" aria-label="anchor" href="#raw-data"></a></h3>
 
 
-<p>With <code>raw_data = TRUE</code> (default), the observed assay temperatures are drawn as
-a rug beneath any temperature-scale row (<code>CTmax</code>), showing the data support
-and flagging extrapolation when <code>CTmax</code> sits outside the assayed range.</p>
+<p>With <code>raw_data = TRUE</code>, the observed assay temperatures are drawn as a rug
+beneath a temperature-scale row (<code>CTmax</code>). This optional diagnostic shows the
+data support and flags extrapolation when <code>CTmax</code> sits outside the assayed
+range; it is off by default because assay temperatures do not support <code>z</code>.</p>
 <p>Parameters on different scales (temperature for <code>CTmax</code>, a positive
 multiplier for <code>z</code>) are stacked in separate panels with a free x-axis.</p>
 </div>
@@ -184,7 +197,7 @@ multiplier for <code>z</code>) are stacked in separate panels with a free x-axis
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">d</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span></span>
-<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">plot_confidence_eye</span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_confidence_eye-1.png" alt="Confidence Eye for CTmax and z from a simulated binomial fit: the CTmax panel shows a narrow lens around 36 degrees Celsius with a hollow point estimate; the z panel shows a wide shallow lens around 4." width="700" height="433"></span>
 <span class="r-in"><span></span></span>

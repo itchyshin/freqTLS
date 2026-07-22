@@ -199,7 +199,7 @@ assumption.</li>
 <span><span class="op">)</span></span>
 <span><span class="va">fit_sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="va">sparse</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
-<span>  family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># freqTLS says so: a profile that does not close returns NA on the open side</span></span>
 <span><span class="co"># (here with the prior-free bootstrap fallback turned off to show the raw signal).</span></span>
@@ -207,7 +207,7 @@ assumption.</li>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
 <span><span class="co">#&gt;   parameter conf.low conf.high estimate level method  scale conf.status</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> z               <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     2.95  0.95 profile log   open_both</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> z               <span style="color: #BB0000;">NA</span>        <span style="color: #BB0000;">NA</span>     2.35  0.95 profile log   open_both</span></span></code></pre></div>
 <p>Neither behaviour is “right” in the abstract. The point is that they
 answer different questions: <em>what do the data alone support?</em>
 versus <em>what should I believe, given the data and my prior?</em>
@@ -420,13 +420,13 @@ prior on the variance component (Chung, Rabe-Hesketh, Dorie, Gelman
 <span><span class="va">fit_re</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">d_re</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  data <span class="op">=</span> <span class="va">d_re</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">blup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ranef.html">ranef</a></span><span class="op">(</span><span class="va">fit_re</span><span class="op">)</span><span class="op">$</span><span class="va">estimate</span></span>
 <span><span class="co"># No pooling: a fixed CTmax per colony (the unshrunk per-group estimates).</span></span>
 <span><span class="va">fit_fix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="va">d_re</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
-<span>  group <span class="op">=</span> <span class="va">colony</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  group <span class="op">=</span> <span class="va">colony</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ct_fix</span> <span class="op">&lt;-</span> <span class="va">fit_fix</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/startsWith.html" class="external-link">startsWith</a></span><span class="op">(</span><span class="va">fit_fix</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">parameter</span>, <span class="st">"CTmax:"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co"># The Gaussian prior on b_g (scale sigma_CTmax) pulls the spread in.</span></span>
@@ -434,7 +434,7 @@ prior on the variance component (Chung, Rabe-Hesketh, Dorie, Gelman
 <span>  partial_pooling_sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">blup</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  sigma_CTmax <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_re</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">fit_re</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"sigma_CTmax"</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      no_pooling_sd partial_pooling_sd        sigma_CTmax </span></span>
-<span><span class="co">#&gt;               2.32               1.48               1.48</span></span></code></pre></div>
+<span><span class="co">#&gt;               1.30               1.48               1.48</span></span></code></pre></div>
 <p>Here the spread of the colony effects is pulled in from the
 no-pooling fit (a separate <code>CTmax</code> per colony) to the shrunk
 random-effect BLUPs — the Gaussian prior <code>b_g ~ N(0, sigma)</code>

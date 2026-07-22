@@ -92,7 +92,7 @@
 </blockquote>
 <p><code>freqTLS</code> fits the single-stage four-parameter logistic (4PL) thermal death-time model by maximum likelihood via <a href="https://github.com/kaskr/adcomp" class="external-link">TMB</a>, parameterised <strong>directly</strong> in <code>CTmax</code> (the critical thermal maximum at the reference time <code>tref</code>) and <code>z</code> (thermal sensitivity, in degrees Celsius per order-of-magnitude change in exposure duration). It then returns prior-free <strong>frequentist confidence intervals</strong> — Wald, profile-likelihood (asymmetry-respecting), and bootstrap — for binomial and beta-binomial survival counts, and for continuous <strong>proportion</strong> responses in <code>(0, 1)</code> via the beta family.</p>
 <p>Its signature display is the <strong>Confidence Eye</strong>: a pale horizontal lens spanning the selected confidence interval, with a hollow point estimate. The profile- likelihood interval is the default where it is supported; Wald and bootstrap intervals can also be shown. These are likelihood-based <em>confidence</em> intervals, not posterior distributions, so the visual deliberately avoids posterior-density iconography.</p>
-<p><img src="reference/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%"></p>
+<p><img src="reference/figures/README-readme-eye-1.png" alt="Hero figure: independently scaled horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale outlined lens spanning its 95% profile-likelihood confidence interval, with a dark centre mark and hollow maximum-likelihood estimate. The lens shape reads as an interval, not a probability density." width="100%"></p>
 <div class="section level2">
 <h2 id="what-freqtls-does">What freqTLS does<a class="anchor" aria-label="anchor" href="#what-freqtls-does"></a>
 </h2>
@@ -182,8 +182,8 @@
 <span>                        duration_unit <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2. Fit the 4PL by maximum likelihood, directly in CTmax and z.</span></span>
-<span><span class="co"># With duration_unit = "hours", the omitted t_ref resolves to one hour.</span></span>
-<span><span class="co"># Supply t_ref = 1 explicitly if the intended estimand is one minute.</span></span>
+<span><span class="co"># `standardize_data()` converts durations to minutes. The omitted t_ref is 60</span></span>
+<span><span class="co"># minutes (one hour); `t_ref = 1` means one minute.</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">std</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 3. Headline thermal-death-time quantities with profile-likelihood intervals</span></span>
@@ -192,7 +192,7 @@
 <span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
 <span><span class="co">#&gt;   quantity median lower upper</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 CTmax     36.0  35.7  36.3 </span></span>
+<span><span class="co">#&gt; 1 CTmax     29.1  28.3  29.8</span></span>
 <span><span class="co">#&gt; 2 z          3.90  3.43  4.38</span></span></code></pre></div>
 <p>For per-group <code>CTmax</code> and <code>z</code>, standardize a dataset that contains the grouping column, then pass matching formulas exactly as in <code>bayesTLS</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -205,7 +205,7 @@
 <span>  n_total <span class="op">=</span> <span class="st">"total"</span>, n_surv <span class="op">=</span> <span class="st">"survived"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">grouped_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_4pl.html">fit_4pl</a></span><span class="op">(</span></span>
-<span>  <span class="va">grouped_std</span>, ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">group</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">group</span>, t_ref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="va">grouped_std</span>, ctmax <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">group</span>, z <span class="op">=</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">group</span>, t_ref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># Inspect the recovered group-specific CTmax and z estimates.</span></span>
 <span><span class="fu"><a href="reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">grouped_fit</span><span class="op">)</span><span class="op">[</span></span>
@@ -228,7 +228,7 @@
 <span>  <span class="fu"><a href="reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  data   <span class="op">=</span> <span class="va">dat</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>,</span>
-<span>  tref   <span class="op">=</span> <span class="fl">1</span></span>
+<span>  tref   <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_f</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
@@ -245,7 +245,7 @@
 <span><span class="va">fit_re</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dre</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  data <span class="op">=</span> <span class="va">dre</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># Between-colony SD of CTmax (with a Wald interval):</span></span>
 <span><span class="va">tp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">fit_re</span><span class="op">)</span></span>
@@ -275,7 +275,7 @@
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;       target   survival</span></span>
-<span><span class="co">#&gt; 1 population 0.22405366</span></span>
+<span><span class="co">#&gt; 1 population 0.22405371</span></span>
 <span><span class="co">#&gt; 2     colony 0.08768286</span></span></code></pre></div>
 <p>Population predictions set every random intercept to zero. Conditional predictions add the fitted BLUP and therefore require each relevant grouping column in <code>newdata</code>; unseen groups stop with guidance to use the population prediction. Calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> without <code>re.form</code> on a random-effects fit warns and returns the population prediction.</p>
 <p>A random intercept on <strong>thermal sensitivity</strong> works the same way, with <code>log_z ~ 1 + (1 | group)</code>. Because <code>z</code> is modelled on the log scale, the deviation is Gaussian on <code>log(z)</code> and <code>sigma_logz</code> is a standard deviation on <code>log(z)</code> — read <code>exp(sigma_logz)</code> as the approximate multiplicative spread of <code>z</code> across groups, not a z-scale SD. The two intercepts can be combined; with the <strong>same</strong> grouping factor freqTLS fits two <em>independent</em> variances (no correlation term) and warns, since group-level <code>CTmax</code> and <code>z</code> deviations are usually correlated — reach for <code>bayesTLS</code> when you need a correlated random effect. Like <code>sigma_CTmax</code>, <code>sigma_logz</code> is a maximum-likelihood variance component, biased low with few groups.</p>
@@ -293,7 +293,7 @@
 <span>  <span class="fu"><a href="reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="va">group</span>, <span class="va">log_z</span> <span class="op">~</span> <span class="va">group</span>,</span>
 <span>         <span class="va">low</span> <span class="op">~</span> <span class="va">group</span>, <span class="va">up</span> <span class="op">~</span> <span class="va">group</span>, <span class="va">log_k</span> <span class="op">~</span> <span class="va">group</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dpop</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  data <span class="op">=</span> <span class="va">dpop</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># Per-group steepness k with profile-likelihood confidence intervals:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit_pop</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"k:tolerant"</span>, <span class="st">"k:sensitive"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span>

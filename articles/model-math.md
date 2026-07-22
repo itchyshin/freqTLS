@@ -71,13 +71,13 @@ fitted model:
 set.seed(1)
 dat <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(dat, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 ct <- get_ctmax(fit)$estimate
 zz <- get_z(fit)$estimate
 
-# (1) midpoint at temp = CTmax equals log10(tref) = log10(1) = 0
+# (1) midpoint at temp = CTmax equals log10(tref) = log10(60)
 predict(fit, data.frame(temp = ct, duration = 1), type = "midpoint")
-#> [1] 0
+#> [1] 1.778151
 
 # (2) midpoint slope in temperature is -1/z
 mids <- predict(fit, data.frame(temp = c(ct, ct + 1), duration = 1), type = "midpoint")
@@ -157,9 +157,9 @@ line.
 
 ``` r
 
-# LT50 (relative midpoint) at three temperatures, in hours
+# Absolute 50% survival at three temperatures, in hours
 derive_lt(fit, p = 0.5, temp = c(35, 36, 37))
-#> [1] 1.6998018 0.9555978 0.5372198
+#> [1] 1.6998017 0.9555978 0.5372199
 ```
 
 ## The bridge to bayesTLS
@@ -225,7 +225,7 @@ rbind(
   recovered = c(CTmax = ctmax_recovered, z = z_recovered)
 )
 #>              CTmax        z
-#> fitted    35.92586 3.998031
+#> fitted    28.81676 3.998031
 #> recovered 35.92586 3.998031
 ```
 

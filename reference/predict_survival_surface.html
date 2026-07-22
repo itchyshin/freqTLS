@@ -122,15 +122,15 @@ carries a <code>group</code> column.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">d</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span></span>
-<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">predict_survival_surface</span><span class="op">(</span><span class="va">fit</span>, temps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">34</span>, <span class="fl">36</span>, <span class="fl">38</span><span class="op">)</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   temp duration   survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   34        1 0.89445180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   36        1 0.47691987</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   38        1 0.09003950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   34        1 0.89445183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   36        1 0.47691988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   38        1 0.09003948</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   34        2 0.69738630</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   36        2 0.18571146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   38        2 0.03695279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   36        2 0.18571139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   38        2 0.03695280</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

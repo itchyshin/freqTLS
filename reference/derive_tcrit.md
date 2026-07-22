@@ -65,9 +65,9 @@ for the absolute-threshold critical temperature.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 derive_tcrit(fit, rate = c(0.1, 1)) # lower thermal thresholds
 #> `T_crit` assumes a lethal endpoint; for sublethal data its steeper `z` makes it
 #> implausibly low.
-#> [1] 23.93177 27.92980
+#> [1] 16.82266 20.82069
 ```

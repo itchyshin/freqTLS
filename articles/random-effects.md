@@ -45,16 +45,16 @@ d <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = d, family = "binomial", tref = 1, quiet = TRUE)
+  data = d, family = "binomial", tref = 60, quiet = TRUE)
 
 # The estimates table carries the population CTmax / z and the between-colony SD.
 est <- fit$estimates
 est[est$parameter %in% c("CTmax", "z", "sigma_CTmax"),
     c("parameter", "estimate", "std.error")]
 #>     parameter  estimate  std.error
-#> 4       CTmax 36.010947 0.38977872
+#> 4       CTmax 28.983670 0.39661517
 #> 5           z  3.952015 0.05042902
-#> 6 sigma_CTmax  1.454802 0.27579903
+#> 6 sigma_CTmax  1.454803 0.27579929
 ```
 
 `sigma_CTmax` is the estimated between-colony standard deviation of
@@ -121,7 +121,7 @@ data.frame(
   )
 )
 #>       target   survival
-#> 1 population 0.19888224
+#> 1 population 0.19888286
 #> 2     colony 0.08525094
 ```
 
@@ -152,7 +152,7 @@ suppressMessages(confint(fit, "CTmax", method = "profile", npoints = 8))[
 #> # A tibble: 1 × 4
 #>   parameter conf.low conf.high method 
 #>   <chr>        <dbl>     <dbl> <chr>  
-#> 1 CTmax         35.2      36.8 profile
+#> 1 CTmax         28.2      29.8 profile
 ```
 
 The Confidence Eye always uses Wald intervals for a random-effects fit,
@@ -169,9 +169,10 @@ suppressMessages(plot_confidence_eye(fit, parm = "CTmax"))
 ```
 
 ![Confidence Eye for the population CTmax of a random-intercept fit: a
-pale confidence lens with a hollow point estimate near 36 degrees
-Celsius, drawn with a Wald interval; a freqTLS uncertainty display, not
-a posterior density.](random-effects_files/figure-html/eye-1.png)
+pale outlined confidence lens with a dark centre mark and hollow
+estimate near 36 degrees Celsius, drawn with a Wald interval; a freqTLS
+uncertainty display, not a posterior
+density.](random-effects_files/figure-html/eye-1.png)
 
 ## Random effects on sensitivity and curve shape
 
@@ -192,12 +193,12 @@ dz <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_z <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          log_z ~ 1 + (1 | colony)),
-  data = dz, family = "binomial", tref = 1, quiet = TRUE)
+  data = dz, family = "binomial", tref = 60, quiet = TRUE)
 sg <- fit_z$estimates$estimate[fit_z$estimates$parameter == "sigma_logz"]
 c(sigma_logz = round(sg, 3),
   approx_fold_spread_in_z = round(exp(sg), 3))
 #>              sigma_logz approx_fold_spread_in_z 
-#>                   0.265                   1.303
+#>                    0.02                    1.02
 ```
 
 The upper asymptote `up` is the **one shape with no random effect**:
@@ -226,7 +227,7 @@ db <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_both <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony), log_z ~ 1 + (1 | colony)),
-  data = db, family = "binomial", tref = 1, quiet = TRUE)
+  data = db, family = "binomial", tref = 60, quiet = TRUE)
 fit_both$estimates$parameter[grepl("^sigma", fit_both$estimates$parameter)]
 #> [1] "sigma_CTmax" "sigma_logz"
 ```

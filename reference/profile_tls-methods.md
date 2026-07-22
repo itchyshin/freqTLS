@@ -110,11 +110,11 @@ the extractors return the quantities named in their titles.
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(
   d, y = survived, n = total, time = duration, temp = temp,
-  family = "binomial", tref = 1, quiet = TRUE
+  family = "binomial", tref = 60, quiet = TRUE
 )
 coef(fit)
 #>         low          up           k       CTmax           z 
-#>  0.01990609  0.97732873  4.89170992 35.92586046  3.99803066 
+#>  0.01990612  0.97732869  4.89171231 28.81675603  3.99803137 
 logLik(fit)
 #> 'log Lik.' -129.0538 (df=5)
 AIC(fit)

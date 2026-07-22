@@ -99,8 +99,9 @@ supplement marks this case `lethal = FALSE` for extraction.
 plot_confidence_eye(zf_fit, parm = c("CTmax", "z"), method = "wald")
 ```
 
-![Wald Confidence Eyes for zebrafish CTmax and z under normoxia and
-hyperoxia.](case-study-zebrafish_files/figure-html/eye-1.png)
+![Independently scaled Wald Confidence Eyes for zebrafish CTmax and z
+under normoxia and hyperoxia, shown as outlined lenses with hollow
+estimates.](case-study-zebrafish_files/figure-html/eye-1.png)
 
 ## Interpretation and boundary
 

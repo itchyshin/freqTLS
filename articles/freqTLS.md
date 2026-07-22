@@ -83,17 +83,12 @@ the data contract; then
 [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
 fits the 4PL by maximum likelihood and returns a `freq_tls` workflow
 object. `t_ref` is the reference time at which `CTmax` is defined, in
-the same unit as `duration`; it does not convert the observed durations.
-When omitted,
-[`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
-and
-[`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
-resolve it to one physical hour from a recognised `duration_unit` (for
-example, 60 minutes or 1 hour). Bare data without metadata retain the
-historical one-native-unit fallback with a warning, so use an explicit
-reference if their unit is not recorded. A supplied numeric reference is
-never converted: for minute data, `t_ref = 1` deliberately means CTmax
-at one minute, whereas the omitted default is one hour (`t_ref = 60`).
+minutes.
+[`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md)
+converts recognised input duration units to minutes, so the omitted
+default is one hour (`t_ref = 60`). A supplied numeric reference is
+never converted: `t_ref = 1` deliberately means CTmax at one minute.
+Bare formula/column data must already use minutes.
 
 ``` r
 
@@ -114,7 +109,7 @@ fit
 #> <freq_tls>
 #>   Data:    105 rows; 7 temperatures; 5 durations
 #>   T_bar:   36.00
-#>   Family:  beta_binomial (relative threshold, t_ref = 1 hours)
+#>   Family:  beta_binomial (relative threshold, t_ref = 60 minutes)
 #>   Fit:     converged (pdHess = TRUE); default CI method = profile
 ```
 
@@ -138,10 +133,10 @@ fit_f <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
   data   = dat,
   family = "beta_binomial",
-  tref   = 1
+  tref   = 60
 )
 all.equal(coef(fit_f), coef(fit))
-#> [1] TRUE
+#> [1] "Mean relative difference: 0.105005"
 ```
 
 The grammar scales well beyond a single ungrouped fit: each
@@ -159,7 +154,7 @@ summary(fit)
 #> <freqTLS beta_binomial 4PL fit> summary
 #> Call: fit_tls(x = ff, family = fam_name, tref = t_ref, start = start, control =
 #> control, trace = trace, quiet = quiet, data = data)
-#> Reference time (tref): 1 | family: beta_binomial
+#> Reference time (tref): 60 | family: beta_binomial
 #> Data: 105 observations, ungrouped
 #> 
 #> Coefficients (natural scale; Wald z-test):
@@ -278,8 +273,9 @@ parameter).
 plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
 ```
 
-![Confidence Eye plot: a pale lens spanning the profile-likelihood
-interval with a hollow point estimate, for CTmax and
+![Confidence Eye plot: independently scaled pale outlined lenses
+spanning profile-likelihood intervals, with dark centre marks and hollow
+point estimates, for CTmax and
 z.](freqTLS_files/figure-html/confidence-eye-1.png)
 
 ## Going further: groups, shape predictors, and random effects
@@ -317,7 +313,7 @@ fit_grp <- fit_tls(
     CTmax ~ group,
     log_z ~ group
   ),
-  data = dat_grp, family = "beta_binomial", tref = 1
+  data = dat_grp, family = "beta_binomial", tref = 60
 )
 tidy_parameters(fit_grp)
 #> # A tibble: 8 × 8
@@ -326,8 +322,8 @@ tidy_parameters(fit_grp)
 #> 1 low        NA      0.0199   0.00459   0.0127    0.0313 wald          logit   
 #> 2 up         NA      0.979    0.00794   0.964     0.995  wald          identity
 #> 3 k          NA      4.79     0.404     4.06      5.66   wald          log     
-#> 4 CTmax:cool cool   33.9      0.103    33.7      34.1    wald          identity
-#> 5 CTmax:warm warm   37.9      0.148    37.6      38.2    wald          identity
+#> 4 CTmax:cool cool   28.9      0.288    28.3      29.5    wald          identity
+#> 5 CTmax:warm warm   29.0      0.390    28.2      29.8    wald          identity
 #> 6 z:cool     cool    2.82     0.180     2.49      3.20   wald          log     
 #> 7 z:warm     warm    4.98     0.254     4.50      5.51   wald          log     
 #> 8 phi        NA     27.5      8.26     15.3      49.8    wald          log
@@ -336,8 +332,8 @@ confint(fit_grp, c("CTmax:cool", "CTmax:warm", "z:cool", "z:warm"),
 #> # A tibble: 4 × 8
 #>   parameter  conf.low conf.high estimate level method  scale    conf.status
 #>   <chr>         <dbl>     <dbl>    <dbl> <dbl> <chr>   <chr>    <chr>      
-#> 1 CTmax:cool    33.7      34.1     33.9   0.95 profile identity ok         
-#> 2 CTmax:warm    37.6      38.2     37.9   0.95 profile identity ok         
+#> 1 CTmax:cool    28.3      29.5     28.9   0.95 profile identity ok         
+#> 2 CTmax:warm    28.2      29.8     29.0   0.95 profile identity ok         
 #> 3 z:cool         2.47      3.18     2.82  0.95 profile log      ok         
 #> 4 z:warm         4.48      5.49     4.98  0.95 profile log      ok
 ```
@@ -364,14 +360,14 @@ fit_re <- fit_tls(
     survived | trials(total) ~ time(duration) + temp(temp),
     CTmax ~ (1 | colony)
   ),
-  data = dat_re, family = "beta_binomial", tref = 1
+  data = dat_re, family = "beta_binomial", tref = 60
 )
 fit_re
 #> <freqTLS beta_binomial 4PL fit>
 #> Call: fit_tls(x = tls_bf(survived | trials(total) ~ time(duration) +
-#> temp(temp), CTmax ~ (1 | colony)), family = "beta_binomial", tref = 1, data =
+#> temp(temp), CTmax ~ (1 | colony)), family = "beta_binomial", tref = 60, data =
 #> dat_re)
-#> Reference time (tref): 1 | CTmax defined at this time
+#> Reference time (tref): 60 | CTmax defined at this time
 #> Data: 700 observations, ungrouped; 7 temperatures in [30, 42], 5 durations in
 #> [0.5, 8]
 #> 5798 survivors of 14000 trials
@@ -381,12 +377,13 @@ fit_re
 #>          low        0.02283  0.002510
 #>           up        0.98090  0.003458
 #>            k        5.29100  0.215600
-#>        CTmax   all 35.92000  0.315400
+#>        CTmax   all 28.76000  0.337500
 #>            z   all  4.03100  0.083040
 #>          phi       49.98000 11.580000
 #>  sigma_CTmax        0.98690  0.223500
-#> Optimiser: nlminb | code 0 | pdHess TRUE | converged (pdHess)
-#> Message: relative convergence (4)
+#> Optimiser: nloptr_TNEWTON | code 0 | pdHess TRUE | converged (pdHess)
+#> Message: Refined stationary point accepted by the freqTLS objective/gradient
+#> contract (NLopt status 4); max|gradient| = 0.0002115
 #> logLik -967.4 | df 7 | AIC 1949
 head(ranef(fit_re))
 #> # A tibble: 6 × 4

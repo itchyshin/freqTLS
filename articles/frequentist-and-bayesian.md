@@ -98,7 +98,7 @@ sparse <- simulate_tls(
 )
 fit_sparse <- suppressWarnings(fit_tls(
   sparse, y = survived, n = total, time = duration, temp = temp,
-  family = "binomial", tref = 1
+  family = "binomial", tref = 60
 ))
 # freqTLS says so: a profile that does not close returns NA on the open side
 # (here with the prior-free bootstrap fallback turned off to show the raw signal).
@@ -106,7 +106,7 @@ suppressWarnings(confint(fit_sparse, "z", method = "profile", fallback = FALSE))
 #> # A tibble: 1 × 8
 #>   parameter conf.low conf.high estimate level method  scale conf.status
 #>   <chr>        <dbl>     <dbl>    <dbl> <dbl> <chr>   <chr> <chr>      
-#> 1 z               NA        NA     2.95  0.95 profile log   open_both
+#> 1 z               NA        NA     2.35  0.95 profile log   open_both
 ```
 
 Neither behaviour is “right” in the abstract. The point is that they
@@ -252,13 +252,13 @@ d_re <- simulate_tls(
 fit_re <- suppressWarnings(fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = d_re, family = "binomial", tref = 1
+  data = d_re, family = "binomial", tref = 60
 ))
 blup <- ranef(fit_re)$estimate
 # No pooling: a fixed CTmax per colony (the unshrunk per-group estimates).
 fit_fix <- suppressWarnings(fit_tls(
   d_re, y = survived, n = total, time = duration, temp = temp,
-  group = colony, family = "binomial", tref = 1
+  group = colony, family = "binomial", tref = 60
 ))
 ct_fix <- fit_fix$estimates$estimate[startsWith(fit_fix$estimates$parameter, "CTmax:")]
 # The Gaussian prior on b_g (scale sigma_CTmax) pulls the spread in.
@@ -266,7 +266,7 @@ c(no_pooling_sd = round(sd(ct_fix - mean(ct_fix)), 2),
   partial_pooling_sd = round(sd(blup), 2),
   sigma_CTmax = round(fit_re$estimates$estimate[fit_re$estimates$parameter == "sigma_CTmax"], 2))
 #>      no_pooling_sd partial_pooling_sd        sigma_CTmax 
-#>               2.32               1.48               1.48
+#>               1.30               1.48               1.48
 ```
 
 Here the spread of the colony effects is pulled in from the no-pooling

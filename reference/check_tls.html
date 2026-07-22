@@ -133,10 +133,14 @@ scientific claim; <code><a href="../articles/profile-likelihood.html">vignette("
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">d</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span></span>
-<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">codes</span> <span class="op">&lt;-</span> <span class="fu">check_tls</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>A fitted CTmax (28.82) lies outside the assayed temperature range [30, 42].</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Expand the assay range to bracket CTmax and refit; if that is impossible,</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   report CTmax explicitly as an extrapolation and do not treat its interval as</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   design-supported.</span>
 <span class="r-in"><span><span class="va">codes</span> <span class="co"># character(0) means no data-adequacy diagnostic fired</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> character(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ctmax_extrapolated"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

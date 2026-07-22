@@ -20,7 +20,7 @@ standardize_data(
   proportion = NULL,
   proportion_eps = 0.001,
   random_effects = NULL,
-  duration_unit = "hours",
+  duration_unit = "minutes",
   temp_mean = NULL
 )
 ```
@@ -62,8 +62,9 @@ standardize_data(
 
 - mortality:
 
-  Column name for mortality proportions in `[0, 1]`. Converted to
-  `n_surv = round((1 - mortality) * n_total)`.
+  Column name for mortality proportions in `[0, 1]`. Converted by
+  reconstructing `n_dead = round(mortality * n_total)` then setting
+  `n_surv = n_total - n_dead`.
 
 - proportion:
 
@@ -85,14 +86,11 @@ standardize_data(
 
 - duration_unit:
 
-  Label for the unit of `duration`, stored in metadata. A recognised
-  value (`"seconds"`, `"minutes"`, `"hours"`, or `"days"`, with common
-  abbreviations) lets
-  [`fit_tls()`](https://itchyshin.github.io/freqTLS/reference/fit_tls.md)
-  and
-  [`fit_4pl()`](https://itchyshin.github.io/freqTLS/reference/fit_4pl.md)
-  resolve an omitted reference time to one physical hour. Default
-  `"hours"`.
+  Unit of the input `duration` column. A recognised value (`"seconds"`,
+  `"minutes"`, `"hours"`, or `"days"`, with common abbreviations) is
+  required. Durations are converted to minutes, so `tref` / `t_ref` is
+  always in minutes and the one-hour default is `60`. Default
+  `"minutes"`.
 
 - temp_mean:
 
@@ -103,10 +101,11 @@ standardize_data(
 ## Value
 
 A tibble with the standardised columns plus a `"tdt_meta"` attribute
-storing `temp_mean`, `duration_unit`, `random_effects`, `response_type`
-(`"count"` or `"proportion"`), `response_var` (the response column name
-for a proportion fit, else `NULL`), and `proportion_eps` (the clamp used
-for a proportion fit, else `NULL`).
+storing `temp_mean`, `duration_unit` (always `"minutes"`),
+`input_duration_unit`, `random_effects`, `response_type` (`"count"` or
+`"proportion"`), `response_var` (the response column name for a
+proportion fit, else `NULL`), and `proportion_eps` (the clamp used for a
+proportion fit, else `NULL`).
 
 ## Details
 
@@ -147,23 +146,24 @@ standardize_data(raw,
                  temp     = "temperature_C",
                  duration = "exposure_h",
                  n_total  = "n",
-                 n_surv   = "alive")
+                 n_surv   = "alive",
+                 duration_unit = "hours")
 #> # A tibble: 12 × 12
 #>    temperature_C exposure_h     n alive  temp duration  logd n_total n_surv
-#>            <dbl>      <dbl> <int> <dbl> <dbl>    <dbl> <dbl>   <int>  <dbl>
-#>  1            30          1    30    29    30        1 0          30     29
-#>  2            30          2    30    28    30        2 0.301      30     28
-#>  3            30          4    30    25    30        4 0.602      30     25
-#>  4            30          8    30     5    30        8 0.903      30      5
-#>  5            32          1    30    30    32        1 0          30     30
-#>  6            32          2    30    27    32        2 0.301      30     27
-#>  7            32          4    30    18    32        4 0.602      30     18
-#>  8            32          8    30     2    32        8 0.903      30      2
-#>  9            34          1    30    28    34        1 0          30     28
-#> 10            34          2    30    22    34        2 0.301      30     22
-#> 11            34          4    30    10    34        4 0.602      30     10
-#> 12            34          8    30     1    34        8 0.903      30      1
-#> # ℹ 3 more variables: n_dead <dbl>, survival <dbl>, temp_c <dbl>
+#>            <dbl>      <dbl> <int> <dbl> <dbl>    <dbl> <dbl>   <int>  <int>
+#>  1            30          1    30    29    30       60  1.78      30     29
+#>  2            30          2    30    28    30      120  2.08      30     28
+#>  3            30          4    30    25    30      240  2.38      30     25
+#>  4            30          8    30     5    30      480  2.68      30      5
+#>  5            32          1    30    30    32       60  1.78      30     30
+#>  6            32          2    30    27    32      120  2.08      30     27
+#>  7            32          4    30    18    32      240  2.38      30     18
+#>  8            32          8    30     2    32      480  2.68      30      2
+#>  9            34          1    30    28    34       60  1.78      30     28
+#> 10            34          2    30    22    34      120  2.08      30     22
+#> 11            34          4    30    10    34      240  2.38      30     10
+#> 12            34          8    30     1    34      480  2.68      30      1
+#> # ℹ 3 more variables: n_dead <int>, survival <dbl>, temp_c <dbl>
 
 # Continuous proportion (Beta) data
 raw_p <- data.frame(
@@ -174,21 +174,22 @@ raw_p <- data.frame(
 standardize_data(raw_p,
                  temp       = "temperature_C",
                  duration   = "exposure_h",
-                 proportion = "fvfm_ratio")
+                 proportion = "fvfm_ratio",
+                 duration_unit = "hours")
 #> Warning: standardize_data() clamped 2 of 12 finite proportion values into [0.001, 0.999] for the Beta likelihood. Check whether boundary values and this epsilon are scientifically appropriate.
 #> # A tibble: 12 × 8
 #>    temperature_C exposure_h fvfm_ratio  temp duration  logd survival temp_c
 #>            <dbl>      <dbl>      <dbl> <dbl>    <dbl> <dbl>    <dbl>  <dbl>
-#>  1            30          1       0.95    30        1 0        0.95      -2
-#>  2            30          2       0.9     30        2 0.301    0.9       -2
-#>  3            30          4       0.7     30        4 0.602    0.7       -2
-#>  4            30          8       0.2     30        8 0.903    0.2       -2
-#>  5            32          1       0.92    32        1 0        0.92       0
-#>  6            32          2       0.6     32        2 0.301    0.6        0
-#>  7            32          4       0.3     32        4 0.602    0.3        0
-#>  8            32          8       0       32        8 0.903    0.001      0
-#>  9            34          1       0.8     34        1 0        0.8        2
-#> 10            34          2       0.4     34        2 0.301    0.4        2
-#> 11            34          4       0.1     34        4 0.602    0.1        2
-#> 12            34          8       0       34        8 0.903    0.001      2
+#>  1            30          1       0.95    30       60  1.78    0.95      -2
+#>  2            30          2       0.9     30      120  2.08    0.9       -2
+#>  3            30          4       0.7     30      240  2.38    0.7       -2
+#>  4            30          8       0.2     30      480  2.68    0.2       -2
+#>  5            32          1       0.92    32       60  1.78    0.92       0
+#>  6            32          2       0.6     32      120  2.08    0.6        0
+#>  7            32          4       0.3     32      240  2.38    0.3        0
+#>  8            32          8       0       32      480  2.68    0.001      0
+#>  9            34          1       0.8     34       60  1.78    0.8        2
+#> 10            34          2       0.4     34      120  2.08    0.4        2
+#> 11            34          4       0.1     34      240  2.38    0.1        2
+#> 12            34          8       0       34      480  2.68    0.001      2
 ```

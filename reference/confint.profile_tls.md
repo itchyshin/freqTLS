@@ -144,12 +144,12 @@ returning percentile intervals when enough stable refits remain.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 confint(fit, "CTmax", method = "profile")
 #> # A tibble: 1 × 8
 #>   parameter conf.low conf.high estimate level method  scale    conf.status
 #>   <chr>        <dbl>     <dbl>    <dbl> <dbl> <chr>   <chr>    <chr>      
-#> 1 CTmax         35.7      36.1     35.9  0.95 profile identity ok         
+#> 1 CTmax         28.2      29.4     28.8  0.95 profile identity ok         
 confint(fit, "z", method = "profile")
 #> # A tibble: 1 × 8
 #>   parameter conf.low conf.high estimate level method  scale conf.status

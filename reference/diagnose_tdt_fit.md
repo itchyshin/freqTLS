@@ -36,11 +36,11 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 diagnose_tdt_fit(fit)
 #> # A tibble: 1 × 9
 #>   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params
 #>   <lgl>     <lgl>                 <dbl> <lgl>         <chr>      <dbl>    <int>
-#> 1 TRUE      TRUE             0.00000617 TRUE          nlminb     -129.        5
+#> 1 TRUE      TRUE               0.000122 TRUE          nlminb     -129.        5
 #> # ℹ 2 more variables: AIC <dbl>, all_pass <lgl>
 ```

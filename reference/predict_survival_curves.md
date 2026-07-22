@@ -79,7 +79,7 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 curves <- predict_survival_curves(
   fit, temps = c(34, 36), durations = c(1, 4), nboot = 10, seed = 1
 )

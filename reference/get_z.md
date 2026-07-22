@@ -38,7 +38,7 @@ A [tibble](https://tibble.tidyverse.org/reference/tibble.html) of the
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 get_z(fit)
 #> # A tibble: 1 × 8
 #>   parameter group estimate std.error conf.low conf.high interval_type scale

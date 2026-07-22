@@ -129,10 +129,9 @@ with <code><a href="extract_tdt.html">extract_tdt()</a></code> and <code>target_
 
 <dt id="arg-t-ref">t_ref<a class="anchor" aria-label="anchor" href="#arg-t-ref"></a></dt>
 <dd><p>Positive reference exposure time at which CTmax is reported,
-expressed in exactly the same unit as the standardised <code>duration</code> column.
-When <code>NULL</code> (the default), it resolves to one physical hour from
-<code>duration_unit</code> (for example, <code>60</code> minutes or <code>1</code> hour). Supply a numeric
-value to retain a non-hour reference such as <code>240</code> minutes.</p></dd>
+in minutes. When <code>NULL</code> (the default), it is <code>60</code> minutes (one hour).
+<code><a href="standardize_data.html">standardize_data()</a></code> converts the input duration to minutes; supply a
+numeric value such as <code>240</code> for a non-hour reference.</p></dd>
 
 
 <dt id="arg-bounds">bounds<a class="anchor" aria-label="anchor" href="#arg-bounds"></a></dt>
@@ -195,11 +194,11 @@ explains open profiles and the bootstrap fallback.</p>
 <span class="r-in"><span>  n_total <span class="op">=</span> <span class="st">"total"</span>, n_surv <span class="op">=</span> <span class="st">"survived"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">fit_4pl</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dat</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="va">dat</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>, method <span class="op">=</span> <span class="st">"wald"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         low          up           k       CTmax           z </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.01990609  0.97732873  4.89170992 35.92586046  3.99803066 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.01990612  0.97732869  4.89171231 28.81675603  3.99803137 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

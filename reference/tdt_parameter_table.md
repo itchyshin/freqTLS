@@ -50,7 +50,7 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 tdt_parameter_table(fit, method = "wald")
 #> # A tibble: 5 × 5
 #>   parameter group  median   lower   upper
@@ -58,6 +58,6 @@ tdt_parameter_table(fit, method = "wald")
 #> 1 low       NA     0.0199  0.0115  0.0345
 #> 2 up        NA     0.977   0.962   0.993 
 #> 3 k         NA     4.89    4.14    5.78  
-#> 4 CTmax     all   35.9    35.7    36.1   
+#> 4 CTmax     all   28.8    28.2    29.4   
 #> 5 z         all    4.00    3.64    4.40  
 ```

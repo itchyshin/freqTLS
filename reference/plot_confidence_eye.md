@@ -19,7 +19,9 @@ plot_confidence_eye(
   method = c("profile", "wald", "bootstrap"),
   level = 0.95,
   style = c("eye", "line"),
-  raw_data = TRUE,
+  raw_data = FALSE,
+  annotate = FALSE,
+  legend = FALSE,
   fallback = TRUE,
   nboot = 1000L,
   boot_seed = NULL,
@@ -58,7 +60,16 @@ plot_confidence_eye(
 - raw_data:
 
   Logical; overlay observed assay temperatures as a rug on
-  temperature-scale rows (default `TRUE`).
+  temperature-scale rows (default `FALSE`).
+
+- annotate:
+
+  Logical; add the plot title (default `FALSE`). Status subtitles for
+  open profiles and random-effects Wald routing are always retained.
+
+- legend:
+
+  Logical; show the interval-status legend (default `FALSE`).
 
 - fallback, nboot, boot_seed, cores:
 
@@ -90,10 +101,11 @@ source noted in the caption.
 
 ### Raw data
 
-With `raw_data = TRUE` (default), the observed assay temperatures are
-drawn as a rug beneath any temperature-scale row (`CTmax`), showing the
-data support and flagging extrapolation when `CTmax` sits outside the
-assayed range.
+With `raw_data = TRUE`, the observed assay temperatures are drawn as a
+rug beneath a temperature-scale row (`CTmax`). This optional diagnostic
+shows the data support and flags extrapolation when `CTmax` sits outside
+the assayed range; it is off by default because assay temperatures do
+not support `z`.
 
 Parameters on different scales (temperature for `CTmax`, a positive
 multiplier for `z`) are stacked in separate panels with a free x-axis.
@@ -103,7 +115,7 @@ multiplier for `z`) are stacked in separate panels with a free x-axis.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 plot_confidence_eye(fit, parm = c("CTmax", "z"))
 
 ```

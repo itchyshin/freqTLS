@@ -115,7 +115,7 @@ counts. The simulating truth is attached as <code>attr(, "truth")</code>.</p>
 
 
 <dt id="arg-times">times<a class="anchor" aria-label="anchor" href="#arg-times"></a></dt>
-<dd><p>Numeric vector of exposure durations (native unit, e.g. hours).</p></dd>
+<dd><p>Numeric vector of exposure durations in minutes.</p></dd>
 
 
 <dt id="arg-reps">reps<a class="anchor" aria-label="anchor" href="#arg-reps"></a></dt>
@@ -208,7 +208,9 @@ random-effect mode (default <code>"colony"</code>).</p></dd>
 
 
 <dt id="arg-tref">tref<a class="anchor" aria-label="anchor" href="#arg-tref"></a></dt>
-<dd><p>Reference time at which <code>CTmax</code> is defined (default <code>1</code>).</p></dd>
+<dd><p>Reference time at which <code>CTmax</code> is defined, in minutes (default
+<code>1</code>, one minute). Supply <code>tref = 60</code> to simulate the package's one-hour
+fitting default.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>

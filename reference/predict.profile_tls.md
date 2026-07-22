@@ -115,18 +115,18 @@ call when a transformed or interacted design cannot be recovered safely.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 nd <- expand.grid(temp = c(34, 36, 38), duration = c(1, 2, 4))
 predict(fit, nd, type = "survival")
-#> [1] 0.89445180 0.47691987 0.09003950 0.69738630 0.18571146 0.03695279 0.36162991
-#> [8] 0.06378846 0.02386996
+#> [1] 0.89445183 0.47691988 0.09003948 0.69738630 0.18571139 0.03695280 0.36162978
+#> [8] 0.06378843 0.02386999
 
 # A continuous predictor used by CTmax and log_z must also be in newdata.
 d$x <- rep(c(-1, 1), length.out = nrow(d))
 fit_x <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ x, log_z ~ x),
-  data = d, family = "binomial", tref = 1
+  data = d, family = "binomial", tref = 60
 )
 predict(fit_x, data.frame(temp = 36, duration = 2, x = c(-1, 1)))
 #> [1] 0.1678129 0.2048208
@@ -138,12 +138,12 @@ dre <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_re <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = dre, family = "binomial", tref = 1
+  data = dre, family = "binomial", tref = 60
 )
 colony <- as.character(ranef(fit_re)$group[1])
 nd_re <- data.frame(temp = 36, duration = 2, colony = colony)
 predict(fit_re, nd_re, re.form = "population")
-#> [1] 0.2124208
+#> [1] 0.2124211
 predict(fit_re, nd_re, re.form = "conditional")
 #> [1] 0.1003736
 # }

@@ -64,11 +64,11 @@ fit_4pl(
 
 - t_ref:
 
-  Positive reference exposure time at which CTmax is reported, expressed
-  in exactly the same unit as the standardised `duration` column. When
-  `NULL` (the default), it resolves to one physical hour from
-  `duration_unit` (for example, `60` minutes or `1` hour). Supply a
-  numeric value to retain a non-hour reference such as `240` minutes.
+  Positive reference exposure time at which CTmax is reported, in
+  minutes. When `NULL` (the default), it is `60` minutes (one hour).
+  [`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md)
+  converts the input duration to minutes; supply a numeric value such as
+  `240` for a non-hour reference.
 
 - bounds:
 
@@ -133,9 +133,9 @@ dat <- standardize_data(
   n_total = "total", n_surv = "survived"
 )
 fit <- fit_4pl(
-  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+  dat, family = "binomial", t_ref = 60, method = "wald", quiet = TRUE
 )
 coef(fit)
 #>         low          up           k       CTmax           z 
-#>  0.01990609  0.97732873  4.89170992 35.92586046  3.99803066 
+#>  0.01990612  0.97732869  4.89171231 28.81675603  3.99803137 
 ```

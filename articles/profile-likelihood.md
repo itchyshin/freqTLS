@@ -45,13 +45,13 @@ deviance curve plus the interval:
 set.seed(1)
 dat <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4, phi = 50, seed = 1)
 fit <- fit_tls(dat, y = survived, n = total, time = duration, temp = temp,
-               family = "beta_binomial", tref = 1)
+               family = "beta_binomial", tref = 60)
 
 pc <- profile(fit, "CTmax")
 c(estimate = pc$estimate, conf.low = pc$conf.low, conf.high = pc$conf.high,
   cutoff = pc$cutoff, min_deviance = min(pc$deviance))
 #>     estimate     conf.low    conf.high       cutoff min_deviance 
-#>    36.004832    35.747797    36.268991     3.937117     0.000000
+#>    29.067705    28.326499    29.802223     3.937117     0.000000
 ```
 
 The deviance minimum sits essentially at zero, at the estimate. Plotting
@@ -94,7 +94,7 @@ rbind(
 # the interval is asymmetric about the estimate (in general)
 with(ci_z, c(lower_gap = estimate - conf.low, upper_gap = conf.high - estimate))
 #> lower_gap upper_gap 
-#> 0.4730210 0.4802363
+#> 0.4730212 0.4802362
 ```
 
 ## Profile versus Wald
@@ -114,8 +114,8 @@ rbind(
   wald    = unlist(confint(fit, "CTmax", method = "wald")[c("conf.low", "conf.high")])
 )
 #>         conf.low conf.high
-#> profile  35.7478  36.26899
-#> wald     35.7483  36.26136
+#> profile 28.32650  29.80222
+#> wald    28.34112  29.79429
 ```
 
 [`tidy_parameters()`](https://itchyshin.github.io/freqTLS/reference/tidy_parameters.md)
@@ -133,7 +133,7 @@ tidy_parameters(fit, method = "profile")[, c("parameter", "estimate", "conf.low"
 #> 1 low         0.0328   0.0329     0.104 profile      
 #> 2 up          0.976    0.957      0.995 wald         
 #> 3 k           5.41     4.21       7.05  profile      
-#> 4 CTmax      36.0     35.7       36.3   profile      
+#> 4 CTmax      29.1     28.3       29.8   profile      
 #> 5 z           3.90     3.43       4.38  profile      
 #> 6 phi        26.7     13.0       71.0   profile
 ```
@@ -188,7 +188,7 @@ sparse <- simulate_tls(
 )
 sparse_fit <- suppressWarnings(
   fit_tls(sparse, y = survived, n = total, time = duration, temp = temp,
-          family = "binomial", tref = 1)
+          family = "binomial", tref = 60)
 )
 ```
 
@@ -225,12 +225,10 @@ ci_strict <- tryCatch(
   ),
   error = function(e) e
 )
+#> caught warning: NaNs produced
 #> caught warning: Inner re-optimisation did not converge at 1 grid point while profiling "CTmax".
 #> ℹ Those points are reported as "NA"; the interval is taken from the points that
 #>   did converge.
-#> caught warning: The profile deviance for "CTmax" is non-monotone (multiple local minima).
-#> ℹ The interval may not be a single connected region; inspect `plot(profile(fit,
-#>   "CTmax"))`.
 #> caught warning: The profile likelihood for "CTmax" did not close on the lower and upper sides:
 #> "CTmax" is weakly identified.
 #> ℹ Returning "NA" on the open side rather than a fabricated bound.
@@ -240,7 +238,7 @@ ci_strict[, c("parameter", "conf.low", "conf.high", "estimate", "method",
 #> # A tibble: 1 × 6
 #>   parameter conf.low conf.high estimate method  conf.status
 #>   <chr>        <dbl>     <dbl>    <dbl> <chr>   <chr>      
-#> 1 CTmax           NA        NA     37.8 profile open_both
+#> 1 CTmax           NA        NA     9.16 profile open_both
 ```
 
 The Confidence Eye follows the same contract. With its default

@@ -90,52 +90,74 @@
 
     
     
-<p>This page is a freqTLS-only experimental extension built from
-synthetic data. It is not a replacement empirical case and does not
-estimate a repair process.</p>
+<p>For diploid zebrafish larvae under normoxia, how would a fitted
+static-assay survival curve translate into predicted survival during a
+hypothetical three-hour staged heat exposure? This page uses the
+package’s CC BY 4.0 oxygen-gradient zebrafish assay data and a clearly
+hypothetical exposure scenario. It is a freqTLS-only experimental
+extension: it does not estimate injury kinetics or a repair process.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/itchyshin/freqTLS" class="external-link">freqTLS</a></span><span class="op">)</span></span>
-<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"beta_binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>                    phi <span class="op">=</span> <span class="fl">50</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span>
-<span><span class="co"># In this synthetic example, duration and trace time are both hours. No unit</span></span>
-<span><span class="co"># conversion occurs inside fit_tls() or predict_heat_injury().</span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">sim</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
-<span>               family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"zebrafish_o2"</span><span class="op">)</span></span>
+<span><span class="va">zebrafish_normoxia</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
+<span>  <span class="va">zebrafish_o2</span>,</span>
+<span>  <span class="va">ploidy</span> <span class="op">==</span> <span class="st">"diploid"</span> <span class="op">&amp;</span> <span class="va">oxygen</span> <span class="op">==</span> <span class="st">"normoxia"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># The assay duration, reference time, and scenario trace below are all minutes.</span></span>
+<span><span class="co"># `tref = 60` therefore defines CTmax at one hour.</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
+<span>  <span class="va">zebrafish_normoxia</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">n_surv</span>, n <span class="op">=</span> <span class="va">n_total</span>, time <span class="op">=</span> <span class="va">duration_min</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/diagnose_tdt_fit.html">diagnose_tdt_fit</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 9</span></span></span>
 <span><span class="co">#&gt;   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">018</span>4 TRUE          nlminb     -<span style="color: #BB0000;">129.</span>        6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> TRUE      TRUE              0.000<span style="text-decoration: underline;">062</span>7 TRUE          nlminb     -<span style="color: #BB0000;">197.</span>        6</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: AIC &lt;dbl&gt;, all_pass &lt;lgl&gt;</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trace</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">96</span>, by <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
+<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">180</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">trace</span><span class="op">$</span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fl">27</span> <span class="op">+</span> <span class="fl">6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="va">trace</span><span class="op">$</span><span class="va">time</span> <span class="op">-</span> <span class="fl">6</span><span class="op">)</span> <span class="op">/</span> <span class="fl">24</span><span class="op">)</span></span></code></pre></div>
-<p>Here <code>tref = 1</code> is one hour, and <code>trace$time</code>
-is also in hours. The trace time, fitted duration, and reference time
-must use the same unit because heat-injury damage is accumulated per
-time unit.</p>
+<span><span class="va">trace</span><span class="op">$</span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">trace</span><span class="op">$</span><span class="va">time</span> <span class="op">&lt;=</span> <span class="fl">60</span>, <span class="fl">38</span>,</span>
+<span>                     <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">trace</span><span class="op">$</span><span class="va">time</span> <span class="op">&lt;=</span> <span class="fl">120</span>, <span class="fl">39</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The staged 38–40 °C heatwave is a user-defined scenario, not an
+environmental trace. Those temperatures and the 20.9–240 minute duration
+range occur in the static assay, but their fluctuating sequence was not
+observed. The trace time, fitted duration, and reference time are all
+minutes because heat-injury damage is accumulated per minute.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">injury</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_heat_injury.html">predict_heat_injury</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">trace</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">injury</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   time     temp         dose      injury  survival</span></span>
-<span><span class="co">#&gt; 1 0.00 21.00000 0.000000e+00 0.000000000 0.9892557</span></span>
-<span><span class="co">#&gt; 2 0.25 21.01285 3.627625e-05 0.003627625 0.9892557</span></span>
-<span><span class="co">#&gt; 3 0.50 21.05133 7.282956e-05 0.007282956 0.9892557</span></span>
-<span><span class="co">#&gt; 4 0.75 21.11529 1.102256e-04 0.011022563 0.9892557</span></span>
-<span><span class="co">#&gt; 5 1.00 21.20445 1.490655e-04 0.014906545 0.9892557</span></span>
-<span><span class="co">#&gt; 6 1.25 21.31842 1.900114e-04 0.019001136 0.9892557</span></span></code></pre></div>
+<span><span class="co">#&gt;   time temp       dose    injury  survival</span></span>
+<span><span class="co">#&gt; 1    0   38 0.00000000  0.000000 0.9990000</span></span>
+<span><span class="co">#&gt; 2    5   38 0.06250152  6.250152 0.9990000</span></span>
+<span><span class="co">#&gt; 3   10   38 0.12500304 12.500304 0.9990000</span></span>
+<span><span class="co">#&gt; 4   15   38 0.18750457 18.750457 0.9990000</span></span>
+<span><span class="co">#&gt; 5   20   38 0.25000609 25.000609 0.9989999</span></span>
+<span><span class="co">#&gt; 6   25   38 0.31250761 31.250761 0.9989988</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heat_injury.html">plot_heat_injury</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">trace</span>, nboot <span class="op">=</span> <span class="fl">50</span>, seed <span class="op">=</span> <span class="fl">42</span><span class="op">)</span></span></code></pre></div>
-<p><img src="heat-injury_files/figure-html/plot-1.png" class="r-plt" alt="Deterministic survival trajectory under a synthetic fluctuating temperature trace." width="672"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_heat_injury.html">plot_heat_injury</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">trace</span>, nboot <span class="op">=</span> <span class="fl">50</span>, seed <span class="op">=</span> <span class="fl">42</span>, xlab <span class="op">=</span> <span class="st">"Time (minutes)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="heat-injury_files/figure-html/plot-1.png" class="r-plt" alt="Predicted survival for a hypothetical staged heatwave applied to the fitted diploid-normoxia zebrafish survival curve." width="672"></p>
+<p><code>nboot = 50</code> keeps this vignette quick to render; use
+substantially more bootstrap replicates before reporting a confidence
+band.</p>
+<p>The default one-dose survival target is the fitted relative midpoint,
+defined from <code>low</code> and <code>up</code>; it is not an absolute
+50% survival threshold. To inspect a separate absolute-threshold
+scenario, use <code>target_surv = 0.5</code> only when 0.5 is strictly
+between the fitted asymptotes. That sensitivity analysis is not
+CTmax.</p>
 <p>The trajectory is a deterministic transformation of the fitted 4PL
-and the user-supplied trace. <code><a href="../reference/heat_injury_envelope.html">heat_injury_envelope()</a></code> can add
-parametric-bootstrap uncertainty from refitted curves. A repair rate
-supplied by the user remains an illustrative scenario: freqTLS has not
-fitted that rate from damage/recovery data. Use bayesTLS for its broader
-Bayesian heat-injury and repair workflow; its posterior intervals are
-distinct from freqTLS confidence intervals.</p>
+and the user-supplied trace. <code><a href="../reference/heat_injury_envelope.html">heat_injury_envelope()</a></code> adds
+parametric-bootstrap confidence bands from refitted curves.
+Variable-temperature dose additivity is an extrapolation from the static
+assays, and a repair rate supplied by the user remains an illustrative
+scenario: freqTLS has not fitted injury or repair parameters from
+damage/recovery data. Use bayesTLS when fitted heat-injury or repair
+dynamics, or Bayesian scenario propagation, is the scientific aim; its
+posterior intervals are distinct from freqTLS confidence intervals.</p>
   </main>
 </div>
 

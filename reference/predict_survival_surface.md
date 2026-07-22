@@ -51,13 +51,13 @@ A long `data.frame` with columns `temp`, `duration`, `survival` (and
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 head(predict_survival_surface(fit, temps = c(34, 36, 38), times = c(1, 2, 4)))
 #>   temp duration   survival
-#> 1   34        1 0.89445180
-#> 2   36        1 0.47691987
-#> 3   38        1 0.09003950
+#> 1   34        1 0.89445183
+#> 2   36        1 0.47691988
+#> 3   38        1 0.09003948
 #> 4   34        2 0.69738630
-#> 5   36        2 0.18571146
-#> 6   38        2 0.03695279
+#> 5   36        2 0.18571139
+#> 6   38        2 0.03695280
 ```

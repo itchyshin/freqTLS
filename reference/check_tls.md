@@ -76,8 +76,12 @@ bootstrap recovery attempt.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 codes <- check_tls(fit)
+#> Warning: A fitted CTmax (28.82) lies outside the assayed temperature range [30, 42].
+#> ℹ Expand the assay range to bracket CTmax and refit; if that is impossible,
+#>   report CTmax explicitly as an extrapolation and do not treat its interval as
+#>   design-supported.
 codes # character(0) means no data-adequacy diagnostic fired
-#> character(0)
+#> [1] "ctmax_extrapolated"
 ```

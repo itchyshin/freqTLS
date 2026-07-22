@@ -129,7 +129,7 @@ estimate, not a posterior median.</p>
 <span class="r-in"><span>  <span class="va">raw</span>, temp <span class="op">=</span> <span class="st">"temp"</span>, duration <span class="op">=</span> <span class="st">"duration"</span>,</span></span>
 <span class="r-in"><span>  n_total <span class="op">=</span> <span class="st">"total"</span>, n_surv <span class="op">=</span> <span class="st">"survived"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">dat</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, t_ref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="fit_4pl.html">fit_4pl</a></span><span class="op">(</span><span class="va">dat</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, t_ref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">tdt_parameter_table</span><span class="op">(</span><span class="va">fit</span>, method <span class="op">=</span> <span class="st">"wald"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   parameter group  median   lower   upper</span>
@@ -137,7 +137,7 @@ estimate, not a posterior median.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> low       <span style="color: #BB0000;">NA</span>     0.019<span style="text-decoration: underline;">9</span>  0.011<span style="text-decoration: underline;">5</span>  0.034<span style="text-decoration: underline;">5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> up        <span style="color: #BB0000;">NA</span>     0.977   0.962   0.993 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> k         <span style="color: #BB0000;">NA</span>     4.89    4.14    5.78  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> CTmax     all   35.9    35.7    36.1   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> CTmax     all   28.8    28.2    29.4   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> z         all    4.00    3.64    4.40  </span>
 </code></pre></div>
     </div>

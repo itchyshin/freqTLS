@@ -46,7 +46,7 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 tdt <- extract_tdt(fit, nboot = 10, seed = 1)
 get_z_summary(tdt)
 #> # A tibble: 1 × 3
@@ -57,15 +57,15 @@ get_ctmax_draws(tdt)
 #> # A tibble: 10 × 2
 #>    .draw CTmax
 #>    <int> <dbl>
-#>  1     1  35.9
-#>  2     2  35.9
-#>  3     3  35.9
-#>  4     4  36.1
-#>  5     5  36.0
-#>  6     6  35.9
-#>  7     7  36.0
-#>  8     8  35.7
-#>  9     9  36.1
-#> 10    10  35.9
+#>  1     1  28.7
+#>  2     2  28.8
+#>  3     3  28.9
+#>  4     4  28.5
+#>  5     5  29.2
+#>  6     6  28.5
+#>  7     7  28.8
+#>  8     8  29.3
+#>  9     9  28.5
+#> 10    10  29.3
 # }
 ```

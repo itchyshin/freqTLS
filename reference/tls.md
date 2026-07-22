@@ -108,14 +108,14 @@ dat <- standardize_data(
   n_total = "total", n_surv = "survived"
 )
 fit <- fit_4pl(
-  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+  dat, family = "binomial", t_ref = 60, method = "wald", quiet = TRUE
 )
 tls(fit)
 #> <tls> relative threshold; quantities: z, CTmax (wald intervals)
 #> # A tibble: 2 × 4
 #>   quantity median lower upper
 #>   <chr>     <dbl> <dbl> <dbl>
-#> 1 CTmax     35.9  35.7  36.1 
+#> 1 CTmax     28.8  28.2  29.4 
 #> 2 z          4.00  3.64  4.40
 tls_z(fit)
 #> <tls> relative threshold; quantities: z (wald intervals)
@@ -128,5 +128,5 @@ tls_ctmax(fit)
 #> # A tibble: 1 × 4
 #>   quantity median lower upper
 #>   <chr>     <dbl> <dbl> <dbl>
-#> 1 CTmax      35.9  35.7  36.1
+#> 1 CTmax      28.8  28.2  29.4
 ```

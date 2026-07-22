@@ -62,7 +62,7 @@ close returns `NA` on the open side (never a fabricated bound).
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 tidy_parameters(fit)
 #> # A tibble: 5 × 8
 #>   parameter group estimate std.error conf.low conf.high interval_type scale   
@@ -70,7 +70,7 @@ tidy_parameters(fit)
 #> 1 low       NA      0.0199   0.00552   0.0115    0.0345 wald          logit   
 #> 2 up        NA      0.977    0.00797   0.962     0.993  wald          identity
 #> 3 k         NA      4.89     0.413     4.14      5.78   wald          log     
-#> 4 CTmax     all    35.9      0.105    35.7      36.1    wald          identity
+#> 4 CTmax     all    28.8      0.294    28.2      29.4    wald          identity
 #> 5 z         all     4.00     0.191     3.64      4.40   wald          log     
 tidy_parameters(fit, method = "profile")
 #> "up" is profiled with the delta-method Wald interval.
@@ -82,6 +82,6 @@ tidy_parameters(fit, method = "profile")
 #> 1 low       NA      0.0199   0.00552   0.0191    0.0631 profile       logit   
 #> 2 up        NA      0.977    0.00797   0.962     0.993  wald          identity
 #> 3 k         NA      4.89     0.413     4.13      5.78   profile       log     
-#> 4 CTmax     all    35.9      0.105    35.7      36.1    profile       identity
+#> 4 CTmax     all    28.8      0.294    28.2      29.4    profile       identity
 #> 5 z         all     4.00     0.191     3.62      4.38   profile       log     
 ```

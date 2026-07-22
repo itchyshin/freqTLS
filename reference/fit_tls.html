@@ -136,7 +136,7 @@ for the <code>beta</code> family, whose response is already a proportion.</p></d
 
 <dt id="arg-time">time<a class="anchor" aria-label="anchor" href="#arg-time"></a></dt>
 <dd><p>&lt;<code><a href="https://rlang.r-lib.org/reference/args_data_masking.html" class="external-link">data-masked</a></code>&gt; Column of exposure
-durations in the data's native unit (e.g. hours); used as
+durations in minutes; used as
 <code>log10(duration)</code> internally.</p></dd>
 
 
@@ -159,12 +159,10 @@ ungrouped fit).</p></dd>
 
 
 <dt id="arg-tref">tref<a class="anchor" aria-label="anchor" href="#arg-tref"></a></dt>
-<dd><p>Reference time at which <code>CTmax</code> is defined, in the same unit as
-<code>time</code>. When <code>NULL</code> (the default), standardized data with a recognised
-<code>duration_unit</code> use one physical hour (for example, <code>60</code> minutes or <code>1</code>
-hour). For bare data without metadata, the historical fallback is <code>1</code>
-native time unit with a warning; supply <code>tref</code> explicitly to avoid an
-ambiguous reference.</p></dd>
+<dd><p>Reference time at which <code>CTmax</code> is defined, in minutes. When
+<code>NULL</code> (the default), it is <code>60</code> minutes (one hour). Use
+<code><a href="standardize_data.html">standardize_data()</a></code> to convert a raw duration column before fitting;
+bare formula/column data must already use minutes.</p></dd>
 
 
 <dt id="arg-start">start<a class="anchor" aria-label="anchor" href="#arg-start"></a></dt>
@@ -249,19 +247,19 @@ default bootstrap recovery attempt.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">fit_tls</span><span class="op">(</span><span class="va">d</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span></span>
-<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span><span class="op">$</span><span class="va">estimates</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   parameter group    estimate   std.error</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       low  &lt;NA&gt;  0.01990609 0.005521840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        up  &lt;NA&gt;  0.97732873 0.007971563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         k  &lt;NA&gt;  4.89170992 0.413063152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     CTmax   all 35.92586046 0.105265524</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         z   all  3.99803066 0.191371793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       low  &lt;NA&gt;  0.01990612 0.005521844</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        up  &lt;NA&gt;  0.97732869 0.007971566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         k  &lt;NA&gt;  4.89171231 0.413062744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     CTmax   all 28.81675603 0.294280072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         z   all  3.99803137 0.191371651</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The same fit through the formula interface:</span></span></span>
 <span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu">fit_tls</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

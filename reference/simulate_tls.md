@@ -43,7 +43,7 @@ simulate_tls(
 
 - times:
 
-  Numeric vector of exposure durations (native unit, e.g. hours).
+  Numeric vector of exposure durations in minutes.
 
 - reps:
 
@@ -136,7 +136,9 @@ simulate_tls(
 
 - tref:
 
-  Reference time at which `CTmax` is defined (default `1`).
+  Reference time at which `CTmax` is defined, in minutes (default `1`,
+  one minute). Supply `tref = 60` to simulate the package's one-hour
+  fitting default.
 
 - seed:
 

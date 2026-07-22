@@ -90,8 +90,9 @@ leaf_table
 plot_confidence_eye(leaf_fit, parm = c("CTmax", "z"), method = "wald")
 ```
 
-![Wald Confidence Eyes for Snow-gum CTmax and z after Dark and Light
-recovery.](case-study-snowgum_files/figure-html/eye-1.png)
+![Independently scaled Wald Confidence Eyes for Snow-gum CTmax and z
+after Dark and Light recovery, shown as outlined lenses with hollow
+estimates.](case-study-snowgum_files/figure-html/eye-1.png)
 
 This sublethal endpoint reports only `CTmax` and `z`; `Tcrit` is not a
 valid headline quantity here. Inspect convergence, Hessian/gradient

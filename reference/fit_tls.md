@@ -58,8 +58,8 @@ fit_tls(
 - time:
 
   \<[`data-masked`](https://rlang.r-lib.org/reference/args_data_masking.html)\>
-  Column of exposure durations in the data's native unit (e.g. hours);
-  used as `log10(duration)` internally.
+  Column of exposure durations in minutes; used as `log10(duration)`
+  internally.
 
 - temp:
 
@@ -85,12 +85,11 @@ fit_tls(
 
 - tref:
 
-  Reference time at which `CTmax` is defined, in the same unit as
-  `time`. When `NULL` (the default), standardized data with a recognised
-  `duration_unit` use one physical hour (for example, `60` minutes or
-  `1` hour). For bare data without metadata, the historical fallback is
-  `1` native time unit with a warning; supply `tref` explicitly to avoid
-  an ambiguous reference.
+  Reference time at which `CTmax` is defined, in minutes. When `NULL`
+  (the default), it is `60` minutes (one hour). Use
+  [`standardize_data()`](https://itchyshin.github.io/freqTLS/reference/standardize_data.md)
+  to convert a raw duration column before fitting; bare formula/column
+  data must already use minutes.
 
 - start:
 
@@ -179,18 +178,18 @@ attempt.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 fit$estimates
 #>   parameter group    estimate   std.error
-#> 1       low  <NA>  0.01990609 0.005521840
-#> 2        up  <NA>  0.97732873 0.007971563
-#> 3         k  <NA>  4.89170992 0.413063152
-#> 4     CTmax   all 35.92586046 0.105265524
-#> 5         z   all  3.99803066 0.191371793
+#> 1       low  <NA>  0.01990612 0.005521844
+#> 2        up  <NA>  0.97732869 0.007971566
+#> 3         k  <NA>  4.89171231 0.413062744
+#> 4     CTmax   all 28.81675603 0.294280072
+#> 5         z   all  3.99803137 0.191371651
 
 # The same fit through the formula interface:
 fit2 <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
-  data = d, family = "binomial", tref = 1
+  data = d, family = "binomial", tref = 60
 )
 ```

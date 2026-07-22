@@ -176,13 +176,13 @@ the two properties on a fitted model:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_tls.html">simulate_tls</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"binomial"</span>, CTmax <span class="op">=</span> <span class="fl">36</span>, z <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span><span class="va">dat</span>, y <span class="op">=</span> <span class="va">survived</span>, n <span class="op">=</span> <span class="va">total</span>, time <span class="op">=</span> <span class="va">duration</span>, temp <span class="op">=</span> <span class="va">temp</span>,</span>
-<span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>               family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>
 <span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_ctmax.html">get_ctmax</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">estimate</span></span>
 <span><span class="va">zz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_z.html">get_z</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">estimate</span></span>
 <span></span>
-<span><span class="co"># (1) midpoint at temp = CTmax equals log10(tref) = log10(1) = 0</span></span>
+<span><span class="co"># (1) midpoint at temp = CTmax equals log10(tref) = log10(60)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="va">ct</span>, duration <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"midpoint"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
+<span><span class="co">#&gt; [1] 1.778151</span></span>
 <span></span>
 <span><span class="co"># (2) midpoint slope in temperature is -1/z</span></span>
 <span><span class="va">mids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>temp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ct</span>, <span class="va">ct</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, duration <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"midpoint"</span><span class="op">)</span></span>
@@ -312,9 +312,9 @@ whose slope is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">-1/z</annotation></semantics></math>
 — the classic log-linear thermal death-time line.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># LT50 (relative midpoint) at three temperatures, in hours</span></span>
+<code class="sourceCode R"><span><span class="co"># Absolute 50% survival at three temperatures, in hours</span></span>
 <span><span class="fu"><a href="../reference/derive_lt.html">derive_lt</a></span><span class="op">(</span><span class="va">fit</span>, p <span class="op">=</span> <span class="fl">0.5</span>, temp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">36</span>, <span class="fl">37</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.6998018 0.9555978 0.5372198</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 1.6998017 0.9555978 0.5372199</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-bridge-to-bayestls">The bridge to bayesTLS<a class="anchor" aria-label="anchor" href="#the-bridge-to-bayestls"></a>
@@ -374,7 +374,7 @@ intercept:</p>
 <span>  recovered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>CTmax <span class="op">=</span> <span class="va">ctmax_recovered</span>, z <span class="op">=</span> <span class="va">z_recovered</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;              CTmax        z</span></span>
-<span><span class="co">#&gt; fitted    35.92586 3.998031</span></span>
+<span><span class="co">#&gt; fitted    28.81676 3.998031</span></span>
 <span><span class="co">#&gt; recovered 35.92586 3.998031</span></span></code></pre></div>
 <p>The recovered <code>CTmax</code> and <code>z</code> match the fitted
 values to numerical precision, confirming that the direct

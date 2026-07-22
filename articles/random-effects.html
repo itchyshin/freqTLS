@@ -133,16 +133,16 @@ of 1.5 °C, then fit a single random intercept.</p>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The estimates table carries the population CTmax / z and the between-colony SD.</span></span>
 <span><span class="va">est</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">estimates</span></span>
 <span><span class="va">est</span><span class="op">[</span><span class="va">est</span><span class="op">$</span><span class="va">parameter</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span>, <span class="st">"sigma_CTmax"</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parameter"</span>, <span class="st">"estimate"</span>, <span class="st">"std.error"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;     parameter  estimate  std.error</span></span>
-<span><span class="co">#&gt; 4       CTmax 36.010947 0.38977872</span></span>
+<span><span class="co">#&gt; 4       CTmax 28.983670 0.39661517</span></span>
 <span><span class="co">#&gt; 5           z  3.952015 0.05042902</span></span>
-<span><span class="co">#&gt; 6 sigma_CTmax  1.454802 0.27579903</span></span></code></pre></div>
+<span><span class="co">#&gt; 6 sigma_CTmax  1.454803 0.27579929</span></span></code></pre></div>
 <p><code>sigma_CTmax</code> is the estimated between-colony standard
 deviation of <code>CTmax</code>, in °C — directly interpretable on the
 thermal-tolerance scale. It is a maximum-likelihood variance component,
@@ -231,7 +231,7 @@ require the grouping column in <code>newdata</code>:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;       target   survival</span></span>
-<span><span class="co">#&gt; 1 population 0.19888224</span></span>
+<span><span class="co">#&gt; 1 population 0.19888286</span></span>
 <span><span class="co">#&gt; 2     colony 0.08525094</span></span></code></pre></div>
 <p>Calling <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> without <code>re.form</code> on a
 random-effects fit warns and returns the population prediction. An
@@ -257,7 +257,7 @@ the full model instead.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
 <span><span class="co">#&gt;   parameter conf.low conf.high method </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax         35.2      36.8 profile</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax         28.2      29.8 profile</span></span></code></pre></div>
 <p>The Confidence Eye always uses Wald intervals for a random-effects
 fit, even when <code>method = "profile"</code> is requested, because a
 profile eye would re-run the Laplace approximation at every grid point
@@ -267,7 +267,7 @@ for random-effects-aware bootstrap intervals. The eye remains a
 confidence-interval display, never a posterior.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="st">"CTmax"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="random-effects_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for the population CTmax of a random-intercept fit: a pale confidence lens with a hollow point estimate near 36 degrees Celsius, drawn with a Wald interval; a freqTLS uncertainty display, not a posterior density." width="576"></p>
+<p><img src="random-effects_files/figure-html/eye-1.png" class="r-plt" alt="Confidence Eye for the population CTmax of a random-intercept fit: a pale outlined confidence lens with a dark centre mark and hollow estimate near 36 degrees Celsius, drawn with a Wald interval; a freqTLS uncertainty display, not a posterior density." width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="random-effects-on-sensitivity-and-curve-shape">Random effects on sensitivity and curve shape<a class="anchor" aria-label="anchor" href="#random-effects-on-sensitivity-and-curve-shape"></a>
@@ -290,12 +290,12 @@ across groups, not a z-unit SD.</p>
 <span><span class="va">fit_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>         <span class="va">log_z</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dz</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="va">dz</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">sg</span> <span class="op">&lt;-</span> <span class="va">fit_z</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="va">fit_z</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">parameter</span> <span class="op">==</span> <span class="st">"sigma_logz"</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>sigma_logz <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sg</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  approx_fold_spread_in_z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">sg</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;              sigma_logz approx_fold_spread_in_z </span></span>
-<span><span class="co">#&gt;                   0.265                   1.303</span></span></code></pre></div>
+<span><span class="co">#&gt;                    0.02                    1.02</span></span></code></pre></div>
 <p>The upper asymptote <code>up</code> is the <strong>one shape with no
 random effect</strong>: under the disjoint-bounds parameterisation
 <code>up = up_min + up_w * plogis(beta_up)</code> it has its own
@@ -322,7 +322,7 @@ or more share the <strong>same</strong> grouping factor,
 <span><span class="va">fit_both</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_tls.html">fit_tls</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>         <span class="va">CTmax</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span>, <span class="va">log_z</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">db</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  data <span class="op">=</span> <span class="va">db</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">fit_both</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">parameter</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^sigma"</span>, <span class="va">fit_both</span><span class="op">$</span><span class="va">estimates</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; [1] "sigma_CTmax" "sigma_logz"</span></span></code></pre></div>
 <p>In real data the group-level <code>CTmax</code> and <code>z</code>

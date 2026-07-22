@@ -93,12 +93,12 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 tdt <- extract_tdt(fit, nboot = 10, seed = 1)
 tdt$CTmax$summary
 #> # A tibble: 1 × 3
 #>   temp_median temp_lower temp_upper
 #>         <dbl>      <dbl>      <dbl>
-#> 1        35.9       35.8       36.1
+#> 1        28.8       28.5       29.3
 # }
 ```

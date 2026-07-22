@@ -106,10 +106,10 @@ design so the contrast is itself a coordinate.
 ``` r
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 pc <- profile(fit, "CTmax")
 pc$conf.low
-#> [1] 35.7173
+#> [1] 28.23147
 pc$conf.high
-#> [1] 36.13577
+#> [1] 29.4012
 ```

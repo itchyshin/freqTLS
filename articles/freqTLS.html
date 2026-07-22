@@ -164,16 +164,12 @@ First <code><a href="../reference/standardize_data.html">standardize_data()</a><
 and survival-count columns and records the data contract; then
 <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> fits the 4PL by maximum likelihood and returns a
 <code>freq_tls</code> workflow object. <code>t_ref</code> is the
-reference time at which <code>CTmax</code> is defined, in the same unit
-as <code>duration</code>; it does not convert the observed durations.
-When omitted, <code><a href="../reference/fit_4pl.html">fit_4pl()</a></code> and <code><a href="../reference/fit_tls.html">fit_tls()</a></code> resolve
-it to one physical hour from a recognised <code>duration_unit</code>
-(for example, 60 minutes or 1 hour). Bare data without metadata retain
-the historical one-native-unit fallback with a warning, so use an
-explicit reference if their unit is not recorded. A supplied numeric
-reference is never converted: for minute data, <code>t_ref = 1</code>
-deliberately means CTmax at one minute, whereas the omitted default is
-one hour (<code>t_ref = 60</code>).</p>
+reference time at which <code>CTmax</code> is defined, in minutes.
+<code><a href="../reference/standardize_data.html">standardize_data()</a></code> converts recognised input duration units
+to minutes, so the omitted default is one hour
+(<code>t_ref = 60</code>). A supplied numeric reference is never
+converted: <code>t_ref = 1</code> deliberately means CTmax at one
+minute. Bare formula/column data must already use minutes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/standardize_data.html">standardize_data</a></span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
@@ -189,7 +185,7 @@ one hour (<code>t_ref = 60</code>).</p>
 <span><span class="co">#&gt; &lt;freq_tls&gt;</span></span>
 <span><span class="co">#&gt;   Data:    105 rows; 7 temperatures; 5 durations</span></span>
 <span><span class="co">#&gt;   T_bar:   36.00</span></span>
-<span><span class="co">#&gt;   Family:  beta_binomial (relative threshold, t_ref = 1 hours)</span></span>
+<span><span class="co">#&gt;   Family:  beta_binomial (relative threshold, t_ref = 60 minutes)</span></span>
 <span><span class="co">#&gt;   Fit:     converged (pdHess = TRUE); default CI method = profile</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="formula-interface">Formula interface<a class="anchor" aria-label="anchor" href="#formula-interface"></a>
@@ -208,10 +204,10 @@ linear model; it matches the preceding fit:</p>
 <span>  <span class="fu"><a href="../reference/tls_bf.html">tls_bf</a></span><span class="op">(</span><span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  data   <span class="op">=</span> <span class="va">dat</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"beta_binomial"</span>,</span>
-<span>  tref   <span class="op">=</span> <span class="fl">1</span></span>
+<span>  tref   <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_f</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Mean relative difference: 0.105005"</span></span></code></pre></div>
 <p>The grammar scales well beyond a single ungrouped fit: each
 sub-parameter can take a grouping factor, a continuous covariate, or an
 <code>lme4</code>-style random intercept. See <strong>Going
@@ -226,7 +222,7 @@ and the log-likelihood:</p>
 <span><span class="co">#&gt; &lt;freqTLS beta_binomial 4PL fit&gt; summary</span></span>
 <span><span class="co">#&gt; Call: fit_tls(x = ff, family = fam_name, tref = t_ref, start = start, control =</span></span>
 <span><span class="co">#&gt; control, trace = trace, quiet = quiet, data = data)</span></span>
-<span><span class="co">#&gt; Reference time (tref): 1 | family: beta_binomial</span></span>
+<span><span class="co">#&gt; Reference time (tref): 60 | family: beta_binomial</span></span>
 <span><span class="co">#&gt; Data: 105 observations, ungrouped</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients (natural scale; Wald z-test):</span></span>
@@ -328,7 +324,7 @@ interval for that question. A hollow point with <em>no</em> lens flags a
 profile that did not close (a weakly identified parameter).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_confidence_eye.html">plot_confidence_eye</a></span><span class="op">(</span><span class="va">fit</span>, parm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CTmax"</span>, <span class="st">"z"</span><span class="op">)</span>, method <span class="op">=</span> <span class="st">"profile"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="freqTLS_files/figure-html/confidence-eye-1.png" class="r-plt" alt="Confidence Eye plot: a pale lens spanning the profile-likelihood interval with a hollow point estimate, for CTmax and z." width="576"></p>
+<p><img src="freqTLS_files/figure-html/confidence-eye-1.png" class="r-plt" alt="Confidence Eye plot: independently scaled pale outlined lenses spanning profile-likelihood intervals, with dark centre marks and hollow point estimates, for CTmax and z." width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="going-further-groups-shape-predictors-and-random-effects">Going further: groups, shape predictors, and random effects<a class="anchor" aria-label="anchor" href="#going-further-groups-shape-predictors-and-random-effects"></a>
@@ -362,7 +358,7 @@ internally:</p>
 <span>    <span class="va">CTmax</span> <span class="op">~</span> <span class="va">group</span>,</span>
 <span>    <span class="va">log_z</span> <span class="op">~</span> <span class="va">group</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dat_grp</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  data <span class="op">=</span> <span class="va">dat_grp</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/tidy_parameters.html">tidy_parameters</a></span><span class="op">(</span><span class="va">fit_grp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 8</span></span></span>
@@ -371,8 +367,8 @@ internally:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> low        <span style="color: #BB0000;">NA</span>      0.019<span style="text-decoration: underline;">9</span>   0.004<span style="text-decoration: underline;">59</span>   0.012<span style="text-decoration: underline;">7</span>    0.031<span style="text-decoration: underline;">3</span> wald          logit   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> up         <span style="color: #BB0000;">NA</span>      0.979    0.007<span style="text-decoration: underline;">94</span>   0.964     0.995  wald          identity</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> k          <span style="color: #BB0000;">NA</span>      4.79     0.404     4.06      5.66   wald          log     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CTmax:cool cool   33.9      0.103    33.7      34.1    wald          identity</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> CTmax:warm warm   37.9      0.148    37.6      38.2    wald          identity</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CTmax:cool cool   28.9      0.288    28.3      29.5    wald          identity</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> CTmax:warm warm   29.0      0.390    28.2      29.8    wald          identity</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> z:cool     cool    2.82     0.180     2.49      3.20   wald          log     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> z:warm     warm    4.98     0.254     4.50      5.51   wald          log     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> phi        <span style="color: #BB0000;">NA</span>     27.5      8.26     15.3      49.8    wald          log</span></span>
@@ -381,8 +377,8 @@ internally:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 8</span></span></span>
 <span><span class="co">#&gt;   parameter  conf.low conf.high estimate level method  scale    conf.status</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax:cool    33.7      34.1     33.9   0.95 profile identity ok         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CTmax:warm    37.6      38.2     37.9   0.95 profile identity ok         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CTmax:cool    28.3      29.5     28.9   0.95 profile identity ok         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CTmax:warm    28.2      29.8     29.0   0.95 profile identity ok         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> z:cool         2.47      3.18     2.82  0.95 profile log      ok         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> z:warm         4.48      5.49     4.98  0.95 profile log      ok</span></span></code></pre></div>
 <p><strong>Shape predictors.</strong> The shape parameters are no longer
@@ -405,14 +401,14 @@ drawn from a population — here <code>CTmax</code> varies by
 <span>    <span class="va">survived</span> <span class="op">|</span> <span class="fu">trials</span><span class="op">(</span><span class="va">total</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/time.html" class="external-link">time</a></span><span class="op">(</span><span class="va">duration</span><span class="op">)</span> <span class="op">+</span> <span class="fu">temp</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>,</span>
 <span>    <span class="va">CTmax</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">colony</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">dat_re</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">1</span></span>
+<span>  data <span class="op">=</span> <span class="va">dat_re</span>, family <span class="op">=</span> <span class="st">"beta_binomial"</span>, tref <span class="op">=</span> <span class="fl">60</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">fit_re</span></span>
 <span><span class="co">#&gt; &lt;freqTLS beta_binomial 4PL fit&gt;</span></span>
 <span><span class="co">#&gt; Call: fit_tls(x = tls_bf(survived | trials(total) ~ time(duration) +</span></span>
-<span><span class="co">#&gt; temp(temp), CTmax ~ (1 | colony)), family = "beta_binomial", tref = 1, data =</span></span>
+<span><span class="co">#&gt; temp(temp), CTmax ~ (1 | colony)), family = "beta_binomial", tref = 60, data =</span></span>
 <span><span class="co">#&gt; dat_re)</span></span>
-<span><span class="co">#&gt; Reference time (tref): 1 | CTmax defined at this time</span></span>
+<span><span class="co">#&gt; Reference time (tref): 60 | CTmax defined at this time</span></span>
 <span><span class="co">#&gt; Data: 700 observations, ungrouped; 7 temperatures in [30, 42], 5 durations in</span></span>
 <span><span class="co">#&gt; [0.5, 8]</span></span>
 <span><span class="co">#&gt; 5798 survivors of 14000 trials</span></span>
@@ -422,12 +418,13 @@ drawn from a population — here <code>CTmax</code> varies by
 <span><span class="co">#&gt;          low        0.02283  0.002510</span></span>
 <span><span class="co">#&gt;           up        0.98090  0.003458</span></span>
 <span><span class="co">#&gt;            k        5.29100  0.215600</span></span>
-<span><span class="co">#&gt;        CTmax   all 35.92000  0.315400</span></span>
+<span><span class="co">#&gt;        CTmax   all 28.76000  0.337500</span></span>
 <span><span class="co">#&gt;            z   all  4.03100  0.083040</span></span>
 <span><span class="co">#&gt;          phi       49.98000 11.580000</span></span>
 <span><span class="co">#&gt;  sigma_CTmax        0.98690  0.223500</span></span>
-<span><span class="co">#&gt; Optimiser: nlminb | code 0 | pdHess TRUE | converged (pdHess)</span></span>
-<span><span class="co">#&gt; Message: relative convergence (4)</span></span>
+<span><span class="co">#&gt; Optimiser: nloptr_TNEWTON | code 0 | pdHess TRUE | converged (pdHess)</span></span>
+<span><span class="co">#&gt; Message: Refined stationary point accepted by the freqTLS objective/gradient</span></span>
+<span><span class="co">#&gt; contract (NLopt status 4); max|gradient| = 0.0002115</span></span>
 <span><span class="co">#&gt; logLik -967.4 | df 7 | AIC 1949</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/ranef.html">ranef</a></span><span class="op">(</span><span class="va">fit_re</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
