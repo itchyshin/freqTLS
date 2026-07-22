@@ -75,13 +75,10 @@ attr(dat, "truth")[c("CTmax", "z", "phi")]
 temperature, duration, and survival-count columns and records the data contract;
 then `fit_4pl()` fits the 4PL by maximum likelihood and returns a `freq_tls`
 workflow object. `t_ref` is the reference time at which `CTmax` is defined, in
-the same unit as `duration`; it does not convert the observed durations. When
-omitted, `fit_4pl()` and `fit_tls()` resolve it to one physical hour from a
-recognised `duration_unit` (for example, 60 minutes or 1 hour). Bare data without
-metadata retain the historical one-native-unit fallback with a warning, so use an
-explicit reference if their unit is not recorded. A supplied numeric reference is
-never converted: for minute data, `t_ref = 1` deliberately means CTmax at one
-minute, whereas the omitted default is one hour (`t_ref = 60`).
+minutes. `standardize_data()` converts recognised input duration units to
+minutes, so the omitted default is one hour (`t_ref = 60`). A supplied numeric
+reference is never converted: `t_ref = 1` deliberately means CTmax at one
+minute. Bare formula/column data must already use minutes.
 
 ```{r standardize}
 std <- standardize_data(
@@ -113,7 +110,7 @@ fit_f <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
   data   = dat,
   family = "beta_binomial",
-  tref   = 1
+  tref   = 60
 )
 all.equal(coef(fit_f), coef(fit))
 ```
@@ -181,7 +178,7 @@ maximum-likelihood estimate. Do not use overlap as a hypothesis test; inspect th
 reported contrast or confidence interval for that question. A hollow point with
 *no* lens flags a profile that did not close (a weakly identified parameter).
 
-```{r confidence-eye, fig.alt = "Confidence Eye plot: a pale lens spanning the profile-likelihood interval with a hollow point estimate, for CTmax and z."}
+```{r confidence-eye, fig.alt = "Confidence Eye plot: independently scaled pale outlined lenses spanning profile-likelihood intervals, with dark centre marks and hollow point estimates, for CTmax and z."}
 plot_confidence_eye(fit, parm = c("CTmax", "z"), method = "profile")
 ```
 
@@ -213,7 +210,7 @@ fit_grp <- fit_tls(
     CTmax ~ group,
     log_z ~ group
   ),
-  data = dat_grp, family = "beta_binomial", tref = 1
+  data = dat_grp, family = "beta_binomial", tref = 60
 )
 tidy_parameters(fit_grp)
 confint(fit_grp, c("CTmax:cool", "CTmax:warm", "z:cool", "z:warm"),
@@ -239,7 +236,7 @@ fit_re <- fit_tls(
     survived | trials(total) ~ time(duration) + temp(temp),
     CTmax ~ (1 | colony)
   ),
-  data = dat_re, family = "beta_binomial", tref = 1
+  data = dat_re, family = "beta_binomial", tref = 60
 )
 fit_re
 head(ranef(fit_re))

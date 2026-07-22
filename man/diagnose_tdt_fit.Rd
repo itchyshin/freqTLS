@@ -24,7 +24,7 @@ dat <- standardize_data(
   raw, temp = "temp", duration = "duration",
   n_total = "total", n_surv = "survived"
 )
-fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 diagnose_tdt_fit(fit)
 }
 \seealso{

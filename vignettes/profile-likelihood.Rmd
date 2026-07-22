@@ -52,7 +52,7 @@ and converges to $\chi^2_1$ as $\nu \to \infty$ (see `vignette("frequentist-and-
 set.seed(1)
 dat <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4, phi = 50, seed = 1)
 fit <- fit_tls(dat, y = survived, n = total, time = duration, temp = temp,
-               family = "beta_binomial", tref = 1)
+               family = "beta_binomial", tref = 60)
 
 pc <- profile(fit, "CTmax")
 c(estimate = pc$estimate, conf.low = pc$conf.low, conf.high = pc$conf.high,
@@ -153,7 +153,7 @@ sparse <- simulate_tls(
 )
 sparse_fit <- suppressWarnings(
   fit_tls(sparse, y = survived, n = total, time = duration, temp = temp,
-          family = "binomial", tref = 1)
+          family = "binomial", tref = 60)
 )
 ```
 

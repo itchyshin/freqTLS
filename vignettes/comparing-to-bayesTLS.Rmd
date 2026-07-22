@@ -440,7 +440,8 @@ Confidence Eyes, open-profile status, likelihood contrasts, bootstrap failure
 provenance, and explicit convergence/Hessian/gradient diagnostics are freqTLS
 distinctions. Simulations, profile theory, survival surfaces, limited random
 intercepts, and deterministic heat-injury scenarios remain separate extension
-pages with synthetic examples.
+pages; the heat-injury page uses a real zebrafish assay fit with a hypothetical
+temperature scenario.
 
 Censored-time, hurdle-productivity, posterior inference, and fitted repair
 dynamics remain bayesTLS-only.

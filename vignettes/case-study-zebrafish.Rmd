@@ -83,7 +83,7 @@ The reported quantities are `CTmax` and `z`. `Tcrit` is not reported: the
 hyperoxia design lacks a benign-temperature control, and the supplement marks
 this case `lethal = FALSE` for extraction.
 
-```{r eye, fig.alt="Wald Confidence Eyes for zebrafish CTmax and z under normoxia and hyperoxia."}
+```{r eye, fig.alt="Independently scaled Wald Confidence Eyes for zebrafish CTmax and z under normoxia and hyperoxia, shown as outlined lenses with hollow estimates."}
 plot_confidence_eye(zf_fit, parm = c("CTmax", "z"), method = "wald")
 ```
 

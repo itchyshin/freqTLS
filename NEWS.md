@@ -26,13 +26,22 @@
 * `standardize_data()` now warns with the affected count and epsilon whenever
   a continuous proportion is moved off 0 or 1 for the Beta likelihood. The
   Snow-gum example makes its 90 adjusted values explicit.
-* Omitted `tref` / `t_ref` now resolves to one physical hour for standardized
-  data with recognised duration-unit metadata (for example, 60 minutes or 1
-  hour). Bare data retain the historical one-native-unit fallback with a
-  warning, so an ambiguous CTmax reference is never silent.
+* `standardize_data()` now converts recognised duration inputs to minutes, and
+  omitted `tref` / `t_ref` therefore resolves to 60 minutes (one physical hour).
+  Bare formula/column data must already use minutes, so an ambiguous CTmax
+  reference is never silent.
 * `get_ctmax()`, `get_z()`, and `get_shape()` now pass `method = "wald"` or
   `"profile"` through to `tidy_parameters()` and retain per-coordinate interval
   routing in `interval_type`.
+* Refined the Confidence Eye into a minimal default: independently scaled
+  parameter panels, no default rug/legend/title, outlined interval lenses, and
+  an explicit opt-in diagnostic rug for `CTmax`. Open profiles remain visibly
+  hollow-only. The heat-injury article now uses the licensed oxygen-gradient
+  zebrafish assay fit with a clearly hypothetical staged exposure scenario;
+  deterministic prediction remains distinct from fitted injury/repair dynamics.
+* Corrected public unit and threshold examples; validated `fit_4pl(p)`; improved
+  column-interface errors to name an unresolved data column; and added regression
+  coverage for the R-SHRIMP direct death reconstruction rule.
 
 # freqTLS 0.1.0 (unreleased historical candidate)
 

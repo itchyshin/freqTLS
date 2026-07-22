@@ -10,7 +10,9 @@ plot_confidence_eye(
   method = c("profile", "wald", "bootstrap"),
   level = 0.95,
   style = c("eye", "line"),
-  raw_data = TRUE,
+  raw_data = FALSE,
+  annotate = FALSE,
+  legend = FALSE,
   fallback = TRUE,
   nboot = 1000L,
   boot_seed = NULL,
@@ -34,7 +36,13 @@ forwarded to \code{\link[=confint.profile_tls]{confint.profile_tls()}}.}
 \code{"line"} (a confidence-interval bar with caps + hollow point, no lens).}
 
 \item{raw_data}{Logical; overlay observed assay temperatures as a rug on
-temperature-scale rows (default \code{TRUE}).}
+temperature-scale rows (default \code{FALSE}).}
+
+\item{annotate}{Logical; add the plot title (default \code{FALSE}). Status
+subtitles for open profiles and random-effects Wald routing are always
+retained.}
+
+\item{legend}{Logical; show the interval-status legend (default \code{FALSE}).}
 
 \item{fallback, nboot, boot_seed, cores}{Forwarded to \code{\link[=confint.profile_tls]{confint.profile_tls()}}:
 control the parametric-bootstrap fallback for non-closing profiles (so the
@@ -70,9 +78,10 @@ noted in the caption.
 
 \subsection{Raw data}{
 
-With \code{raw_data = TRUE} (default), the observed assay temperatures are drawn as
-a rug beneath any temperature-scale row (\code{CTmax}), showing the data support
-and flagging extrapolation when \code{CTmax} sits outside the assayed range.
+With \code{raw_data = TRUE}, the observed assay temperatures are drawn as a rug
+beneath a temperature-scale row (\code{CTmax}). This optional diagnostic shows the
+data support and flags extrapolation when \code{CTmax} sits outside the assayed
+range; it is off by default because assay temperatures do not support \code{z}.
 
 Parameters on different scales (temperature for \code{CTmax}, a positive
 multiplier for \code{z}) are stacked in separate panels with a free x-axis.
@@ -81,7 +90,7 @@ multiplier for \code{z}) are stacked in separate panels with a free x-axis.
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 plot_confidence_eye(fit, parm = c("CTmax", "z"))
 
 }

@@ -59,7 +59,7 @@
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' nd <- expand.grid(temp = c(34, 36, 38), duration = c(1, 2, 4))
 #' predict(fit, nd, type = "survival")
 #'
@@ -68,7 +68,7 @@
 #' fit_x <- fit_tls(
 #'   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
 #'          CTmax ~ x, log_z ~ x),
-#'   data = d, family = "binomial", tref = 1
+#'   data = d, family = "binomial", tref = 60
 #' )
 #' predict(fit_x, data.frame(temp = 36, duration = 2, x = c(-1, 1)))
 #'
@@ -79,7 +79,7 @@
 #' fit_re <- fit_tls(
 #'   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
 #'          CTmax ~ 1 + (1 | colony)),
-#'   data = dre, family = "binomial", tref = 1
+#'   data = dre, family = "binomial", tref = 60
 #' )
 #' colony <- as.character(ranef(fit_re)$group[1])
 #' nd_re <- data.frame(temp = 36, duration = 2, colony = colony)
@@ -450,7 +450,7 @@ tls_predict_pars <- function(fit, newdata, re.form = "population") {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' head(predict_survival_surface(fit, temps = c(34, 36, 38), times = c(1, 2, 4)))
 #'
 #' @export
@@ -546,7 +546,7 @@ predict_survival_surface <- function(object, temps = NULL, times = NULL,
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' # Absolute 50% survival duration at 36 C:
 #' derive_lt(fit, p = 0.5, temp = 36)
 #'
@@ -625,7 +625,7 @@ derive_lt <- function(object, p = 0.5, temp, group = NULL) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' derive_ctmax(fit)                                  # ~ CTmax (relative, at tref)
 #' derive_ctmax(fit, surv = 0.5, duration = c(1, 4))  # absolute 50% survival
 #' @export
@@ -706,7 +706,7 @@ derive_ctmax <- function(object, surv = NULL, duration = NULL, group = NULL) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' derive_tcrit(fit, rate = c(0.1, 1)) # lower thermal thresholds
 #' @export
 derive_tcrit <- function(object, rate = 1, group = NULL) {

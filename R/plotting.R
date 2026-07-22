@@ -89,9 +89,10 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #' noted in the caption.
 #'
 #' ## Raw data
-#' With `raw_data = TRUE` (default), the observed assay temperatures are drawn as
-#' a rug beneath any temperature-scale row (`CTmax`), showing the data support
-#' and flagging extrapolation when `CTmax` sits outside the assayed range.
+#' With `raw_data = TRUE`, the observed assay temperatures are drawn as a rug
+#' beneath a temperature-scale row (`CTmax`). This optional diagnostic shows the
+#' data support and flags extrapolation when `CTmax` sits outside the assayed
+#' range; it is off by default because assay temperatures do not support `z`.
 #'
 #' Parameters on different scales (temperature for `CTmax`, a positive
 #' multiplier for `z`) are stacked in separate panels with a free x-axis.
@@ -106,7 +107,11 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #' @param style One of `"eye"` (default; pale horizontal lens + hollow point) or
 #'   `"line"` (a confidence-interval bar with caps + hollow point, no lens).
 #' @param raw_data Logical; overlay observed assay temperatures as a rug on
-#'   temperature-scale rows (default `TRUE`).
+#'   temperature-scale rows (default `FALSE`).
+#' @param annotate Logical; add the plot title (default `FALSE`). Status
+#'   subtitles for open profiles and random-effects Wald routing are always
+#'   retained.
+#' @param legend Logical; show the interval-status legend (default `FALSE`).
 #' @param fallback,nboot,boot_seed,cores Forwarded to [confint.profile_tls()]:
 #'   control the parametric-bootstrap fallback for non-closing profiles (so the
 #'   eye draws an honest bootstrap lens instead of only a hollow point), make it
@@ -119,7 +124,7 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_confidence_eye(fit, parm = c("CTmax", "z"))
 #'
 #' @export
@@ -127,7 +132,8 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
                                 method = c("profile", "wald", "bootstrap"),
                                 level = 0.95,
                                 style = c("eye", "line"),
-                                raw_data = TRUE,
+                                raw_data = FALSE, annotate = FALSE,
+                                legend = FALSE,
                                 fallback = TRUE, nboot = 1000L,
                                 boot_seed = NULL, cores = 1L, ...) {
   dots <- list(...)
@@ -143,6 +149,15 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   }
   method <- match.arg(method)
   style <- match.arg(style)
+  if (!is.logical(raw_data) || length(raw_data) != 1L || is.na(raw_data)) {
+    cli::cli_abort("{.arg raw_data} must be TRUE or FALSE.")
+  }
+  if (!is.logical(annotate) || length(annotate) != 1L || is.na(annotate)) {
+    cli::cli_abort("{.arg annotate} must be TRUE or FALSE.")
+  }
+  if (!is.logical(legend) || length(legend) != 1L || is.na(legend)) {
+    cli::cli_abort("{.arg legend} must be TRUE or FALSE.")
+  }
   # The Confidence Eye stays on Wald for random-effects fits: a profile under the
   # RE re-runs the Laplace at every grid point for every parameter, which defeats
   # the eye's role as a quick visual. The profile interval is available directly
@@ -244,8 +259,9 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
       g <- g + ggplot2::geom_ribbon(
         data = rib_df,
         mapping = ggplot2::aes(x = .data$x, ymin = .data$ymin, ymax = .data$ymax,
-                               group = .data$.gid, fill = .data$.reliability),
-        colour = NA, alpha = 0.30, inherit.aes = FALSE
+                               group = .data$.gid, fill = .data$.reliability,
+                               colour = .data$.reliability),
+        alpha = 0.30, linewidth = 0.45, inherit.aes = FALSE
       )
     }
   }
@@ -266,6 +282,7 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   # Hollow point estimate on top (white interior, coloured stroke), every row.
   # Make an all-open fallback immediately visible without inventing a lens.
   point_size <- if (none_drawable) 4.5 else 3
+  centre_df <- ci[drawable, , drop = FALSE]
   g <- g +
     ggplot2::geom_point(
       ggplot2::aes(colour = .data$.reliability),
@@ -273,7 +290,8 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
     ) +
     ggplot2::scale_fill_manual(values = fill_pal, name = NULL, drop = TRUE,
                                guide = "none") +
-    ggplot2::scale_colour_manual(values = fill_pal, name = NULL, drop = TRUE) +
+    ggplot2::scale_colour_manual(values = fill_pal, name = NULL, drop = TRUE,
+                                 guide = if (isTRUE(legend)) "legend" else "none") +
     ggplot2::scale_y_continuous(breaks = row_breaks, labels = row_labels,
                                 expand = ggplot2::expansion(add = 0.6)) +
     ggplot2::facet_wrap(~ .data$.facet, scales = "free_x", ncol = 1L) +
@@ -282,6 +300,16 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
       panel.grid.major.y = ggplot2::element_blank(),
       panel.grid.minor = ggplot2::element_blank()
     )
+  # The dark centre mark comes *after* the white hollow estimate, so it remains
+  # visible inside the ring. Open profiles never receive it.
+  if (nrow(centre_df) > 0L) {
+    g <- g + ggplot2::geom_point(
+      data = centre_df,
+      mapping = ggplot2::aes(x = .data$estimate, y = .data$.row,
+                             colour = .data$.reliability),
+      shape = 16, size = 1.5, inherit.aes = FALSE
+    )
+  }
 
   methods_used <- unique(ci$method)
   src_lab <- if (setequal(methods_used, "wald")) {
@@ -308,11 +336,11 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
     )
   }, character(1))
   caption <- sprintf(
-    "%d%% confidence intervals (%s). Scale: %s. %s; hollow point = estimate%s.",
+    "%d%% confidence intervals (%s); %s; %s; hollow point = estimate%s.",
     round(100 * level), src_lab, paste(scale_lab, collapse = "; "),
     shape_lab, rug_lab
   )
-  caption <- paste(strwrap(caption, width = 88L), collapse = "\n")
+  caption <- paste(strwrap(caption, width = 74L), collapse = "\n")
   subtitle <- if (none_drawable) {
     "Profile open: no finite interval; hollow points only."
   } else if (any_open) {
@@ -322,16 +350,19 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   } else {
     NULL
   }
+  title <- if (isTRUE(annotate)) "Confidence Eyes for headline parameters" else NULL
+  if (!isTRUE(annotate) && !any_open && !none_drawable && !re_wald) subtitle <- NULL
 
   g + ggplot2::labs(
     x = NULL, y = NULL,
-    title = "Confidence Eyes for headline parameters",
+    title = title,
     subtitle = subtitle,
     caption = caption
   ) +
     ggplot2::theme(
       plot.caption = ggplot2::element_text(hjust = 0),
-      plot.margin = ggplot2::margin(5.5, 12, 16, 12)
+      legend.position = if (isTRUE(legend)) "right" else "none",
+      plot.margin = ggplot2::margin(5.5, 18, 20, 12)
     )
 }
 
@@ -354,7 +385,7 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_survival_curves(fit)
 #'
 #' @export
@@ -479,7 +510,7 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_tdt_curve(fit)
 #'
 #' @export
@@ -591,7 +622,7 @@ plot_tdt_curve <- function(fit, p = NULL, temps = NULL, ...) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_survival_surface(fit)
 #'
 #' @export

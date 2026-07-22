@@ -42,7 +42,7 @@ not add a group BLUP.
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 derive_ctmax(fit)                                  # ~ CTmax (relative, at tref)
 derive_ctmax(fit, surv = 0.5, duration = c(1, 4))  # absolute 50\% survival
 }

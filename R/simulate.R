@@ -17,7 +17,7 @@
 #' parameterisation in [beta_binomial_tls()].
 #'
 #' @param temps Numeric vector of assay temperatures (degrees C).
-#' @param times Numeric vector of exposure durations (native unit, e.g. hours).
+#' @param times Numeric vector of exposure durations in minutes.
 #' @param reps Number of replicate observations per temperature-by-duration
 #'   cell (per group).
 #' @param n Number of individuals per observation (binomial size).
@@ -65,7 +65,9 @@
 #' @param n_re_groups Number of random-effect groups (required with any `re_sd*`).
 #' @param re_group_name Name of the grouping column added to the output for the
 #'   random-effect mode (default `"colony"`).
-#' @param tref Reference time at which `CTmax` is defined (default `1`).
+#' @param tref Reference time at which `CTmax` is defined, in minutes (default
+#'   `1`, one minute). Supply `tref = 60` to simulate the package's one-hour
+#'   fitting default.
 #' @param seed Optional integer seed for reproducibility.
 #'
 #' @return A base `data.frame` with columns `temp`, `duration`, the true

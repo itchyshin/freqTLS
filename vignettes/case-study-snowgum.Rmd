@@ -72,7 +72,7 @@ names(leaf_table)[names(leaf_table) == "median"] <- "estimate"
 leaf_table
 ```
 
-```{r eye, fig.alt="Wald Confidence Eyes for Snow-gum CTmax and z after Dark and Light recovery."}
+```{r eye, fig.alt="Independently scaled Wald Confidence Eyes for Snow-gum CTmax and z after Dark and Light recovery, shown as outlined lenses with hollow estimates."}
 plot_confidence_eye(leaf_fit, parm = c("CTmax", "z"), method = "wald")
 ```
 

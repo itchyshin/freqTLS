@@ -41,7 +41,7 @@ not add a group BLUP.
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 # Absolute 50\% survival duration at 36 C:
 derive_lt(fit, p = 0.5, temp = 36)
 

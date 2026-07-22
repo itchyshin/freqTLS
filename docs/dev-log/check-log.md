@@ -2836,3 +2836,64 @@ Interpretation:
   one-native-unit result but now warn; unknown labelled units fail until the
   user supplies a reference. The code/documentation changes are source work
   after the submitted tarball and do not amend that artifact.
+
+## 2026-07-21 -- Documentation correctness pass (#47, #53 and cross-surface audit)
+
+Goal:
+
+- Make every known reader-facing correction concrete before requesting the
+  remaining human validation, including the Confidence Eye and heat-injury
+  examples formerly deferred from the reference-time repair.
+
+Checks and evidence:
+
+- `Rscript -e 'devtools::test()'` -> 1,116 passing tests, 0 failures, 0
+  warnings, 0 skips (135.9 seconds).
+- `Rscript -e 'devtools::document(); devtools::check_man()'` -> regenerated
+  `plot_confidence_eye.Rd` and `standardize_data.Rd` without documentation
+  problems.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`; final
+  `tools/build-site.R` evidence is recorded in the after-task report.
+- `rg -n -i 'one minute|LT50 \(relative midpoint\)|synthetic examples|heat-injury prediction.*\*\*fitted\*\*|tls_eye_polygon_df|round\(\(1 - mortality\)' README.Rmd README.md R man vignettes docs inst pkgdown-site --glob '!docs/dev-log/check-log.md' --glob '!docs/dev-log/recovery-checkpoints/**'` -> only intentional current explanations or historical records.
+- `rg -n -i 'posterior|credible' R man README.Rmd README.md vignettes docs pkgdown-site --glob '!pkgdown-site/search.json'` -> `bayesTLS` contrasts only; no freqTLS output uses Bayesian interval language.
+- A direct rendered 7 by 3.45 inch Confidence-Eye PNG was inspected after the
+  caption-wrap/margin and centre-mark repairs: the full confidence caption is
+  visible, each parameter has an independent x scale, and the dark centre mark
+  remains visible inside the hollow estimate ring.
+
+Interpretation:
+
+- The default confidence figure now communicates interval scale and source
+  without a legend or misleading `z` rug. The real zebrafish teaching example
+  uses a CC BY 4.0 installed dataset and labels its temperature trace as a
+  hypothetical extrapolation from static assays. `fit_tls()`/`fit_4pl()` and
+  all repaired examples preserve literal time units and distinguish relative
+  midpoint from absolute survival targets.
+
+## 2026-07-22 -- PR #56 reviewer correction: minute-valued reference time
+
+Goal:
+
+- Address Daniel Noble's review: make the public `tref` / `t_ref` contract
+  unambiguously minute-valued, with one hour always written as `60`, without
+  deleting the intentionally installed internal R-SHRIMP regression guard.
+
+Checks and evidence:
+
+- `Rscript -e 'rmarkdown::render("README.Rmd", output_file = "README.md", quiet = TRUE); devtools::test()'`
+  -> 1,120 passing tests, 0 failures, warnings, or skips (132.9 seconds). The
+  README renderer reported only unavailable external badge/MathJax resources;
+  it regenerated `README.md` successfully.
+- `Rscript -e 'devtools::load_all(); testthat::test_file("tests/testthat/test-reference-time.R", reporter = "summary"); devtools::check_man()'`
+  -> the minute-normalisation contract and generated documentation passed.
+- `rg -n --glob '!pkgdown-site/**' --glob '!man/**' 't_?ref\\s*=\\s*1[^0-9/]|one-native|1 in hours|1/24|same unit as.*duration' README.Rmd R vignettes docs/design NEWS.md`
+  -> only deliberate statements that explicit `tref = 1` means one minute and
+  the simulation helper's explicit one-minute default remain.
+
+Interpretation:
+
+- `standardize_data()` now converts recognised seconds/minutes/hours/days input
+  to minutes and records both the input label and the canonical minute unit.
+  `fit_4pl()` and `fit_tls()` therefore default to `60` minutes; direct bare
+  data must already express duration in minutes. `simulate_tls()` retains its
+  separately documented explicit one-minute default for test-fixture stability.

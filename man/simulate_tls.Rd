@@ -30,7 +30,7 @@ simulate_tls(
 \arguments{
 \item{temps}{Numeric vector of assay temperatures (degrees C).}
 
-\item{times}{Numeric vector of exposure durations (native unit, e.g. hours).}
+\item{times}{Numeric vector of exposure durations in minutes.}
 
 \item{reps}{Number of replicate observations per temperature-by-duration
 cell (per group).}
@@ -93,7 +93,9 @@ deviations alongside \code{re_sd} / \code{re_sd_z}; realised deviations are in
 \item{re_group_name}{Name of the grouping column added to the output for the
 random-effect mode (default \code{"colony"}).}
 
-\item{tref}{Reference time at which \code{CTmax} is defined (default \code{1}).}
+\item{tref}{Reference time at which \code{CTmax} is defined, in minutes (default
+\code{1}, one minute). Supply \code{tref = 60} to simulate the package's one-hour
+fitting default.}
 
 \item{seed}{Optional integer seed for reproducibility.}
 }

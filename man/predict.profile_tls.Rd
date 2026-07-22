@@ -89,7 +89,7 @@ safely.
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 nd <- expand.grid(temp = c(34, 36, 38), duration = c(1, 2, 4))
 predict(fit, nd, type = "survival")
 
@@ -98,7 +98,7 @@ d$x <- rep(c(-1, 1), length.out = nrow(d))
 fit_x <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ x, log_z ~ x),
-  data = d, family = "binomial", tref = 1
+  data = d, family = "binomial", tref = 60
 )
 predict(fit_x, data.frame(temp = 36, duration = 2, x = c(-1, 1)))
 
@@ -109,7 +109,7 @@ dre <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_re <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = dre, family = "binomial", tref = 1
+  data = dre, family = "binomial", tref = 60
 )
 colony <- as.character(ranef(fit_re)$group[1])
 nd_re <- data.frame(temp = 36, duration = 2, colony = colony)

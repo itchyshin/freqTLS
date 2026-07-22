@@ -16,7 +16,7 @@ standardize_data(
   proportion = NULL,
   proportion_eps = 0.001,
   random_effects = NULL,
-  duration_unit = "hours",
+  duration_unit = "minutes",
   temp_mean = NULL
 )
 }
@@ -42,7 +42,8 @@ via \code{n_surv = n_total - n_dead}.}
 Converted to integer counts via \code{n_total}.}
 
 \item{mortality}{Column name for mortality proportions in \verb{[0, 1]}.
-Converted to \code{n_surv = round((1 - mortality) * n_total)}.}
+Converted by reconstructing \code{n_dead = round(mortality * n_total)}
+then setting \code{n_surv = n_total - n_dead}.}
 
 \item{proportion}{Column name for a continuous proportion response in
 \verb{[0, 1]} with no denominator (modelled with a Beta
@@ -58,11 +59,11 @@ random effects, e.g. \code{c("Date", "Tank")}. These
 columns are converted to factors and stored in
 metadata for the fitter to read.}
 
-\item{duration_unit}{Label for the unit of \code{duration}, stored in metadata.
-A recognised value (\code{"seconds"}, \code{"minutes"},
-\code{"hours"}, or \code{"days"}, with common abbreviations)
-lets \code{\link[=fit_tls]{fit_tls()}} and \code{\link[=fit_4pl]{fit_4pl()}} resolve an omitted
-reference time to one physical hour. Default \code{"hours"}.}
+\item{duration_unit}{Unit of the input \code{duration} column. A recognised value
+(\code{"seconds"}, \code{"minutes"}, \code{"hours"}, or \code{"days"},
+with common abbreviations) is required. Durations are
+converted to minutes, so \code{tref} / \code{t_ref} is always in
+minutes and the one-hour default is \code{60}. Default \code{"minutes"}.}
 
 \item{temp_mean}{Value to subtract from \code{temp} to form \code{temp_c}.
 \code{NULL} (default) uses \code{mean(temp)}. Supply a fixed
@@ -70,7 +71,8 @@ value to align multiple datasets to a common centre.}
 }
 \value{
 A tibble with the standardised columns plus a \code{"tdt_meta"} attribute
-storing \code{temp_mean}, \code{duration_unit}, \code{random_effects},
+storing \code{temp_mean}, \code{duration_unit} (always \code{"minutes"}),
+\code{input_duration_unit}, \code{random_effects},
 \code{response_type} (\code{"count"} or \code{"proportion"}), \code{response_var}
 (the response column name for a proportion fit, else \code{NULL}), and
 \code{proportion_eps} (the clamp used for a proportion fit, else \code{NULL}).
@@ -114,7 +116,8 @@ standardize_data(raw,
                  temp     = "temperature_C",
                  duration = "exposure_h",
                  n_total  = "n",
-                 n_surv   = "alive")
+                 n_surv   = "alive",
+                 duration_unit = "hours")
 
 # Continuous proportion (Beta) data
 raw_p <- data.frame(
@@ -125,5 +128,6 @@ raw_p <- data.frame(
 standardize_data(raw_p,
                  temp       = "temperature_C",
                  duration   = "exposure_h",
-                 proportion = "fvfm_ratio")
+                 proportion = "fvfm_ratio",
+                 duration_unit = "hours")
 }

@@ -80,7 +80,7 @@
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' trace <- data.frame(time = seq(0, 2, by = 0.05),
 #'                     temp = 34 + 6 * sin(seq(0, 2, by = 0.05)))
 #' head(predict_heat_injury(fit, trace))
@@ -278,7 +278,7 @@ tls_repair_rate_schoolfield <- function(temp_c, pars) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' trace <- data.frame(time = seq(0, 2, by = 0.1),
 #'                     temp = 34 + 6 * sin(seq(0, 2, by = 0.1)))
 #' heat_injury_envelope(fit, trace, nboot = 50, seed = 1)
@@ -387,7 +387,7 @@ heat_injury_envelope <- function(object, trace, group = NULL, target_surv = NULL
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' trace <- data.frame(time = seq(0, 2, by = 0.1),
 #'                     temp = 34 + 6 * sin(seq(0, 2, by = 0.1)))
 #' plot_heat_injury(fit, trace, nboot = 50, seed = 1)

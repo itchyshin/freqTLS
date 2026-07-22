@@ -54,11 +54,11 @@ intervals can also be shown. These are likelihood-based *confidence* intervals,
 not posterior distributions, so the visual deliberately avoids posterior-density
 iconography.
 
-```{r readme-eye, echo = FALSE, fig.height = 2.4, fig.width = 7, fig.alt = "Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density."}
+```{r readme-eye, echo = FALSE, fig.height = 2.4, fig.width = 7, fig.alt = "Hero figure: independently scaled horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale outlined lens spanning its 95% profile-likelihood confidence interval, with a dark centre mark and hollow maximum-likelihood estimate. The lens shape reads as an interval, not a probability density."}
 library(freqTLS)
 dat0 <- simulate_tls(family = "beta_binomial", CTmax = 36, z = 4, phi = 50, seed = 1)
 fit0 <- fit_tls(dat0, y = survived, n = total, time = duration, temp = temp,
-                family = "beta_binomial", tref = 1)
+                family = "beta_binomial", tref = 60)
 plot_confidence_eye(fit0, parm = c("CTmax", "z"), method = "profile")
 ```
 
@@ -161,8 +161,8 @@ std <- standardize_data(dat, temp = "temp", duration = "duration",
                         duration_unit = "hours")
 
 # 2. Fit the 4PL by maximum likelihood, directly in CTmax and z.
-# With duration_unit = "hours", the omitted t_ref resolves to one hour.
-# Supply t_ref = 1 explicitly if the intended estimand is one minute.
+# `standardize_data()` converts durations to minutes. The omitted t_ref is 60
+# minutes (one hour); `t_ref = 1` means one minute.
 fit <- fit_4pl(std)
 
 # 3. Headline thermal-death-time quantities with profile-likelihood intervals
@@ -182,7 +182,7 @@ grouped_std <- standardize_data(
   n_total = "total", n_surv = "survived"
 )
 grouped_fit <- fit_4pl(
-  grouped_std, ctmax = ~ 0 + group, z = ~ 0 + group, t_ref = 1
+  grouped_std, ctmax = ~ 0 + group, z = ~ 0 + group, t_ref = 60
 )
 # Inspect the recovered group-specific CTmax and z estimates.
 tidy_parameters(grouped_fit)[
@@ -214,7 +214,7 @@ fit_f <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
   data   = dat,
   family = "beta_binomial",
-  tref   = 1
+  tref   = 60
 )
 all.equal(coef(fit_f), coef(fit))
 ```
@@ -241,7 +241,7 @@ dre <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_re <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = dre, family = "binomial", tref = 1
+  data = dre, family = "binomial", tref = 60
 )
 # Between-colony SD of CTmax (with a Wald interval):
 tp <- tidy_parameters(fit_re)
@@ -297,7 +297,7 @@ fit_pop <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ group, log_z ~ group,
          low ~ group, up ~ group, log_k ~ group),
-  data = dpop, family = "binomial", tref = 1
+  data = dpop, family = "binomial", tref = 60
 )
 # Per-group steepness k with profile-likelihood confidence intervals:
 confint(fit_pop, parm = c("k:tolerant", "k:sensitive"), method = "profile")
