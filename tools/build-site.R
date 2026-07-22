@@ -323,6 +323,32 @@ if (any(warning_count != 1L)) {
        paste(rendered_html[warning_count != 1L], collapse = ", "))
 }
 
+# The site includes central model equations in Rd and article sources. pkgdown's
+# default MathML leaves some of those equations as raw TeX in supported browser
+# combinations, so this site explicitly uses KaTeX. Check the rendered pages,
+# not just _pkgdown.yml, because a template regression or a partial build can
+# silently omit the required assets.
+math_pages <- file.path(dst, c(
+  "reference/derive_lt.html",
+  "reference/derive_ctmax.html",
+  "reference/derive_tcrit.html",
+  "articles/model-math.html"
+))
+missing_math_pages <- math_pages[!file.exists(math_pages)]
+if (length(missing_math_pages)) {
+  stop("Expected equation page(s) are missing: ",
+       paste(missing_math_pages, collapse = ", "))
+}
+has_katex <- vapply(math_pages, function(path) {
+  html <- paste(readLines(path, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  grepl("<!-- katex math -->", html, fixed = TRUE) &&
+    grepl("katex-auto.js", html, fixed = TRUE)
+}, logical(1))
+if (any(!has_katex)) {
+  stop("KaTeX assets are missing from equation page(s): ",
+       paste(math_pages[!has_katex], collapse = ", "))
+}
+
 # Fail if Pandoc has interpreted wildcard function names inside the inline SVG
 # as Markdown emphasis. An HTML <em> element is a foreign-content integration
 # point: it terminates the SVG context and makes the rest of the map flow as

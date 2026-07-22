@@ -2577,6 +2577,8 @@ Checks and evidence:
 - `Rscript tools/build-site.R` -> 103 HTML pages from an exact temporary
   installation; internal pages removed; post-build assertions passed.
 - `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `Rscript -e 'devtools::test()'` -> 1,120 passing tests, 0 failures,
+  warnings, or skips.
 - Rendered warning scan -> 103 pages, exactly one
   `freqtls-experimental-warning` element per page; all seven canonical article
   routes present.
@@ -2919,3 +2921,30 @@ Interpretation:
   `fit_4pl()` and `fit_tls()` therefore default to `60` minutes; direct bare
   data must already express duration in minutes. `simulate_tls()` retains its
   separately documented explicit one-minute default for test-fixture stability.
+
+## 2026-07-22 -- Pieter pkgdown and home-page cleanup (#58, #59)
+
+Goal:
+
+- Repair site-wide equation rendering found during Pieter Arnold's human
+  validation and remove benchmark-only fixture names from the public home page
+  without removing their attribution from the distributed package.
+
+Checks and evidence:
+
+- `Rscript tools/build-site.R .` -> completed a clean full public-site build.
+  Its rendered-artifact guards confirmed that KaTeX assets occur on
+  `derive_lt`, `derive_ctmax`, `derive_tcrit`, and `model-math`; internal and
+  benchmark-only discovery pages were still removed.
+- `Rscript -e 'pkgdown::check_pkgdown()'` -> `No problems found`.
+- `rg -n -i 'katex math|katex-auto.js' pkgdown-site/reference/derive_lt.html pkgdown-site/reference/derive_ctmax.html pkgdown-site/reference/derive_tcrit.html pkgdown-site/articles/model-math.html` -> KaTeX stylesheet, renderer, and local helper occur on every checked equation page.
+- `rg -n 'shrimp_lethal|shrimp_sublethal|zebrafish_lethal' pkgdown-site/index.html` -> 0 matches.
+- `git diff --check` -> clean.
+
+Interpretation:
+
+- `_pkgdown.yml` now selects KaTeX explicitly rather than relying on pkgdown's
+  MathML default, and `tools/build-site.R` fails if its equation pages lose the
+  KaTeX assets in a future build. The home page directs readers to canonical
+  examples while `inst/CITATION` and `inst/COPYRIGHTS` retain the complete
+  legacy-fixture attribution trail.

@@ -8,6 +8,10 @@ destination: pkgdown-site
 template:
   bootstrap: 5
   bootswatch: flatly
+  # Core TLS equations appear in both reference pages and articles. KaTeX gives
+  # consistent rendering for the display equations that MathML leaves raw in
+  # several supported browsers.
+  math-rendering: katex
   includes:
     before_body: |
       <aside id="freqtls-experimental-warning" class="freqtls-experimental-warning" role="alert" aria-labelledby="freqtls-experimental-warning-title">

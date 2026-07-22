@@ -392,8 +392,7 @@ sources and component licences are recorded in `inst/CITATION`,
 CC BY-NC 4.0 in this development version; do not assume the package’s
 GPL licence removes that restriction.
 
-`shrimp_lethal`, `shrimp_sublethal`, and `zebrafish_lethal` are retained
-only as unpublished compatibility/benchmark fixtures. They are not
-current teaching examples and must not be used as substitutes for the
-canonical cases. Please cite `bayesTLS` and each original data source
-when using any bundled data.
+Legacy compatibility/benchmark fixtures remain fully attributed in
+`inst/CITATION` and `inst/COPYRIGHTS`, but are intentionally absent from
+public examples and pkgdown discovery. Please cite `bayesTLS` and each
+original data source when using any bundled data.
