@@ -3,7 +3,8 @@
 #' `fit_tls()` fits the descending four-parameter logistic (4PL) thermal
 #' death-time model to survival-count data, parameterised **directly in `CTmax`
 #' (the critical thermal maximum at the reference time `tref`) and `z` (thermal
-#' sensitivity, degrees Celsius per decade of duration) so that both headline
+#' sensitivity, degrees Celsius per order-of-magnitude change in tolerated
+#' duration) so that both headline
 #' quantities can be profiled. Survival is modelled as a function of
 #' `log10(duration)`; the midpoint moves with temperature through `CTmax` and `z`
 #' (see `vignette("model-math")`). The thermal-load-sensitivity modelling framework
@@ -54,7 +55,11 @@
 #'   (a continuous proportion in `(0, 1)`), or a `tls_family` object from
 #'   [beta_binomial_tls()] / [binomial_tls()] / [beta_tls()].
 #' @param tref Reference time at which `CTmax` is defined, in the same unit as
-#'   `time` (default `1`, i.e. CTmax at one time unit).
+#'   `time`. When `NULL` (the default), standardized data with a recognised
+#'   `duration_unit` use one physical hour (for example, `60` minutes or `1`
+#'   hour). For bare data without metadata, the historical fallback is `1`
+#'   native time unit with a warning; supply `tref` explicitly to avoid an
+#'   ambiguous reference.
 #' @param start Optional named list of starting values on the internal
 #'   (unconstrained) scale, overriding the defaults. Names must match the
 #'   parameters in `src/profile_tls.cpp` (`beta_low`, `beta_up`, `beta_logk`,
@@ -100,13 +105,10 @@
 #' @export
 fit_tls <- function(x, y, n, time, temp, group = NULL,
                     family = c("beta_binomial", "binomial", "beta"),
-                    tref = 1, start = NULL, control = list(),
+                    tref = NULL, start = NULL, control = list(),
                     trace = FALSE, quiet = FALSE, data = NULL) {
   call <- match.call()
 
-  if (!is.numeric(tref) || length(tref) != 1L || tref <= 0) {
-    cli::cli_abort("{.arg tref} must be a single positive number.")
-  }
   fam <- resolve_tls_family(family)
 
   # When `quiet`, suppress freqTLS's own diagnostic warnings/messages (run
@@ -165,6 +167,7 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
       ))
     }
     data <- x
+    tdt_meta <- attr(data, "tdt_meta")
     temp_center <- NULL
 
     # ---- tidy-eval the columns ----------------------------------------------
@@ -186,6 +189,8 @@ fit_tls <- function(x, y, n, time, temp, group = NULL,
 
     design <- build_tls_design(group_v, length(y_v))
   }
+
+  tref <- tls_resolve_tref(tref, tdt_meta)
 
   # `n` (trials) is optional for the beta family, whose response is already a
   # proportion: supply a dummy the beta likelihood ignores. The count families

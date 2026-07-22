@@ -5,7 +5,7 @@
 thermal-load-sensitivity (thermal death-time) model by maximum likelihood via
 Template Model Builder (TMB), parameterised **directly** in `CTmax` (the critical
 thermal maximum at a reference exposure time) and `z` (the thermal sensitivity,
-degrees Celsius per decade of exposure duration), so that both headline
+degrees Celsius per order-of-magnitude change in exposure duration), so that both headline
 quantities are direct, profile-able coordinates.
 
 ## Core idea
@@ -87,7 +87,7 @@ The package does not currently support (non-goals):
 | --- | --- | --- | --- |
 | `fit_tls()` | tidy-eval fit of the 4PL model by ML | `R/fit_tls.R` | `test-fit-binomial`, `test-fit-beta-binomial` |
 | `CTmax` | critical thermal maximum at `tref` | `src/profile_tls.cpp`, `R/extract.R` | `test-parameter-transforms` |
-| `z` | thermal sensitivity (deg C per decade) | `src/profile_tls.cpp`, `R/extract.R` | `test-parameter-transforms`, `test-profile` |
+| `z` | thermal sensitivity (deg C per 10-fold duration change) | `src/profile_tls.cpp`, `R/extract.R` | `test-parameter-transforms`, `test-profile` |
 | `confint(method = "profile")` | profile-likelihood confidence interval | `R/profile.R`, `R/confint.R` | `test-profile` (`ci_z == exp(ci_log_z)`) |
 | Confidence Eye | default uncertainty visual (not a posterior) | `R/plotting.R` | Florence figure-audit gate |
 

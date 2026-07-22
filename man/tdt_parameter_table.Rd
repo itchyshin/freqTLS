@@ -22,7 +22,8 @@ for over-dispersed families) as point estimates with confidence intervals, in
 bayesTLS's \verb{parameter / [group] / median / lower / upper} shape. \code{low} and
 \code{up} are the fitted survival asymptotes, \code{k} is curve steepness, \code{CTmax} is
 the critical thermal maximum at the reference time, \code{z} is thermal sensitivity
-in degrees per decade of duration, and \code{phi} is beta/beta-binomial precision
+in degrees per order-of-magnitude change in duration, and \code{phi} is
+beta/beta-binomial precision
 or overdispersion. The \code{median} name is retained for table compatibility; for
 frequentist Wald or profile output it contains the maximum-likelihood point
 estimate, not a posterior median.

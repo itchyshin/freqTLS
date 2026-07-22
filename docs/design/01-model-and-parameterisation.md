@@ -132,8 +132,14 @@ ratio is `z_A / z_B = exp(dlog_z:A-B)`.
 
 ## Time unit (R-UNITS)
 
-The duration is in the data's native unit (typically hours), and `tref` is in the
-same unit, so `CTmax` is the critical thermal maximum at `tref` (e.g. CTmax at
-1 hour). When calling bayesTLS for the benchmark, pin the matching
+The duration is in the data's native unit, and `tref` is in the same unit, so
+`CTmax` is the critical thermal maximum at `tref`. When omitted for data
+standardized with a recognised `duration_unit`, freqTLS resolves `tref` to one
+physical hour (for example, 60 in minutes, 1 in hours, or 1/24 in days).
+Bare data without metadata retain the historical `tref = 1` fallback with a
+warning; users should supply `tref` explicitly in that case. An explicit numeric
+reference is never converted: `tref = 1` on minute data is deliberately CTmax at
+one minute, while omission on labelled minute data selects the one-hour value
+`tref = 60`. When calling bayesTLS for the benchmark, pin the matching
 `t_ref`/`time_multiplier` so the two implementations agree on the unit. The unit
 and `tref` are surfaced in `print()`.

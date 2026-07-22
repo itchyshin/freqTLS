@@ -95,6 +95,11 @@ installed datasets. The fitting output is suppressed because the diagnostic
 table follows, but the code remains visible and copyable. The five case
 articles explain each preparation and fit in smaller steps.
 
+For the awake/coma count endpoint, duration-zero controls are excluded because
+the 4PL uses `log10(duration)` and cannot represent zero duration—not because
+they are evidence against `up`. Short positive exposures or mild treatments are
+needed to inform that upper asymptote.
+
 ```{r freq-fits, results='hide', message=FALSE, warning=FALSE}
 data(zebrafish_o2)
 zf <- droplevels(subset(
@@ -263,11 +268,16 @@ freq_rows <- rbind(
   ),
   as_freq_rows(
     coma_fit, "drosophila_awake", "sex",
-    "awake counts (missing t_coma)", 60
+    "awake counts (no recorded t_coma)", 60
   )
 )
 
 bayes_rows <- bayes_cache$summaries
+# Use the current reader-facing wording before joining the pinned cache to the
+# freshly refitted rows. The cache's older "missing t_coma" label denotes the
+# same awake/coma endpoint.
+bayes_rows$endpoint[bayes_rows$case_id == "drosophila_awake"] <-
+  "awake counts (no recorded t_coma)"
 bayes_rows$group <- ifelse(
   !is.na(bayes_rows$oxygen), as.character(bayes_rows$oxygen),
   ifelse(

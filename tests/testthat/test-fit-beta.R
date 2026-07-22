@@ -23,13 +23,14 @@ test_that("beta fit recovers the simulating truth (CTmax, z, phi)", {
 
 test_that("n (trials) is optional for beta and required for count families", {
   d <- simulate_tls(family = "beta", CTmax = 36, z = 4, phi = 20, seed = 8)
-  fit <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta")
+  fit <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta",
+                 tref = 1)
   expect_identical(fit$convergence$code, 0L)
 
   db <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 8)
   expect_error(
     fit_tls(db, y = survived, time = duration, temp = temp,
-            family = "binomial"),
+            family = "binomial", tref = 1),
     regexp = "required for the"
   )
 })
@@ -40,7 +41,8 @@ test_that("beta response must be a proportion; boundary values clamp with a warn
   bad <- d
   bad$prop[1] <- 1.5
   expect_error(
-    fit_tls(bad, y = prop, time = duration, temp = temp, family = "beta"),
+    fit_tls(bad, y = prop, time = duration, temp = temp, family = "beta",
+            tref = 1),
     regexp = "proportion"
   )
 
@@ -48,14 +50,16 @@ test_that("beta response must be a proportion; boundary values clamp with a warn
   edge$prop[1] <- 0
   edge$prop[2] <- 1
   expect_warning(
-    fit_tls(edge, y = prop, time = duration, temp = temp, family = "beta"),
+    fit_tls(edge, y = prop, time = duration, temp = temp, family = "beta",
+            tref = 1),
     regexp = "[Cc]lamp"
   )
 })
 
 test_that("the formula interface accepts a bare-name proportion response", {
   d <- simulate_tls(family = "beta", CTmax = 36, z = 4, phi = 20, seed = 10)
-  fcol <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta")
+  fcol <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta",
+                  tref = 1)
   ff <- fit_tls(
     tls_bf(prop ~ time(duration) + temp(temp)),
     data = d, family = "beta", tref = 1
@@ -66,7 +70,8 @@ test_that("the formula interface accepts a bare-name proportion response", {
 
 test_that("profile and bootstrap intervals are available for the beta family", {
   d <- simulate_tls(family = "beta", CTmax = 36, z = 4, phi = 20, seed = 11)
-  fit <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta")
+  fit <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta",
+                 tref = 1)
 
   pr <- confint(fit, "CTmax", method = "profile")
   expect_true(is.finite(pr$conf.low) && is.finite(pr$conf.high))
@@ -86,7 +91,7 @@ test_that("the beta family supports grouped CTmax / z", {
   d <- simulate_tls(family = "beta", group = c("A", "B"),
                     CTmax = c(34, 38), z = c(3, 5), phi = 20, seed = 13)
   fit <- fit_tls(d, y = prop, time = duration, temp = temp, group = group,
-                 family = "beta")
+                 family = "beta", tref = 1)
   expect_identical(fit$convergence$code, 0L)
 
   est <- fit$estimates
@@ -102,7 +107,8 @@ test_that("the beta family supports grouped CTmax / z", {
 test_that("a clean beta fit is silent and reports phi with a standard error", {
   d <- simulate_tls(family = "beta", CTmax = 36, z = 4, phi = 20, seed = 12)
   expect_no_warning(
-    fit <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta")
+    fit <- fit_tls(d, y = prop, time = duration, temp = temp, family = "beta",
+                   tref = 1)
   )
   est <- fit$estimates
   phi_row <- est[est$parameter == "phi", ]

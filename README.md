@@ -33,11 +33,12 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 death-time model by maximum likelihood via
 [TMB](https://github.com/kaskr/adcomp), parameterised **directly** in
 `CTmax` (the critical thermal maximum at the reference time `tref`) and
-`z` (thermal sensitivity, in degrees Celsius per decade of exposure
-duration). It then returns prior-free **frequentist confidence
-intervals** — Wald, profile-likelihood (asymmetry-respecting), and
-bootstrap — for binomial and beta-binomial survival counts, and for
-continuous **proportion** responses in `(0, 1)` via the beta family.
+`z` (thermal sensitivity, in degrees Celsius per order-of-magnitude
+change in exposure duration). It then returns prior-free **frequentist
+confidence intervals** — Wald, profile-likelihood
+(asymmetry-respecting), and bootstrap — for binomial and beta-binomial
+survival counts, and for continuous **proportion** responses in `(0, 1)`
+via the beta family.
 
 Its signature display is the **Confidence Eye**: a pale horizontal lens
 spanning the selected confidence interval, with a hollow point estimate.
@@ -46,7 +47,7 @@ Wald and bootstrap intervals can also be shown. These are
 likelihood-based *confidence* intervals, not posterior distributions, so
 the visual deliberately avoids posterior-density iconography.
 
-<img src="man/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per decade of duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%" />
+<img src="man/figures/README-readme-eye-1.png" alt="Hero figure: horizontal Confidence Eyes for CTmax on the temperature scale and z in degrees per order-of-magnitude change in duration. Each parameter is a pale, shallow lens spanning its 95% profile-likelihood confidence interval, with a hollow point estimate at the maximum-likelihood value. The lens shape reads as an interval, not a probability density." width="100%" />
 
 ## What freqTLS does
 
@@ -154,8 +155,10 @@ std <- standardize_data(dat, temp = "temp", duration = "duration",
                         n_total = "total", n_surv = "survived",
                         duration_unit = "hours")
 
-# 2. Fit the 4PL by maximum likelihood, directly in CTmax and z
-fit <- fit_4pl(std, t_ref = 1)
+# 2. Fit the 4PL by maximum likelihood, directly in CTmax and z.
+# With duration_unit = "hours", the omitted t_ref resolves to one hour.
+# Supply t_ref = 1 explicitly if the intended estimand is one minute.
+fit <- fit_4pl(std)
 
 # 3. Headline thermal-death-time quantities with profile-likelihood intervals
 tls(fit)
@@ -349,13 +352,14 @@ p = \mathrm{low} + \frac{\mathrm{up} - \mathrm{low}}{1 + \exp\!\big(k\,(\log_{10
 $$
 
 `CTmax` is the critical thermal maximum at the reference time `tref`,
-and `z` is the thermal sensitivity (degrees Celsius per decade of
-exposure duration). The In the default constant-shape configuration, the
-temperature effect runs through the midpoint only (shared `low`, `up`,
-`k`). Explicit formula terms can instead model `low`, `up`, or `log_k`;
-these extensions change the interpretation of an absolute-threshold
-curve and do not create local `z` estimates. Because `CTmax` and `z` are
-direct model parameters, both can be profiled directly.
+and `z` is the thermal sensitivity (degrees Celsius per
+order-of-magnitude change in exposure duration). The In the default
+constant-shape configuration, the temperature effect runs through the
+midpoint only (shared `low`, `up`, `k`). Explicit formula terms can
+instead model `low`, `up`, or `log_k`; these extensions change the
+interpretation of an absolute-threshold curve and do not create local
+`z` estimates. Because `CTmax` and `z` are direct model parameters, both
+can be profiled directly.
 
 See `vignette("freqTLS")` for the full walkthrough,
 `vignette("model-math")` for the exact bridge to `bayesTLS`, and

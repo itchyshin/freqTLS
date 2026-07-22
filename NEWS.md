@@ -26,6 +26,13 @@
 * `standardize_data()` now warns with the affected count and epsilon whenever
   a continuous proportion is moved off 0 or 1 for the Beta likelihood. The
   Snow-gum example makes its 90 adjusted values explicit.
+* Omitted `tref` / `t_ref` now resolves to one physical hour for standardized
+  data with recognised duration-unit metadata (for example, 60 minutes or 1
+  hour). Bare data retain the historical one-native-unit fallback with a
+  warning, so an ambiguous CTmax reference is never silent.
+* `get_ctmax()`, `get_z()`, and `get_shape()` now pass `method = "wald"` or
+  `"profile"` through to `tidy_parameters()` and retain per-coordinate interval
+  routing in `interval_type`.
 
 # freqTLS 0.1.0 (unreleased historical candidate)
 
