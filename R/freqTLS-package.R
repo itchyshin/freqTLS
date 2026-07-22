@@ -25,9 +25,9 @@
 #'
 #' @section Credit and origins:
 #' The thermal-load-sensitivity modelling framework and the direct mapping from
-#' the 4PL midpoint slope to `z` and `CTmax` are due to Noble, Arnold and Pottier
-#' (the `bayesTLS` package). `freqTLS` contributes the TMB maximum-likelihood
-#' likelihood and the
+#' the 4PL midpoint slope to `z` and `CTmax` are from Noble, Arnold, Nakagawa
+#' and Pottier (the `bayesTLS` package). `freqTLS` contributes the TMB maximum-likelihood
+#' likelihood, the direct `CTmax`/`log_z` reparameterisation, and the
 #' profile-likelihood machinery. Engineering patterns are adapted from `drmTMB`
 #' (GPL-3) with attribution in the relevant source files.
 #'

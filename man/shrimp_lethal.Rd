@@ -20,7 +20,7 @@ Consumed by
 }
 \source{
 Brown shrimp lethal-TDT assay (Case Study 1), obtained from the
-\pkg{bayesTLS} package distribution by Noble, Arnold, and Pottier (2026),
+\pkg{bayesTLS} package distribution by Noble, Arnold, Nakagawa, and Pottier (2026),
 licensed CC BY 4.0. freqTLS retains the mortality proportion and documents
 its count reconstruction above. Raw file:
 \code{system.file("extdata", "data_lethal_TDT_brown_shrimp.csv", package = "freqTLS")}.

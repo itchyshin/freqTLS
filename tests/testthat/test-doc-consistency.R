@@ -1,18 +1,21 @@
 # Doc-consistency tripwires (Rose audit, 2026-06-25). Two whole-fix invariants
 # the remediation initially got wrong by updating N-1 of N surfaces:
-#   (1) the package title must agree across DESCRIPTION, the package doc (.R + .Rd),
-#       and inst/CITATION, and must not revert to "Profile-Likelihood Inference";
+#   (1) the package title must agree across DESCRIPTION and the package doc
+#       (.R + .Rd), and must not revert to "Profile-Likelihood Inference";
 #   (2) under the disjoint-bounds asymptotes `up` HAS its own coordinate `beta_up`,
 #       so no live doc may state its "nested gap has no single coordinate" as the
 #       current reason it is Wald-only.
+# inst/CITATION is intentionally excluded from (1): by design freqTLS cites the
+# paper it implements, not a separate R-package self-citation, so the package
+# title does not appear there (2026-07-19 citation policy change).
 # Dev-only where the source tree is needed (skipped against an installed package).
 
 repo_root <- function() normalizePath(test_path("..", ".."), mustWork = FALSE)
 
-test_that("the package title agrees across DESCRIPTION, package doc, and CITATION", {
+test_that("the package title agrees across DESCRIPTION and package doc", {
   files <- file.path(repo_root(),
                      c("DESCRIPTION", "R/freqTLS-package.R",
-                       "man/freqTLS-package.Rd", "inst/CITATION"))
+                       "man/freqTLS-package.Rd"))
   skip_if_not(all(file.exists(files)), "source tree not available")
   the_title <- "Frequentist Inference for Thermal Load Sensitivity Models"
   for (f in files) {

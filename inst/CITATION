@@ -1,42 +1,29 @@
 # Citation information for freqTLS.
 # freqTLS implements the thermal-load-sensitivity modelling framework
-# introduced by Noble, Arnold and Pottier in the bayesTLS package. Please cite
-# both freqTLS and the bayesTLS framework when you use this package.
+# described in the paper below. Cite the paper (not a separate R-package
+# citation) together with the original sources of any bundled data.
 
-citHeader("To cite freqTLS in publications, cite the package and the bayesTLS framework it implements:")
-
-bibentry(
-  bibtype  = "Manual",
-  title    = "freqTLS: Frequentist Inference for Thermal Load Sensitivity Models",
-  author   = c(
-    person("Shinichi", "Nakagawa"),
-    person("Pieter A.", "Arnold"),
-    person("Patrice", "Pottier"),
-    person("Daniel W. A.", "Noble")
-  ),
-  year     = "2026",
-  note     = paste("R package version", meta$Version),
-  url      = "https://github.com/itchyshin/freqTLS"
-)
+citHeader("To cite freqTLS in publications, cite the paper it implements together with the original sources of any bundled data:")
 
 bibentry(
-  bibtype  = "Manual",
-  title    = "bayesTLS: Bayesian Thermal Load Sensitivity Models",
+  bibtype  = "Article",
+  title    = "A flexible modelling framework for estimating thermal tolerance and sensitivity",
   author   = c(
     person("Daniel W. A.", "Noble"),
-    person("Pieter A.", "Arnold"),
-    person("Patrice", "Pottier")
+    person("Pieter A.",    "Arnold"),
+    person("Shinichi",     "Nakagawa"),
+    person("Patrice",      "Pottier")
   ),
   year     = "2026",
-  note     = paste(
-    "R package; the thermal-load-sensitivity framework that freqTLS",
-    "implements (manuscript in preparation). The brown-shrimp and life-stage",
-    "zebrafish data were obtained from the CC BY 4.0 bayesTLS distribution;",
-    "please cite bayesTLS when using them. Other datasets retain their",
-    "component-specific licences and citations; see the entries below and",
-    "inst/COPYRIGHTS in the source package."
-  ),
-  url      = "https://github.com/daniel1noble/bayesTLS"
+  journal  = "bioRxiv",
+  doi      = "10.64898/2026.07.16.738378",
+  note     = "Preprint; the thermal-load-sensitivity framework that freqTLS implements",
+  url      = "https://www.biorxiv.org/content/10.64898/2026.07.16.738378v1",
+  textVersion = paste(
+    "Noble DWA, Arnold PA, Nakagawa S, Pottier P (2026).",
+    "A flexible modelling framework for estimating thermal tolerance and sensitivity.",
+    "bioRxiv. doi:10.64898/2026.07.16.738378"
+  )
 )
 
 bibentry(
@@ -99,3 +86,10 @@ bibentry(
     "229(10): jeb251548, doi:10.1242/jeb.251548."
   )
 )
+
+citFooter(paste(
+  "The brown-shrimp and life-stage zebrafish data were obtained from the",
+  "CC BY 4.0 bayesTLS distribution; please cite bayesTLS when using them.",
+  "Other datasets retain their component-specific licences and citations;",
+  "see the entries above and inst/COPYRIGHTS in the source package."
+))

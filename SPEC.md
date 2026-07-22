@@ -32,7 +32,7 @@ R release (`pull_request` + `workflow_dispatch`).
 
 ## Context — why this package
 
-The bayesTLS paper (Noble, Arnold & Pottier, in prep) presents a single-stage
+The bayesTLS paper (Noble, Arnold, Nakagawa & Pottier, 2026, bioRxiv, doi:10.64898/2026.07.16.738378) presents a single-stage
 Bayesian 4PL for thermal death time / thermal load sensitivity (TDT/TLS) and
 notes the same model class *could* be fit by likelihood (they suggest
 bootstrap/Delta, not profile likelihood). `bayesTLS` is a complete Bayesian
@@ -203,7 +203,8 @@ freqTLS/
 Authors@R: c(
   person("Shinichi", "Nakagawa", email = "itchyshin@gmail.com",
          role = c("aut", "cre", "cph"),
-         comment = c(ORCID = "0000-0002-7765-5182")),
+         comment = c(ORCID = "0000-0002-7765-5182",
+                     "co-author of the bayesTLS framework")),
   person("Pieter A.", "Arnold", role = "aut",
          comment = c(ORCID = "0000-0002-6158-7752",
                      "co-author of the bayesTLS framework")),
@@ -214,7 +215,7 @@ Authors@R: c(
          comment = c(ORCID = "0000-0001-9460-8743",
                      "senior author of the bayesTLS thermal-load-sensitivity framework")))
 ```
-`Description:` states plainly that freqTLS implements the TLS framework **introduced by Noble, Arnold & Pottier (bayesTLS)**; freqTLS contributes the TMB ML likelihood, direct CTmax/z reparameterisation, and profile-likelihood CIs. Current fields: `Imports: cli, ggplot2, MASS, parallel, rlang, stats, tibble, TMB, utils`; `LinkingTo: RcppEigen, TMB`; `Suggests: glmmTMB, knitr, rmarkdown, testthat (>= 3.0.0)`; `Config/testthat/edition: 3`; `LazyData: true`. No Makevars are needed.
+`Description:` states plainly that freqTLS implements the TLS framework **introduced by Noble, Arnold, Nakagawa & Pottier (bayesTLS)**; freqTLS contributes the TMB ML likelihood, direct CTmax/z reparameterisation, and profile-likelihood CIs. Current fields: `Imports: cli, ggplot2, MASS, parallel, rlang, stats, tibble, TMB, utils`; `LinkingTo: RcppEigen, TMB`; `Suggests: glmmTMB, knitr, rmarkdown, testthat (>= 3.0.0)`; `Config/testthat/edition: 3`; `LazyData: true`. No Makevars are needed.
 
 ## 9. TMB engine core (load-bearing)
 

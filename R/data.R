@@ -24,7 +24,7 @@
 #'         \code{standardize_data(mortality = "Mortality_after_trial")}.}
 #' }
 #' @source Brown shrimp lethal-TDT assay (Case Study 1), obtained from the
-#'   \pkg{bayesTLS} package distribution by Noble, Arnold, and Pottier (2026),
+#'   \pkg{bayesTLS} package distribution by Noble, Arnold, Nakagawa, and Pottier (2026),
 #'   licensed CC BY 4.0. freqTLS retains the mortality proportion and documents
 #'   its count reconstruction above. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
@@ -49,7 +49,7 @@
 #' }
 #' @source Brown shrimp sublethal time-to-knockdown assay (Case Study 1,
 #'   sublethal endpoint), obtained from the \pkg{bayesTLS} package distribution
-#'   by Noble, Arnold, and Pottier (2026), licensed CC BY 4.0. freqTLS dropped
+#'   by Noble, Arnold, Nakagawa, and Pottier (2026), licensed CC BY 4.0. freqTLS dropped
 #'   excluded rows and converted the clock times to elapsed minutes. Raw file:
 #'   \code{system.file("extdata", "data_sublethal_TDT_brown_shrimp.csv", package = "freqTLS")}.
 #' @keywords datasets internal
@@ -76,8 +76,8 @@
 #'   \item{Date_experiment}{Experiment date (grouping factor).}
 #' }
 #' @source Zebrafish lethal-TDT assay across life stages (Case Study 2),
-#'   obtained from the \pkg{bayesTLS} package distribution by Noble, Arnold, and
-#'   Pottier (2026), licensed CC BY 4.0. freqTLS removed excluded trials,
+#'   obtained from the \pkg{bayesTLS} package distribution by Noble, Arnold,
+#'   Nakagawa, and Pottier (2026), licensed CC BY 4.0. freqTLS removed excluded trials,
 #'   aggregated daily mortality counts, and derived survivors as documented
 #'   above. Raw file:
 #'   \code{system.file("extdata", "data_lethal_TDT_zebrafish.csv", package = "freqTLS")}.

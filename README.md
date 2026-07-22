@@ -369,15 +369,18 @@ honest non-closing fallback.
 ## Credit and origins
 
 The thermal-load-sensitivity modelling framework implemented here was
-introduced by **Daniel W. A. Noble, Pieter A. Arnold, and Patrice
-Pottier** in the [`bayesTLS`](https://github.com/daniel1noble/bayesTLS)
-package. The model and the mapping from the 4PL midpoint slope to `z`
+introduced by **Daniel W. A. Noble, Pieter A. Arnold, Shinichi
+Nakagawa, and Patrice Pottier** in the
+[`bayesTLS`](https://github.com/daniel1noble/bayesTLS) package. The model and the mapping from the 4PL midpoint slope to `z`
 and `CTmax` are theirs. `freqTLS` is a likelihood implementation of that
-framework. Please cite `bayesTLS` alongside `freqTLS` when you use this
-package. `freqTLS` contributes a TMB maximum-likelihood likelihood,
-direct `CTmax`/`z` parameters that make both quantities directly
-profile-able, and profile-likelihood confidence intervals — a likelihood
-complement to the Bayesian path (no priors, no MCMC, no Stan).
+framework. Please cite their paper — Noble et al. (2026, *bioRxiv*,
+[doi:10.64898/2026.07.16.738378](https://doi.org/10.64898/2026.07.16.738378)) —
+when you use `freqTLS`; run `citation("freqTLS")` for all entries.
+`freqTLS` contributes a TMB maximum-likelihood likelihood, the
+direct `CTmax`/`z` reparameterisation that makes both quantities
+directly profile-able, and profile-likelihood confidence intervals — a
+likelihood complement to the Bayesian path (no priors, no MCMC, no
+Stan).
 
 ## Data credits
 

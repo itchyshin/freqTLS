@@ -14,7 +14,7 @@ the relative-vs-absolute threshold consistently, and define each at first use.
 Always describe freqTLS intervals as compatibility / confidence intervals,
 never as posterior or credible intervals; the Confidence Eye is the default
 uncertainty visual.
-Credit the bayesTLS framework (Noble, Arnold & Pottier) as the origin of the
+Credit the bayesTLS framework (Noble, Arnold, Nakagawa & Pottier) as the origin of the
 modelling idea wherever the model is introduced.
 For substantial prose, follow the project-local prose-style-review standard:
 name the reader, lead with purpose, use concrete claims, keep terms stable, and
