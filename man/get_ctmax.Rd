@@ -4,15 +4,22 @@
 \alias{get_ctmax}
 \title{Extract the CTmax estimate(s)}
 \usage{
-get_ctmax(fit, conf.int = TRUE, conf.level = 0.95)
+get_ctmax(
+  fit,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  method = c("wald", "profile")
+)
 }
 \arguments{
 \item{fit}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
 
-\item{conf.int}{Logical; include Wald \code{conf.low} / \code{conf.high} (default
+\item{conf.int}{Logical; include confidence-interval columns (default
 \code{TRUE}).}
 
-\item{conf.level}{Confidence level for the Wald interval (default \code{0.95}).}
+\item{conf.level}{Confidence level for the interval (default \code{0.95}).}
+
+\item{method}{Either \code{"wald"} (default) or \code{"profile"}.}
 }
 \value{
 A \link[tibble:tibble]{tibble} of the \code{CTmax} row(s) from

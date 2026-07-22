@@ -54,7 +54,8 @@ same forward map as the TMB engine in \code{src/profile_tls.cpp}:
 }
 \details{
 Here \code{CTmax} is the critical thermal maximum at the reference duration
-\code{tref}; \code{z} is thermal sensitivity in degrees per decade of duration;
+\code{tref}; \code{z} is thermal sensitivity in degrees per order-of-magnitude change
+in duration;
 \code{low} and \code{up} are the fitted lower and upper survival asymptotes; and \code{k}
 controls the curve's steepness. The model fits \code{log_z = log(z)} internally,
 then reports positive natural-scale \code{z} values.

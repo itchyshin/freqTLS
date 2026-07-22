@@ -4,15 +4,22 @@
 \alias{get_shape}
 \title{Extract the shape parameters (low, up, k, and phi)}
 \usage{
-get_shape(fit, conf.int = TRUE, conf.level = 0.95)
+get_shape(
+  fit,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  method = c("wald", "profile")
+)
 }
 \arguments{
 \item{fit}{A \code{profile_tls} fit from \code{\link[=fit_tls]{fit_tls()}}.}
 
-\item{conf.int}{Logical; include Wald \code{conf.low} / \code{conf.high} (default
+\item{conf.int}{Logical; include confidence-interval columns (default
 \code{TRUE}).}
 
-\item{conf.level}{Confidence level for the Wald interval (default \code{0.95}).}
+\item{conf.level}{Confidence level for the interval (default \code{0.95}).}
+
+\item{method}{Either \code{"wald"} (default) or \code{"profile"}.}
 }
 \value{
 A \link[tibble:tibble]{tibble} of the shape rows (\code{low}, \code{up}, \code{k}, and
@@ -20,6 +27,11 @@ A \link[tibble:tibble]{tibble} of the shape rows (\code{low}, \code{up}, \code{k
 }
 \description{
 Extract the shape parameters (low, up, k, and phi)
+}
+\details{
+With \code{method = "profile"}, a shape parameter receives a profile
+interval only where \code{\link[=tidy_parameters]{tidy_parameters()}} supports that coordinate; \code{up} and
+unsupported shape coordinates retain their documented Wald route.
 }
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)

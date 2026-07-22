@@ -82,9 +82,10 @@ tidy_parameters <- function(fit, conf.int = TRUE, conf.level = 0.95,
 #' Extract the CTmax estimate(s)
 #'
 #' @param fit A `profile_tls` fit from [fit_tls()].
-#' @param conf.int Logical; include Wald `conf.low` / `conf.high` (default
+#' @param conf.int Logical; include confidence-interval columns (default
 #'   `TRUE`).
-#' @param conf.level Confidence level for the Wald interval (default `0.95`).
+#' @param conf.level Confidence level for the interval (default `0.95`).
+#' @param method Either `"wald"` (default) or `"profile"`.
 #' @return A [tibble][tibble::tibble] of the `CTmax` row(s) from
 #'   [tidy_parameters()].
 #' @examples
@@ -93,8 +94,11 @@ tidy_parameters <- function(fit, conf.int = TRUE, conf.level = 0.95,
 #'                family = "binomial", tref = 1)
 #' get_ctmax(fit)
 #' @export
-get_ctmax <- function(fit, conf.int = TRUE, conf.level = 0.95) {
-  tidy <- tidy_parameters(fit, conf.int = conf.int, conf.level = conf.level)
+get_ctmax <- function(fit, conf.int = TRUE, conf.level = 0.95,
+                      method = c("wald", "profile")) {
+  method <- match.arg(method)
+  tidy <- tidy_parameters(fit, conf.int = conf.int, conf.level = conf.level,
+                          method = method)
   tidy[startsWith(tidy$parameter, "CTmax"), , drop = FALSE]
 }
 
@@ -109,14 +113,20 @@ get_ctmax <- function(fit, conf.int = TRUE, conf.level = 0.95) {
 #'                family = "binomial", tref = 1)
 #' get_z(fit)
 #' @export
-get_z <- function(fit, conf.int = TRUE, conf.level = 0.95) {
-  tidy <- tidy_parameters(fit, conf.int = conf.int, conf.level = conf.level)
+get_z <- function(fit, conf.int = TRUE, conf.level = 0.95,
+                  method = c("wald", "profile")) {
+  method <- match.arg(method)
+  tidy <- tidy_parameters(fit, conf.int = conf.int, conf.level = conf.level,
+                          method = method)
   tidy[startsWith(tidy$parameter, "z"), , drop = FALSE]
 }
 
 #' Extract the shape parameters (low, up, k, and phi)
 #'
 #' @inheritParams get_ctmax
+#' @details With `method = "profile"`, a shape parameter receives a profile
+#'   interval only where [tidy_parameters()] supports that coordinate; `up` and
+#'   unsupported shape coordinates retain their documented Wald route.
 #' @return A [tibble][tibble::tibble] of the shape rows (`low`, `up`, `k`, and
 #'   `phi` for the beta-binomial family) from [tidy_parameters()].
 #' @examples
@@ -125,8 +135,11 @@ get_z <- function(fit, conf.int = TRUE, conf.level = 0.95) {
 #'                family = "binomial", tref = 1)
 #' get_shape(fit)
 #' @export
-get_shape <- function(fit, conf.int = TRUE, conf.level = 0.95) {
-  tidy <- tidy_parameters(fit, conf.int = conf.int, conf.level = conf.level)
+get_shape <- function(fit, conf.int = TRUE, conf.level = 0.95,
+                      method = c("wald", "profile")) {
+  method <- match.arg(method)
+  tidy <- tidy_parameters(fit, conf.int = conf.int, conf.level = conf.level,
+                          method = method)
   tidy[tidy$parameter %in% c("low", "up", "k", "phi"), , drop = FALSE]
 }
 

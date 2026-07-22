@@ -5,7 +5,8 @@
 #' same forward map as the TMB engine in `src/profile_tls.cpp`:
 #'
 #' Here `CTmax` is the critical thermal maximum at the reference duration
-#' `tref`; `z` is thermal sensitivity in degrees per decade of duration;
+#' `tref`; `z` is thermal sensitivity in degrees per order-of-magnitude change
+#' in duration;
 #' `low` and `up` are the fitted lower and upper survival asymptotes; and `k`
 #' controls the curve's steepness. The model fits `log_z = log(z)` internally,
 #' then reports positive natural-scale `z` values.

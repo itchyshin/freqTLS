@@ -302,7 +302,7 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
   scale_lab <- vapply(levels(ci$.facet), function(parm_name) {
     switch(parm_name,
       CTmax = "CTmax = temperature scale",
-      z = "z = degrees per decade of duration",
+      z = "z = degrees per 10-fold change in duration",
       log_z = "log_z = log thermal sensitivity",
       paste0(parm_name, " = native parameter scale")
     )

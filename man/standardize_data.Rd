@@ -59,7 +59,10 @@ columns are converted to factors and stored in
 metadata for the fitter to read.}
 
 \item{duration_unit}{Label for the unit of \code{duration}, stored in metadata.
-Default \code{"hours"}.}
+A recognised value (\code{"seconds"}, \code{"minutes"},
+\code{"hours"}, or \code{"days"}, with common abbreviations)
+lets \code{\link[=fit_tls]{fit_tls()}} and \code{\link[=fit_4pl]{fit_4pl()}} resolve an omitted
+reference time to one physical hour. Default \code{"hours"}.}
 
 \item{temp_mean}{Value to subtract from \code{temp} to form \code{temp_c}.
 \code{NULL} (default) uses \code{mean(temp)}. Supply a fixed
