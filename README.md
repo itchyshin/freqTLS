@@ -156,8 +156,8 @@ std <- standardize_data(dat, temp = "temp", duration = "duration",
                         duration_unit = "hours")
 
 # 2. Fit the 4PL by maximum likelihood, directly in CTmax and z.
-# With duration_unit = "hours", the omitted t_ref resolves to one hour.
-# `t_ref = 1` is likewise one hour; for one minute use `t_ref = 1 / 60`.
+# `standardize_data()` converts durations to minutes. The omitted t_ref is 60
+# minutes (one hour); `t_ref = 1` means one minute.
 fit <- fit_4pl(std)
 
 # 3. Headline thermal-death-time quantities with profile-likelihood intervals
@@ -166,7 +166,7 @@ tls(fit)
 #> # A tibble: 2 × 4
 #>   quantity median lower upper
 #>   <chr>     <dbl> <dbl> <dbl>
-#> 1 CTmax     36.0  35.7  36.3 
+#> 1 CTmax     29.1  28.3  29.8
 #> 2 z          3.90  3.43  4.38
 ```
 
@@ -183,7 +183,7 @@ grouped_std <- standardize_data(
   n_total = "total", n_surv = "survived"
 )
 grouped_fit <- fit_4pl(
-  grouped_std, ctmax = ~ 0 + group, z = ~ 0 + group, t_ref = 1
+  grouped_std, ctmax = ~ 0 + group, z = ~ 0 + group, t_ref = 60
 )
 # Inspect the recovered group-specific CTmax and z estimates.
 tidy_parameters(grouped_fit)[
@@ -218,7 +218,7 @@ fit_f <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
   data   = dat,
   family = "beta_binomial",
-  tref   = 1
+  tref   = 60
 )
 all.equal(coef(fit_f), coef(fit))
 #> [1] TRUE
@@ -247,7 +247,7 @@ dre <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_re <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = dre, family = "binomial", tref = 1
+  data = dre, family = "binomial", tref = 60
 )
 # Between-colony SD of CTmax (with a Wald interval):
 tp <- tidy_parameters(fit_re)
@@ -277,7 +277,7 @@ data.frame(
   )
 )
 #>       target   survival
-#> 1 population 0.22405366
+#> 1 population 0.22405371
 #> 2     colony 0.08768286
 ```
 
@@ -318,7 +318,7 @@ fit_pop <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ group, log_z ~ group,
          low ~ group, up ~ group, log_k ~ group),
-  data = dpop, family = "binomial", tref = 1
+  data = dpop, family = "binomial", tref = 60
 )
 # Per-group steepness k with profile-likelihood confidence intervals:
 confint(fit_pop, parm = c("k:tolerant", "k:sensitive"), method = "profile")

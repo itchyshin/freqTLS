@@ -110,10 +110,9 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #'   with [extract_tdt()] and `target_surv = "absolute"`.
 #' @param p Survival level for the absolute threshold (default 0.5).
 #' @param t_ref Positive reference exposure time at which CTmax is reported,
-#'   expressed in exactly the same unit as the standardised `duration` column.
-#'   When `NULL` (the default), it resolves to one physical hour from
-#'   `duration_unit` (for example, `60` minutes or `1` hour). Supply a numeric
-#'   value to retain a non-hour reference such as `240` minutes.
+#'   in minutes. When `NULL` (the default), it is `60` minutes (one hour).
+#'   [standardize_data()] converts the input duration to minutes; supply a
+#'   numeric value such as `240` for a non-hour reference.
 #' @param bounds Asymptote range. Only `c(0, 1)` is currently accepted. Supply
 #'   survival as a probability in `[0, 1]` and let the model estimate `low` and
 #'   `up` within that range; non-default bounds stop with an error.
@@ -138,7 +137,7 @@ make_4pl_formula <- function(ctmax = NULL, z = NULL, up = NULL, low = NULL,
 #'   n_total = "total", n_surv = "survived"
 #' )
 #' fit <- fit_4pl(
-#'   dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+#'   dat, family = "binomial", t_ref = 60, method = "wald", quiet = TRUE
 #' )
 #' coef(fit)
 #' @export
@@ -201,6 +200,7 @@ fit_4pl <- function(data,
       bounds        = bounds,
       temp_mean     = meta_in$temp_mean,
       duration_unit = meta_in$duration_unit,
+      input_duration_unit = meta_in$input_duration_unit,
       response_type = meta_in$response_type,
       family        = fam_name,
       grouped       = isTRUE(fit$data_summary$grouped),

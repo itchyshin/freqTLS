@@ -88,7 +88,7 @@ duration cells) used in the fit.
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(
   d, y = survived, n = total, time = duration, temp = temp,
-  family = "binomial", tref = 1, quiet = TRUE
+  family = "binomial", tref = 60, quiet = TRUE
 )
 coef(fit)
 logLik(fit)

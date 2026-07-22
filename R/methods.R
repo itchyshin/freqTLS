@@ -9,7 +9,7 @@
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(
 #'   d, y = survived, n = total, time = duration, temp = temp,
-#'   family = "binomial", tref = 1, quiet = TRUE
+#'   family = "binomial", tref = 60, quiet = TRUE
 #' )
 #' coef(fit)
 #' logLik(fit)
@@ -247,7 +247,7 @@ nobs.profile_tls <- function(object, ...) {
 #' fit <- fit_tls(
 #'   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
 #'          CTmax ~ 1 + (1 | colony)),
-#'   data = d, family = "binomial", tref = 1)
+#'   data = d, family = "binomial", tref = 60)
 #' ranef(fit)
 #' @export
 ranef <- function(object, ...) {

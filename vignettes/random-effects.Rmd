@@ -56,7 +56,7 @@ d <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony)),
-  data = d, family = "binomial", tref = 1, quiet = TRUE)
+  data = d, family = "binomial", tref = 60, quiet = TRUE)
 
 # The estimates table carries the population CTmax / z and the between-colony SD.
 est <- fit$estimates
@@ -165,7 +165,7 @@ dz <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_z <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          log_z ~ 1 + (1 | colony)),
-  data = dz, family = "binomial", tref = 1, quiet = TRUE)
+  data = dz, family = "binomial", tref = 60, quiet = TRUE)
 sg <- fit_z$estimates$estimate[fit_z$estimates$parameter == "sigma_logz"]
 c(sigma_logz = round(sg, 3),
   approx_fold_spread_in_z = round(exp(sg), 3))
@@ -194,7 +194,7 @@ db <- simulate_tls(family = "binomial", CTmax = 36, z = 4,
 fit_both <- fit_tls(
   tls_bf(survived | trials(total) ~ time(duration) + temp(temp),
          CTmax ~ 1 + (1 | colony), log_z ~ 1 + (1 | colony)),
-  data = db, family = "binomial", tref = 1, quiet = TRUE)
+  data = db, family = "binomial", tref = 60, quiet = TRUE)
 fit_both$estimates$parameter[grepl("^sigma", fit_both$estimates$parameter)]
 ```
 

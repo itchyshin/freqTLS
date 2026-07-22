@@ -26,6 +26,6 @@ Extract the thermal-sensitivity (z) estimate(s)
 \examples{
 d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 get_z(fit)
 }

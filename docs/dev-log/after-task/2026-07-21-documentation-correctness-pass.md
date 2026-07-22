@@ -104,3 +104,17 @@ human review.
 Commit and open the candidate PR, request the human validation group to review
 the same rendered surface, close #47/#53 with exact evidence after merge, and
 retain #14 until Piet returns his independent checklist.
+
+## 13. PR #56 reviewer follow-up (2026-07-22)
+
+Daniel Noble identified a genuine ambiguity: `t_ref = 1` could be read as one
+hour when values were expressed in hours. The correction moves the public
+contract to minutes: `standardize_data()` converts recognised input duration
+units to minutes, fitting defaults to `tref = 60`, and all reviewed help,
+README, vignette, and design surfaces state this explicitly. Regression tests
+prove input-unit invariance and reject unknown units. The simulator keeps its
+documented one-minute fixture default so existing inference tests retain their
+known truth; it is not the fitting default. Brown shrimp remain excluded from
+teaching/discovery surfaces but their internal R-SHRIMP test stays deliberately
+installed, as required by the project boundary and the count-reconstruction
+audit.

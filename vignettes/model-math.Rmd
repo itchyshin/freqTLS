@@ -79,11 +79,11 @@ profiled directly. We can check the two properties on a fitted model:
 set.seed(1)
 dat <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 fit <- fit_tls(dat, y = survived, n = total, time = duration, temp = temp,
-               family = "binomial", tref = 1)
+               family = "binomial", tref = 60)
 ct <- get_ctmax(fit)$estimate
 zz <- get_z(fit)$estimate
 
-# (1) midpoint at temp = CTmax equals log10(tref) = log10(1) = 0
+# (1) midpoint at temp = CTmax equals log10(tref) = log10(60)
 predict(fit, data.frame(temp = ct, duration = 1), type = "midpoint")
 
 # (2) midpoint slope in temperature is -1/z

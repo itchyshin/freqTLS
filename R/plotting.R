@@ -124,7 +124,7 @@ tls_eye_ribbon_df <- function(df, half_height = 0.22, n = 80L) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_confidence_eye(fit, parm = c("CTmax", "z"))
 #'
 #' @export
@@ -385,7 +385,7 @@ plot_confidence_eye <- function(fit, parm = c("CTmax", "z"),
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_survival_curves(fit)
 #'
 #' @export
@@ -510,7 +510,7 @@ plot_survival_curves <- function(fit, temps = NULL, times = NULL, ...) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_tdt_curve(fit)
 #'
 #' @export
@@ -622,7 +622,7 @@ plot_tdt_curve <- function(fit, p = NULL, temps = NULL, ...) {
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' plot_survival_surface(fit)
 #'
 #' @export

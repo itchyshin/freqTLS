@@ -45,7 +45,7 @@
 #'   raw, temp = "temp", duration = "duration",
 #'   n_total = "total", n_surv = "survived"
 #' )
-#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 #' tdt <- extract_tdt(fit, nboot = 10, seed = 1)
 #' tdt$CTmax$summary
 #' }
@@ -180,7 +180,8 @@ extract_tdt <- function(object, target_surv = "relative", lethal = FALSE,
       mode = mode, p = p, lethal = lethal, TC_rate_range = TC_rate_range,
       by = if (grouped) by_name else NULL,
       nboot = nrow(R), level = level, tref = fit$tref,
-      duration_unit = meta$duration_unit %||% NULL
+      duration_unit = meta$duration_unit %||% NULL,
+      input_duration_unit = meta$input_duration_unit %||% NULL
     )
   )
   class(out) <- c("freq_tdt", "list")
@@ -222,7 +223,7 @@ stop_if_not_freq_tdt <- function(et) {
 #'   raw, temp = "temp", duration = "duration",
 #'   n_total = "total", n_surv = "survived"
 #' )
-#' fit <- fit_4pl(dat, family = "binomial", t_ref = 1, quiet = TRUE)
+#' fit <- fit_4pl(dat, family = "binomial", t_ref = 60, quiet = TRUE)
 #' tdt <- extract_tdt(fit, nboot = 10, seed = 1)
 #' get_z_summary(tdt)
 #' get_ctmax_draws(tdt)

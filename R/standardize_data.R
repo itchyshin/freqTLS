@@ -51,16 +51,17 @@
 #'                       random effects, e.g. `c("Date", "Tank")`. These
 #'                       columns are converted to factors and stored in
 #'                       metadata for the fitter to read.
-#' @param duration_unit  Label for the unit of `duration`, stored in metadata.
-#'                       A recognised value (`"seconds"`, `"minutes"`,
-#'                       `"hours"`, or `"days"`, with common abbreviations)
-#'                       lets [fit_tls()] and [fit_4pl()] resolve an omitted
-#'                       reference time to one physical hour. Default `"hours"`.
+#' @param duration_unit  Unit of the input `duration` column. A recognised value
+#'                       (`"seconds"`, `"minutes"`, `"hours"`, or `"days"`,
+#'                       with common abbreviations) is required. Durations are
+#'                       converted to minutes, so `tref` / `t_ref` is always in
+#'                       minutes and the one-hour default is `60`. Default `"minutes"`.
 #' @param temp_mean      Value to subtract from `temp` to form `temp_c`.
 #'                       `NULL` (default) uses `mean(temp)`. Supply a fixed
 #'                       value to align multiple datasets to a common centre.
 #' @return A tibble with the standardised columns plus a `"tdt_meta"` attribute
-#'         storing `temp_mean`, `duration_unit`, `random_effects`,
+#'         storing `temp_mean`, `duration_unit` (always `"minutes"`),
+#'         `input_duration_unit`, `random_effects`,
 #'         `response_type` (`"count"` or `"proportion"`), `response_var`
 #'         (the response column name for a proportion fit, else `NULL`), and
 #'         `proportion_eps` (the clamp used for a proportion fit, else `NULL`).
@@ -76,7 +77,8 @@
 #'                  temp     = "temperature_C",
 #'                  duration = "exposure_h",
 #'                  n_total  = "n",
-#'                  n_surv   = "alive")
+#'                  n_surv   = "alive",
+#'                  duration_unit = "hours")
 #'
 #' # Continuous proportion (Beta) data
 #' raw_p <- data.frame(
@@ -87,7 +89,8 @@
 #' standardize_data(raw_p,
 #'                  temp       = "temperature_C",
 #'                  duration   = "exposure_h",
-#'                  proportion = "fvfm_ratio")
+#'                  proportion = "fvfm_ratio",
+#'                  duration_unit = "hours")
 #' @export
 standardize_data <- function(data,
                              temp,
@@ -100,7 +103,7 @@ standardize_data <- function(data,
                              proportion     = NULL,
                              proportion_eps = 0.001,
                              random_effects = NULL,
-                             duration_unit  = "hours",
+                             duration_unit  = "minutes",
                              temp_mean      = NULL) {
 
   response_args <- list(n_surv = n_surv, n_dead = n_dead, survival = survival,
@@ -118,6 +121,7 @@ standardize_data <- function(data,
   needed <- c(temp, duration, n_total, n_surv, n_dead, survival, mortality,
               proportion, tdt_random_effect_variables(random_effects))
   tdt_check_columns(data, needed, "input columns")
+  duration_multiplier <- tls_minutes_multiplier(duration_unit)
 
   # Warn when standardized columns would overwrite an input column that was not
   # supplied as its source. For example, a raw `temp_c` or `logd` column may
@@ -136,7 +140,7 @@ standardize_data <- function(data,
 
   out          <- as.data.frame(data)
   out$temp     <- as.numeric(out[[temp]])
-  out$duration <- as.numeric(out[[duration]])
+  out$duration <- as.numeric(out[[duration]]) * duration_multiplier
   out$logd     <- log10(out$duration)
 
   if (is_proportion) {
@@ -230,7 +234,8 @@ standardize_data <- function(data,
 
   attr(out, "tdt_meta") <- list(
     temp_mean      = temp_mean,
-    duration_unit  = duration_unit,
+    duration_unit  = "minutes",
+    input_duration_unit = duration_unit,
     random_effects = random_effects,
     response_type  = response_type,
     response_var   = response_var,

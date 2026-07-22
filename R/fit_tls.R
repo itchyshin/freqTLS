@@ -43,7 +43,7 @@
 #'   individuals). Required for the binomial and beta-binomial families; omit it
 #'   for the `beta` family, whose response is already a proportion.
 #' @param time <[`data-masked`][rlang::args_data_masking]> Column of exposure
-#'   durations in the data's native unit (e.g. hours); used as
+#'   durations in minutes; used as
 #'   `log10(duration)` internally.
 #' @param temp <[`data-masked`][rlang::args_data_masking]> Column of assay
 #'   temperatures (degrees C).
@@ -54,12 +54,10 @@
 #' @param family One of `"beta_binomial"` (default), `"binomial"`, or `"beta"`
 #'   (a continuous proportion in `(0, 1)`), or a `tls_family` object from
 #'   [beta_binomial_tls()] / [binomial_tls()] / [beta_tls()].
-#' @param tref Reference time at which `CTmax` is defined, in the same unit as
-#'   `time`. When `NULL` (the default), standardized data with a recognised
-#'   `duration_unit` use one physical hour (for example, `60` minutes or `1`
-#'   hour). For bare data without metadata, the historical fallback is `1`
-#'   native time unit with a warning; supply `tref` explicitly to avoid an
-#'   ambiguous reference.
+#' @param tref Reference time at which `CTmax` is defined, in minutes. When
+#'   `NULL` (the default), it is `60` minutes (one hour). Use
+#'   [standardize_data()] to convert a raw duration column before fitting;
+#'   bare formula/column data must already use minutes.
 #' @param start Optional named list of starting values on the internal
 #'   (unconstrained) scale, overriding the defaults. Names must match the
 #'   parameters in `src/profile_tls.cpp` (`beta_low`, `beta_up`, `beta_logk`,
@@ -93,13 +91,13 @@
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' fit$estimates
 #'
 #' # The same fit through the formula interface:
 #' fit2 <- fit_tls(
 #'   tls_bf(survived | trials(total) ~ time(duration) + temp(temp)),
-#'   data = d, family = "binomial", tref = 1
+#'   data = d, family = "binomial", tref = 60
 #' )
 #'
 #' @export

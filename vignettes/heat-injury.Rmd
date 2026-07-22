@@ -47,8 +47,8 @@ trace$temp <- ifelse(trace$time <= 60, 38,
 The staged 38–40 °C heatwave is a user-defined scenario, not an environmental
 trace. Those temperatures and the 20.9–240 minute duration range occur in the
 static assay, but their fluctuating sequence was not observed. The trace time,
-fitted duration, and reference time must use the same unit because heat-injury
-damage is accumulated per time unit.
+fitted duration, and reference time are all minutes because heat-injury damage
+is accumulated per minute.
 
 ```{r prediction}
 injury <- predict_heat_injury(fit, trace)

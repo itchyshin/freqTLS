@@ -75,7 +75,7 @@ dat <- standardize_data(
   n_total = "total", n_surv = "survived"
 )
 fit <- fit_4pl(
-  dat, family = "binomial", t_ref = 1, method = "wald", quiet = TRUE
+  dat, family = "binomial", t_ref = 60, method = "wald", quiet = TRUE
 )
 tls(fit)
 tls_z(fit)

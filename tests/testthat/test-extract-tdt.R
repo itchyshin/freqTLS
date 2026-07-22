@@ -25,7 +25,8 @@ test_that("extract_tdt returns nested z/CTmax with the bayesTLS column contract"
   expect_true(s$temp_lower < s$temp_median && s$temp_median < s$temp_upper)
   expect_equal(nrow(get_z_draws(et)), et$meta$nboot)
   expect_identical(et$meta$tref, 1)
-  expect_identical(et$meta$duration_unit, "hours")
+  expect_identical(et$meta$duration_unit, "minutes")
+  expect_identical(et$meta$input_duration_unit, "minutes")
 })
 
 test_that("extract_tdt groups and adds T_crit (below CTmax) when lethal", {

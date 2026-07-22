@@ -29,7 +29,7 @@
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' tidy_parameters(fit)
 #' tidy_parameters(fit, method = "profile")
 #'
@@ -91,7 +91,7 @@ tidy_parameters <- function(fit, conf.int = TRUE, conf.level = 0.95,
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' get_ctmax(fit)
 #' @export
 get_ctmax <- function(fit, conf.int = TRUE, conf.level = 0.95,
@@ -110,7 +110,7 @@ get_ctmax <- function(fit, conf.int = TRUE, conf.level = 0.95,
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' get_z(fit)
 #' @export
 get_z <- function(fit, conf.int = TRUE, conf.level = 0.95,
@@ -132,7 +132,7 @@ get_z <- function(fit, conf.int = TRUE, conf.level = 0.95,
 #' @examples
 #' d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 1)
 #' fit <- fit_tls(d, y = survived, n = total, time = duration, temp = temp,
-#'                family = "binomial", tref = 1)
+#'                family = "binomial", tref = 60)
 #' get_shape(fit)
 #' @export
 get_shape <- function(fit, conf.int = TRUE, conf.level = 0.95,
