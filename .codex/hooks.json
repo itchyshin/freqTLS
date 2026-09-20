@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/z3437171/Dropbox/Github Local/freqTLS/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
