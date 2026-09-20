@@ -29,7 +29,7 @@ only independent random intercepts, not a phylogenetic covariance matrix.
 `tests/testthat/test-formula.R`, `docs/design/08-random-effects.md`,
 `docs/design/46-capability-matrix.md`, `docs/dev-log/known-limitations.md`,
 `inst/COPYRIGHTS`, this report, the check log, `man/figures/logo.png`, and
-`pkgdown/favicon/`.
+`pkgdown/favicon/`, and `.github/workflows/R-CMD-check.yaml`.
 
 ## Checks Run
 
@@ -40,6 +40,10 @@ only independent random intercepts, not a phylogenetic covariance matrix.
   metadata.
 - Rendered-home-page inspection found `logo.png` plus all six active badges.
 - `git diff --check` completed cleanly.
+- The initial GitHub Actions run exposed an ARM macOS R 4.6 binary-download
+  failure for `knitr` before package installation. The macOS release check now
+  targets GitHub's supported `macos-15-intel` runner; its CRAN binary endpoint
+  returned a gzip response in a direct check.
 
 ## Tests Of The Tests
 
@@ -67,7 +71,9 @@ open issue. No duplicate issue was created or updated.
 pkgdown requires each custom sidebar item to be declared under
 `home.sidebar.components`; the first local build exposed that configuration
 requirement. Adding the named `badges` component fixed it, after which the site
-build passed.
+build passed. GitHub's current ARM macOS runner also returned an invalid
+dependency archive before the package check; the CI job was moved to the
+supported Intel macOS release runner and requires a fresh four-platform run.
 
 ## Team Learning
 

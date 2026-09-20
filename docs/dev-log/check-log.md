@@ -23,6 +23,12 @@ Checks and evidence:
 - `rg -n 'gr\\(species, cov = tree\\)|Phylogenetic covariance' README.Rmd ROADMAP.md NEWS.md docs R man tests` -> the package code, test, README, limitations, capability matrix, and random-effects design note agree on the unsupported scope.
 - `gh issue list --repo itchyshin/freqTLS --state open --limit 100` -> no overlapping open issue; tracker deliberately unchanged.
 - `git diff --check` -> clean.
+- GitHub Actions run `35532363680` -> the ARM `macos-latest` job reproducibly
+  failed before package installation because `pak` received a non-archive
+  response for `knitr_1.52.tgz`; Ubuntu release and Windows release completed
+  successfully. The workflow now uses GitHub's supported `macos-15-intel`
+  runner for the macOS release check; the R 4.6 Intel CRAN binary endpoint
+  returned `200 application/x-gzip` when checked directly.
 
 Interpretation:
 
