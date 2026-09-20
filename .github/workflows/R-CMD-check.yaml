@@ -30,7 +30,10 @@ jobs:
           - {os: ubuntu-latest, r: release}
           - {os: ubuntu-latest, r: devel}
           - {os: windows-latest, r: release}
-          - {os: macos-latest, r: release}
+          # `macos-latest` is currently ARM and its R 4.6 binary package
+          # download can yield a non-archive response before checks start.
+          # Keep the release check on GitHub's supported Intel macOS image.
+          - {os: macos-15-intel, r: release}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

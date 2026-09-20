@@ -26,7 +26,10 @@ Deliberately **out of scope**, each rejected with a clear error:
 - more than one grouping factor on a single sub-parameter / crossed or nested
   random effects;
 - a **correlated** (multivariate) random effect across coordinates — only
-  independent intercepts are fit (use `bayesTLS` for a correlated random structure).
+  independent intercepts are fit (use `bayesTLS` for a correlated random structure);
+- phylogenetic covariance syntax such as `(1 | gr(species, cov = tree))`.
+  It is rejected before fitting rather than being reported as an optimizer
+  failure; use `bayesTLS` for that model.
 
 ## Model
 
@@ -220,6 +223,8 @@ every block's deviations. `sigma_logz` stays on Wald under `method = "profile"`
   equals the column-interface fit; scope errors (intercept only, single grouping,
   `up` RE rejected while `low`/`log_k` are accepted); `simulate_tls` RE-mode
   validation.
+- `tests/testthat/test-formula.R`: a `gr(species, cov = tree)` grouping is
+  rejected with a phylogenetic-covariance message before fitting.
 - `tests/testthat/test-random-effects-logz.R` (log_z, item 5): convergence +
   fixed-effect recovery; averaged `sigma_logz` recovery; the no-RE fit is
   unchanged; `ranef()` `log_z` BLUPs and the `sigma_logz` Wald interval;

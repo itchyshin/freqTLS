@@ -5,6 +5,41 @@ state. Each dated entry records the goal, the changes, the exact checks run (wit
 command text, not summaries), and an interpretation into next steps. GitHub issue
 maintenance is recorded here too.
 
+## 2026-09-20 -- pkgdown identity, verified status badges, and phylogenetic RE boundary
+
+Goal:
+
+- Put Daniel W. A. Noble's supplied freqTLS hex logo and a truthful status-badge
+  set on the pkgdown home page, and make the unsupported phylogenetic random
+  effect reported in the collaborator discussion fail clearly before fitting.
+
+Checks and evidence:
+
+- `gh api repos/itchyshin/freqTLS --jq '{has_discussions, license: .license.spdx_id, archived, default_branch}'` -> public repository is active, GPL-3.0, and has no GitHub Discussions; `gh api repos/itchyshin/freqTLS/actions/workflows` -> active `R-CMD-check` and `pkgdown` workflows. No CRAN, download, Codecov, or AMA badge was added because those services are not active for this package.
+- `Rscript -e 'devtools::document(); devtools::test()'` -> completed with exit status 0, including the deterministic formula-parser regression test for `gr(species, cov = tree)`.
+- `Rscript tools/build-site.R .` -> completed with exit status 0. pkgdown's initial sitrep reported `URLs ok`, `Favicons ok`, `Open graph metadata ok`, `Articles metadata ok`, and `Reference metadata ok`.
+- `rg -n 'logo.png|Questions welcome|Open source|R-CMD-check' pkgdown-site/index.html` -> the generated home page has `logo.png` as its header image and the experimental, R-CMD-check, pkgdown, GPL, questions-welcome, and open-source badges in its status component.
+- `rg -n -i 'phylogenetic|gr\\(' pkgdown-site/reference/tls_bf.html` -> the generated formula reference documents that `gr(species, cov = tree)` is unsupported and directs readers to `bayesTLS`.
+- `rg -n 'gr\\(species, cov = tree\\)|Phylogenetic covariance' README.Rmd ROADMAP.md NEWS.md docs R man tests` -> the package code, test, README, limitations, capability matrix, and random-effects design note agree on the unsupported scope.
+- `gh issue list --repo itchyshin/freqTLS --state open --limit 100` -> no overlapping open issue; tracker deliberately unchanged.
+- `git diff --check` -> clean.
+- GitHub Actions run `35532363680` -> the ARM `macos-latest` job reproducibly
+  failed before package installation because `pak` received a non-archive
+  response for `knitr_1.52.tgz`; Ubuntu release and Windows release completed
+  successfully. The workflow now uses GitHub's supported `macos-15-intel`
+  runner for the macOS release check; the R 4.6 Intel CRAN binary endpoint
+  returned `200 application/x-gzip` when checked directly.
+
+Interpretation:
+
+- The package now has a locally rendered, attribution-recorded visual identity and
+  the same public status signals on GitHub and pkgdown. The CRAN/download/coverage
+  badges visible on bayesTLS are deferred until freqTLS has a CRAN release and a
+  coverage service; the site does not imply they exist. Phylogenetic covariance is
+  explicitly out of scope for the independent-intercept TMB implementation, and
+  users receive an actionable `bayesTLS` alternative instead of a misleading
+  convergence diagnosis.
+
 ## 2026-06-16 -- Phase 0 bootstrap: team, memory, docs, and package scaffold
 
 Goal:

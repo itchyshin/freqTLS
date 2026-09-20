@@ -87,6 +87,11 @@ group-aware data-adequacy warnings, `diag_data`, and `plot_survival_curves()`
 match the column interface. A general multi-predictor design has no single
 grouping label, so it carries none.
 
+Phylogenetic covariance is not an independent grouping factor: a
+`gr(species, cov = tree)` term is rejected before fitting rather than being
+misreported as an optimizer failure. Use `bayesTLS` when the model needs that
+covariance structure.
+
 ## Implemented core matrix
 
 The original core matrix covered two count families, two designs, and two CI

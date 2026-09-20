@@ -151,6 +151,23 @@ test_that("random intercepts on CTmax / log_z / low / log_k are parsed; up is re
   )
 })
 
+test_that("phylogenetic covariance syntax is rejected before fitting", {
+  d <- simulate_tls(family = "binomial", CTmax = 36, z = 4, seed = 111)
+  d$species <- factor(rep(letters[1:3], length.out = nrow(d)))
+
+  expect_error(
+    freqTLS:::tls_parse_formula(
+      tls_bf(
+        survived | trials(total) ~ time(duration) + temp(temp),
+        CTmax ~ (1 | gr(species, cov = phylo_covariance))
+      ),
+      d, quiet = TRUE
+    ),
+    "Phylogenetic covariance random effects are not implemented",
+    fixed = TRUE
+  )
+})
+
 test_that("an unknown sub-parameter handle is an error", {
   expect_error(
     tls_bf(survived | trials(total) ~ time(duration) + temp(temp),

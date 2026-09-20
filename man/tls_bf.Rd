@@ -43,7 +43,9 @@ intercept groupings may differ. A single random intercept,
 \code{log_k} (one grouping factor each, intercept only) -- but not on the upper
 asymptote \code{up}, for which the compiled objective has no random-intercept term. Putting the same
 grouping factor on two or more of them fits independent variances (no
-correlation term) and warns.
+correlation term) and warns. Phylogenetic covariance structures (for
+example, \code{gr(species, cov = tree)}) are not implemented; use \code{bayesTLS} for
+that model.
 }
 \section{Parser provenance}{
 

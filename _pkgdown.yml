@@ -34,7 +34,17 @@ home:
     model, fitted by maximum likelihood via TMB. The likelihood complement to
     bayesTLS.
   sidebar:
-    structure: [links, license, community, citation, authors, dev]
+    structure: [links, badges, license, community, citation, authors, dev]
+    components:
+      badges:
+        title: Status
+        text: |
+          [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+          [![R-CMD-check](https://github.com/itchyshin/freqTLS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/itchyshin/freqTLS/actions/workflows/R-CMD-check.yaml)
+          [![pkgdown](https://github.com/itchyshin/freqTLS/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/itchyshin/freqTLS/actions/workflows/pkgdown.yaml)
+          [![License: GPL (>= 3)](https://img.shields.io/badge/license-GPL%20(%3E%3D%203)-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+          [![Questions welcome](https://img.shields.io/badge/questions-welcome-0b9f8c.svg)](https://github.com/itchyshin/freqTLS/issues)
+          [![Open source](https://img.shields.io/badge/open%20source-%E2%99%A5-e85285.svg)](https://github.com/itchyshin/freqTLS)
   links:
     - text: Source code on GitHub
       href: https://github.com/itchyshin/freqTLS
