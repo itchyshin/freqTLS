@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Cross-checking freqTLS with bayesTLS • freqTLS</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
@@ -81,8 +86,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Cross-checking freqTLS with bayesTLS</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Cross-checking freqTLS with bayesTLS</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/itchyshin/freqTLS/blob/main/vignettes/comparing-to-bayesTLS.Rmd" class="external-link"><code>vignettes/comparing-to-bayesTLS.Rmd</code></a></small>
@@ -318,11 +322,11 @@ effect.</p>
 <span><span class="va">freq_diagnostics</span></span>
 <span><span class="co">#&gt;                case_id converged pd_hessian max_abs_gradient gradient_pass</span></span>
 <span><span class="co">#&gt; 1     zebrafish_oxygen      TRUE       TRUE     1.948692e-04          TRUE</span></span>
-<span><span class="co">#&gt; 2           aphid_age6      TRUE       TRUE     1.076456e-05          TRUE</span></span>
-<span><span class="co">#&gt; 3        aphid_all_age      TRUE       TRUE     1.962863e-05          TRUE</span></span>
-<span><span class="co">#&gt; 4         snowgum_psii      TRUE       TRUE     2.898513e-04          TRUE</span></span>
-<span><span class="co">#&gt; 5 drosophila_mortality      TRUE       TRUE     7.497304e-05          TRUE</span></span>
-<span><span class="co">#&gt; 6     drosophila_awake      TRUE       TRUE     1.202229e-05          TRUE</span></span>
+<span><span class="co">#&gt; 2           aphid_age6      TRUE       TRUE     2.091929e-06          TRUE</span></span>
+<span><span class="co">#&gt; 3        aphid_all_age      TRUE       TRUE     9.832409e-06          TRUE</span></span>
+<span><span class="co">#&gt; 4         snowgum_psii      TRUE       TRUE     2.898515e-04          TRUE</span></span>
+<span><span class="co">#&gt; 5 drosophila_mortality      TRUE       TRUE     7.996796e-05          TRUE</span></span>
+<span><span class="co">#&gt; 6     drosophila_awake      TRUE       TRUE     1.204766e-05          TRUE</span></span>
 <span><span class="co">#&gt;                                     interval_method</span></span>
 <span><span class="co">#&gt; 1                      Wald 95% confidence interval</span></span>
 <span><span class="co">#&gt; 2                      Wald 95% confidence interval</span></span>
@@ -806,8 +810,8 @@ reported separately rather than printing another 18-row table.</p>
 <span>  FUN <span class="op">=</span> <span class="va">max</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   parameter abs(difference_freq_minus_bayes)</span></span>
-<span><span class="co">#&gt; 1     CTmax                       0.02725904</span></span>
-<span><span class="co">#&gt; 2         z                       0.02246866</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     CTmax                       0.02725888</span></span>
+<span><span class="co">#&gt; 2         z                       0.02246847</span></span></code></pre></div>
 <p>Snow-gum is a paired refit of the locked shared-shape analogue. It is
 not a claim that freqTLS reproduces the richer recovery-by-temperature
 shape model displayed in the pinned supplement.</p>

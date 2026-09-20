@@ -69,6 +69,8 @@ not a probability density.](reference/figures/README-readme-eye-1.png)
   fixed effects. At most one intercept term is supported per coordinate,
   and multiple terms remain independent variance blocks; correlated,
   crossed, nested, and random-slope structures are not implemented.
+  Phylogenetic covariance terms such as `gr(species, cov = tree)` are
+  also unsupported; use `bayesTLS` for that model.
 - Derives critical temperatures —
   [`derive_ctmax()`](https://itchyshin.github.io/freqTLS/reference/derive_ctmax.md)
   (absolute threshold) and

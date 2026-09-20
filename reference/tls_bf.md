@@ -50,6 +50,9 @@ groupings may differ. A single random intercept,
 on the upper asymptote `up`, for which the compiled objective has no
 random-intercept term. Putting the same grouping factor on two or more
 of them fits independent variances (no correlation term) and warns.
+Phylogenetic covariance structures (for example,
+`gr(species, cov = tree)`) are not implemented; use `bayesTLS` for that
+model.
 
 ## Parser provenance
 

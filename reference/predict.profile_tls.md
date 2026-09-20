@@ -129,7 +129,7 @@ fit_x <- fit_tls(
   data = d, family = "binomial", tref = 60
 )
 predict(fit_x, data.frame(temp = 36, duration = 2, x = c(-1, 1)))
-#> [1] 0.1678129 0.2048208
+#> [1] 0.1678131 0.2048207
 
 # \donttest{
 # Choose population or fitted-group prediction explicitly for an RE fit.
