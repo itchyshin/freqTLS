@@ -61,6 +61,13 @@ Source: https://github.com/JenniNiku/gllvmTMB (or the local sibling package).
   survival/TDT/surface plots; only the lens geometry and eye structure are
   adapted.
 
+== Package logo ==
+
+- `man/figures/logo.png` is the freqTLS hex-sticker artwork created by Daniel
+  W. A. Noble and supplied to the project on 2026-09-18. It is displayed on the
+  pkgdown home page and used to derive site favicons; it is not source code and
+  does not change the GPL (>= 3) licence of the package code.
+
 == Bundled data and generated evidence ==
 
 The file-by-file source, rights holder, licence or permission status,

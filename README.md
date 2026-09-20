@@ -16,6 +16,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![pkgdown](https://github.com/itchyshin/freqTLS/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/itchyshin/freqTLS/actions/workflows/pkgdown.yaml)
 [![License: GPL (\>=
 3)](https://img.shields.io/badge/license-GPL%20(%3E%3D%203)-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![Questions welcome](https://img.shields.io/badge/questions-welcome-0b9f8c.svg)](https://github.com/itchyshin/freqTLS/issues)
+[![Open source](https://img.shields.io/badge/open%20source-%E2%99%A5-e85285.svg)](https://github.com/itchyshin/freqTLS)
 <!-- badges: end -->
 
 > **⚠️ `freqTLS` is experimental and provided without assurance. Use at
@@ -73,6 +75,8 @@ the visual deliberately avoids posterior-density iconography.
   fixed effects. At most one intercept term is supported per coordinate,
   and multiple terms remain independent variance blocks; correlated,
   crossed, nested, and random-slope structures are not implemented.
+  Phylogenetic covariance terms such as `gr(species, cov = tree)` are also
+  unsupported; use `bayesTLS` for that model.
 - Derives critical temperatures — `derive_ctmax()` (absolute threshold)
   and `derive_tcrit()` (rate-multiplier) — and predicts **heat injury**
   under a temperature trace (`predict_heat_injury()`) with a prior-free

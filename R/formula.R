@@ -26,7 +26,9 @@
 #' `log_k` (one grouping factor each, intercept only) -- but not on the upper
 #' asymptote `up`, for which the compiled objective has no random-intercept term. Putting the same
 #' grouping factor on two or more of them fits independent variances (no
-#' correlation term) and warns.
+#' correlation term) and warns. Phylogenetic covariance structures (for
+#' example, `gr(species, cov = tree)`) are not implemented; use `bayesTLS` for
+#' that model.
 #'
 #' @section Parser provenance:
 #' The shape of the parser (variadic capture via [substitute()], a per-entry
@@ -230,6 +232,13 @@ tls_extract_re <- function(rhs_expr, data, param = "CTmax", quiet = FALSE) {
       cli::cli_abort(c(
         "Only a random intercept {.code (1 | group)} is supported on {.code {param}}.",
         x = "Got {.code ({deparse1(re_lhs)} | {deparse1(re_group)})}; random slopes are not supported."
+      ))
+    }
+    if (is.call(re_group) && identical(as.character(re_group[[1L]]), "gr")) {
+      cli::cli_abort(c(
+        "Phylogenetic covariance random effects are not implemented in {.pkg freqTLS}.",
+        x = "Got {.code (1 | {deparse1(re_group)})}.",
+        i = "freqTLS supports only an independent {.code (1 | group)} intercept; use {.pkg bayesTLS} for {.code gr(..., cov = ...)} phylogenetic structures."
       ))
     }
     if (!is.name(re_group)) {

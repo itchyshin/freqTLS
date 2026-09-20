@@ -165,8 +165,9 @@ estimand. Bare formula/column data must already use minutes.
 - Random effects beyond single intercepts on `CTmax` / `log_z` / `low` / `log_k`
   (random slopes, a RE on the upper asymptote `up`, a second / crossed grouping
   factor on one sub-parameter, and correlated multivariate random effects across
-  coordinates). These need a stacked-random-vector engine redesign; `bayesTLS` is
-  the path for a correlated random structure. The single intercepts on `CTmax` /
+  coordinates), including phylogenetic covariance terms such as
+  `gr(species, cov = tree)`. These need a stacked-random-vector engine redesign;
+  `bayesTLS` is the path for a correlated or phylogenetic random structure. The single intercepts on `CTmax` /
   `log_z` / `low` / `log_k` -- with profile intervals for the fixed effects and a
   prior-free RE-aware bootstrap for the variance components -- are fitted.
 - Beta / continuous responses: **fitted** (`family = "beta"`). The
