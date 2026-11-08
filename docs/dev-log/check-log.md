@@ -5,6 +5,60 @@ state. Each dated entry records the goal, the changes, the exact checks run (wit
 command text, not summaries), and an interpretation into next steps. GitHub issue
 maintenance is recorded here too.
 
+## 2026-11-08 -- CI pin repair: r-lib/actions v2.14.0 for Ubuntu sudo-rs
+
+Goal:
+
+- Same PR 65. Repair the observed `setup-r-dependencies` failure on current
+  `ubuntu-latest` (`sudo -E` ignored by sudo-rs; empty `R_LIB_FOR_PAK`) so
+  coverage and ordinary Ubuntu checks can start. No science, tests, matrix,
+  or Codecov-auth change.
+
+Compatibility evidence (upstream, not a freqTLS coverage percent):
+
+- Failure on PR 65 runs `42527449672` (test-coverage) and `42527449655`
+  (R-CMD-check ubuntu release/devel): `sudo: preserving the entire
+  environment is not supported, '-E' is ignored` then
+  `dir.create(Sys.getenv("R_LIB_FOR_PAK")): zero-length 'path' argument`.
+  Codecov upload was **skipped**. Windows and macos-15-intel succeeded.
+- Matches r-lib/actions#1094 / PR #1096. NEWS `v2.13.0`: setup-r-dependencies
+  switches back to classic sudo on Linux for Ubuntu 26.04 runners.
+- Old pin `d3c5be51b12e724e68f33216ca3c148b66d5f0b6` = tag `v2.12.1`
+  (2026-06-23), before the fix. New pin
+  `f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05` = tag `v2.14.0` (2026-09-21
+  commit tag, 9 commits ahead of merge `2a66450eb7b5`, 0 behind). Action
+  yaml at that SHA contains the `/usr/bin/sudo.ws` switch.
+- Rejected pinning `ubuntu-24.04` as the primary fix: the supported repair
+  is the released action that added ubuntu-26.04 to its own test matrix.
+  Four-platform freqTLS matrix unchanged.
+
+Checks:
+
+```sh
+python3 -c 'import yaml,pathlib; w=yaml.safe_load(open(".github/workflows/test-coverage.yaml")); j=w["jobs"]["test-coverage"]; pin="f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05"; assert j["runs-on"]=="ubuntu-latest"; assert pin in pathlib.Path(".github/workflows/test-coverage.yaml").read_text(); assert "d3c5be51" not in pathlib.Path(".github/workflows/test-coverage.yaml").read_text(); print("coverage pin ok")'
+python3 -c 'import yaml,pathlib; c=yaml.safe_load(open(".github/workflows/R-CMD-check.yaml")); print([(m["os"], m["r"]) for m in c["jobs"]["R-CMD-check"]["strategy"]["matrix"]["config"]]); t=pathlib.Path(".github/workflows/R-CMD-check.yaml").read_text(); assert "f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05" in t; assert "d3c5be51" not in t'
+git diff --check
+command -v Rscript; command -v R
+```
+
+Results:
+
+- `coverage pin ok` / `R-CMD-check pin+matrix ok` / `pkgdown pin ok`.
+  Matrix still ubuntu-release, ubuntu-devel, windows-release,
+  macos-15-intel. Timeouts unchanged (check 45, coverage 60). No leftover
+  `d3c5be51` in `.github`. Codecov `token:` input still absent.
+- `git diff --check`: clean.
+- `Rscript` / `R`: ABSENT. Local covr **NOT_VERIFIED**. No percent
+  fabricated.
+- Hosted CI after this push: **NOT_VERIFIED** at write time. Do not claim
+  coverage finish, upload, processed report, or main baseline from this
+  pin change.
+
+Interpretation:
+
+- CI compatibility only. Future wakes are evidence-only; no further
+  coding without explicit coordinator assignment.
+
 ## 2026-11-08 -- Codecov first coding pass (collection + OIDC upload config)
 
 Goal:

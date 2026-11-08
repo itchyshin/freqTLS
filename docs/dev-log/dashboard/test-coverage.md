@@ -33,6 +33,14 @@ Auth is documented Codecov OIDC (`use_oidc: true`) with job-scoped
 `GITHUB_TOKEN` / `GH_TOKEN` is not used as a Codecov token (`GITHUB_PAT` is
 only the usual r-lib install token).
 
+`r-lib/actions` is pinned to immutable commit
+`f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05` (released tag `v2.14.0`). That
+tag includes `setup-r-dependencies` #1096, which switches Ubuntu 25.10+
+`sudo-rs` back to classic `sudo` so `R_LIB_FOR_PAK` survives `sudo -E`.
+The previous pin `d3c5be51` (`v2.12.1`) failed on current `ubuntu-latest`
+before covr ran. The four-platform R-CMD-check matrix is unchanged. This
+pin is compatibility evidence, not a coverage percentage.
+
 ## Evidence stages (do not collapse)
 
 Config on a branch is not functioning coverage. Keep these claims separate:
