@@ -1,0 +1,40 @@
+# Codecov upload policy for freqTLS.
+# Presence of this file does not prove coverage ran, uploaded, or was accepted.
+# See docs/dev-log/dashboard/test-coverage.md.
+#
+# One CI coverage job uploads one report (`ubuntu-covr`). Do not add a second
+# OS or shard without raising `after_n_builds` and splitting flags, or Codecov
+# will wait for missing uploads or double-count the same tests.
+codecov:
+  require_ci_to_pass: false
+  notify:
+    after_n_builds: 1
+    wait_for_ci: false
+
+comment:
+  layout: "header, diff, files"
+  behavior: default
+  require_changes: false
+
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+ignore:
+  - "tests/**/*"
+  - "vignettes/**/*"
+  - "data-raw/**/*"
+  - "docs/**/*"
+  - "tools/**/*"
+  - "man/**/*"
+  - "inst/**/*"
+  - ".agents/**/*"
+  - ".claude/**/*"
+  - ".codex/**/*"
+  - "plans/**/*"
+  - "pkgdown-site/**/*"

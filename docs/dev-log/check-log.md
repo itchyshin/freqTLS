@@ -5,6 +5,60 @@ state. Each dated entry records the goal, the changes, the exact checks run (wit
 command text, not summaries), and an interpretation into next steps. GitHub issue
 maintenance is recorded here too.
 
+## 2026-11-08 -- Codecov first coding pass (collection + OIDC upload config)
+
+Goal:
+
+- Land real test-coverage collection and one Codecov OIDC upload on freqTLS
+  CI only. Isolated branch from `origin/main` `314ac98c`. No science, tests,
+  fixtures, NEWS, DESCRIPTION, capability, or README badge.
+
+Checks and evidence:
+
+```sh
+python3 -c 'import yaml; yaml.safe_load(open(".github/workflows/test-coverage.yaml")); yaml.safe_load(open("codecov.yml")); print("yaml ok")'
+python3 -c 'import yaml,pathlib; w=yaml.safe_load(open(".github/workflows/test-coverage.yaml")); j=w["jobs"]["test-coverage"]; assert j["runs-on"]=="ubuntu-latest"; assert j["permissions"]=={"contents":"read","id-token":"write"}; u=[s for s in j["steps"] if s.get("name")=="Upload coverage to Codecov (OIDC)"][0]; assert u["with"]["use_oidc"] is True; assert "token" not in u["with"]; wf=pathlib.Path(".github/workflows/test-coverage.yaml").read_text(); assert "${{ secrets.CODECOV_TOKEN }}" not in wf; print("oidc+ubuntu+single-upload ok")'
+python3 -c 'import yaml; c=yaml.safe_load(open(".github/workflows/R-CMD-check.yaml")); print([(m["os"], m["r"]) for m in c["jobs"]["R-CMD-check"]["strategy"]["matrix"]["config"]])'
+git diff --check
+command -v Rscript; command -v R
+gh issue list --repo itchyshin/freqTLS --state open --limit 20
+rg -n "codecov|covr|CODECOV_TOKEN|use_oidc" .github codecov.yml docs/dev-log README.Rmd ROADMAP.md NEWS.md docs/design/46-capability-matrix.md docs/dev-log/known-limitations.md
+```
+
+Results:
+
+- YAML parse: `yaml ok` / `oidc+ubuntu+single-upload ok` (PyYAML 6.0.1 on
+  Python 3.12). Asserted ubuntu-only job, job-scoped `contents:read` +
+  `id-token:write`, `use_oidc: true`, no Codecov `token:` input, no
+  `${{ secrets.CODECOV_TOKEN }}`, `after_n_builds: 1`, informational
+  Codecov status, flag `ubuntu-covr`, `fail_ci_if_error: true`.
+- R-CMD-check matrix still
+  `[('ubuntu-latest', 'release'), ('ubuntu-latest', 'devel'),
+  ('windows-latest', 'release'), ('macos-15-intel', 'release')]`. Comment
+  only; no covr upload on those shards.
+- `git diff --check`: clean.
+- `Rscript` / `R`: ABSENT. Local `covr::package_coverage()` is
+  **NOT_VERIFIED**. No coverage percent is recorded.
+- `devtools::document()` / `devtools::test()` / `devtools::check()`: not
+  run (no R; no R source change).
+- `gh issue list --repo itchyshin/freqTLS --state open`: no open issues.
+  Tracker unchanged.
+- Hosted `test-coverage` and R-CMD-check: **NOT_VERIFIED** at write time.
+  Watch the PR runs. hsquared PR 364 processed 78.21% OIDC on that repo
+  is not freqTLS proof.
+
+Interpretation:
+
+- This is GitHub Actions + Codecov infrastructure. It is not scientific
+  interval coverage, not a capability-matrix change, not a README badge,
+  and not proof that Codecov accepted a report. Keep stages distinct:
+  config, local covr, CI coverage finish, upload transaction, processed
+  commit report, main baseline. On `pull_request`, branch-head SHA and
+  tested checkout SHA (synthetic merge possible) must be recorded
+  separately. Main baseline needs an authorized merge; this lane does not
+  merge. Subsequent CI wakes: evidence only; request coordinator before
+  further edits.
+
 ## 2026-09-20 -- pkgdown identity, verified status badges, and phylogenetic RE boundary
 
 Goal:

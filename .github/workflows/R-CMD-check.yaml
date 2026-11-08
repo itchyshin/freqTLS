@@ -23,6 +23,11 @@ jobs:
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
+    # Coverage collection lives in test-coverage.yaml (ubuntu-only, one
+    # Codecov upload). Do not add covr to this OS matrix: ubuntu-release,
+    # ubuntu-devel, windows, and macos-15-intel run the same testthat suite
+    # and extra uploads would double-count.
+
     strategy:
       fail-fast: false
       matrix:

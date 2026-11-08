@@ -26,3 +26,12 @@ bump.
 
 The port is 8767 (drmTMB uses 8765, hsquared 8766), so the three boards can run
 side by side.
+
+## Test coverage / Codecov (infrastructure, not scientific coverage)
+
+`test-coverage.md` records the covr + Codecov pipeline and the evidence
+stages (config, local covr, CI coverage finish, upload transaction, processed
+commit report, main baseline). That pipeline does not change the 4PL, the
+direct `CTmax`/`z` map, interval calibration, or the capability matrix.
+R-CMD-check OS shards stay check-only; one ubuntu job uploads. A README
+Codecov badge stays deferred until a processed commit report exists.
