@@ -111,7 +111,7 @@ diagnose_tdt_fit(mort_fit)
 #> # A tibble: 1 × 9
 #>   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params
 #>   <lgl>     <lgl>                 <dbl> <lgl>         <chr>      <dbl>    <int>
-#> 1 TRUE      TRUE              0.0000800 TRUE          nlminb     -167.       11
+#> 1 TRUE      TRUE              0.0000732 TRUE          nlminb     -167.       11
 #> # ℹ 2 more variables: AIC <dbl>, all_pass <lgl>
 check_tls(mort_fit)
 ```
@@ -129,9 +129,9 @@ mort_shape <- subset(
 )
 mort_shape
 #>         parameter     estimate    std.error
-#> 1 low:(Intercept) -29.26008064 2056.8348181
-#> 2      low:temp_c  13.92824301 1086.1951816
-#> 3  up:(Intercept)   0.70428049    0.1832665
+#> 1 low:(Intercept) -29.26042792 2057.0225329
+#> 2      low:temp_c  13.92842659 1086.2943115
+#> 3  up:(Intercept)   0.70428050    0.1832665
 #> 4       up:temp_c  -0.18786584    0.1203898
 #> 5   k:(Intercept)   2.98857053    0.1578812
 #> 6        k:temp_c   0.06581904    0.0997330

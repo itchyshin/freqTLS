@@ -71,7 +71,7 @@ diagnose_tdt_fit(coma_fit)
 #> # A tibble: 1 × 9
 #>   converged pd_hessian max_abs_gradient gradient_pass optimizer logLik n_params
 #>   <lgl>     <lgl>                 <dbl> <lgl>         <chr>      <dbl>    <int>
-#> 1 TRUE      TRUE              0.0000120 TRUE          nlminb     -130.       11
+#> 1 TRUE      TRUE              0.0000117 TRUE          nlminb     -130.       11
 #> # ℹ 2 more variables: AIC <dbl>, all_pass <lgl>
 check_tls(coma_fit)
 ```
@@ -89,9 +89,9 @@ coma_shape <- subset(
 )
 coma_shape
 #>         parameter    estimate    std.error
-#> 1 low:(Intercept) -44.2916768 1.781037e+04
-#> 2      low:temp_c -20.2774545 8.455428e+03
-#> 3  up:(Intercept)   2.6835505 8.010875e-01
+#> 1 low:(Intercept) -44.3152690 1.791051e+04
+#> 2      low:temp_c -20.2886548 8.502970e+03
+#> 3  up:(Intercept)   2.6835506 8.010875e-01
 #> 4       up:temp_c   0.4135033 4.957870e-01
 #> 5   k:(Intercept)   2.7540874 1.471270e-01
 #> 6        k:temp_c  -0.2713143 9.005695e-02
