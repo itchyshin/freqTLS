@@ -23,6 +23,11 @@ jobs:
 
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
+    # Coverage collection lives in test-coverage.yaml (ubuntu-only, one
+    # Codecov upload). Do not add covr to this OS matrix: ubuntu-release,
+    # ubuntu-devel, windows, and macos-15-intel run the same testthat suite
+    # and extra uploads would double-count.
+
     strategy:
       fail-fast: false
       matrix:
@@ -42,20 +47,23 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
-      - uses: r-lib/actions/setup-pandoc@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+      # v2.14.0 includes setup-r-dependencies #1096 (classic sudo on
+      # sudo-rs / Ubuntu 25.10+). v2.12.1 dropped R_LIB_FOR_PAK under
+      # `sudo -E` on current ubuntu-latest. Matrix OS/R unchanged.
+      - uses: r-lib/actions/setup-pandoc@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
 
-      - uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+      - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
           r-version: ${{ matrix.config.r }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+      - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
           dependencies: 'c("hard", "soft")'
           extra-packages: |
             any::rcmdcheck
           needs: check
 
-      - uses: r-lib/actions/check-r-package@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2
+      - uses: r-lib/actions/check-r-package@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
         with:
           upload-snapshots: true

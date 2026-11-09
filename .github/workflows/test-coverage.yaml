@@ -1,0 +1,110 @@
+# Test coverage collection + one Codecov upload.
+# Derived from https://github.com/r-lib/actions/tree/v2/examples
+# (test-coverage.yaml) with these freqTLS-specific choices:
+#   * OIDC auth (`use_oidc: true`); no CODECOV_TOKEN and no GH_TOKEN-as-token.
+#   * Job-scoped permissions: contents:read + id-token:write only.
+#   * Ubuntu-only. Do not add covr to the R-CMD-check OS matrix:
+#     ubuntu-release, ubuntu-devel, windows, and macos-15-intel all run the
+#     same testthat suite; extra uploads would double-count.
+#   * Existing skips are preserved (skip_on_cran still runs here because
+#     r-lib sets NOT_CRAN, matching R-CMD-check; skip_if_not cache/source-tree
+#     guards stay). This job does not expand or weaken the suite.
+#   * covr traces R. TMB C++ in src/ is not a gcov report.
+# Config (this file + codecov.yml) does not prove coverage ran, uploaded,
+# or was accepted. See docs/dev-log/dashboard/test-coverage.md.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+name: test-coverage
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions: {}
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      # v2.14.0 includes setup-r-dependencies #1096 (classic sudo on
+      # sudo-rs / Ubuntu 25.10+). v2.12.1 dropped R_LIB_FOR_PAK under
+      # `sudo -E` on current ubuntu-latest before covr could run.
+      - uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05 # v2.14.0
+        with:
+          extra-packages: any::covr, any::xml2
+          needs: coverage
+
+      - name: Test coverage
+        run: |
+          cov <- covr::package_coverage(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(
+              normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"),
+              "package"
+            )
+          )
+          print(cov)
+          pct <- round(covr::percent_coverage(cov), 2)
+          summary_file <- Sys.getenv("GITHUB_STEP_SUMMARY")
+          if (nzchar(summary_file)) {
+            writeLines(
+              c(
+                "## covr (CI coverage finish, not Codecov acceptance)",
+                "",
+                paste0("- package coverage: ", pct, "%"),
+                "- suite: existing testthat (skips preserved; skip_on_cran runs because NOT_CRAN)",
+                "- tracing: R via covr; TMB C++ in src/ is not a gcov report",
+                "- this print is CI coverage finish, not upload or dashboard evidence"
+              ),
+              summary_file
+            )
+          }
+          cat(sprintf("FREQTLS_COVR_PERCENT=%s\n", pct))
+          covr::to_cobertura(cov)
+        shell: Rscript {0}
+
+      - name: Upload coverage to Codecov (OIDC)
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7
+        with:
+          fail_ci_if_error: true
+          files: ./cobertura.xml
+          plugins: noop
+          disable_search: true
+          use_oidc: true
+          name: freqtls-ubuntu-covr
+          flags: ubuntu-covr
+          verbose: true
+
+      - name: Show testthat output
+        if: always()
+        run: |
+          find '${{ runner.temp }}/package' -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+
+      - name: Upload coverage-test failures
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: coverage-test-failures
+          path: ${{ runner.temp }}/package

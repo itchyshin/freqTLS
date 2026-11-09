@@ -22,3 +22,5 @@
 ^cran-comments\.md$
 ^LICENSE$
 ^LICENSE\.md$
+^codecov\.yml$
+^\.codecov\.yml$
