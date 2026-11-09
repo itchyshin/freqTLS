@@ -36,12 +36,9 @@ test_that("tls_bf() stores sub-formulas by handle and prints a readable summary"
   expect_s3_class(bf, "tls_formula")
   expect_named(bf$sub_formulas, c("CTmax", "log_z"))
   expect_identical(deparse1(bf$sub_formulas$CTmax), "CTmax ~ group")
-  out <- NULL
-  printed <- utils::capture.output(
-    expect_message(out <- print(bf), "tls_formula")
-  )
-  expect_identical(out, bf)
-  expect_true(any(grepl("CTmax ~ group", printed, fixed = TRUE)))
+  expect_message(print(bf), "CTmax ~ group")
+  expect_message(print(bf), "log_z ~ 1")
+  expect_identical(suppressMessages(print(bf)), bf)
 })
 
 test_that("a random-effects grouping must be one existing, complete column", {
