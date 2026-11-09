@@ -84,8 +84,10 @@ test_that("extract_tdt accepts a freq_tls workflow", {
   et <- extract_tdt(wf, nboot = 20, seed = 2)
   expect_s3_class(et, "freq_tdt")
   expect_equal(et$meta$tref, wf$fit$tref)
+  # `extract_tdt()` copies the fitted z into the bootstrap summary median when
+  # every replicate succeeds (nboot = 20 here); the point estimate is exact.
   expect_equal(get_z_summary(et)$z_median, wf$fit$estimates$estimate[
-    wf$fit$estimates$parameter == "z"], tolerance = 0.5)
+    wf$fit$estimates$parameter == "z"], tolerance = 1e-6)
 })
 
 test_that("accessors reject objects that are not extract_tdt() results", {

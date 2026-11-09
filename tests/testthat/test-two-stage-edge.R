@@ -137,8 +137,8 @@ test_that("ts_stage2 `rows` selects the Stage-1 validity rule and validates inpu
   expect_equal(ts_stage2(st1, rows = "stage1_ok")$summary$n_stage1, 4L)
   expect_equal(ts_stage2(st1, rows = "stage1_ok")$summary$n_excluded, 1L)
   expect_equal(ts_stage2(st1, rows = "finite_ok")$summary$n_stage1, 5L)
-  expect_error(ts_stage2(st1, t_ref = -1))
-  expect_error(ts_stage2(st1, time_multiplier = 0))
+  expect_error(ts_stage2(st1, t_ref = -1), "t_ref > 0 is not TRUE")
+  expect_error(ts_stage2(st1, time_multiplier = 0), "time_multiplier > 0 is not TRUE")
   expect_error(ts_stage2(st1, rows = "bogus"), "should be one of")
 })
 
