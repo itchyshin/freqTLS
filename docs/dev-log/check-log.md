@@ -3136,3 +3136,27 @@ Interpretation:
   supported post-fit absolute extraction, and user-supplied but not fitted
   repair scenarios. This is reader-surface evidence only; it is not an
   unqualified CRAN-readiness claim.
+
+## 2026-11-09 Coverage raised from 83.33% to 96.47% (tests only)
+
+Commands:
+
+- `Rscript -e 'Sys.setenv(NOT_CRAN="true"); cov <- covr::package_coverage(clean = FALSE); print(covr::percent_coverage(cov))'`
+  before the change -> `83.33` (matches the Codecov badge).
+- The same command after adding 15 new `tests/testthat/test-*-edge.R`,
+  `test-diagnostics.R`, `test-tdt-utils.R`, `test-predict-validation.R`,
+  `test-formula-errors.R`, `test-fit-validation.R`, `test-plotting-edge.R`, and
+  related files -> `96.47` with no test failures or errors.
+
+Interpretation:
+
+- The new tests assert values, error messages, warnings, and classes. The
+  two-stage and bootstrap tests use noiseless or seeded known-truth data
+  (`z = 4`, `CTmax = (log10(60) - 9.5) / -0.25`) and check recovery. No source
+  file, CI workflow, `codecov.yml`, or coverage exclusion changed.
+- Uncovered code that the tests could not reach is listed in the pull request
+  body for the owner to decide; it was left in place. One defect was found: a
+  continuous `CTmax` predictor containing `NA` crashes R inside `fit_tls()`
+  because `model.matrix()` silently drops the row and the guard at
+  `R/formula.R` 628-630 never fires. The test suite does not exercise that
+  case.
